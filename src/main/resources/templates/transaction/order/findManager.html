@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>발주 담당자 검색</title>
+
+    <!-- 기본적인 외부 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+    <!-- 필수 스크립트 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+</head>
+<body>
+<h3 class="text-center my-5">발주 담당자 검색</h3>
+<div class="input-group col-8 my-5 mx-auto text-center">
+  <input type="search" class="form-control form-control-large" placeholder="이름으로 검색">
+  <div class="input-group-append">
+    <button type="submit" class="btn btn-default">
+      <i class="fa fa-search"></i>
+    </button>
+  </div>
+</div>
+<div class="item-list card-body col-10 mx-auto">
+    <table class="table table-bordered table-hover dataTable dtr-inline">
+        <tr class="bg-lightblue">
+            <th class="text-center" style="width:50%;">담당자코드</th>
+            <th class="text-center" style="width:50%;">성명</th>
+        </tr>
+        <tr class="managers" th:onclick="sendResult(1, '김철수')" style="cursor: pointer;">
+            <td class="admin-id text-center">1</td>
+            <td class="name text-center">김철수</td>
+        </tr>
+        <tr>
+            <td class="admin-id text-center">2</td>
+            <td class="name text-center">김영희</td>
+        </tr>
+    </table>
+</div>
+
+<script>
+
+    // 행을 클릭하면 admin-id, name이 변수에 저장되어 부모창으로 전송
+    function sendResult(id, name) {
+        window.opener.setManager(id, name);
+        window.close();
+    }
+
+
+</script>
+
+</body>
+</html>
