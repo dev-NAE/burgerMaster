@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>거래처 검색</title>
+
+    <!-- 기본적인 외부 CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+    <!-- 필수 스크립트 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+</head>
+<body>
+<h3 class="text-center my-5">거래처 검색</h3>
+<div class="input-group col-8 my-5 mx-auto text-center">
+  <input type="search" class="form-control form-control-large" placeholder="업체명으로 검색">
+  <div class="input-group-append">
+    <button type="submit" class="btn btn-default">
+      <i class="fa fa-search"></i>
+    </button>
+  </div>
+</div>
+<div class="item-list card-body col-10 mx-auto">
+    <table class="table table-bordered table-hover dataTable dtr-inline">
+        <tr class="bg-lightblue">
+            <th class="text-center" style="width:50%;">거래처코드</th>
+            <th class="text-center" style="width:50%;">업체명</th>
+        </tr>
+        <tr>
+            <td class="text-center">1</td>
+            <td class="text-center">맛있다정육</td>
+        </tr>
+        <tr>
+            <td class="text-center">2</td>
+            <td class="text-center">최고다야채</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
