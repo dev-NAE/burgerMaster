@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
@@ -27,6 +27,15 @@
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
+	
+
+	<!-- 공통 헤더 불러오기 -->
+	    <div th:replace="fragments/header :: headerFragment"></div>
+		
+		<!-- 공통 사이드바 불러오기 -->
+		   <div th:replace="fragments/sidebar :: sidebarFragment"></div>
+		
+		
 <div class="wrapper">
 
   <!-- Preloader -->
@@ -223,6 +232,9 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+
+<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+		   <div th:replace="fragments/footer :: footerFragment"></div>
 
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
