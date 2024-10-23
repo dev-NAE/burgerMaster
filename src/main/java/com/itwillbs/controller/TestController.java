@@ -20,5 +20,10 @@ public class TestController {
 	}
 	
 
+	@GetMapping("/sample")
+	public String sample() {
+		return "sample";
+	}
+	
 	
 }
