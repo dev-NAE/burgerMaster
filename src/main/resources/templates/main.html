@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+  <!-- summernote -->
+  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+	
+
+	<!-- 공통 헤더 불러오기 -->
+	    <div th:replace="fragments/header :: headerFragment"></div>
+		
+		<!-- 공통 사이드바 불러오기 -->
+		   <div th:replace="fragments/sidebar :: sidebarFragment"></div>
+		
+		
+<div class="wrapper">
+
+  <!-- Preloader -->
+  <div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
+  </div>
+
+  
+  
+  
+  
+
+
+    
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+<!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+       
+        </div>
+
+		        <!-- Main row -->
+        <div class="row">
+        
+          <section class="col-lg-5 connectedSortable">
+
+          
+
+            <!-- solid sales graph -->
+            <div class="card bg-gradient-info">
+              <div class="card-header border-0">
+                <h3 class="card-title">
+                  <i class="fas fa-th mr-1"></i>
+                  Sales Graph
+                </h3>
+
+                <div class="card-tools">
+<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">-->
+<!--                    <i class="fas fa-minus"></i>-->
+<!--                  </button>-->
+<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">-->
+<!--                    <i class="fas fa-times"></i>-->
+<!--                  </button>-->
+                </div>
+              </div>
+              <div class="card-body">
+                <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer bg-transparent">
+                <div class="row">
+                  <div class="col-4 text-center">
+                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
+                           data-fgColor="#39CCCC">
+
+                    <div class="text-white">Mail-Orders</div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-4 text-center">
+                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
+                           data-fgColor="#39CCCC">
+
+                    <div class="text-white">Online</div>
+                  </div>
+                  <!-- ./col -->
+                  <div class="col-4 text-center">
+                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
+                           data-fgColor="#39CCCC">
+
+                    <div class="text-white">In-Store</div>
+                  </div>
+                  <!-- ./col -->
+                </div>
+                <!-- /.row -->
+              </div>
+              <!-- /.card-footer -->
+            </div>
+            <!-- /.card -->
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			<div class="col-md-6">
+
+			<div class="card card-primary card-outline">
+			<div class="card-header">
+			<h3 class="card-title">
+			<i class="far fa-chart-bar"></i>
+			Bar Chart
+			</h3>
+			<div class="card-tools">
+<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+<!--			<i class="fas fa-minus"></i>-->
+<!--			</button>-->
+<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+<!--			<i class="fas fa-times"></i>-->
+<!--			</button>-->
+			</div>
+			</div>
+			<div class="card-body">
+			<div id="bar-chart" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="374" height="300" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 374.5px; height: 300px;"></canvas><canvas class="flot-overlay" width="374" height="300" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 374.5px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; inset: 0px;"><text x="138.8849431818182" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">March</text><text x="258.85640092329544" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">May</text><text x="18.551180752840907" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">January</text><text x="312.77303799715907" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">June</text><text x="199.9900568181818" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">April</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; inset: 0px;"><text x="8.9521484375" y="269" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">0</text><text x="8.9521484375" y="205.5" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">5</text><text x="1" y="15" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">20</text><text x="1" y="142" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">10</text><text x="1" y="78.5" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">15</text></g></svg></div></div>
+			</div>
+
+			</div>
+
+
+			
+
+			</div>
+			
+			
+			<div class="card card-success">
+			<div class="card-header">
+			<h3 class="card-title">Bar Chart</h3>
+			<div class="card-tools">
+<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+<!--			<i class="fas fa-minus"></i>-->
+<!--			</button>-->
+<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+<!--			<i class="fas fa-times"></i>-->
+<!--			</button>-->
+			</div>
+			</div>
+			<div class="card-body">
+			<div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+			<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
+			</div>
+			</div>
+
+			</div>
+			
+			<div class="card card-danger">
+			<div class="card-header">
+			<h3 class="card-title">Pie Chart</h3>
+			<div class="card-tools">
+<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+<!--			<i class="fas fa-minus"></i>-->
+<!--			</button>-->
+<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+<!--			<i class="fas fa-times"></i>-->
+<!--			</button>-->
+			</div>
+			</div>
+			<div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+			<canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
+			</div>
+
+			</div>
+			
+			
+            
+          </section>
+          <!-- right col -->
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+  
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+		   <div th:replace="fragments/footer :: footerFragment"></div>
+
+<!-- jQuery -->
+<script src="plugins/jquery/jquery.min.js"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+  $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/adminlte.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="dist/js/demo.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="dist/js/pages/dashboard.js"></script>
+</body>
+</html>
