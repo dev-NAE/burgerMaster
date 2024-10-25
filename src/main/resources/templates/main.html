@@ -6,7 +6,8 @@
   <title>AdminLTE 3 | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+<link rel="stylesheet" href="css/font.css">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <!-- Ionicons -->
@@ -38,10 +39,7 @@
 		
 <div class="wrapper">
 
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
+
 
   
   
@@ -82,7 +80,55 @@
         
           <section class="col-lg-5 connectedSortable">
 
-          
+						
+			<!--			Bar Chart-->
+						<div class="card card-success">
+						<div class="card-header">
+						<h3 class="card-title">Bar Chart</h3>
+						<div class="card-tools">
+						</div>
+						</div>
+						<div class="card-body">
+						<div class="chart">
+							<div class="chartjs-size-monitor">
+								<div class="chartjs-size-monitor-expand">
+									<div class="">
+										
+									</div>
+								</div>
+								<div class="chartjs-size-monitor-shrink">
+									<div class=""></div>
+								</div>
+							</div>
+						<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
+						</div>
+						</div>
+
+						</div>
+			<!--			/Bar Chart-->
+			
+						
+			<!--			Bar Chart-->
+						<div class="card card-success">
+						<div class="card-header">
+						<h3 class="card-title">Bar Chart</h3>
+						<div class="card-tools">
+			<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+			<!--			<i class="fas fa-minus"></i>-->
+			<!--			</button>-->
+			<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+			<!--			<i class="fas fa-times"></i>-->
+			<!--			</button>-->
+						</div>
+						</div>
+						<div class="card-body">
+						<div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+						<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor">
+						</div>
+						</div>
+
+						</div>
+			<!--			/Bar Chart-->
 
             <!-- solid sales graph -->
             <div class="card bg-gradient-info">
@@ -107,25 +153,25 @@
               <!-- /.card-body -->
               <div class="card-footer bg-transparent">
                 <div class="row">
-                  <div class="col-4 text-center">
-                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
-                           data-fgColor="#39CCCC">
+<!--                  <div class="col-4 text-center">-->
+<!--                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"-->
+<!--                           data-fgColor="#39CCCC">-->
 
-                    <div class="text-white">Mail-Orders</div>
-                  </div>
+<!--                    <div class="text-white">Mail-Orders</div>-->
+<!--                  </div>-->
+                  <!-- ./col -->
+<!--                  <div class="col-4 text-center">-->
+<!--                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"-->
+<!--                           data-fgColor="#39CCCC">-->
+
+<!--                    <div class="text-white">Online</div>-->
+<!--                  </div>-->
                   <!-- ./col -->
                   <div class="col-4 text-center">
-                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
-                           data-fgColor="#39CCCC">
+<!--                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"-->
+<!--                           data-fgColor="#39CCCC">-->
 
-                    <div class="text-white">Online</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
-                           data-fgColor="#39CCCC">
-
-                    <div class="text-white">In-Store</div>
+                    <div class="text-white">월간 발주량</div>
                   </div>
                   <!-- ./col -->
                 </div>
@@ -137,61 +183,31 @@
 			
 			
 			
-			
-			
-			
-			
-			
-			
-			
-			<div class="col-md-6">
+			<div class="card card-danger">
+						<div class="card-header">
+						<h3 class="card-title">Pie Chart</h3>
+						<div class="card-tools">
+			<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+			<!--			<i class="fas fa-minus"></i>-->
+			<!--			</button>-->
+			<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+			<!--			<i class="fas fa-times"></i>-->
+			<!--			</button>-->
+						</div>
+						</div>
+						<div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+						<canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
+						</div>
 
-			<div class="card card-primary card-outline">
-			<div class="card-header">
-			<h3 class="card-title">
-			<i class="far fa-chart-bar"></i>
-			Bar Chart
-			</h3>
-			<div class="card-tools">
-<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-<!--			<i class="fas fa-minus"></i>-->
-<!--			</button>-->
-<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-<!--			<i class="fas fa-times"></i>-->
-<!--			</button>-->
-			</div>
-			</div>
-			<div class="card-body">
-			<div id="bar-chart" style="height: 300px; padding: 0px; position: relative;"><canvas class="flot-base" width="374" height="300" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 374.5px; height: 300px;"></canvas><canvas class="flot-overlay" width="374" height="300" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 374.5px; height: 300px;"></canvas><div class="flot-svg" style="position: absolute; top: 0px; left: 0px; height: 100%; width: 100%; pointer-events: none;"><svg style="width: 100%; height: 100%;"><g class="flot-x-axis flot-x1-axis xAxis x1Axis" style="position: absolute; inset: 0px;"><text x="138.8849431818182" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">March</text><text x="258.85640092329544" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">May</text><text x="18.551180752840907" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">January</text><text x="312.77303799715907" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">June</text><text x="199.9900568181818" y="294" class="flot-tick-label tickLabel" style="position: absolute; text-align: center;">April</text></g><g class="flot-y-axis flot-y1-axis yAxis y1Axis" style="position: absolute; inset: 0px;"><text x="8.9521484375" y="269" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">0</text><text x="8.9521484375" y="205.5" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">5</text><text x="1" y="15" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">20</text><text x="1" y="142" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">10</text><text x="1" y="78.5" class="flot-tick-label tickLabel" style="position: absolute; text-align: right;">15</text></g></svg></div></div>
-			</div>
-
-			</div>
-
+						</div>
+			
+			
+			
+			
+			
+			
 
 			
-
-			</div>
-			
-			
-			<div class="card card-success">
-			<div class="card-header">
-			<h3 class="card-title">Bar Chart</h3>
-			<div class="card-tools">
-<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-<!--			<i class="fas fa-minus"></i>-->
-<!--			</button>-->
-<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-<!--			<i class="fas fa-times"></i>-->
-<!--			</button>-->
-			</div>
-			</div>
-			<div class="card-body">
-			<div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-			<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
-			</div>
-			</div>
-
-			</div>
 			
 			<div class="card card-danger">
 			<div class="card-header">
@@ -233,6 +249,8 @@
 </div>
 <!-- ./wrapper -->
 
+
+
 <!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
 		   <div th:replace="fragments/footer :: footerFragment"></div>
 
@@ -241,6 +259,8 @@
 <!-- jQuery UI 1.11.4 -->
 <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+
 <script>
   $.widget.bridge('uibutton', $.ui.button)
 </script>
@@ -270,5 +290,58 @@
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
+
+<script>
+  $(function () {
+    /* ChartJS
+     * -------
+     * Here we will create a few charts using ChartJS
+     */
+
+    
+
+    //-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    var pieData        = donutData;
+    var pieOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    new Chart(pieChartCanvas, {
+      type: 'pie',
+      data: pieData,
+      options: pieOptions
+    })
+
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+    var barChartData = $.extend(true, {}, areaChartData)
+    var temp0 = areaChartData.datasets[0]
+    var temp1 = areaChartData.datasets[1]
+    barChartData.datasets[0] = temp1
+    barChartData.datasets[1] = temp0
+
+    var barChartOptions = {
+      responsive              : true,
+      maintainAspectRatio     : false,
+      datasetFill             : false
+    }
+
+    new Chart(barChartCanvas, {
+      type: 'bar',
+      data: barChartData,
+      options: barChartOptions
+    })
+
+   
+  })
+</script>
 </body>
 </html>
