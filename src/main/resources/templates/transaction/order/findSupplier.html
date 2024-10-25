@@ -31,15 +31,27 @@
             <th class="text-center" style="width:50%;">거래처코드</th>
             <th class="text-center" style="width:50%;">업체명</th>
         </tr>
-        <tr>
-            <td class="text-center">1</td>
-            <td class="text-center">맛있다정육</td>
+        <tr onclick="sendResult(this)" style="cursor: pointer;">
+            <td class="text-center" data-code="data-code">1</td>
+            <td class="text-center" data-name="data-name">맛있다정육</td>
         </tr>
-        <tr>
-            <td class="text-center">2</td>
-            <td class="text-center">최고다야채</td>
+        <tr onclick="sendResult(this)" style="cursor: pointer;">
+            <td class="text-center" data-code="data-code1">2</td>
+            <td class="text-center" data-name="data-name1">최고다야채</td>
         </tr>
     </table>
 </div>
+
+<script th:inline="javascript">
+    // 선택한 항목 정보 넘겨주고 팝업창 닫기
+    function sendResult(row) {
+        var supplierCode = row.querySelector('[data-code]').getAttribute('data-code');
+        var supplierName = row.querySelector('[data-name]').getAttribute('data-name');
+        window.opener.setSupplier(supplierCode, supplierName);
+        window.close();
+    }
+</script>
+
+
 </body>
 </html>

@@ -25,30 +25,39 @@
     </button>
   </div>
 </div>
-<div class="item-list card-body">
+<div class="item-list card-body col-10 mx-auto">
     <table class="table table-bordered table-hover dataTable dtr-inline">
         <tr class="bg-lightblue">
             <th class="text-center" style="width:15%;">구분</th>
             <th class="text-center" style="width:15%;">품목코드</th>
-            <th class="text-center" style="width:30%;">품목명</th>
-            <th class="text-center" style="width:15%;">단가(원)</th>
-            <th class="text-center" style="width:15%;">재고상태</th>
+            <th class="text-center" style="width:50%;">품목명</th>
+            <th class="text-center" style="width:20%;">재고상태</th>
         </tr>
-        <tr>
+        <tr onclick="sendResult(this)" style="cursor: pointer;">
             <td class="text-center">원재료</td>
-            <td class="text-center">1</td>
-            <td class="text-center">샘플</td>
-            <td class="text-right">999,999</td>
+            <td class="text-center" data-code="item_code1">1</td>
+            <td class="text-center" data-name="item_name1">샘플</td>
             <td class="text-right">100 <small>(양호)</small></td>
         </tr>
-        <tr>
+        <tr onclick="sendResult(this)" style="cursor: pointer;">
             <td class="text-center">완제품</td>
-            <td class="text-center">2</td>
-            <td class="text-center">샘플</td>
-            <td class="text-right">999,999</td>
+            <td class="text-center" data-code="item_code2">2</td>
+            <td class="text-center" data-name="item_name2">샘플</td>
             <td class="text-right">3 <small>(부족)</small></td>
         </tr>
     </table>
 </div>
+
+<script th:inline="javascript">
+    // 선택한 항목 정보 넘겨주고 팝업창 닫기
+    function sendResult(row) {
+        var itemCode = row.querySelector('[data-code]').getAttribute('data-code');
+        var itemName = row.querySelector('[data-name]').getAttribute('data-name');
+        window.opener.setItemInfo(itemCode, itemName);
+        window.close();
+    }
+</script>
+
+
 </body>
 </html>

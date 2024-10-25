@@ -31,27 +31,27 @@
             <th class="text-center" style="width:50%;">담당자코드</th>
             <th class="text-center" style="width:50%;">성명</th>
         </tr>
-        <tr class="managers" th:onclick="sendResult(1, '김철수')" style="cursor: pointer;">
-            <td class="admin-id text-center">1</td>
-            <td class="name text-center">김철수</td>
+        <tr onclick="sendResult(this)" style="cursor: pointer;">
+            <td class="admin-id text-center" data-code="data-code">1</td>
+            <td class="name text-center" data-name="data-name">김철수</td>
         </tr>
-        <tr>
-            <td class="admin-id text-center">2</td>
-            <td class="name text-center">김영희</td>
+        <tr onclick="sendResult(this)" style="cursor: pointer;">
+            <td class="admin-id text-center" data-code="data-code1">2</td>
+            <td class="name text-center" data-name="data-name1">김영희</td>
         </tr>
     </table>
 </div>
 
-<script>
-
-    // 행을 클릭하면 admin-id, name이 변수에 저장되어 부모창으로 전송
-    function sendResult(id, name) {
-        window.opener.setManager(id, name);
+<script th:inline="javascript">
+    // 선택한 항목 정보 넘겨주고 팝업창 닫기
+    function sendResult(row) {
+        var managerCode = row.querySelector('[data-code]').getAttribute('data-code');
+        var managerName = row.querySelector('[data-name]').getAttribute('data-name');
+        window.opener.setManager(managerCode, managerName);
         window.close();
     }
-
-
 </script>
+
 
 </body>
 </html>
