@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Dashboard</title>
+  <!-- 기본 css 링크-->
+  <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+
+
+<!-- 공통 헤더 불러오기 -->
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<!-- 공통 사이드바 불러오기 -->
+<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+
+
+<div class="wrapper">
+  <!--   Preloader -->
+  <!-- 처음 로딩 시 나오는 요소 불러오기 -->
+  <div th:replace="fragments/Preloader :: PreloaderFragment"></div>
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">관리자 관리</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">관리자 관리</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid dataTables_wrapper">
+
+        <!-- Main row -->
+        <div class="row">
+          <div class="col-12">
+
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">관리자 목록</h3>
+
+                <div class="card-tools">
+                  <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body table-responsive p-0" style="height: 300px;">
+                <table class="table table-head-fixed text-nowrap">
+                  <thead>
+                  <tr>
+                    <th>관리자 ID</th>
+                    <th>이름</th>
+                    <th>전화번호</th>
+                    <th>이메일</th>
+                    <th>권한</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td>183</td>
+                    <td>John Doe</td>
+                    <td>11-7-2014</td>
+                    <td><span class="tag tag-success">Approved</span></td>
+                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  </tr>
+                  <tr>
+                    <td>219</td>
+                    <td>Alexander Pierce</td>
+                    <td>11-7-2014</td>
+                    <td><span class="tag tag-warning">Pending</span></td>
+                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  </tr>
+                  <tr>
+                    <td>657</td>
+                    <td>Bob Doe</td>
+                    <td>11-7-2014</td>
+                    <td><span class="tag tag-primary">Approved</span></td>
+                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  </tr>
+                  <tr>
+                    <td>175</td>
+                    <td>Mike Doe</td>
+                    <td>11-7-2014</td>
+                    <td><span class="tag tag-danger">Denied</span></td>
+                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  </tr>
+                  <tr>
+                    <td>134</td>
+                    <td>Jim Doe</td>
+                    <td>11-7-2014</td>
+                    <td><span class="tag tag-success">Approved</span></td>
+                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  </tr>
+                  <tr>
+                    <td>494</td>
+                    <td>Victoria Doe</td>
+                    <td>11-7-2014</td>
+                    <td><span class="tag tag-warning">Pending</span></td>
+                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  </tr>
+                  <tr>
+                    <td>832</td>
+                    <td>Michael Doe</td>
+                    <td>11-7-2014</td>
+                    <td><span class="tag tag-primary">Approved</span></td>
+                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  </tr>
+                  <tr>
+                    <td>982</td>
+                    <td>Rocky Doe</td>
+                    <td>11-7-2014</td>
+                    <td><span class="tag tag-danger">Denied</span></td>
+                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  </tr>
+                  </tbody>
+                </table>
+
+
+              </div>
+              <!-- /div admins table-->
+
+            </div>
+            <!-- /card -->
+          </div>
+          <!--  -->
+        </div>
+        <!-- /.row admins table -->
+        <div class="row">
+          <div class="col-sm-12 col-md-5">
+            <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+          </div>
+          <div class="col-sm-12 col-md-7">
+            <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+              <ul class="pagination">
+                <li class="paginate_button page-item previous disabled" id="example2_previous">
+                  <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                </li>
+                <li class="paginate_button page-item active">
+                  <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a>
+                </li>
+                <li class="paginate_button page-item ">
+                  <a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a>
+                </li>
+                <li class="paginate_button page-item next" id="example2_next">
+                  <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- /row page controllbar-->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+    <!-- 모달 창  -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">관리자 상세 정보</h1>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- 모달 창 메인 body -->
+            <div class="form-floating mb-3">
+              <label for="report_id_modal">신고ID</label>
+              <input type="text" class="form-control-plaintext" id="report_id_modal" readonly>
+            </div>
+            <div class="form-floating d-flex flex-row mb-3">
+              <div class="form-floating flex-fill mr-3">
+                <label for="reporter_id_modal">신고자ID</label>
+                <input type="text" class="form-control-plaintext" id="reporter_id_modal" readonly>
+              </div>
+              <div class="form-floating flex-fill ">
+                <label for="report_type_modal">신고유형</label>
+                <input type="text" class="form-control-plaintext" id="report_type_modal" placeholder="Password" readonly>
+              </div>
+            </div>
+            <div class="form-floating d-flex flex-row mb-3">
+              <div class="form-floating flex-fill mr-3">
+                <label for="reportee_id_modal">신고대상ID</label>
+                <input type="text" class="form-control-plaintext" id="reportee_id_modal" readonly>
+              </div>
+              <div class="form-floating flex-fill">
+                <label for="reported_item_id_modal">신고상품ID</label>
+                <input type="text" class="form-control-plaintext" id="reported_item_id_modal" placeholder="Password" readonly>
+              </div>
+            </div>
+            <div class="form-floating d-flex flex-row mb-3">
+              <div class="form-floating flex-fill">
+                <label for="reported_at_modal">신고일시</label>
+                <input type="text" class="form-control-plaintext" id="reported_at_modal" placeholder="Password" readonly>
+              </div>
+              <div class="form-floating flex-fill">
+                <label for="report_status_modal">처리상태</label>
+                <select class="custom-select " id="report_status_modal">
+                  <option value="접수">접수</option>
+                  <option value="처리 완료">처리 완료</option>
+                  <option value="해당 없음">해당 없음</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-floating mb-3">
+              <label for="report_contents_modal">신고내용ID</label>
+              <textarea class="form-control" id="report_contents_modal"></textarea>
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-purple"  data-dismiss="modal" onclick="editReport()">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end modal -->
+
+  </div>
+  <!-- /.content-wrapper -->
+
+
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+  <!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+  <div th:replace="fragments/footer :: footerFragment"></div>
+</div>
+<!-- ./wrapper -->
+<!-- 기본 js 링크 -->
+<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
+
+</script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- custom js -->
+<script src="js/admins/admins.js"></script>
+</body>
+</html>
