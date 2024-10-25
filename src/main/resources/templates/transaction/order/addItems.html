@@ -49,13 +49,14 @@
 </div>
 
 <script th:inline="javascript">
-    // 선택한 항목 정보 넘겨주고 팝업창 닫기
+    // (등록) 선택한 항목 정보 넘겨주고 팝업창 닫기
     function sendResult(row) {
         var itemCode = row.querySelector('[data-code]').getAttribute('data-code');
         var itemName = row.querySelector('[data-name]').getAttribute('data-name');
         window.opener.setItemInfo(itemCode, itemName);
         window.close();
     }
+
 </script>
 
 
