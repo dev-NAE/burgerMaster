@@ -58,7 +58,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0" >Dashboard</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -78,15 +78,15 @@
         </div>
 
 		        <!-- Main row -->
-        <div class="row">
+        <div class="row" >
         
-          <section class="col-lg-5 connectedSortable">
+<!--          <section class="col-lg-5 connectedSortable">-->
 
 						
 			<!--			Bar Chart-->
-						<div class="card card-success">
+						<div class="card card-success" style="margin: 5px;">
 						<div class="card-header">
-						<h3 class="card-title">Bar Chart</h3>
+						<h3 class="card-title">원재료 입고량 . 총 재고</h3>
 						<div class="card-tools">
 						</div>
 						</div>
@@ -109,11 +109,37 @@
 						</div>
 			<!--			/Bar Chart-->
 			
+			<!--			Bar Chart-->
+									<div class="card card-success" style="margin: 5px;">
+									<div class="card-header">
+									<h3 class="card-title">완재품 입고량 . 총 재고</h3>
+									<div class="card-tools">
+									</div>
+									</div>
+									<div class="card-body">
+									<div class="chart">
+										<div class="chartjs-size-monitor">
+											<div class="chartjs-size-monitor-expand">
+												<div class="">
+													
+												</div>
+											</div>
+											<div class="chartjs-size-monitor-shrink">
+												<div class=""></div>
+											</div>
+										</div>
+									<canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
+									</div>
+									</div>
+
+									</div>
+						<!--			/Bar Chart-->
+			
 						
 			<!--			Bar Chart-->
-						<div class="card card-success">
+						<div class="card card-success" style="margin: 5px;">
 						<div class="card-header">
-						<h3 class="card-title">Bar Chart</h3>
+						<h3 class="card-title">가공품 총재고</h3>
 						<div class="card-tools">
 			<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
 			<!--			<i class="fas fa-minus"></i>-->
@@ -132,62 +158,12 @@
 						</div>
 			<!--			/Bar Chart-->
 
-            <!-- solid sales graph -->
-            <div class="card bg-gradient-info">
-              <div class="card-header border-0">
-                <h3 class="card-title">
-                  <i class="fas fa-th mr-1"></i>
-                  Sales Graph
-                </h3>
-
-                <div class="card-tools">
-<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">-->
-<!--                    <i class="fas fa-minus"></i>-->
-<!--                  </button>-->
-<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">-->
-<!--                    <i class="fas fa-times"></i>-->
-<!--                  </button>-->
-                </div>
-              </div>
-              <div class="card-body">
-                <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer bg-transparent">
-                <div class="row">
-<!--                  <div class="col-4 text-center">-->
-<!--                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"-->
-<!--                           data-fgColor="#39CCCC">-->
-
-<!--                    <div class="text-white">Mail-Orders</div>-->
-<!--                  </div>-->
-                  <!-- ./col -->
-<!--                  <div class="col-4 text-center">-->
-<!--                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"-->
-<!--                           data-fgColor="#39CCCC">-->
-
-<!--                    <div class="text-white">Online</div>-->
-<!--                  </div>-->
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-<!--                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"-->
-<!--                           data-fgColor="#39CCCC">-->
-
-                    <div class="text-white">월간 발주량</div>
-                  </div>
-                  <!-- ./col -->
-                </div>
-                <!-- /.row -->
-              </div>
-              <!-- /.card-footer -->
-            </div>
-            <!-- /.card -->
 			
 			
 			
-			<div class="card card-danger">
+			<div class="card card-danger" style="margin: 5px;">
 						<div class="card-header">
-						<h3 class="card-title">Pie Chart</h3>
+						<h3 class="card-title">불량률</h3>
 						<div class="card-tools">
 			<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
 			<!--			<i class="fas fa-minus"></i>-->
@@ -211,9 +187,9 @@
 
 			
 			
-			<div class="card card-danger">
+			<div class="card card-danger" style="margin: 5px 500px 0  5px;">
 			<div class="card-header">
-			<h3 class="card-title">Pie Chart</h3>
+			<h3 class="card-title">반품률</h3>
 			<div class="card-tools">
 <!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
 <!--			<i class="fas fa-minus"></i>-->
@@ -230,8 +206,65 @@
 			</div>
 			
 			
+			  <!-- solid sales graph -->
+			  
+			            <div class="card bg-gradient-info" style="margin: 5px ;">
+			              <div class="card-header border-0">
+			                <h3 class="card-title">
+			<!--                  <i class="fas fa-th mr-1"></i>-->
+			                  월간 수주량
+			                </h3>
+
+			                <div class="card-tools">
+			<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">-->
+			<!--                    <i class="fas fa-minus"></i>-->
+			<!--                  </button>-->
+			<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">-->
+			<!--                    <i class="fas fa-times"></i>-->
+			<!--                  </button>-->
+			                </div>
+			              </div>
+			              <div class="card-body">
+			                <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+			              </div>
+			              <!-- /.card-body -->
+			              <div class="card-footer bg-transparent">
+			                <div class="row">
+			<!--                  <div class="col-4 text-center">-->
+			<!--                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"-->
+			<!--                           data-fgColor="#39CCCC">-->
+
+			<!--                    <div class="text-white">Mail-Orders</div>-->
+			<!--                  </div>-->
+			                  <!-- ./col -->
+			<!--                  <div class="col-4 text-center">-->
+			<!--                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"-->
+			<!--                           data-fgColor="#39CCCC">-->
+
+			<!--                    <div class="text-white">Online</div>-->
+			<!--                  </div>-->
+			                  <!-- ./col -->
+			                  <div class="col-4 text-center">
+			<!--                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"-->
+			<!--                           data-fgColor="#39CCCC">-->
+
+			<!--                    <div class="text-white">월간 수주량</div>-->
+			                  </div>
+			                  <!-- ./col -->
+			                </div>
+			                <!-- /.row -->
+			              </div>
+			              <!-- /.card-footer -->
+			            </div>
+			            <!-- /.card -->
+						
+						
+
+						
+						
+									
             
-          </section>
+<!--          </section>-->
           <!-- right col -->
         </div>
         <!-- /.row (main row) -->
