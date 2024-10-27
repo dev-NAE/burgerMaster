@@ -17,8 +17,8 @@ import lombok.ToString;
 @ToString
 public class Admin {
 	@Id
-	@Column(name = "id", length= 50)
-	private String id;
+	@Column(name = "adminID", length= 50)
+	private String adminID;
 	
 	@Column(name = "pass", nullable = false)
 	private String pass;
@@ -26,6 +26,12 @@ public class Admin {
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "date")
-	private Timestamp date;
+	@Column(name = "email")
+	private Timestamp email;
+
+	@Column(name = "phone")
+	private Timestamp phone;
+
+	@Column(name = "authority")
+	private Timestamp authority;
 }
