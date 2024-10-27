@@ -36,4 +36,11 @@ public class TXController {
     public String addItems() {
         return "transaction/order/addItems";
     }
+
+    @GetMapping("/orderlist")
+    public String orderList() {
+        return "transaction/order/list";
+    }
+
+
 }
