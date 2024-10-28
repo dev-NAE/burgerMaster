@@ -23,9 +23,9 @@ public class MainDashBoardController {
 	public String main(org.springframework.ui.Model model) {
 		log.info("MainDashBoardController main");
 		
-		List<Item>ItemList=mainDashBoardService.getItemList();
-		model.addAttribute("ItemList", ItemList);
-		System.out.println("ItemList:"+ItemList);
+			List<Item>ItemList=mainDashBoardService.getItemList();
+			model.addAttribute("ItemList", ItemList);
+			System.out.println("ItemList:"+ItemList);
 		
 		return "main";
 	}

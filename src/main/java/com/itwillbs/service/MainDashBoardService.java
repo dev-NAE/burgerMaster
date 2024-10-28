@@ -20,8 +20,8 @@ public class MainDashBoardService {
 	public List<Item> getItemList() {
 		log.info("MainDashBoardService getItemList");
 		
-		mainDashBoardRepository.findAll();
-		return null;
+	return	mainDashBoardRepository.findAll();
+		
 	}
 
 	
