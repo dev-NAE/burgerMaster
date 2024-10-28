@@ -1,7 +1,7 @@
 package com.itwillbs;
 
 import com.itwillbs.entity.Admin;
-import com.itwillbs.repository.AdminsRepository;
+import com.itwillbs.repository.AdminRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class adminsTest {
     @Autowired
-    private AdminsRepository adminsRepository;
+    private AdminRepository adminRepository;
     @Autowired
     private BCryptPasswordEncoder encoder;
 
@@ -27,7 +27,7 @@ public class adminsTest {
                 .email("testEmail")
                 .phone("testEmail")
                 .build();
-        Admin saved = adminsRepository.save(admin);
+        Admin saved = adminRepository.save(admin);
         Assertions.assertThat(saved.toString())
                 .as("같은지 테스트 %s", saved)
                 .isEqualTo(admin.toString());

@@ -25,10 +25,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         String[] urlsToBePermittedAll = {
                 "/",
-                "/login/**",
-                "/logout/**",
+                "/main/**",
+                "/admin/login/**",
+                "/admin/logout/**",
                 "/css/**",
-                "/js/**"
+                "/js/**",
+                "/dist/**",
+                "/img/**",
+                "/plugins/**"
         };
         http
 //                .httpBasic(AbstractHttpConfigurer::disable)
@@ -37,9 +41,9 @@ public class SecurityConfig {
                         .requestMatchers(urlsToBePermittedAll).permitAll()
                         .anyRequest().authenticated())
                 // 폼 로그인은 현재 사용하지 않음
-//				.formLogin(formLogin -> formLogin
-//						.loginPage("/login")
-//						.defaultSuccessUrl("/home"))
+				.formLogin(formLogin -> formLogin
+						.loginPage("/admin/login")
+						.defaultSuccessUrl("/main"))
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true));
