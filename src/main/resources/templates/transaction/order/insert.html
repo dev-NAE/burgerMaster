@@ -6,6 +6,7 @@
     <title>발주 등록</title>
 
     <!-- CSS -->
+    <link rel="stylesheet" href="/css/font.css">
     <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
 
@@ -17,6 +18,8 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
+    <!-- 공통 프리로더 -->
+    <div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
 
     <!-- 공통 헤더 불러오기 -->
     <div th:replace="~{fragments/header :: headerFragment}"></div>

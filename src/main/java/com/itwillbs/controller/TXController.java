@@ -6,15 +6,22 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
 
 @Controller
 @RequiredArgsConstructor
 @Log
+@RequestMapping("/tx")
 public class TXController {
 
-    @GetMapping("/transaction")
+    @GetMapping({"", "/"})
+    public String transaction() {
+        return "redirect:/tx/insertOrder";
+    }
+
+    @GetMapping("/insertOrder")
     public String insertOrder(Model model, HttpSession session) {
         model.addAttribute("today", LocalDate.now());
         model.addAttribute("id", "ABCD");
@@ -37,7 +44,7 @@ public class TXController {
         return "transaction/order/addItems";
     }
 
-    @GetMapping("/orderlist")
+    @GetMapping("/orderList")
     public String orderList() {
         return "transaction/order/list";
     }
