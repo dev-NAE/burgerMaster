@@ -1,20 +1,21 @@
 package com.itwillbs.entity;
 
-import java.sql.Timestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
-@Table(name="members")
+@Table(name="admins")
 @Getter
 @Setter
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Admin {
 	@Id
 	@Column(name = "adminID", length= 50)
@@ -27,11 +28,22 @@ public class Admin {
 	private String name;
 	
 	@Column(name = "email")
-	private Timestamp email;
+	private String email;
 
 	@Column(name = "phone")
-	private Timestamp phone;
+	private String phone;
 
 	@Column(name = "authority")
-	private Timestamp authority;
+	private String authority;
+
+	public Admin createAdmin(Admin admin, PasswordEncoder passwordEncoder) {
+		return Admin.builder()
+				.adminID(admin.getAdminID())
+				.pass(passwordEncoder.encode(admin.getPass()))
+				.name(admin.getName())
+				.email(admin.getEmail())
+				.phone(admin.getPhone())
+				.authority(admin.getAuthority())
+				.build();
+	}
 }
