@@ -4,25 +4,29 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.itwillbs.entity.Item;
-import com.itwillbs.repository.MainDashBoardRepository;
+import com.itwillbs.entity.test.ITEM;
+import com.itwillbs.repository.MainDashBoardItemRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+
+
 
 @Service
 @Log
 @RequiredArgsConstructor
 public class MainDashBoardService {
 	
-	private final MainDashBoardRepository mainDashBoardRepository;
+	private final MainDashBoardItemRepository mainDashBoardRepository;
 
-	public List<Item> getItemList() {
-		log.info("MainDashBoardService getItemList");
+	public List<ITEM> getItemListByType(String itemType) {
+		log.info("getItemListByType"+itemType);
+		System.out.println("MainDashBoardService itemType:"+itemType);
 		
-	return	mainDashBoardRepository.findAll();
-		
+		 return mainDashBoardRepository.findByItemType(itemType);
+		 
 	}
+
 
 	
 	

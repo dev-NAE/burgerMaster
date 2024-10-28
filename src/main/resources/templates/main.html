@@ -330,39 +330,52 @@
 <script src="dist/js/pages/dashboard.js"></script>
 
 
+<script  th:inline="javascript">
+    // Controller에서 전달된 rmItemList 데이터를 가져와 JavaScript 변수로 정의
+    const rmItemList = [	
+			  ];
+	console.log(rmItemList);
 
-<script>
-    // JSP 또는 템플릿 엔진에서 생성된 ItemList 데이터를 JavaScript에서 사용할 수 있도록 설정
-<!--    const itemList = [[${ItemList}]];-->
-
-    // itemList에서 라벨과 데이터 추출
-    const labels = itemList.map(item => item.name); // 예시: 아이템 이름이 있을 경우
-    const dataValues = itemList.map(item => item.value); // 예시: 아이템에 value가 있을 경우
-
-    // 바 차트 생성
-    const ctx = document.getElementById('barChart1').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels, // x축 라벨 설정
-            datasets: [{
-                label: '원재료 입고량',
-                data: dataValues, // y축 데이터
-                backgroundColor: 'rgba(60, 141, 188, 0.9)', // 바 색상 설정
-                borderColor: 'rgba(60, 141, 188, 1)',
-                borderWidth: 1
-            }]
+    const labels = rmItemList.map(item => item.itemName);  // 항목 이름
+    const data = {
+        labels: labels,
+        datasets: [
+		{
+            label: '완재품 입고량',
+            data: rmItemList.map(item => item.stockQuantity),  // 입고량 필드로 사용 (예시)
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
         },
+		{
+		            label: '총 재고',
+		            data: rmItemList.map(item => item.totalStock),  // 입고량 필드로 사용 (예시)
+		            backgroundColor: 'lightgreen',
+		            borderColor: 'green',
+		            borderWidth: 1
+		        }
+		]
+    };
+
+    const config = {
+        type: 'bar',
+        data: data,
         options: {
-            responsive: true,
             scales: {
                 y: {
                     beginAtZero: true
                 }
             }
         }
-    });
+    };
+
+    // Chart.js로 바 차트 생성
+    const barChart1 = new Chart(
+        document.getElementById('barChart1'),
+        config
+    );
 </script>
+
 
 <!--<script>-->
 <!--  $(function () {-->
