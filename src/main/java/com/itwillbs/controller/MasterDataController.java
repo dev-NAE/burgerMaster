@@ -46,6 +46,7 @@ public class MasterDataController {
 		return "masterdata/layout";
 	}
 
+	// Item Management
 	// 목록 페이지
 	@GetMapping("/items")
 	public String listItems(Model model) {
