@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +48,7 @@ public class MasterDataController {
 	// Item Management
 	// 목록 페이지
 	@GetMapping("/items")
-	public String listItems(Model model) {
+	public String listItems() {
 		return "masterdata/items";
 	}
 
