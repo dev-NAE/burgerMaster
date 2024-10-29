@@ -44,42 +44,37 @@
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="#" class="nav-link active">
+									<a href="/masterdata/items" class="nav-link active">
 										<i class="far fa-circle nav-icon"></i>
-										<p>하위1</p>
+										<p>품목 관리</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="./index2" class="nav-link">
+									<a href="/masterdata/boms" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
-										<p>하위2</p>
+										<p> BOM 관리
+										</p>
+									</a>
+								</li>
+
+								<li class="nav-item">
+									<a href="/masterdata/suppliers" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p> 거래처관리
+										</p>
+									</a>
+								</li>
+
+								<li class="nav-item">
+									<a href="/masterdata/franchises" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p> 가맹점관리
+										</p>
 									</a>
 								</li>
 							</ul>
 						</li>
-
-						<!-- 거래관리 -->
-						<!--                        <li class="nav-item">-->
-						<!--                            <a href="#" class="nav-link">-->
-						<!--								<img src="/img/sidebar/2.png" alt="Icon" class="nav-icon" >-->
-						<!--                                <i class="nav-icon fas fa-copy"></i>-->
-						<!--                                <p>거래관리<i class="right fas fa-angle-left"></i></p>-->
-						<!--                            </a>-->
-						<!--                            <ul class="nav nav-treeview">-->
-						<!--                                <li class="nav-item">-->
-						<!--                                    <a href="./index.html" class="nav-link active">-->
-						<!--                                        <i class="far fa-circle nav-icon"></i>-->
-						<!--                                        <p>하위1</p>-->
-						<!--                                    </a>-->
-						<!--                                </li>-->
-						<!--                                <li class="nav-item">-->
-						<!--                                    <a href="./index2" class="nav-link">-->
-						<!--                                        <i class="far fa-circle nav-icon"></i>-->
-						<!--                                        <p>하위2</p>-->
-						<!--                                    </a>-->
-						<!--                                </li>-->
-						<!--                            </ul>-->
-						<!--                        </li>-->
+						</li>
 
 						<li class="nav-item">
 							<a href="#" class="nav-link">
@@ -94,12 +89,12 @@
 									</a>
 									<ul class="nav nav-treeview" id="sub-menu-1">
 										<li class="nav-item">
-											<a href="/transaction" class="nav-link">
+											<a href="/tx/insertOrder" class="nav-link">
 												<p>발주등록</p>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="/orderlist" class="nav-link">
+											<a href="/tx/orderList" class="nav-link">
 												<p>발주현황</p>
 											</a>
 										</li>
@@ -112,12 +107,12 @@
 									</a>
 									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="/tx/insertSale" class="nav-link">
 												<p>수주등록</p>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="/tx/saleList" class="nav-link">
 												<p>수주조회</p>
 											</a>
 										</li>
@@ -131,12 +126,12 @@
 									</a>
 									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="/tx/insertShip" class="nav-link">
 												<p>출하등록</p>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="/tx/shipList" class="nav-link">
 												<p>출하조회</p>
 											</a>
 										</li>
@@ -145,32 +140,10 @@
 							</ul>
 						</li>
 
-						<!-- 자재/제품관리 -->
-						<!--                        <li class="nav-item">-->
-						<!--                            <a href="#" class="nav-link">-->
-						<!--								<img src="/img/sidebar/3.png" alt="Icon" class="nav-icon" >-->
-						<!--                                <i class="nav-icon fas fa-copy"></i>-->
-						<!--                                <p>자재/제품관리<i class="right fas fa-angle-left"></i></p>-->
-						<!--                            </a>-->
-						<!--                            <ul class="nav nav-treeview">-->
-						<!--                                <li class="nav-item">-->
-						<!--                                    <a href="./index.html" class="nav-link active">-->
-						<!--                                        <i class="far fa-circle nav-icon"></i>-->
-						<!--                                        <p>하위1</p>-->
-						<!--                                    </a>-->
-						<!--                                </li>-->
-						<!--                                <li class="nav-item">-->
-						<!--                                    <a href="./index2" class="nav-link">-->
-						<!--                                        <i class="far fa-circle nav-icon"></i>-->
-						<!--                                        <p>하위2</p>-->
-						<!--                                    </a>-->
-						<!--                                </li>-->
-						<!--                            </ul>-->
-						<!--                        </li>-->
 
 						<li class="nav-item">
 							<a href="#" class="nav-link">
-								<img src="/img/sidebar/2.png" alt="Icon" class="nav-icon">
+								<img src="/img/sidebar/3.png" alt="Icon" class="nav-icon">
 								<p>자재/제품관리<i class="right fas fa-angle-left"></i></p>
 							</a>
 							<ul class="nav nav-treeview">
@@ -181,11 +154,11 @@
 									</a>
 									<ul class="nav nav-treeview" id="sub-menu-1">
 										<li class="nav-item">
-											<a href="/inventoryList" class="nav-link">
+											<a href="/inven/inventoryList" class="nav-link">
 												<p>재고조회</p>
 											</a>
 										</li>
-										
+
 									</ul>
 								</li>
 								<li class="nav-item">
@@ -195,12 +168,12 @@
 									</a>
 									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="/inven/incomingInsert" class="nav-link">
 												<p>입고등록</p>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="/inven/incomingList" class="nav-link">
 												<p>입고조회</p>
 											</a>
 										</li>
@@ -214,12 +187,12 @@
 									</a>
 									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="/inven/outgoingInsert" class="nav-link">
 												<p>출고등록</p>
 											</a>
 										</li>
 										<li class="nav-item">
-											<a href="#" class="nav-link">
+											<a href="/inven/outgoingList" class="nav-link">
 												<p>출고조회</p>
 											</a>
 										</li>
@@ -254,22 +227,59 @@
 						<li class="nav-item">
 							<a href="#" class="nav-link">
 								<img src="/img/sidebar/5.png" alt="Icon" class="nav-icon">
-								<!--                                <i class="nav-icon fas fa-copy"></i>-->
 								<p>품질관리<i class="right fas fa-angle-left"></i></p>
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="./index.html" class="nav-link active">
+									<a href="#" class="nav-link ">
 										<i class="far fa-circle nav-icon"></i>
-										<p>하위1</p>
+										<p>품질관리<i class="right fas fa-angle-left"></i></p>
 									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/quality/qualityList/sale" class="nav-link">
+												<p>입하검품</p>
+											</a>
+										</li>
+
+										<li class="nav-item">
+											<a href="/quality/qualityList/order" class="nav-link">
+												<p>출고검품</p>
+											</a>
+										</li>
+
+										<li class="nav-item">
+											<a href="/quality/qualityList/shipment" class="nav-link">
+												<p>출하검품</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/quality/qualityList" class="nav-link">
+												<p>품질관리리스트</p>
+											</a>
+										</li>
+
+									</ul>
+
+
+
 								</li>
 								<li class="nav-item">
-									<a href="./index2" class="nav-link">
+									<a href="#" class="nav-link ">
 										<i class="far fa-circle nav-icon"></i>
-										<p>하위2</p>
+										<p>반품관리<i class="right fas fa-angle-left"></i></p>
 									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="/defective/defective" class="nav-link">
+												<p>반품 품목 조회</p>
+											</a>
+										</li>
+
+									</ul>
 								</li>
+
+
 							</ul>
 						</li>
 
