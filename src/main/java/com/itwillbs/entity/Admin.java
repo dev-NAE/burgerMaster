@@ -36,6 +36,8 @@ public class Admin {
 	@Column(name = "authority")
 	private String authority;
 
+
+
 	public Admin createAdmin(Admin admin, PasswordEncoder passwordEncoder) {
 		return Admin.builder()
 				.adminID(admin.getAdminID())

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -21,8 +22,8 @@ public class adminsTest {
     @Test
     void register(){
         Admin admin = Admin.builder()
-                .adminID("testid12")
-                .pass(encoder.encode("password12"))
+                .adminID("testid")
+                .pass(encoder.encode("password"))
                 .name("testNick")
                 .email("testEmail")
                 .phone("testEmail")
