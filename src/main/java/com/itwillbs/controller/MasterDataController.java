@@ -1,19 +1,19 @@
 package com.itwillbs.controller;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.domain.masterdata.ItemSearchDTO;
 import com.itwillbs.entity.Item;
@@ -45,74 +45,59 @@ public class MasterDataController {
 		return "masterdata/layout";
 	}
 
-	@GetMapping("/test")
-	public String listItems() {
-		return "masterdata/items/form";
-	}
-	
 	// Item Management
-	//getlists - list -검색 service 추가 필요
+	// 목록 페이지
 	@GetMapping("/items")
-	public String listItems(Model model, ItemSearchDTO searchDto, @RequestParam(defaultValue = "0") int page,
+	public String listItems() {
+		return "masterdata/items";
+	}
+
+	// 아이템 목록 조회
+	@GetMapping("/api/items")
+	@ResponseBody
+	public Page<Item> getItems(ItemSearchDTO searchDto, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size) {
-		Page<Item> items = itemService.searchItems(searchDto, PageRequest.of(page, size));
-		model.addAttribute("items", items);
-		model.addAttribute("searchDto", searchDto);
-		return "masterdata/items/list";
+		return itemService.searchItems(searchDto, PageRequest.of(page, size));
 	}
 
-	//@getItem - detail
-	@GetMapping("/items/{itemCode}")
-	public String detailItem(@PathVariable String itemCode, Model model) {
-		Optional<Item> item = itemService.findItemByCode(itemCode);
-		model.addAttribute("item", item.get());
-		return "masterdata/items/detail";
+	// 아이템 상세 조회
+	@GetMapping("/api/items/{itemCode}")
+	@ResponseBody
+	public ResponseEntity<Item> getItem(@PathVariable String itemCode) {
+		return itemService.findItemByCode(itemCode).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
-	//@등록 빈 form
-	@GetMapping("/items/new")
-	public String newItemForm(Model model) {
-		model.addAttribute("item", new Item());
-		return "masterdata/items/form";
+	// 아이템 저장
+	@PostMapping("/api/items")
+	@ResponseBody
+	public ResponseEntity<Item> saveItem(@RequestBody @Validated Item item) {
+		Item savedItem = itemService.saveItem(item);
+		return ResponseEntity.ok(savedItem);
 	}
 
-	//@수정 시 조회 된 form
-	@GetMapping("/items/{itemCode}/edit")
-	public String editItemForm(@PathVariable String itemCode, Model model) {
-		Optional<Item> item = itemService.findItemByCode(itemCode);
-		model.addAttribute("item", item.get());
-		return "masterdata/items/form";
+	// 아이템 수정
+	@PutMapping("/api/items/{itemCode}")
+	@ResponseBody
+	public ResponseEntity<Item> updateItem(@PathVariable String itemCode, @RequestBody @Validated Item item) {
+		item.setItemCode(itemCode);
+		Item updatedItem = itemService.updateItem(item);
+		return ResponseEntity.ok(updatedItem);
 	}
 
-	//등록폼 select 선택 시 최대코드의 다음값 조회
-	@GetMapping("/items/nextCode")
-	public String getNextCode(@RequestParam String itemType) {
-		return itemService.generateNextCode(itemType);
-	}
-
-	//@등록 Validated 및 bindingresult 고려하기 
-	@PostMapping("/items")
-    public String createItem(@ModelAttribute Item item) {
-        Item savedItem = itemService.saveItem(item);
-        return "redirect:/items/" + savedItem.getItemCode();
-    }
-
-	//@수정
-    @PutMapping("/items/{itemCode}")
-    public String updateItem(@PathVariable String itemCode, @ModelAttribute Item item) {
-        item.setItemCode(itemCode);
-        Item updatedItem = itemService.updateItem(item);
-        return "redirect:/items/" + updatedItem.getItemCode();
-    }
-
-	//@삭제버튼 delete
-	@DeleteMapping("/items/{itemCode}")
-	public String deleteItem(@PathVariable String itemCode) {
+	// 아이템 삭제
+	@DeleteMapping("/api/items/{itemCode}")
+	@ResponseBody
+	public ResponseEntity<Void> deleteItem(@PathVariable String itemCode) {
 		itemService.deleteItem(itemCode);
-		return "redirect:/masterdata/items";
+		return ResponseEntity.ok().build();
 	}
-	
-	
+
+	// 코드 최대값+1 조회
+	@GetMapping("/api/items/nextCode")
+	@ResponseBody
+	public String getNextCode(@RequestParam String itemType) {
+	    return itemService.generateNextCode(itemType);
+	}
 
 	// BOM Management
 	@GetMapping("/boms")
