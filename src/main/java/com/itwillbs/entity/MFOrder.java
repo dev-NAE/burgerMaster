@@ -17,7 +17,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class ManuOrder {
+public class MFOrder {
 	
 	@Id
 	@Column(name = "mOrder_id", length = 20, nullable = false)

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>작업 지시 조회</title>
+  <title>가공품 상세 정보</title>
   <!-- 기본 css 링크-->
   <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
   <!-- Google Font: Source Sans Pro -->
@@ -36,12 +36,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">작업 지시 조회</h1>
+            <h1 class="m-0">가공품 상세 정보</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">작업 지시 조회</li>
+              <li class="breadcrumb-item active">가공품 상세 정보</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -61,12 +61,7 @@
 					<tr>
 						<th>식별번호</th>
 						<th>가공품명</th>
-						<th>수량</th>
-						<th>데드라인</th>
-						<th>요청일</th>
-						<th>작업 상태</th>
-						<th>작업 전달 확인</th>
-						<th>작업 완료 확인</th>
+						<th>재료</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -74,31 +69,16 @@
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
 					</tr>
 					<tr>
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
 					</tr>
 					<tr>
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
 					</tr>
 				</tbody>
 			</table>
@@ -120,19 +100,9 @@
 			  
 			  <div style="display: inline-block;">
 			    <select class="form-control">
-					<option th:text="식별번호"></option>
+					<option th:text="가공품식별번호"></option>
 					<option th:text="가공품명"></option>
-					<option th:text="요청일"></option>
 				</select>
-			  </div>
-			  
-			  <div style="display: inline-block;">
-			    <select class="form-control">
-			  	  <option th:text="작업완료"></option>
-			  	  <option th:text="작업전달전"></option>
-			  	  <option th:text="작업중"></option>
-				  <option th:text="작업완료"></option>
-			  	</select>
 			  </div>
 			  
 			  <div style="display: inline-block;">
