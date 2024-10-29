@@ -1,422 +1,567 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BugerMaster</title>
 
-  <!-- Google Font: Source Sans Pro -->
-<!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>BugerMaster</title>
+
+	<!-- Google Font: Source Sans Pro -->
+	<!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
 	<link rel="stylesheet" href="css/font.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
-  <!-- Ionicons -->
-  <!-- icon 을 사용할 수 있는 링크-->
-  <!-- https://ionic.io/ionicons 아이콘 검색 링크-->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Tempusdominus Bootstrap 4  달력 관련 css-->
-  <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-  <!-- iCheck -->
-  <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/adminlte.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
-  <!-- Daterange picker -->
-  <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
-  <!-- summernote -->
-  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+	<!-- Ionicons -->
+	<!-- icon 을 사용할 수 있는 링크-->
+	<!-- https://ionic.io/ionicons 아이콘 검색 링크-->
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- Tempusdominus Bootstrap 4  달력 관련 css-->
+	<link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+	<!-- iCheck -->
+	<link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+	<!-- JQVMap -->
+	<link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="dist/css/adminlte.min.css">
+	<!-- overlayScrollbars -->
+	<link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+	<!-- Daterange picker -->
+	<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+	<!-- summernote -->
+	<link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
-	
+
 
 	<!-- 공통 헤더 불러오기 -->
-	    <div th:replace="fragments/header :: headerFragment"></div>
-		
-		<!-- 공통 사이드바 불러오기 -->
-		   <div th:replace="fragments/sidebar :: sidebarFragment"></div>
-		   
-		   <!-- 공통 로딩 불러오기 -->
-		   		   <div th:replace="fragments/Preloader :: PreloaderFragment"></div>
-		
-		
-<div class="wrapper">
+	<div th:replace="fragments/header :: headerFragment"></div>
+
+	<!-- 공통 사이드바 불러오기 -->
+	<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+
+	<!-- 공통 로딩 불러오기 -->
+	<div th:replace="fragments/Preloader :: PreloaderFragment"></div>
+
+
+	<div class="wrapper">
 
 
 
-  
-  
-  
-  
 
 
-    
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0" >Dashboard</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="/main">Home</a></li> / Dashboard
-<!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-       
-        </div>
 
-		        <!-- Main row -->
-        <div class="row" >
-        
-<!--          <section class="col-lg-5 connectedSortable">-->
 
-						
-			<!--			Bar Chart-->
-						<div class="card card-success" style="margin: 5px;">
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Dashboard</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="/main">Home</a></li> / Dashboard
+								<!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+
+				</div>
+
+				<!-- Main row -->
+				<div class="row">
+
+					<!--          <section class="col-lg-5 connectedSortable">-->
+
+
+					<!--			Bar Chart-->
+					<div class="card card-success" style="margin: 5px;">
 						<div class="card-header">
-						<h3 class="card-title">원재료 입고량 . 총 재고</h3>
-						<div class="card-tools">
-						</div>
+							<h3 class="card-title">원재료 입고량 . 총 재고</h3>
+							<div class="card-tools">
+							</div>
 						</div>
 						<div class="card-body">
-						<div class="chart">
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class="">
+
+										</div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="myChart"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+									width="375" height="250" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+
+					</div>
+					<!--			/Bar Chart-->
+
+					<!--			Bar Chart-->
+					<div class="card card-success" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">완재품 입고량 . 총 재고</h3>
+							<div class="card-tools">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class="">
+
+										</div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="myChart2"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+									width="375" height="250" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+
+					</div>
+					<!--			/Bar Chart-->
+
+
+					<!--			Bar Chart-->
+					<div class="card card-success" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">가공품 총재고</h3>
+							<div class="card-tools">
+								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+								<!--			<i class="fas fa-minus"></i>-->
+								<!--			</button>-->
+								<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+								<!--			<i class="fas fa-times"></i>-->
+								<!--			</button>-->
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class=""></div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="myChart3"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+									width="375" height="250" class="chartjs-render-monitor">
+							</div>
+						</div>
+
+					</div>
+					<!--			/Bar Chart-->
+
+
+
+
+					<div class="card card-danger" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">불량률</h3>
+							<div class="card-tools">
+								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+								<!--			<i class="fas fa-minus"></i>-->
+								<!--			</button>-->
+								<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+								<!--			<i class="fas fa-times"></i>-->
+								<!--			</button>-->
+							</div>
+						</div>
+						<div class="card-body">
 							<div class="chartjs-size-monitor">
 								<div class="chartjs-size-monitor-expand">
-									<div class="">
-										
-									</div>
+									<div class=""></div>
 								</div>
 								<div class="chartjs-size-monitor-shrink">
 									<div class=""></div>
 								</div>
 							</div>
-						<canvas id="barChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
-						</div>
+							<canvas id="pieChart1"
+								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+								width="375" height="250" class="chartjs-render-monitor"></canvas>
 						</div>
 
-						</div>
-			<!--			/Bar Chart-->
-			
-			<!--			Bar Chart-->
-									<div class="card card-success" style="margin: 5px;">
-									<div class="card-header">
-									<h3 class="card-title">완재품 입고량 . 총 재고</h3>
-									<div class="card-tools">
-									</div>
-									</div>
-									<div class="card-body">
-									<div class="chart">
-										<div class="chartjs-size-monitor">
-											<div class="chartjs-size-monitor-expand">
-												<div class="">
-													
-												</div>
-											</div>
-											<div class="chartjs-size-monitor-shrink">
-												<div class=""></div>
-											</div>
-										</div>
-									<canvas id="barChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
-									</div>
-									</div>
+					</div>
 
-									</div>
-						<!--			/Bar Chart-->
-			
-						
-			<!--			Bar Chart-->
-						<div class="card card-success" style="margin: 5px;">
+
+
+
+
+
+
+
+
+					<div class="card card-danger" style="margin: 5px 500px 0  5px;">
 						<div class="card-header">
-						<h3 class="card-title">가공품 총재고</h3>
-						<div class="card-tools">
-			<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-			<!--			<i class="fas fa-minus"></i>-->
-			<!--			</button>-->
-			<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-			<!--			<i class="fas fa-times"></i>-->
-			<!--			</button>-->
-						</div>
+							<h3 class="card-title">반품률</h3>
+							<div class="card-tools">
+								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+								<!--			<i class="fas fa-minus"></i>-->
+								<!--			</button>-->
+								<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+								<!--			<i class="fas fa-times"></i>-->
+								<!--			</button>-->
+							</div>
 						</div>
 						<div class="card-body">
-						<div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-						<canvas id="barChart3" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor">
-						</div>
-						</div>
-
-						</div>
-			<!--			/Bar Chart-->
-
-			
-			
-			
-			<div class="card card-danger" style="margin: 5px;">
-						<div class="card-header">
-						<h3 class="card-title">불량률</h3>
-						<div class="card-tools">
-			<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-			<!--			<i class="fas fa-minus"></i>-->
-			<!--			</button>-->
-			<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-			<!--			<i class="fas fa-times"></i>-->
-			<!--			</button>-->
-						</div>
-						</div>
-						<div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-						<canvas id="pieChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
+							<div class="chartjs-size-monitor">
+								<div class="chartjs-size-monitor-expand">
+									<div class=""></div>
+								</div>
+								<div class="chartjs-size-monitor-shrink">
+									<div class=""></div>
+								</div>
+							</div>
+							<canvas id="pieChart2"
+								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+								width="375" height="250" class="chartjs-render-monitor"></canvas>
 						</div>
 
+					</div>
+
+
+					<!-- solid sales graph -->
+
+					<div class="card bg-gradient-info" style="margin: 5px ;">
+						<div class="card-header border-0">
+							<h3 class="card-title">
+								<!--                  <i class="fas fa-th mr-1"></i>-->
+								월간 수주량
+							</h3>
+
+							<div class="card-tools">
+								<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">-->
+								<!--                    <i class="fas fa-minus"></i>-->
+								<!--                  </button>-->
+								<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">-->
+								<!--                    <i class="fas fa-times"></i>-->
+								<!--                  </button>-->
+							</div>
 						</div>
-			
-			
-			
-			
-			
-			
+						<div class="card-body">
+							<canvas class="chart" id="line-chart"
+								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+						</div>
+						<!-- /.card-body -->
+						<div class="card-footer bg-transparent">
+							<div class="row">
+								<!--                  <div class="col-4 text-center">-->
+								<!--                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"-->
+								<!--                           data-fgColor="#39CCCC">-->
 
-			
-			
-			<div class="card card-danger" style="margin: 5px 500px 0  5px;">
-			<div class="card-header">
-			<h3 class="card-title">반품률</h3>
-			<div class="card-tools">
-<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-<!--			<i class="fas fa-minus"></i>-->
-<!--			</button>-->
-<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-<!--			<i class="fas fa-times"></i>-->
-<!--			</button>-->
-			</div>
-			</div>
-			<div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-			<canvas id="pieChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;" width="375" height="250" class="chartjs-render-monitor"></canvas>
-			</div>
+								<!--                    <div class="text-white">Mail-Orders</div>-->
+								<!--                  </div>-->
+								<!-- ./col -->
+								<!--                  <div class="col-4 text-center">-->
+								<!--                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"-->
+								<!--                           data-fgColor="#39CCCC">-->
 
-			</div>
-			
-			
-			  <!-- solid sales graph -->
-			  
-			            <div class="card bg-gradient-info" style="margin: 5px ;">
-			              <div class="card-header border-0">
-			                <h3 class="card-title">
-			<!--                  <i class="fas fa-th mr-1"></i>-->
-			                  월간 수주량
-			                </h3>
+								<!--                    <div class="text-white">Online</div>-->
+								<!--                  </div>-->
+								<!-- ./col -->
+								<div class="col-4 text-center">
+									<!--                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"-->
+									<!--                           data-fgColor="#39CCCC">-->
 
-			                <div class="card-tools">
-			<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">-->
-			<!--                    <i class="fas fa-minus"></i>-->
-			<!--                  </button>-->
-			<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">-->
-			<!--                    <i class="fas fa-times"></i>-->
-			<!--                  </button>-->
-			                </div>
-			              </div>
-			              <div class="card-body">
-			                <canvas class="chart" id="line-chart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-			              </div>
-			              <!-- /.card-body -->
-			              <div class="card-footer bg-transparent">
-			                <div class="row">
-			<!--                  <div class="col-4 text-center">-->
-			<!--                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"-->
-			<!--                           data-fgColor="#39CCCC">-->
-
-			<!--                    <div class="text-white">Mail-Orders</div>-->
-			<!--                  </div>-->
-			                  <!-- ./col -->
-			<!--                  <div class="col-4 text-center">-->
-			<!--                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"-->
-			<!--                           data-fgColor="#39CCCC">-->
-
-			<!--                    <div class="text-white">Online</div>-->
-			<!--                  </div>-->
-			                  <!-- ./col -->
-			                  <div class="col-4 text-center">
-			<!--                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"-->
-			<!--                           data-fgColor="#39CCCC">-->
-
-			<!--                    <div class="text-white">월간 수주량</div>-->
-			                  </div>
-			                  <!-- ./col -->
-			                </div>
-			                <!-- /.row -->
-			              </div>
-			              <!-- /.card-footer -->
-			            </div>
-			            <!-- /.card -->
-						
-						
-
-						
-						
-									
-            
-<!--          </section>-->
-          <!-- right col -->
-        </div>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-  
-  
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
+									<!--                    <div class="text-white">월간 수주량</div>-->
+								</div>
+								<!-- ./col -->
+							</div>
+							<!-- /.row -->
+						</div>
+						<!-- /.card-footer -->
+					</div>
+					<!-- /.card -->
 
 
 
-<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
-		   <div th:replace="fragments/footer :: footerFragment"></div>
-
-<!-- jQuery -->
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-
-
-<script>
-  $.widget.bridge('uibutton', $.ui.button)
-</script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="plugins/moment/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Summernote -->
-<script src="plugins/summernote/summernote-bs4.min.js"></script>
-<!-- overlayScrollbars -->
-<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="dist/js/pages/dashboard.js"></script>
 
 
 
-<script>
-    // JSP 또는 템플릿 엔진에서 생성된 ItemList 데이터를 JavaScript에서 사용할 수 있도록 설정
-<!--    const itemList = [[${ItemList}]];-->
 
-    // itemList에서 라벨과 데이터 추출
-    const labels = itemList.map(item => item.name); // 예시: 아이템 이름이 있을 경우
-    const dataValues = itemList.map(item => item.value); // 예시: 아이템에 value가 있을 경우
+					<!--          </section>-->
+					<!-- right col -->
+				</div>
+				<!-- /.row (main row) -->
+		</div><!-- /.container-fluid -->
+		</section>
+		<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
 
-    // 바 차트 생성
-    const ctx = document.getElementById('barChart1').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels, // x축 라벨 설정
-            datasets: [{
-                label: '원재료 입고량',
-                data: dataValues, // y축 데이터
-                backgroundColor: 'rgba(60, 141, 188, 0.9)', // 바 색상 설정
-                borderColor: 'rgba(60, 141, 188, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-</script>
 
-<!--<script>-->
-<!--  $(function () {-->
-<!--    /* ChartJS-->
-<!--     * --------->
-<!--     * Here we will create a few charts using ChartJS-->
-<!--     */-->
 
-    
+	<!-- Control Sidebar -->
+	<aside class="control-sidebar control-sidebar-dark">
+		<!-- Control sidebar content goes here -->
+	</aside>
+	<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
 
-<!--    //--------------->
-<!--    //- PIE CHART --->
-<!--    //--------------->
-<!--    // Get context with jQuery - using jQuery's .get() method.-->
-<!--    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')-->
-<!--    var pieData        = donutData;-->
-<!--    var pieOptions     = {-->
-<!--      maintainAspectRatio : false,-->
-<!--      responsive : true,-->
-<!--    }-->
-<!--    //Create pie or douhnut chart-->
-<!--    // You can switch between pie and douhnut using the method below.-->
-<!--    new Chart(pieChartCanvas, {-->
-<!--      type: 'pie',-->
-<!--      data: pieData,-->
-<!--      options: pieOptions-->
-<!--    })-->
 
-<!--    //--------------->
-<!--    //- BAR CHART --->
-<!--    //--------------->
-<!--    var barChartCanvas = $('#barChart1').get(0).getContext('2d')-->
-<!--    var barChartData = $.extend(true, {}, areaChartData)-->
-<!--    var temp0 = areaChartData.datasets[0]-->
-<!--    var temp1 = areaChartData.datasets[1]-->
-<!--    barChartData.datasets[0] = temp1-->
-<!--    barChartData.datasets[1] = temp0-->
 
-<!--    var barChartOptions = {-->
-<!--      responsive              : true,-->
-<!--      maintainAspectRatio     : false,-->
-<!--      datasetFill             : false-->
-<!--    }-->
+	<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+	<div th:replace="fragments/footer :: footerFragment"></div>
 
-<!--    new Chart(barChartCanvas, {-->
-<!--      type: 'bar',-->
-<!--      data: barChartData,-->
-<!--      options: barChartOptions-->
-<!--    })-->
+	<!-- jQuery -->
+	<script src="plugins/jquery/jquery.min.js"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 
-   
-<!--  })-->
-  
-  
-<!--</script>-->
+
+	<script>
+		$.widget.bridge('uibutton', $.ui.button)
+	</script>
+	<!-- Bootstrap 4 -->
+	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- ChartJS -->
+	<script src="plugins/chart.js/Chart.min.js"></script>
+	<!-- Sparkline -->
+	<script src="plugins/sparklines/sparkline.js"></script>
+	<!-- JQVMap -->
+	<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+	<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+	<!-- jQuery Knob Chart -->
+	<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+	<!-- daterangepicker -->
+	<script src="plugins/moment/moment.min.js"></script>
+	<script src="plugins/daterangepicker/daterangepicker.js"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+	<!-- Summernote -->
+	<script src="plugins/summernote/summernote-bs4.min.js"></script>
+	<!-- overlayScrollbars -->
+	<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="dist/js/adminlte.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="dist/js/demo.js"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script src="dist/js/pages/dashboard.js"></script>
+
+
+	<script th:inline="javascript">
+		
+		// 원재료
+		const rmItemList = /*[[${rmItemList}]]*/[
+		];
+		//alert(JSON.stringify(rmItemList));
+
+		const labels = rmItemList.map(item => item.itemName);  // 항목 이름
+		const data = {
+			labels: labels,
+			datasets: [
+				{
+					label: '원재료 입고량',
+					data: rmItemList.map(item => item.quantity),  // 입고량 필드로 사용 (수정필요)
+					backgroundColor: 'lightblue',
+					borderColor: 'lightblue',
+					borderWidth: 1
+				},
+				{
+					label: '총 재고',
+					data: rmItemList.map(item => item.quantity),  // 총 재고 필드로 사용
+					backgroundColor: 'lightgreen',
+					borderColor: 'lightgreen',
+					borderWidth: 1
+				}
+			]
+		};
+
+		const config = {
+			type: 'bar',
+			data: data,
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		};
+
+		// Chart.js를 사용하여 차트 생성
+		  const ctx = document.getElementById('myChart').getContext('2d');
+		  new Chart(ctx, config);
+
+
+
+
+
+
+		//완재품
+		const fpItemList = /*[[${fpItemList}]]*/[
+		];
+
+		//alert("fpItemList"+JSON.stringify(fpItemList));
+		
+		const labels2 = fpItemList.map(item => item.itemName);  // 항목 이름
+		const data2 = {
+			labels: labels2,
+			datasets: [
+				{
+					label: '완재품 입고량',
+					data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					backgroundColor: 'lightblue',
+					borderColor: 'lightblue',
+					borderWidth: 1
+				},
+				{
+					label: '총 재고',
+					data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					backgroundColor: 'lightgreen',
+					borderColor: 'lightgreen',
+					borderWidth: 1
+				}
+			]
+		};
+
+		const config2 = {
+			type: 'bar',
+			data: data2,
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		};
+
+		// Chart.js를 사용하여 차트 생성
+				  const ctx2 = document.getElementById('myChart2').getContext('2d');
+				  new Chart(ctx2, config2);
+
+		//가공품
+		const ppItemList = /*[[${ppItemList}]]*/[
+		];
+		
+		//alert("ppItemList:"+JSON.stringify(ppItemList));
+
+		const labels3 = ppItemList.map(item => item.itemName);  // 항목 이름
+		const data3 = {
+			labels: labels3,
+			datasets: [
+				{
+					label: '가공품 입고량',
+					data: ppItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					backgroundColor: 'lightblue',
+					borderColor: 'lightblue',
+					borderWidth: 1
+				},
+				{
+					label: '총 재고',
+					data: ppItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					backgroundColor: 'lightgreen',
+					borderColor: 'lightgreen',
+					borderWidth: 1
+				}
+			]
+		};
+
+		const config3 = {
+			type: 'bar',
+			data: data3,
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		};
+
+		// Chart.js를 사용하여 차트 생성
+				  const ctx3 = document.getElementById('myChart3').getContext('2d');
+				  new Chart(ctx3, config3);
+
+
+
+
+	</script>
+
+
+	<!--<script>-->
+	<!--  $(function () {-->
+	<!--    /* ChartJS-->
+	<!--     * --------->
+	<!--     * Here we will create a few charts using ChartJS-->
+	<!--     */-->
+
+
+
+	<!--    //--------------->
+	<!--    //- PIE CHART --->
+	<!--    //--------------->
+	<!--    // Get context with jQuery - using jQuery's .get() method.-->
+	<!--    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')-->
+	<!--    var pieData        = donutData;-->
+	<!--    var pieOptions     = {-->
+	<!--      maintainAspectRatio : false,-->
+	<!--      responsive : true,-->
+	<!--    }-->
+	<!--    //Create pie or douhnut chart-->
+	<!--    // You can switch between pie and douhnut using the method below.-->
+	<!--    new Chart(pieChartCanvas, {-->
+	<!--      type: 'pie',-->
+	<!--      data: pieData,-->
+	<!--      options: pieOptions-->
+	<!--    })-->
+
+	<!--    //--------------->
+	<!--    //- BAR CHART --->
+	<!--    //--------------->
+	<!--    var barChartCanvas = $('#barChart1').get(0).getContext('2d')-->
+	<!--    var barChartData = $.extend(true, {}, areaChartData)-->
+	<!--    var temp0 = areaChartData.datasets[0]-->
+	<!--    var temp1 = areaChartData.datasets[1]-->
+	<!--    barChartData.datasets[0] = temp1-->
+	<!--    barChartData.datasets[1] = temp0-->
+
+	<!--    var barChartOptions = {-->
+	<!--      responsive              : true,-->
+	<!--      maintainAspectRatio     : false,-->
+	<!--      datasetFill             : false-->
+	<!--    }-->
+
+	<!--    new Chart(barChartCanvas, {-->
+	<!--      type: 'bar',-->
+	<!--      data: barChartData,-->
+	<!--      options: barChartOptions-->
+	<!--    })-->
+
+
+	<!--  })-->
+
+
+	<!--</script>-->
 </body>
+
 </html>
