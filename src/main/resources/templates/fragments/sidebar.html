@@ -1,179 +1,302 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
+	<meta charset="UTF-8">
 
 </head>
+
 <body>
-    <th:block th:fragment="sidebarFragment">
-        <!-- Main Sidebar Container -->
+	<th:block th:fragment="sidebarFragment">
+		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar elevation-4 sidebar-light-olive">
-<!--        <aside class="main-sidebar sidebar-dark-primary elevation-4">-->
-            <!-- Brand Logo -->
-            <a href="#" class="brand-link"  >
-                <img src="/img/sidebar/bugerMasterLogo2.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style=" opacity: .8"><br>
-                <span class="brand-text font-weight-light"  >BugerMaster</span>
-            </a>
+			<!--        <aside class="main-sidebar sidebar-dark-primary elevation-4">-->
+			<!-- Brand Logo -->
+			<a href="#" class="brand-link">
+				<img src="/img/sidebar/bugerMasterLogo2.png" alt="AdminLTE Logo"
+					class="brand-image img-circle elevation-3" style=" opacity: .8"><br>
+				<span class="brand-text font-weight-light">BugerMaster</span>
+			</a>
 
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar user panel (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="/img/sidebar/testuser.png" class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">Alexander Pierce</a>
-                    </div>
-                </div>
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<!-- Sidebar user panel (optional) -->
+				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+					<div class="image">
+						<img src="/img/sidebar/testuser.png" class="img-circle elevation-2" alt="User Image">
+					</div>
+					<div class="info">
+						<a href="#" class="d-block">Alexander Pierce</a>
+					</div>
+				</div>
 
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- 기준정보관리 -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link ">
+				<!-- Sidebar Menu -->
+				<nav class="mt-2">
+					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+						data-accordion="false">
+						<!-- 기준정보관리 -->
+						<li class="nav-item">
+							<a href="#" class="nav-link ">
 								<img src="/img/sidebar/1.png" alt="Icon" class="nav-icon">
 
-<!--                                <i class="nav-icon fas fa-copy"></i>-->
-                                <p>기준정보관리<i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="./index2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+								<!--                                <i class="nav-icon fas fa-copy"></i>-->
+								<p>기준정보관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>하위1</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="./index2" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>하위2</p>
+									</a>
+								</li>
+							</ul>
+						</li>
 
-                        <!-- 거래관리 -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-								<img src="/img/sidebar/2.png" alt="Icon" class="nav-icon" >
-<!--                                <i class="nav-icon fas fa-copy"></i>-->
-                                <p>거래관리<i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="./index.html" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="./index2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+						<!-- 거래관리 -->
+						<!--                        <li class="nav-item">-->
+						<!--                            <a href="#" class="nav-link">-->
+						<!--								<img src="/img/sidebar/2.png" alt="Icon" class="nav-icon" >-->
+						<!--                                <i class="nav-icon fas fa-copy"></i>-->
+						<!--                                <p>거래관리<i class="right fas fa-angle-left"></i></p>-->
+						<!--                            </a>-->
+						<!--                            <ul class="nav nav-treeview">-->
+						<!--                                <li class="nav-item">-->
+						<!--                                    <a href="./index.html" class="nav-link active">-->
+						<!--                                        <i class="far fa-circle nav-icon"></i>-->
+						<!--                                        <p>하위1</p>-->
+						<!--                                    </a>-->
+						<!--                                </li>-->
+						<!--                                <li class="nav-item">-->
+						<!--                                    <a href="./index2" class="nav-link">-->
+						<!--                                        <i class="far fa-circle nav-icon"></i>-->
+						<!--                                        <p>하위2</p>-->
+						<!--                                    </a>-->
+						<!--                                </li>-->
+						<!--                            </ul>-->
+						<!--                        </li>-->
 
-                        <!-- 자재/제품관리 -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-								<img src="/img/sidebar/3.png" alt="Icon" class="nav-icon" >
-<!--                                <i class="nav-icon fas fa-copy"></i>-->
-                                <p>자재/제품관리<i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="./index.html" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="./index2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<img src="/img/sidebar/2.png" alt="Icon" class="nav-icon">
+								<p>거래관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>발주관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/transaction" class="nav-link">
+												<p>발주등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/orderlist" class="nav-link">
+												<p>발주현황</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>수주관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="#" class="nav-link">
+												<p>수주등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" class="nav-link">
+												<p>수주조회</p>
+											</a>
+										</li>
+									</ul>
+								</li>
 
-                        <!-- 생산작업관리 -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-<!--                                <i class="nav-icon fas fa-copy"></i>-->
-							<img src="/img/sidebar/4.png" alt="Icon" class="nav-icon" >
-                                <p>생산작업관리<i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="./index.html" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="./index2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>출하관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="#" class="nav-link">
+												<p>출하등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" class="nav-link">
+												<p>출하조회</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
 
-                        <!-- 품질관리 -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-								<img src="/img/sidebar/5.png" alt="Icon" class="nav-icon" >
-<!--                                <i class="nav-icon fas fa-copy"></i>-->
-                                <p>품질관리<i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="./index.html" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="./index2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+						<!-- 자재/제품관리 -->
+						<!--                        <li class="nav-item">-->
+						<!--                            <a href="#" class="nav-link">-->
+						<!--								<img src="/img/sidebar/3.png" alt="Icon" class="nav-icon" >-->
+						<!--                                <i class="nav-icon fas fa-copy"></i>-->
+						<!--                                <p>자재/제품관리<i class="right fas fa-angle-left"></i></p>-->
+						<!--                            </a>-->
+						<!--                            <ul class="nav nav-treeview">-->
+						<!--                                <li class="nav-item">-->
+						<!--                                    <a href="./index.html" class="nav-link active">-->
+						<!--                                        <i class="far fa-circle nav-icon"></i>-->
+						<!--                                        <p>하위1</p>-->
+						<!--                                    </a>-->
+						<!--                                </li>-->
+						<!--                                <li class="nav-item">-->
+						<!--                                    <a href="./index2" class="nav-link">-->
+						<!--                                        <i class="far fa-circle nav-icon"></i>-->
+						<!--                                        <p>하위2</p>-->
+						<!--                                    </a>-->
+						<!--                                </li>-->
+						<!--                            </ul>-->
+						<!--                        </li>-->
 
-                        <!-- 관리자관리 -->
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-								<img src="/img/sidebar/6.png" alt="Icon" class="nav-icon" >
-<!--                                <i class="nav-icon fas fa-copy"></i>-->
-                                <p>관리자관리<i class="right fas fa-angle-left"></i></p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="./index.html" class="nav-link active">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위1</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="./index2" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>하위2</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
-            <!-- /.sidebar -->
-        </aside>
-    </th:block>
-	</body>
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<img src="/img/sidebar/2.png" alt="Icon" class="nav-icon">
+								<p>자재/제품관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>재고관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/inventoryList" class="nav-link">
+												<p>재고조회</p>
+											</a>
+										</li>
+										
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>입고관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="#" class="nav-link">
+												<p>입고등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" class="nav-link">
+												<p>입고조회</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>출고관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="#" class="nav-link">
+												<p>출고등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="#" class="nav-link">
+												<p>출고조회</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<!-- 생산작업관리 -->
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<!--                                <i class="nav-icon fas fa-copy"></i>-->
+								<img src="/img/sidebar/4.png" alt="Icon" class="nav-icon">
+								<p>생산작업관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="./index.html" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>하위1</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="./index2" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>하위2</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<!-- 품질관리 -->
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<img src="/img/sidebar/5.png" alt="Icon" class="nav-icon">
+								<!--                                <i class="nav-icon fas fa-copy"></i>-->
+								<p>품질관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="./index.html" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>하위1</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="./index2" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>하위2</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+
+						<!-- 관리자관리 -->
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<img src="/img/sidebar/6.png" alt="Icon" class="nav-icon">
+								<!--                                <i class="nav-icon fas fa-copy"></i>-->
+								<p>관리자관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="admins" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>관리자목록</p>
+									</a>
+								</li>
+
+							</ul>
+						</li>
+					</ul>
+				</nav>
+				<!-- /.sidebar-menu -->
+			</div>
+			<!-- /.sidebar -->
+		</aside>
+	</th:block>
+</body>
+
 </html>
