@@ -49,5 +49,9 @@ public class TXController {
         return "transaction/order/list";
     }
 
+    @GetMapping("/orderDetail")
+    public String orderDetail() {
+        return "transaction/order/detail";
+    }
 
 }
