@@ -15,7 +15,7 @@ function openPopupAtMousePosition(event, url, width, height) {
 
 // 담당자 검색 팝업
 $('#find-manager').on('click', function(event) {
-    openPopupAtMousePosition(event, '/findManager', 600, 600)
+    openPopupAtMousePosition(event, '/tx/findManager', 600, 600)
 });
 
 // 팝업에서 선택한 담당자 폼에 입력
@@ -26,7 +26,7 @@ function setManager(managerCode, managerName) {
 
 // 거래처 검색 팝업
 $('#find-supplier').on('click', function(event) {
-    openPopupAtMousePosition(event, '/findSupplier', 600, 600)
+    openPopupAtMousePosition(event, '/tx/findSupplier', 600, 600)
 });
 
 // 팝업에서 선택한 거래처 폼에 입력
@@ -37,7 +37,7 @@ function setSupplier(supplierCode, supplierName) {
 
 // 물품 추가 팝업
 $('#add-items').on('click', function(event) {
-    openPopupAtMousePosition(event, '/addItems', 800, 600)
+    openPopupAtMousePosition(event, '/tx/addItems', 800, 600)
 });
 
 // 팝업에서 선택한 물품 목록에 입력
@@ -91,4 +91,5 @@ function refreshTotalPrice() {
 
 
 // 발주등록 버튼: 필수항목이 비어있으면 비활성화, 모두 채워지면 활성화
+// + 입력내용 저장(발주, 발주품목)
 // + 등록버튼 연타에 따른 중복등록 방지 (로더 넣기)
