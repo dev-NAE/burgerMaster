@@ -11,7 +11,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class QualityController {
 
-	@GetMapping("/qualityList")
+	@GetMapping("/quality/qualityList")
 	public String qualityList() {
 		log.info("QualityController qualityList().....");
 		return "/quality/qualityList";
