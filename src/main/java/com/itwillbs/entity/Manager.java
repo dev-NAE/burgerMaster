@@ -9,17 +9,17 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
-@Table(name="admins")
+@Table(name="managers")
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Admin {
+public class Manager {
 	@Id
-	@Column(name = "adminID", length= 50)
-	private String adminID;
+	@Column(name = "manager_id", length= 50)
+	private String managerId;
 	
 	@Column(name = "pass", nullable = false)
 	private String pass;
@@ -38,9 +38,9 @@ public class Admin {
 
 
 
-	public Admin createAdmin(Admin admin, PasswordEncoder passwordEncoder) {
-		return Admin.builder()
-				.adminID(admin.getAdminID())
+	public Manager createManger(Manager admin, PasswordEncoder passwordEncoder) {
+		return Manager.builder()
+				.managerId(admin.getManagerId())
 				.pass(passwordEncoder.encode(admin.getPass()))
 				.name(admin.getName())
 				.email(admin.getEmail())
