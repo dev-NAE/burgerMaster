@@ -17,9 +17,23 @@ public class QualityController {
 		return "/quality/qualityList";
 	}
 
+	@GetMapping("/quality/quality_shipment")
+	public String quality_shipment() {
+		log.info("QualityController quality_shipment().....");
+		return "/quality/quality_shipment";
+	}
 
+	@GetMapping("/quality/quality_sale")
+	public String quality_sale() {
+		log.info("QualityController quality_sale().....");
+		return "/quality/quality_sale";
+	}
 
-
+	@GetMapping("/quality/quality_order")
+	public String quality_order() {
+		log.info("QualityController quality_order().....");
+		return "/quality/quality_order";
+	}
 
 
 }
