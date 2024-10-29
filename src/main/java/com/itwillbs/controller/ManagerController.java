@@ -1,6 +1,7 @@
 package com.itwillbs.controller;
 
 import lombok.extern.java.Log;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -16,7 +17,7 @@ public class ManagerController {
     @GetMapping("/managers")
     public String admins(){
         log.info("AdminsController managers()");
-
+        log.info("security context "+SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
         return "managers/managers";
     }
     @GetMapping("error/403")

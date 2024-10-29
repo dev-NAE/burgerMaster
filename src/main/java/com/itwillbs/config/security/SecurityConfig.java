@@ -35,6 +35,7 @@ public class SecurityConfig {
         String[] urlsToBePermittedAll = {
                 "/",
                 "/main/**",
+                "/managers/**",
                 "/login/**",
                 "/login/**",
                 "/error/**",
@@ -46,7 +47,7 @@ public class SecurityConfig {
         };
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(urlsToBePermittedAll).permitAll()
-                .anyRequest().anonymous()
+                .anyRequest().authenticated()
         );
 		http.formLogin(formLogin -> formLogin
                 .loginPage("/login")
@@ -57,10 +58,10 @@ public class SecurityConfig {
         );
 
         http.logout((logout) -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessHandler(customLogoutSuccessHandler)
-                        .invalidateHttpSession(true)
-                        .permitAll());
+                .logoutUrl("/logout")
+                .logoutSuccessHandler(customLogoutSuccessHandler)
+                .invalidateHttpSession(true)
+                .permitAll());
         http.exceptionHandling(conf -> conf
                 .authenticationEntryPoint(customAuthenticationEntryPointHandler)
                 .accessDeniedHandler(customAccessDeniedHandler)

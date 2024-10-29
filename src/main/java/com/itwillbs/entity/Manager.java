@@ -36,7 +36,8 @@ public class Manager {
 	@Column(name = "authority")
 	private String authority;
 
-
+	@Column(name = "manager_role")
+	private String managerRole;
 
 	public Manager createManger(Manager admin, PasswordEncoder passwordEncoder) {
 		return Manager.builder()

@@ -10,7 +10,10 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.Collections;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,10 +38,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new LoginException(LoginExceptionResult.NOT_CORRECT);
 
         // return UsernamePasswordAuthenticationToken
+        //
         return new UsernamePasswordAuthenticationToken(
                 managerInfo.getManagerId(),
-                managerInfo.getPass()
-
+                managerInfo.getPass(),
+                Collections.singleton(new SimpleGrantedAuthority("TEST"))
         );
     }
 
