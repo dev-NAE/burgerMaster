@@ -91,5 +91,9 @@ function refreshTotalPrice() {
 
 
 // 발주등록 버튼: 필수항목이 비어있으면 비활성화, 모두 채워지면 활성화
+$(document).ready(function() {
+    var $form = $('#')
+})
+
 // + 입력내용 저장(발주, 발주품목)
 // + 등록버튼 연타에 따른 중복등록 방지 (로더 넣기)

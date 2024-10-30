@@ -31,6 +31,9 @@ public class Order {
     @Column(name = "due_date")
     private Timestamp dueDate;
 
+    @Column(name = "real_date")
+    private Timestamp realDate;
+
     @Column(name = "status")
     private String status;
 
