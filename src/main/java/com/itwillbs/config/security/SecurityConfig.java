@@ -47,7 +47,7 @@ public class SecurityConfig {
         };
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(urlsToBePermittedAll).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
         );
 		http.formLogin(formLogin -> formLogin
                 .loginPage("/login")
