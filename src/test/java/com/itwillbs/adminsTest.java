@@ -1,13 +1,12 @@
 package com.itwillbs;
 
 import com.itwillbs.entity.Admin;
-import com.itwillbs.repository.AdminRepository;
+import com.itwillbs.repository.ManagerRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -15,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class adminsTest {
     @Autowired
-    private AdminRepository adminRepository;
+    private ManagerRepository adminRepository;
     @Autowired
     private BCryptPasswordEncoder encoder;
 

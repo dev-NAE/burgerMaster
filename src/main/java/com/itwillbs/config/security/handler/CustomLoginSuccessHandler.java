@@ -22,6 +22,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         // Spring Security Context Holder 인증 정보 set
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("Successfully logged in");
+
         response.sendRedirect("/main");
     }
 

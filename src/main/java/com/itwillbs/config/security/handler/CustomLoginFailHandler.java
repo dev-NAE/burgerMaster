@@ -20,7 +20,7 @@ public class CustomLoginFailHandler implements AuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         log.info("[CustomLoginFailHandler] :: " + exception.getMessage());
 
-        response.sendRedirect("/admin/login");
+        response.sendRedirect("/login");
     }
 
 }
