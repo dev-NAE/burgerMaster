@@ -28,5 +28,6 @@ public class Item {
     private String itemType;
 
     @Column(name = "use_yn", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'Y'")
-    private char useYN;
+    private char useYN = 'Y';
+
 }
