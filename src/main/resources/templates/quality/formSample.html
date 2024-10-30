@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>폼 샘플</title>
+  <!-- 기본 css 링크-->
+  <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
+  <!-- Google Font: Source Sans Pro -->
+  <!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="css/quality/quality.css">
+  	
+
+</head>
+<body class="hold-transition layout-fixed">
+
+<div class="wrapper">
+
+  <!--   Preloader -->
+  <!-- 처음 로딩 시 나오는 요소-->
+
+
+  <!-- Content Wrapper. Contains page content -->
+
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">모달로 입력 될 화면</h1>
+
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <!-- Main row -->
+        <div class="row">
+			
+			<!--여기 넓이 수정 필요-->
+      		<div class="card col-12">
+      		
+      		<div class="card-header">
+      			<div class="d-flex justify-content-end mt-3">
+			  		<button class="btn btn-danger">X</button>
+				</div> 
+				<div class="card search-container mx-auto col-10">
+	                <div class="card-body col-11 mx-auto">
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 col-form-label text-center" for="quality_id">검사 요청 번호</label>
+	                        <div class="input-group col-sm-4">
+	                            <input id="quality_id" class="form-control" type="text" name="quality_id">
+	                         
+	                        </div>
+	                        <label class="col-sm-2 col-form-label text-center" for="item-name">품목</label>
+	                        <div class="input-group col-sm-4">
+	                            <input id="item-name" class="form-control" type="text" name="item_name">
+	                           
+	                        </div>
+	                    </div>
+	                    <div class="form-group row">
+	                        <label class="col-sm-2 col-form-label text-center" for="manager-name">담당자</label>
+	                        <div class="input-group col-sm-4">
+	                            <input id="manager-name" class="form-control" type="text" name="manager_name">
+
+	                        </div>
+	                  		<label class="col-sm-2 col-form-label text-center" for="stock_date">입하일</label>
+	                        <div class="col-sm-4 d-flex">
+	                            <input class="form-control" type="date" id="stock_date" name="stock_date">
+	                        </div>
+	                    </div>
+
+                    </div>
+						
+					</div>
+	            </div>
+            </div>
+      			
+   			<div class="card-body">
+   				<div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+   					<div class="row">
+   						<div class="col-sm-12 col-md-6"></div>
+   						<div class="col-sm-12 col-md-6"></div>
+   					</div>
+   					<div class="row">
+   						<div class="col-sm-12">
+   						<table id="example2" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
+                  <thead>
+                  <tr>
+					<th class="sorting sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Rendering engine: activate to sort column descending" aria-sort="ascending">품목 코드</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">품목명</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">수량(단위)</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">처리상태</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">비고</th>		
+				</tr>
+                  </thead>
+                  <tbody>
+                  
+                  <tr class="even">
+                    <td class="dtr-control sorting_1" tabindex="0">PD0001</td>
+                    <td>패티</td>
+                    <td>
+                    	<input type="text" id="item_quantity" name="item_quantity" value="" placeholder="150">
+                    </td>
+                    <td>
+                   		<div class="col-sm-7">
+                        	<select class="form-control" id="form_status" name="form_status">
+                                <option value="">전체</option>
+                                <option value="">검품완료</option>
+                                <option value="">진행 중</option>
+								<option value="">검품 대기 중</option>
+                                <option value="">반품</option>
+                            </select>
+                        </div>
+                    </td>
+					<td>
+						<textarea></textarea>
+					</td>
+                  </tr><tr class="odd">
+                    <td class="dtr-control sorting_1" tabindex="0">PD0002</td>
+                    <td>양파</td>
+                    <td>
+                    	<input type="text" id="item_quantity" name="item_quantity" value="" placeholder="200">
+                    </td>
+                    <td>
+                   		<div class="col-sm-7">
+                        	<select class="form-control" id="form_status" name="form_status">
+                                <option value="">전체</option>
+                                <option value="">검품완료</option>
+                                <option value="">진행 중</option>
+								<option value="">검품 대기 중</option>
+                                <option value="">반품</option>
+                            </select>
+                        </div>
+                    </td>
+					<td>
+						<textarea></textarea>
+					</td>
+                  </tr>
+                  </tbody>
+                  <tfoot>
+     		      
+                 </tfoot>
+                </table>
+                </div>
+                </div>
+
+         		</div>
+			 	<div class="d-flex justify-content-end mt-3">
+			  		<button class="btn btn-success">저장</button>
+				</div> 
+   			</div>
+      		
+      		</div>
+
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  <!-- /.content-wrapper -->
+
+
+
+  <!-- Control Sidebar -->
+  <!--  <aside class="control-sidebar control-sidebar-dark">-->
+  <!-- Control sidebar content goes here -->
+  <!--  </aside>-->
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+
+<!-- 기본 js 링크 -->
+<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
+
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<!-- jQuery 차트 라이브러리-->
+<!-- 사용법 참고 용 사이트 : https://idenrai.tistory.com/55-->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+</body>
+</html>
