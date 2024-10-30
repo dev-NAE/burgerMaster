@@ -30,6 +30,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+	implementation 'com.fasterxml.jackson.core:jackson-core:2.17.2'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
