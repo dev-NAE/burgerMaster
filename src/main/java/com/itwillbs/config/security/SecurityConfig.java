@@ -47,7 +47,8 @@ public class SecurityConfig {
         // url 접근 제한
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(urlsToBePermittedAll).permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/manager/**").hasRole("ADMIN")
+                .anyRequest().permitAll()
         );
         // 로그인 처리
 		http.formLogin(formLogin -> formLogin
@@ -61,7 +62,7 @@ public class SecurityConfig {
         http.logout((logout) -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessHandler(customLogoutSuccessHandler)
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID","remember-me")
                 .invalidateHttpSession(true)
                 .permitAll());
         http.exceptionHandling(conf -> conf

@@ -37,10 +37,12 @@ public class ManagerController {
     @GetMapping("/manager/list")
     public String admins(){
         log.info("AdminsController managers()");
-        log.info("security context "+SecurityContextHolder.getContext()
+        log.info("isAuthenticated : "+SecurityContextHolder.getContext()
                 .getAuthentication().isAuthenticated());
-        log.info("authorities "+SecurityContextHolder.getContext()
+        log.info("authorities : "+SecurityContextHolder.getContext()
                 .getAuthentication().getAuthorities());
+        log.info("name : "+SecurityContextHolder.getContext()
+                .getAuthentication().getName());
         return "managers/managers";
     }
     @GetMapping("error/403")
