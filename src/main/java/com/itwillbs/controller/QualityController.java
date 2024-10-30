@@ -11,6 +11,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class QualityController {
 
+	//추후에 지워야함
+	@GetMapping("/formSample")
+	public String formSample() {
+		log.info("QualityController formSample().....");
+		return "/quality/formSample";
+	} 
+	
 	@GetMapping("/quality/qualityList")
 	public String qualityList() {
 		log.info("QualityController qualityList().....");
@@ -34,6 +41,12 @@ public class QualityController {
 		log.info("QualityController quality_order().....");
 		return "/quality/quality_order";
 	}
-
+	
+	@GetMapping("/defective/defectiveList")
+	public String defective() {
+		log.info("QualityController defective().....");
+		return "/quality/defectiveList";
+	}
+	
 
 }
