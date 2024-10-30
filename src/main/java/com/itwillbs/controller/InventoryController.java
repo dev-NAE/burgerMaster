@@ -16,8 +16,8 @@ public class InventoryController {
 
 	// 공통된 View 경로를 상수로 정의
     private static final String VIEW_PATH = "inventory_management/";
-	
-	
+    
+    
 	//재고 조회
 	@GetMapping("/inventoryList")
 	public String inventoryList(Model model) {
@@ -37,7 +37,7 @@ public class InventoryController {
 	//입고 등록
 	@GetMapping("/incomingInsert")
 	public String incomingInsert() {
-		
+		log.info("InventroyController incomingInsert()");
 		
 		return VIEW_PATH + "incoming/insert";
 	}
@@ -45,7 +45,7 @@ public class InventoryController {
 	//입고 조회
 	@GetMapping("/incomingList")
 	public String incomingList() {
-		
+		log.info("InventroyController incomingList()");
 		
 		return VIEW_PATH + "incoming/list";
 	}
@@ -53,7 +53,7 @@ public class InventoryController {
 	//출고 등록
 	@GetMapping("/outgoingInsert")
 	public String outgoingInsert() {
-		
+		log.info("InventroyController outgoingInsert()");
 		
 		return VIEW_PATH + "outgoing/insert";
 	}
@@ -61,7 +61,7 @@ public class InventoryController {
 	//출고 조회
 	@GetMapping("/outgoingList")
 	public String outgoingList() {
-		
+		log.info("InventroyController outgoingList()");
 		
 		return VIEW_PATH + "outgoing/list";
 	}
