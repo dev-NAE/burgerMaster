@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>가공품 상세 정보</title>
+  <!-- 기본 css 링크-->
+  <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
+  <!-- Google Font: Source Sans Pro -->
+  <!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="css/font.css">
+  
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+
+
+<!-- 공통 헤더 불러오기 -->
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<!-- 공통 사이드바 불러오기 -->
+<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+
+
+<div class="wrapper">
+
+  <!--   Preloader -->
+  <!-- 처음 로딩 시 나오는 요소-->
+  <div th:replace="fragments/Preloader :: PreloaderFragment"></div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">가공품 상세 정보</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">가공품 상세 정보</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <!-- Main row -->
+        <div class="row">
+
+            <table class="table table-secondary table-striped">
+				<thead>
+					<tr>
+						<th>식별번호</th>
+						<th>가공품명</th>
+						<th>재료</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>00000000</td>
+						<td>00000000</td>
+						<td>00000000</td>
+					</tr>
+					<tr>
+						<td>00000000</td>
+						<td>00000000</td>
+						<td>00000000</td>
+					</tr>
+					<tr>
+						<td>00000000</td>
+						<td>00000000</td>
+						<td>00000000</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<nav aria-label="Page navigation" style="width:100%;">
+			  <div>
+				
+			  <div style="display: inline-block;">
+			  <ul class="pagination">
+			    <li class="page-item"><a class="page-link" href="#">◀</a></li>
+			    <li class="page-item"><a class="page-link" href="#">1</a></li>
+			    <li class="page-item"><a class="page-link" href="#">2</a></li>
+			    <li class="page-item"><a class="page-link" href="#">3</a></li>
+			    <li class="page-item"><a class="page-link" href="#">▶</a></li>
+			  </ul>
+			  </div>
+			  
+			  <div class="searching" style="float: right;">
+			  
+			  <div style="display: inline-block;">
+			    <select class="form-control">
+					<option th:text="가공품식별번호"></option>
+					<option th:text="가공품명"></option>
+				</select>
+			  </div>
+			  
+			  <div style="display: inline-block;">
+			  	<input type="text" name="keyword" placeholder="검색어">
+			  </div>
+			  
+			  <div style="display: inline-block;">
+				<button type="button" class="btn btn-success">검색</button>
+			  </div>
+			  
+			  </div>
+<!--			  searching-->
+			  
+			  </div>
+			</nav>
+
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+
+  <!-- Control Sidebar -->
+  <!--  <aside class="control-sidebar control-sidebar-dark">-->
+  <!-- Control sidebar content goes here -->
+  <!--  </aside>-->
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+<div th:replace="fragments/footer :: footerFragment"></div>
+<!-- 기본 js 링크 -->
+<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
+
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<!-- jQuery 차트 라이브러리-->
+<!-- 사용법 참고 용 사이트 : https://idenrai.tistory.com/55-->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+</body>
+</html>
