@@ -2,14 +2,14 @@ package com.itwillbs.service;
 
 import org.springframework.stereotype.Service;
 
-import com.itwillbs.repository.ItemRepository;
+import com.itwillbs.repository.BOMRepository;
 
 @Service
 public class BOMService {
-    private final ItemRepository itemRepository;
+    private final BOMRepository bomRepository ;
 
-    public BOMService(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
+    public BOMService(BOMRepository bomRepository) {
+        this.bomRepository = bomRepository;
     }
 
 }

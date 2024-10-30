@@ -2,14 +2,14 @@ package com.itwillbs.service;
 
 import org.springframework.stereotype.Service;
 
-import com.itwillbs.repository.ItemRepository;
+import com.itwillbs.repository.SupplierRepository;
 
 @Service
 public class SupplierService {
-    private final ItemRepository itemRepository;
+    private final SupplierRepository supplierRepository;
 
-    public SupplierService(ItemRepository itemRepository) {
-        this.itemRepository = itemRepository;
+    public SupplierService(SupplierRepository supplierRepository) {
+        this.supplierRepository = supplierRepository;
     }
 
 }
