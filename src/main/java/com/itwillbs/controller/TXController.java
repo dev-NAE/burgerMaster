@@ -2,6 +2,7 @@ package com.itwillbs.controller;
 
 import com.itwillbs.domain.transaction.OrderDTO;
 import com.itwillbs.domain.transaction.OrderItemsDTO;
+import com.itwillbs.domain.transaction.OrderRequestDTO;
 import com.itwillbs.service.TXService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +36,13 @@ public class TXController {
     }
 
     @PostMapping("/saveOrder")
-    public String saveOrder(@ModelAttribute OrderDTO orderDTO,
-                            @RequestBody List<OrderItemsDTO> orderItems) {
+    public String saveOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+
+        OrderDTO orderDTO = orderRequestDTO.getOrder();
+        List<OrderItemsDTO> orderItems = orderRequestDTO.getItems();
 
         txService.saveOrder(orderDTO, orderItems);
+
         return "redirect:/orderList";
     }
 

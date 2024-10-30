@@ -76,7 +76,8 @@ $(document).on('click', '.delete-this-row', function() {
 // 등록에 따른 총 품목개수, 합계금액 보여주기
 function refreshQuantity() {
     var rowCount = $('#item-list-table .item-row').length;
-    $('#total-quantity').text(rowCount);
+    $('#total-quantity-view').text(rowCount);
+    $('#total-quantity').val(rowCount);
 }
 
 function refreshTotalPrice() {
@@ -92,8 +93,82 @@ function refreshTotalPrice() {
 
 // 발주등록 버튼: 필수항목이 비어있으면 비활성화, 모두 채워지면 활성화
 $(document).ready(function() {
-    var $form = $('#')
-})
+    var $form = $('#order-form');
+    var $submitButton = $('#order-submit-btn');
 
-// + 입력내용 저장(발주, 발주품목)
+    function checkInputs() {
+        var allChecked = true;
+        var totalQuantity = $('#total-quantity').val();
+        $form.find('input[required]').each(function () {
+            if (!this.value || !this.checkValidity() || parseInt(totalQuantity) === 0) {
+                allChecked = false;
+                return false;
+            }
+        });
+        $submitButton.prop('disabled', !allChecked);
+    }
+
+    // 폼에 이벤트 위임 (품목 추가시 작동하도록)
+    $form.on('input', 'input[required]', checkInputs);
+
+    // 페이지 로드 시 적용
+    checkInputs();
+
+    // 버튼을 누르면
+    $submitButton.on('click', function(event) {
+        event.preventDefault();
+
+        // 유효성 검사 + 메시지
+
+        // 주문정보 수집 = OrderDTO 형태
+        var totalPrice = $('total-price').text();
+        var order = {
+            totalPrice: parseInt(totalPrice),
+            orderDate: $('#order_date').val(),
+            dueDate: $('#due_date').val(),
+            note: $('#note').val(),
+            manager: $('#manager-code').val(),
+            supplier_code: $('#supplier-code').val()
+        };
+
+        // 주문품목정보 수집 = OrderItemsDTO 형태
+        var items = [];
+        $('#item-list-table .item-row').each(function() {
+            var $item = $(this);
+            var item = {
+                itemCode: $item.find('.item-code').text(),
+                subtotalPrice: $item.find('.subtotal').text(),
+                quantity: $item.find('.item-quantity').val()
+            }
+            items.push(item);
+        });
+
+        // 데이터 통합 = OrderRequestDTO 형태
+        var orderRequest = {
+            order: order,
+            items: items
+        }
+
+        // 등록처리를 위한 전송
+        $.ajax({
+            url: '/saveOrder',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(orderRequest),
+            success: function(response) {
+                alert('발주가 등록되었습니다.');
+            },
+            error: function(error) {
+                console.log('Error: :', error)
+                alert('발주 등록처리 중 오류가 발생했습니다.')
+            }
+        });
+
+
+
+    })
+
+
+});
+
 // + 등록버튼 연타에 따른 중복등록 방지 (로더 넣기)

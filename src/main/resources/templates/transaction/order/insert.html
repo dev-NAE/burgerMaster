@@ -65,7 +65,8 @@
                     <!-- Contents -->
                         <div class="container-fluid col-sm-10 my-5">
                             <div class="card insert-container px-3 py-3">
-                                <form th:action="@{/insertOrder}" method="post">
+
+                                <form id="order-form">
                                 <div class="card-body basic-info-area px-5">
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center" for="order_date">등록일</label>
@@ -104,7 +105,7 @@
                                 </div>
                                 <div class="input-items-area card-body">
                                     <div class="row">
-                                        <button class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-items">물품 추가</button>
+                                        <button type="button" class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-items">물품 추가</button>
                                     </div>
                                     <div class="item-list card-body border">
                                         <table id="item-list-table" class="table table-bordered table-hover dataTable dtr-inline">
@@ -118,16 +119,23 @@
                                             </tr>
                                         </table>
                                         <div class="calculating-brief row my-2 py-3 px-2 bg-light">
-                                            <div class="col-6 number-of-items"><span id="total-quantity" class="ml-3">0</span>개 품목 선택</div>
+                                            <div class="col-6 number-of-items">
+                                                <span id="total-quantity-view" class="ml-3">0</span>개 품목 선택
+                                                <input id="total-quantity" type="hidden" value="0">
+                                            </div>
                                             <div class="col-6 text-right total-of-price">금액 합계: <span id="total-price" class="ml-1">0</span> 원</div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="submit-btn-area row">
-                                    <button type="submit" class="btn btn-lg btn-primary ml-auto my-3">발주 등록</button>
+                                    <button id="order-submit-btn" type="submit" class="btn btn-lg btn-primary ml-auto my-3">발주 등록</button>
                                 </div>
+                                </form>
+
                             </div>
                         </div>
+
+                    </div>
 
         <template id="add-item-template">
             <tr class="item-row">
@@ -140,6 +148,9 @@
             </tr>
         </template>
 
+        <div class="loader spinner-border text-primary" role="status">
+            <span class="visually-hidden"></span>
+        </div>
 
                     <!-- /.Contents -->
 
