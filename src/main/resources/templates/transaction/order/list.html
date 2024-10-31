@@ -130,23 +130,14 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr class="text-center">
-                                            <td>OD-0010</td>
-                                            <td>맛있다정육</td>
+                                        <tr th:each="order : ${orders}" class="text-center" th:onclick="|location.href='@{/tx/orderDetail(orderId=${order.orderId})}'|" style="cursor:pointer;">
+                                            <td th:text="${order.orderId}"></td>
+                                            <td th:text="${order.supplierCode}">맛있다정육</td>
                                             <td>패티용소고기 외 3건</td>
-                                            <td class="text-right">1,000,000</td>
-                                            <td>2024-10-29</td>
-                                            <td>2024-11-05</td>
-                                            <td>발주등록(저장)</td>
-                                        </tr>
-                                        <tr class="text-center">
-                                            <td>OD-0009</td>
-                                            <td>최고다채소</td>
-                                            <td>양배추 외 2건</td>
-                                            <td class="text-right">600,000</td>
-                                            <td>2024-10-28</td>
-                                            <td>2024-11-04</td>
-                                            <td>발주등록(저장)</td>
+                                            <td th:text="${order.totalPrice}" class="text-right">1,000,000</td>
+                                            <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}">2024-10-29</td>
+                                            <td th:text="${#dates.format(order.dueDate, 'yyyy-MM-dd')}">2024-11-05</td>
+                                            <td th:text="${order.status}">발주등록(저장)</td>
                                         </tr>
                                         </tbody>
                                     </table>

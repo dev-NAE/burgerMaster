@@ -13,6 +13,22 @@ function openPopupAtMousePosition(event, url, width, height) {
     window.open(url, 'popupWindow', `width=${popupWidth}, height=${popupHeight}, top=${popupTop}, left=${popupLeft}`);
 }
 
+let $form = $('#order-form');
+let $submitButton = $('#order-submit-btn');
+
+function checkInputs() {
+    let allChecked = true;
+    let totalQuantity = $('#total-quantity').val();
+    $form.find('input[required]').each(function () {
+        if (!this.value || !this.checkValidity() || parseInt(totalQuantity) === 0) {
+            allChecked = false;
+            return false;
+        }
+    });
+    $submitButton.prop('disabled', !allChecked);
+}
+
+
 // 담당자 검색 팝업
 $('#find-manager').on('click', function(event) {
     openPopupAtMousePosition(event, '/tx/findManager', 600, 600)
@@ -48,6 +64,7 @@ function setItemInfo(itemCode, itemName) {
 
     $('#item-list-table').append($newItemRow);
     refreshQuantity();
+    checkInputs();
 }
 
 // 단가, 수량 입력 시 소계, 총계 자동 산출
@@ -58,10 +75,10 @@ $(document).on('input', '.item-price, .item-quantity', function() {
     const subtotal = price * quantity;
 
     // 계산용 데이터 저장
-    $row.find('.subtotal').data('subtotal', subtotal);
+    $row.find('.subtotal').val(subtotal);
 
     // 데이터 표시
-    $row.find('.subtotal').text(subtotal.toLocaleString());
+    $row.find('.subtotal-view').text(subtotal.toLocaleString());
     refreshTotalPrice();
 });
 
@@ -71,6 +88,7 @@ $(document).on('click', '.delete-this-row', function() {
     $row.remove();
     refreshQuantity();
     refreshTotalPrice();
+    checkInputs();
 });
 
 // 등록에 따른 총 품목개수, 합계금액 보여주기
@@ -83,30 +101,17 @@ function refreshQuantity() {
 function refreshTotalPrice() {
     let totalPrice = 0;
     $('.subtotal').each(function() {
-        let subtotalVal = $(this).data('subtotal') || 0;
+        let subtotalVal = parseInt($(this).val()) || 0;
         totalPrice += subtotalVal;
     })
-    $('#total-price').data('totalPrice', totalPrice);
-    $('#total-price').text(totalPrice.toLocaleString());
+    $('#total-price-view').text(totalPrice.toLocaleString());
+    $('#total-price').val(totalPrice);
 }
 
 
 // 발주등록 버튼: 필수항목이 비어있으면 비활성화, 모두 채워지면 활성화
 $(document).ready(function() {
-    var $form = $('#order-form');
-    var $submitButton = $('#order-submit-btn');
 
-    function checkInputs() {
-        var allChecked = true;
-        var totalQuantity = $('#total-quantity').val();
-        $form.find('input[required]').each(function () {
-            if (!this.value || !this.checkValidity() || parseInt(totalQuantity) === 0) {
-                allChecked = false;
-                return false;
-            }
-        });
-        $submitButton.prop('disabled', !allChecked);
-    }
 
     // 폼에 이벤트 위임 (품목 추가시 작동하도록)
     $form.on('input', 'input[required]', checkInputs);
@@ -121,14 +126,13 @@ $(document).ready(function() {
         // 유효성 검사 + 메시지
 
         // 주문정보 수집 = OrderDTO 형태
-        var totalPrice = $('total-price').text();
         var order = {
-            totalPrice: parseInt(totalPrice),
+            totalPrice: parseInt($('#total-price').val()),
             orderDate: $('#order_date').val(),
             dueDate: $('#due_date').val(),
             note: $('#note').val(),
             manager: $('#manager-code').val(),
-            supplier_code: $('#supplier-code').val()
+            supplierCode: $('#supplier-code').val()
         };
 
         // 주문품목정보 수집 = OrderItemsDTO 형태
@@ -137,8 +141,8 @@ $(document).ready(function() {
             var $item = $(this);
             var item = {
                 itemCode: $item.find('.item-code').text(),
-                subtotalPrice: $item.find('.subtotal').text(),
-                quantity: $item.find('.item-quantity').val()
+                subtotalPrice: parseInt($item.find('.subtotal').val()),
+                quantity: parseInt($item.find('.item-quantity').val())
             }
             items.push(item);
         });
@@ -151,12 +155,19 @@ $(document).ready(function() {
 
         // 등록처리를 위한 전송
         $.ajax({
-            url: '/saveOrder',
+            url: 'saveOrder',
             method: 'POST',
             contentType: 'application/json',
+            dataType: 'json',
+            beforeSend: function(xhr) {
+                var token = $('meta[name="_csrf"]').attr('content');
+                var header = $('meta[name="_csrf_header"]').attr('content');
+                xhr.setRequestHeader(header, token);
+            },
             data: JSON.stringify(orderRequest),
             success: function(response) {
                 alert('발주가 등록되었습니다.');
+                window.location.href = '/tx/orderList';
             },
             error: function(error) {
                 console.log('Error: :', error)

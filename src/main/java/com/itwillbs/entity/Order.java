@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "Order")
+@Table(name = "`Order`")
 @Getter
 @Setter
 @ToString

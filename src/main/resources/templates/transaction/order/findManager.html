@@ -32,9 +32,9 @@
             <th class="text-center" style="width:50%;">담당자코드</th>
             <th class="text-center" style="width:50%;">성명</th>
         </tr>
-        <tr onclick="sendResult(this)" style="cursor: pointer;">
-            <td class="admin-id text-center" data-code="data-code">1</td>
-            <td class="name text-center" data-name="data-name">김철수</td>
+        <tr onclick="sendResult(this)" style="cursor: pointer;" th:each="manager : ${managers}">
+            <td class="admin-id text-center" th:data-code="${manager.managerId}" th:text="${manager.managerId}"></td>
+            <td class="name text-center" th:data-name="${manager.name}" th:text="${manager.name}"></td>
         </tr>
         <tr onclick="sendResult(this)" style="cursor: pointer;">
             <td class="admin-id text-center" data-code="data-code1">2</td>
