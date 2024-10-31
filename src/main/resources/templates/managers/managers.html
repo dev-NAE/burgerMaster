@@ -3,29 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
+  <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
   <title>AdminLTE 3 | Dashboard</title>
   <!-- 기본 css 링크-->
-  <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
+  <th:block th:replace="~{fragments/basicLink :: basicLinkCssFragment}"></th:block>
   <!-- DataTables -->
-  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
 
 <!-- 공통 헤더 불러오기 -->
-<div th:replace="fragments/header :: headerFragment"></div>
+<div th:replace="~{fragments/header :: headerFragment}"></div>
 
 <!-- 공통 사이드바 불러오기 -->
-<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
 
 
 <div class="wrapper">
   <!--   Preloader -->
   <!-- 처음 로딩 시 나오는 요소 불러오기 -->
-  <div th:replace="fragments/Preloader :: PreloaderFragment"></div>
+  <div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
 
 
   <!-- Content Wrapper. Contains page content -->
@@ -60,8 +62,11 @@
               <div class="card-header">
                 <h3 class="card-title">관리자 목록</h3>
 
-                <div class="card-tools">
-                  <div class="input-group input-group-sm" style="width: 150px;">
+                <div class="card-tools row">
+                  <div class="input-group input-group-sm" style="width: 100px;">
+                    <a class="btn-sm btn-primary" href="#" id="createManager">관리자 생성</a>
+                  </div>
+                  <div class="input-group input-group-sm" style="width: 250px;">
                     <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
 
                     <div class="input-group-append">
@@ -153,6 +158,7 @@
           <!--  -->
         </div>
         <!-- /.row managers table -->
+        <!-- row page controllbar-->
         <div class="row">
           <div class="col-sm-12 col-md-5">
             <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
@@ -193,57 +199,65 @@
     </section>
     <!-- /.content -->
     <!-- 모달 창  -->
-    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="managerChangeModal" tabindex="-1" aria-labelledby="managerChangeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">관리자 상세 정보</h1>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            <h3 class="modal-title fs-4" id="managerChangeModalLabel">관리자 상세정보</h3>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           <div class="modal-body">
             <!-- 모달 창 메인 body -->
-            <div class="form-floating mb-3">
-              <label for="report_id_modal">신고ID</label>
-              <input type="text" class="form-control-plaintext" id="report_id_modal" readonly>
-            </div>
+
             <div class="form-floating d-flex flex-row mb-3">
               <div class="form-floating flex-fill mr-3">
-                <label for="reporter_id_modal">신고자ID</label>
-                <input type="text" class="form-control-plaintext" id="reporter_id_modal" readonly>
+                <label for="manager_id_change_modal">관리자 ID</label>
+                <input type="text" class="form-control-plaintext" id="manager_id_change_modal" readonly>
               </div>
               <div class="form-floating flex-fill ">
-                <label for="report_type_modal">신고유형</label>
-                <input type="text" class="form-control-plaintext" id="report_type_modal" placeholder="Password" readonly>
+                <label for="manager_name_change_modal">이름</label>
+                <input type="text" class="form-control-plaintext" id="manager_name_change_modal" placeholder="Password" readonly>
               </div>
             </div>
             <div class="form-floating d-flex flex-row mb-3">
               <div class="form-floating flex-fill mr-3">
-                <label for="reportee_id_modal">신고대상ID</label>
-                <input type="text" class="form-control-plaintext" id="reportee_id_modal" readonly>
+                <label for="manager_phone_change_modal">전화번호</label>
+                <input type="text" class="form-control-plaintext" id="manager_phone_change_modal" >
               </div>
               <div class="form-floating flex-fill">
-                <label for="reported_item_id_modal">신고상품ID</label>
-                <input type="text" class="form-control-plaintext" id="reported_item_id_modal" placeholder="Password" readonly>
+                <label for="manager_email_change_modal">이메일</label>
+                <input type="text" class="form-control-plaintext" id="manager_email_change_modal" placeholder="Password" >
               </div>
             </div>
             <div class="form-floating d-flex flex-row mb-3">
+
               <div class="form-floating flex-fill">
-                <label for="reported_at_modal">신고일시</label>
-                <input type="text" class="form-control-plaintext" id="reported_at_modal" placeholder="Password" readonly>
-              </div>
-              <div class="form-floating flex-fill">
-                <label for="report_status_modal">처리상태</label>
-                <select class="custom-select " id="report_status_modal">
-                  <option value="접수">접수</option>
-                  <option value="처리 완료">처리 완료</option>
-                  <option value="해당 없음">해당 없음</option>
-                </select>
+                <label >권한 설정</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox">
+                  <label class="form-check-label">기준정보 관리</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox">
+                  <label class="form-check-label">거래 관리</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox">
+                  <label class="form-check-label">자재/제품 관리</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox">
+                  <label class="form-check-label">생산 작업 관리</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox">
+                  <label class="form-check-label">품질 관리</label>
+                </div>
               </div>
             </div>
-            <div class="form-floating mb-3">
-              <label for="report_contents_modal">신고내용ID</label>
-              <textarea class="form-control" id="report_contents_modal"></textarea>
-            </div>
+
 
           </div>
 
@@ -255,10 +269,77 @@
       </div>
     </div>
     <!-- end modal -->
+    <!-- create manager 모달 창  -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title fs-4" id="createModalLabel">관리자 생성</h3>
 
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- 모달 창 메인 body -->
+
+            <div class="form-group">
+              <label for="manager_id_create_modal">관리자 ID</label>
+              <input type="text" class="form-control" id="manager_id_create_modal" placeholder="Enter Id">
+            </div>
+            <div class="form-group">
+              <label for="manager_name_create_modal">Password</label>
+              <input type="password" class="form-control" id="manager_pass_create_modal" placeholder="Enter Password">
+            </div>
+            <div class="form-floating flex-fill ">
+              <label for="manager_name_create_modal">이름</label>
+              <input type="text" class="form-control" id="manager_name_create_modal" placeholder="Enter Name">
+            </div>
+            <div class="form-floating flex-fill mr-3">
+              <label for="manager_phone_create_modal">전화번호</label>
+              <input type="tel" class="form-control" id="manager_phone_create_modal" placeholder="Enter Name">
+            </div>
+            <div class="form-floating flex-fill">
+              <label for="manager_email_create_modal">이메일</label>
+              <input type="email" class="form-control" id="manager_email_create_modal" placeholder="Enter Email" >
+            </div>
+
+            <div class="form-floating flex-fill">
+              <label >권한 설정</label>
+              <div class="form-check col">
+                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_MASTERDATA">
+                <label class="form-check-label">기준정보 관리</label>
+              </div>
+              <div class="form-check col">
+                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_TRANSCTION">
+                <label class="form-check-label">거래 관리</label>
+              </div>
+              <div class="form-check col">
+                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_INVENTORY">
+                <label class="form-check-label">자재/제품 관리</label>
+              </div>
+              <div class="form-check col">
+                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_MANUFACTURE">
+                <label class="form-check-label">생산 작업 관리</label>
+              </div>
+              <div class="form-check col">
+                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_QUALITY">
+                <label class="form-check-label">품질 관리</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn "  data-dismiss="modal" onclick="createManager()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- create manager end modal -->
   </div>
   <!-- /.content-wrapper -->
-
+  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
 
   <!-- Control Sidebar -->
@@ -268,20 +349,20 @@
   <!-- /.control-sidebar -->
 
   <!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
-  <div th:replace="fragments/footer :: footerFragment"></div>
+  <div th:replace="~{fragments/footer :: footerFragment}"></div>
 </div>
 <!-- ./wrapper -->
 <!-- 기본 js 링크 -->
-<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
+<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
 
 </script>
 <!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
+<script src="/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
-<script src="plugins/sparklines/sparkline.js"></script>
+<script src="/plugins/sparklines/sparkline.js"></script>
 <!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- custom js -->
-<script src="js/admins/admins.js"></script>
+<script src="/js/admins/admins.js"></script>
 </body>
 </html>

@@ -17,7 +17,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final ManagerService adminService;
+    private final ManagerService managerService;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final CustomLoginSuccessHandler customLoginSuccessHandler;
     private final CustomLoginFailHandler customLoginFailHandler;
@@ -25,10 +27,7 @@ public class SecurityConfig {
 
     private final CustomAuthenticationEntryPointHandler customAuthenticationEntryPointHandler;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -45,10 +44,13 @@ public class SecurityConfig {
                 "/img/**",
                 "/plugins/**"
         };
+        // url 접근 제한
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(urlsToBePermittedAll).permitAll()
+                .requestMatchers("/manager/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
         );
+        // 로그인 처리
 		http.formLogin(formLogin -> formLogin
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
@@ -56,10 +58,11 @@ public class SecurityConfig {
                 .successHandler(customLoginSuccessHandler)
                 .failureHandler(customLoginFailHandler)
         );
-
+        // 로그아웃 처리
         http.logout((logout) -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessHandler(customLogoutSuccessHandler)
+                .deleteCookies("JSESSIONID","remember-me")
                 .invalidateHttpSession(true)
                 .permitAll());
         http.exceptionHandling(conf -> conf
@@ -70,7 +73,7 @@ public class SecurityConfig {
     }
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(bCryptPasswordEncoder(), adminService);
+        return new CustomAuthenticationProvider(bCryptPasswordEncoder, managerService);
     }
 
     @Bean
