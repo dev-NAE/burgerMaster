@@ -18,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class InventoryItem {
 
-	
+	@Id
 	@Column(name = "item_code", length = 20)
 	private String itemCode;
 	
