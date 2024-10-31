@@ -1,8 +1,11 @@
 package com.itwillbs.entity;
 
+import com.itwillbs.entity.dashboard.InventoryItem;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,4 +32,10 @@ public class Item {
 
     @Column(name = "use_yn", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'Y'")
     private char useYN;
+    
+    
+    
+    // InventoryItem과 일대일 관계 설정
+    @OneToOne(mappedBy = "item")
+    private InventoryItem inventoryItem; 
 }

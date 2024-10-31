@@ -6,8 +6,13 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.itwillbs.domain.test.ItemDashDTO;
+import com.itwillbs.domain.dashboard.DefectiveDTO;
+import com.itwillbs.domain.dashboard.IncomingItemDTO;
+import com.itwillbs.domain.dashboard.InventoryItemDTO;
+import com.itwillbs.domain.dashboard.ItemDashDTO;
 import com.itwillbs.entity.Item;
+import com.itwillbs.entity.dashboard.IncommingItem;
+import com.itwillbs.entity.dashboard.Sale;
 import com.itwillbs.service.MainDashBoardService;
 
 import ch.qos.logback.core.model.Model;
@@ -25,26 +30,54 @@ public class MainDashBoardController {
 	public String main(org.springframework.ui.Model model) {
 		log.info("MainDashBoardController main");
 		
-			//원재료
-			List<ItemDashDTO>rmItemList=mainDashBoardService.getItemListByType("RM");
-			
-			
+			//원재료 입고  
+			List<IncomingItemDTO>rmItemList=mainDashBoardService.getItemIncomming("RM");
 			System.out.println("MainDashBoardController rmItemList:"+rmItemList);
 			model.addAttribute("rmItemList", rmItemList);
 			
-			//가공품
-			List<ItemDashDTO>ppItemList=mainDashBoardService.getItemListByType("PP");
-			System.out.println("MainDashBoardController ppItemList:"+ppItemList);
-			model.addAttribute("ppItemList", ppItemList);
+			//원재료 재고
+			List<InventoryItemDTO>rmInventoryList=mainDashBoardService.getItemInventory("RM");
+			System.out.println("MainDashBoardController rmInventoryList:"+rmInventoryList);
+			model.addAttribute("rmInventoryList", rmInventoryList);
 			
-			//완재품
-			List<ItemDashDTO>fpItemList=mainDashBoardService.getItemListByType("FP");
+			//완재품 입고
+			List<IncomingItemDTO>fpItemList=mainDashBoardService.getItemIncomming("FP");
 			System.out.println("MainDashBoardController fpItemList:"+fpItemList);
 			model.addAttribute("fpItemList", fpItemList);
 			
-			//불량률
+			//완재품 재고
+			List<InventoryItemDTO>fpInventoryList=mainDashBoardService.getItemInventory("FP");
+			System.out.println("MainDashBoardController fpInventoryList:"+fpInventoryList);
+			model.addAttribute("fpInventoryList", fpInventoryList);
+			
+			
+			//가공품 입고 
+//			List<IncomingItemDTO>ppItemList=mainDashBoardService.getItemIncomming("PP");
+//			System.out.println("MainDashBoardController ppItemList:"+ppItemList);
+//			model.addAttribute("ppItemList", ppItemList);
+			
+			//가공품 재고
+			List<InventoryItemDTO>ppInventoryList=mainDashBoardService.getItemInventory("PP");
+			System.out.println("MainDashBoardController ppInventoryList:"+ppInventoryList);
+			model.addAttribute("ppInventoryList", ppInventoryList);
+			
+			
 			
 			//반품률
+			List<DefectiveDTO>dfItemList=mainDashBoardService.findByItemSatus("반품");
+			System.out.println("MainDashBoardController dfItemList:"+dfItemList);
+			model.addAttribute("dfItemList", dfItemList);
+			
+			//폐기율
+			List<DefectiveDTO>discardItemList=mainDashBoardService.findByItemSatus("폐기");
+			System.out.println("MainDashBoardController discardItemList:"+discardItemList);
+			model.addAttribute("discardItemList", discardItemList);
+			
+			//수주
+			List<Sale>saleItemList=mainDashBoardService.findBySaleStatus("수주완료");
+			System.out.println("MainDashBoardController saleItemList:"+saleItemList);
+			model.addAttribute("saleItemList", saleItemList);
+			
 		
 		return "main";
 	}
