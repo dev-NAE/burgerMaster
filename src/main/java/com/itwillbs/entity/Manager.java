@@ -33,20 +33,18 @@ public class Manager {
 	@Column(name = "phone")
 	private String phone;
 
-	@Column(name = "authority")
-	private String authority;
-
+	// ROLE_INBENTORY,ROLE_QUALITY 형태로 저장
 	@Column(name = "manager_role")
 	private String managerRole;
 
-	public Manager createManger(Manager admin, PasswordEncoder passwordEncoder) {
+	public static Manager createManger(Manager manager, PasswordEncoder passwordEncoder) {
 		return Manager.builder()
-				.managerId(admin.getManagerId())
-				.pass(passwordEncoder.encode(admin.getPass()))
-				.name(admin.getName())
-				.email(admin.getEmail())
-				.phone(admin.getPhone())
-				.authority(admin.getAuthority())
+				.managerId(manager.getManagerId())
+				.pass(passwordEncoder.encode(manager.getPass()))
+				.name(manager.getName())
+				.email(manager.getEmail())
+				.phone(manager.getPhone())
+				.managerRole(manager.getManagerRole())
 				.build();
 	}
 }
