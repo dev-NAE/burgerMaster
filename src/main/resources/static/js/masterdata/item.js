@@ -1,3 +1,6 @@
+const token = $("meta[name='_csrf']").attr("content");
+const header = $("meta[name='_csrf_header']").attr("content");
+
 // 초기화
 $(document).ready(function() {
 	loadItems();
@@ -205,6 +208,10 @@ function saveItem() {
 			`/masterdata/api/items/${itemCode}` :
 			'/masterdata/api/items',
 		type: mode === 'edit' ? 'PUT' : 'POST',
+		beforeSend : function(xhr)
+		        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+		            xhr.setRequestHeader(header, token);
+		        },
 		contentType: 'application/json',
 		data: JSON.stringify(jsonData),
 		success: function() {

@@ -4,6 +4,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 	<title>BurgerMaster | MasterDataManagement</title>
 
 	<th:block th:replace="~{/fragments/basicLink :: basicLinkCssFragment}"></th:block>
@@ -15,7 +17,7 @@
 <body class="hold-transition sidebar-mini layout-fixed">
 	<div th:replace="~{fragments/header :: headerFragment}"></div>
 	<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
-	
+
 	<div class="wrapper">
 		<div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
 

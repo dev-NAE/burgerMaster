@@ -20,7 +20,7 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 	@Query("SELECT i FROM Item i " +
 		       "WHERE (:itemName IS NULL OR i.itemName LIKE %:itemName%) " +
 		       "AND (:itemType IS NULL OR i.itemType = :itemType) " +
-		       "AND ((:includeUnused = true) OR i.useYN = 'Y')")  // 조건 단순화
+		       "AND ((:includeUnused = true) OR i.useYN = 'Y')")
 	Page<Item> findBySearchConditions(
 	    @Param("itemName") String itemName, 
 	    @Param("itemType") String itemType,
