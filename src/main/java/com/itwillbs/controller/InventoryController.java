@@ -1,21 +1,31 @@
 package com.itwillbs.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.itwillbs.domain.inventory.InventoryItemDTO;
+import com.itwillbs.service.InventoryService;
+import com.itwillbs.service.MainDashBoardService;
 
 
 @Controller
 @RequestMapping("/inven")
 @Log
+@RequiredArgsConstructor
 public class InventoryController {
 
 	// 공통된 View 경로를 상수로 정의
     private static final String VIEW_PATH = "inventory_management/";
+    
+    private final InventoryService inventoryService;
     
     
 	//재고 조회
@@ -25,7 +35,7 @@ public class InventoryController {
 		
 		
 		//DB에 저장된 재고들의 목록을 불러옴
-		
+		List<InventoryItemDTO> inventoryItemDTOs = inventoryService.getInventoryItems();
 		
 		//model에 저장
 		
