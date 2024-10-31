@@ -15,8 +15,8 @@
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/dist/js/adminlte.min.js"></script>
 
-    <meta name="_csrf" content="${_csrf.token}">
-    <meta name="_csrf_header" content="${_csrf.headerName}">
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

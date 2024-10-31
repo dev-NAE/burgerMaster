@@ -25,6 +25,9 @@ public class OrderItems {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "price")
+    private int price;
+
     @Column(name = "subtotal_price")
     private int subtotalPrice;
 

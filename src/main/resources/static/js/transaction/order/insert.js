@@ -1,3 +1,6 @@
+let token = $("meta[name='_csrf']").attr("content");
+let header = $("meta[name='_csrf_header']").attr("content");
+
 // 마우스 포인터가 위치한 곳에 팝업창 띄우기
 function openPopupAtMousePosition(event, url, width, height) {
     // 마우스 위치
@@ -141,6 +144,7 @@ $(document).ready(function() {
             var $item = $(this);
             var item = {
                 itemCode: $item.find('.item-code').text(),
+                price: parseInt($item.find('.item-price').val()),
                 subtotalPrice: parseInt($item.find('.subtotal').val()),
                 quantity: parseInt($item.find('.item-quantity').val())
             }
@@ -153,15 +157,16 @@ $(document).ready(function() {
             items: items
         }
 
+        console.log(header);
+        console.log(token);
+
         // 등록처리를 위한 전송
         $.ajax({
-            url: 'saveOrder',
+            url: '/tx/saveOrder',
             method: 'POST',
             contentType: 'application/json',
             dataType: 'json',
-            beforeSend: function(xhr) {
-                var token = $('meta[name="_csrf"]').attr('content');
-                var header = $('meta[name="_csrf_header"]').attr('content');
+            beforeSend : function(xhr){
                 xhr.setRequestHeader(header, token);
             },
             data: JSON.stringify(orderRequest),

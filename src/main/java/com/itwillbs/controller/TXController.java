@@ -42,15 +42,14 @@ public class TXController {
         return "transaction/order/insert";
     }
 
+    @ResponseBody
     @PostMapping("/saveOrder")
-    public ResponseEntity<String> saveOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+    public String saveOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
         log.info("Controller saveOrder()");
         OrderDTO orderDTO = orderRequestDTO.getOrder();
-        log.info(orderDTO.toString());
         List<OrderItemsDTO> orderItems = orderRequestDTO.getItems();
-        log.info(orderItems.toString());
         txService.saveOrder(orderDTO, orderItems);
-        return ResponseEntity.ok("success");
+        return "success";
     }
 
     @GetMapping("/findManager")

@@ -47,6 +47,7 @@ public class TXService {
             BeanUtils.copyProperties(item, orderItem);
             orderItem.setOrderId(orderId);
             orderItem.setOrderItemId(orderId + item.getItemCode());
+            log.info(orderItem.toString());
             orderItemsRepository.save(orderItem);
         }
     }
