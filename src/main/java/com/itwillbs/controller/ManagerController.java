@@ -40,7 +40,7 @@ public class ManagerController {
     }
 
     @GetMapping("/manager/list")
-    public String admins(Model model){
+    public String managerList(Model model){
         log.info("AdminsController managers()");
         log.info("isAuthenticated : "+SecurityContextHolder.getContext()
                 .getAuthentication().isAuthenticated());

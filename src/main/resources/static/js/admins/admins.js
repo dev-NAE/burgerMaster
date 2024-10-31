@@ -19,6 +19,7 @@ $(document).ready(function(){
 
     });
 });
+// 중복 확인
 function checkMangerId(){
 
 }
@@ -64,4 +65,14 @@ function createCheckString(name){
         })
     };
     return checkArr.join(',');
+}
+
+// manager 정보 수정
+function changeManager(){
+
+}
+
+// manager delete
+function deleteManager(){
+
 }
