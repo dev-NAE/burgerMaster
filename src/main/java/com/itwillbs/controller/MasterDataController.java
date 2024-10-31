@@ -62,7 +62,7 @@ public class MasterDataController {
 	// 아이템 상세 조회 loadItemDetail(itemCode)
 	@GetMapping("/api/items/{itemCode}")
 	@ResponseBody
-	public ResponseEntity<Item> getItem(@PathVariable String itemCode) {
+	public ResponseEntity<Item> getItem(@PathVariable(name = "itemCode") String itemCode) {
 		return itemService.findItemByCode(itemCode).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
@@ -77,7 +77,7 @@ public class MasterDataController {
 	// 아이템 수정 saveItem() @Validated
 	@PutMapping("/api/items/{itemCode}")
 	@ResponseBody
-	public ResponseEntity<Item> updateItem(@PathVariable String itemCode, @RequestBody Item item) {
+	public ResponseEntity<Item> updateItem(@PathVariable(name = "itemCode") String itemCode, @RequestBody Item item) {
 		item.setItemCode(itemCode);
 		Item updatedItem = itemService.updateItem(item);
 		return ResponseEntity.ok(updatedItem);
@@ -86,7 +86,7 @@ public class MasterDataController {
 	// 아이템 삭제 deleteItem()
 	@DeleteMapping("/api/items/{itemCode}")
 	@ResponseBody
-	public ResponseEntity<Void> deleteItem(@PathVariable String itemCode) {
+	public ResponseEntity<Void> deleteItem(@PathVariable(name = "itemCode") String itemCode) {
 		itemService.deleteItem(itemCode);
 		return ResponseEntity.ok().build();
 	}
