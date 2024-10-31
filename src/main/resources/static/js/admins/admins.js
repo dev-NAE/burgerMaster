@@ -4,8 +4,14 @@ let header = $("meta[name='_csrf_header']").attr("content");
 $(document).ready(function(){
     $(".content tr").click(function(){
         $("#managerChangeModal").modal();
-
-
+        $("#manager_id_change_modal").val($(this).children('td:eq(0)').text());
+        $("#manager_name_change_modal").val($(this).children('td:eq(1)').text());
+        $("#manager_phone_change_modal").val($(this).children('td:eq(2)').text());
+        $("#manager_email_change_modal").val($(this).children('td:eq(3)').text());
+        let roles = $(this).children('td:eq(4)').text().split(",");
+        for(let role in roles){
+            $("input[name='changeRole'][value="+role+"]").prop("checked",true);
+        }
     });
     $("#createManager").click(function(){
         $("#createModal").modal();
@@ -13,7 +19,9 @@ $(document).ready(function(){
 
     });
 });
+function checkMangerId(){
 
+}
 //관리자 생성하기
 function createManager(){
     console.log($("#manager_id_create_modal").val())
