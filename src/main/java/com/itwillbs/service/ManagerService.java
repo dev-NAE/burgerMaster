@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,7 +33,7 @@ public class ManagerService {
     }
 
     public String createManger(Manager manager) {
-        log.info("Creating manager");
+        log.info("ManagerService Creating manager");
         ObjectMapper objectMapper = new ObjectMapper();
         Manager encManger = Manager.createManger(manager, bCryptPasswordEncoder);
         mangerRepository.save(encManger);
@@ -44,5 +45,14 @@ public class ManagerService {
             throw new RuntimeException(e);
         }
         return result;
+    }
+
+    public List<Manager> getManagerList() {
+        log.info("ManagerService Getting manager list");
+
+        List<Manager> managers = null;
+        managers = mangerRepository.findAll();
+
+        return managers;
     }
 }

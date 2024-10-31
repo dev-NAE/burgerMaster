@@ -89,62 +89,14 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>183</td>
-                    <td>John Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-success">Approved</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
+                  <tr th:each="manager, status:${managers}">
+                    <td th:text="${manager.managerId}"></td>
+                    <td th:text="${manager.name}"></td>
+                    <td th:text="${manager.email}"></td>
+                    <td th:text="${manager.phone}"></td>
+                    <td th:text="${manager.managerRole}"></td>
                   </tr>
-                  <tr>
-                    <td>219</td>
-                    <td>Alexander Pierce</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-warning">Pending</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td>657</td>
-                    <td>Bob Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-primary">Approved</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td>175</td>
-                    <td>Mike Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-danger">Denied</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td>134</td>
-                    <td>Jim Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-success">Approved</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td>494</td>
-                    <td>Victoria Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-warning">Pending</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td>832</td>
-                    <td>Michael Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-primary">Approved</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
-                  <tr>
-                    <td>982</td>
-                    <td>Rocky Doe</td>
-                    <td>11-7-2014</td>
-                    <td><span class="tag tag-danger">Denied</span></td>
-                    <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-                  </tr>
+
                   </tbody>
                 </table>
 
@@ -198,13 +150,13 @@
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-    <!-- 모달 창  -->
+    <!-- 수정 모달 창  -->
     <div class="modal fade" id="managerChangeModal" tabindex="-1" aria-labelledby="managerChangeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h3 class="modal-title fs-4" id="managerChangeModalLabel">관리자 상세정보</h3>
-            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -218,47 +170,44 @@
               </div>
               <div class="form-floating flex-fill ">
                 <label for="manager_name_change_modal">이름</label>
-                <input type="text" class="form-control-plaintext" id="manager_name_change_modal" placeholder="Password" readonly>
+                <input type="text" class="form-control-plaintext" id="manager_name_change_modal" placeholder="Name">
               </div>
             </div>
             <div class="form-floating d-flex flex-row mb-3">
               <div class="form-floating flex-fill mr-3">
                 <label for="manager_phone_change_modal">전화번호</label>
-                <input type="text" class="form-control-plaintext" id="manager_phone_change_modal" >
+                <input type="text" class="form-control-plaintext" id="manager_phone_change_modal" placeholder="Phone Number" >
               </div>
               <div class="form-floating flex-fill">
                 <label for="manager_email_change_modal">이메일</label>
-                <input type="text" class="form-control-plaintext" id="manager_email_change_modal" placeholder="Password" >
+                <input type="text" class="form-control-plaintext" id="manager_email_change_modal" placeholder="Email" >
               </div>
             </div>
-            <div class="form-floating d-flex flex-row mb-3">
-
-              <div class="form-floating flex-fill">
-                <label >권한 설정</label>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox">
+            <div class="form-floating flex-row">
+              <label >권한 설정</label>
+              <div class="row">
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_MASTERDATA">
                   <label class="form-check-label">기준정보 관리</label>
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox">
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_TRANSCTION">
                   <label class="form-check-label">거래 관리</label>
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox">
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_INVENTORY">
                   <label class="form-check-label">자재/제품 관리</label>
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox">
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_MANUFACTURE">
                   <label class="form-check-label">생산 작업 관리</label>
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox">
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_QUALITY">
                   <label class="form-check-label">품질 관리</label>
                 </div>
               </div>
             </div>
-
-
           </div>
 
           <div class="modal-footer">
@@ -285,46 +234,52 @@
 
             <div class="form-group">
               <label for="manager_id_create_modal">관리자 ID</label>
+              <div class="input-group">
               <input type="text" class="form-control" id="manager_id_create_modal" placeholder="Enter Id">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button" id="checkId">중복확인</button>
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label for="manager_name_create_modal">Password</label>
               <input type="password" class="form-control" id="manager_pass_create_modal" placeholder="Enter Password">
             </div>
-            <div class="form-floating flex-fill ">
+            <div class="form-group flex-fill ">
               <label for="manager_name_create_modal">이름</label>
               <input type="text" class="form-control" id="manager_name_create_modal" placeholder="Enter Name">
             </div>
-            <div class="form-floating flex-fill mr-3">
+            <div class="form-group flex-fill">
               <label for="manager_phone_create_modal">전화번호</label>
-              <input type="tel" class="form-control" id="manager_phone_create_modal" placeholder="Enter Name">
+              <input type="tel" class="form-control" id="manager_phone_create_modal" placeholder="Enter Phone Number">
             </div>
-            <div class="form-floating flex-fill">
+            <div class="form-group flex-fill">
               <label for="manager_email_create_modal">이메일</label>
               <input type="email" class="form-control" id="manager_email_create_modal" placeholder="Enter Email" >
             </div>
-
-            <div class="form-floating flex-fill">
+            <div class="form-floating flex-row">
               <label >권한 설정</label>
-              <div class="form-check col">
-                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_MASTERDATA">
-                <label class="form-check-label">기준정보 관리</label>
-              </div>
-              <div class="form-check col">
-                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_TRANSCTION">
-                <label class="form-check-label">거래 관리</label>
-              </div>
-              <div class="form-check col">
-                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_INVENTORY">
-                <label class="form-check-label">자재/제품 관리</label>
-              </div>
-              <div class="form-check col">
-                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_MANUFACTURE">
-                <label class="form-check-label">생산 작업 관리</label>
-              </div>
-              <div class="form-check col">
-                <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_QUALITY">
-                <label class="form-check-label">품질 관리</label>
+              <div class="row">
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_MASTERDATA">
+                  <label class="form-check-label">기준정보 관리</label>
+                </div>
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_TRANSCTION">
+                  <label class="form-check-label">거래 관리</label>
+                </div>
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_INVENTORY">
+                  <label class="form-check-label">자재/제품 관리</label>
+                </div>
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_MANUFACTURE">
+                  <label class="form-check-label">생산 작업 관리</label>
+                </div>
+                <div class="form-check col">
+                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_QUALITY">
+                  <label class="form-check-label">품질 관리</label>
+                </div>
               </div>
             </div>
           </div>
