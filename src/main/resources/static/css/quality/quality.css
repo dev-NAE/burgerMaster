@@ -1,0 +1,13 @@
+  textarea {
+    width: 70%;
+    height: 3em;
+    border: none;
+    resize: none;
+  }
+  
+  #item_quantity {
+  	width:50%;
+  	height:2em;
+  	border:none;
+  }
+  

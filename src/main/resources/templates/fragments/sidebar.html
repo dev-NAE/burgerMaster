@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 
 <head>
 	<meta charset="UTF-8">
@@ -237,19 +240,19 @@
 									</a>
 									<ul class="nav nav-treeview" id="sub-menu-1">
 										<li class="nav-item">
-											<a href="/quality/qualityList/sale" class="nav-link">
+											<a href="/quality/quality_order" class="nav-link">
 												<p>입하검품</p>
 											</a>
 										</li>
 
 										<li class="nav-item">
-											<a href="/quality/qualityList/order" class="nav-link">
+											<a href="/quality/quality_sale" class="nav-link">
 												<p>출고검품</p>
 											</a>
 										</li>
 
 										<li class="nav-item">
-											<a href="/quality/qualityList/shipment" class="nav-link">
+											<a href="/quality/quality_shipment" class="nav-link">
 												<p>출하검품</p>
 											</a>
 										</li>
@@ -271,7 +274,7 @@
 									</a>
 									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
 										<li class="nav-item">
-											<a href="/defective/defective" class="nav-link">
+											<a href="/defective/defectiveList" class="nav-link">
 												<p>반품 품목 조회</p>
 											</a>
 										</li>
@@ -284,7 +287,7 @@
 						</li>
 
 						<!-- 관리자관리 -->
-						<li class="nav-item">
+						<li class="nav-item" sec:authorize="hasRole('ADMIN')">
 							<a href="#" class="nav-link">
 								<img src="/img/sidebar/6.png" alt="Icon" class="nav-icon">
 								<!--                                <i class="nav-icon fas fa-copy"></i>-->
@@ -292,7 +295,7 @@
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="admins" class="nav-link active">
+									<a href="/manager/list" class="nav-link active">
 										<i class="far fa-circle nav-icon"></i>
 										<p>관리자목록</p>
 									</a>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>품질 관리 리스트</title>
+  <title>반품 품목 조회</title>
   <!-- 기본 css 링크-->
   <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
   <!-- Google Font: Source Sans Pro -->
@@ -31,7 +31,6 @@
     <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
   </div>
 
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -39,7 +38,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">품질 관리 리스트</h1>
+            <h1 class="m-0">반품 품목 조회</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -69,31 +68,29 @@
 	                </div>
 	                <div class="card-body col-11 mx-auto">
 	                    <div class="form-group row">
-	                        <label class="col-sm-2 col-form-label text-center" for="step">단계</label>
-							<div class="col-sm-4">
-	                            <select class="form-control" id="status" name="status">
-	                                <option value="">전체</option>
-	                                <option value="">입고</option>
-	                                <option value="">출고</option>
-	                                <option value="">출하</option>
-	                            </select>
+	                        <label class="col-sm-2 col-form-label text-center" for="manager-name">담당자</label>
+	                        <div class="input-group col-sm-4">
+	                            <input id="manager-name" class="form-control" type="text" name="manager_name">
+	                            <div class="input-group-append">
+	                                <span id="find-manager" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
+	                            </div>
 	                        </div>
 	                        <label class="col-sm-2 col-form-label text-center" for="status">처리상태</label>
 	                        <div class="col-sm-4">
 	                            <select class="form-control" id="status" name="status">
 	                                <option value="">전체</option>
-	                                <option value="">검품완료</option>
-	                                <option value="">진행 중</option>
-									<option value="">검품 대기 중</option>
 	                                <option value="">반품</option>
+	                                <option value="">폐기</option>
 	                            </select>
 	                        </div>
 	                    </div>
 	                    <div class="form-group row">
-	                        <label class="col-sm-2 col-form-label text-center" for="transaction">처리일</label>
-	                        <div class="col-sm-4 d-flex">
-	                            <input class="form-control" type="date" id="transaction_start" name="transaction_start"> ~
-	                            <input class="form-control" type="date" id="transaction_end" name="transaction_end">
+	                        <label class="col-sm-2 col-form-label text-center" for="quality_id">검사 요청 번호</label>
+	                        <div class="input-group col-sm-4">
+	                            <input id="quality_id" class="form-control" type="text" name="quality_id">
+	                            <div class="input-group-append">
+	                                <span id="find-quality_id" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
+	                            </div>
 	                        </div>
 	                        <label class="col-sm-2 col-form-label text-center" for="item-name">품목</label>
 	                        <div class="input-group col-sm-4">
@@ -104,24 +101,33 @@
 	                        </div>
 	                    </div>
 	                    <div class="form-group row">
-							<label class="col-sm-2 col-form-label text-center" for="manager-name">담당자</label>
+							<label class="col-sm-2 col-form-label text-center" for="return">반품 번호</label>
 	                        <div class="input-group col-sm-4">
-	                            <input id="manager-name" class="form-control" type="text" name="manager_name">
+	                            <input id="return" class="form-control" type="text" name="return">
 	                            <div class="input-group-append">
-	                                <span id="find-manager" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
+	                                <span id="find-return" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
 	                            </div>
 	                        </div>
-							<label class="col-sm-2 col-form-label text-center" for="quality_id">검사 요청 번호</label>
+							<label class="col-sm-2 col-form-label text-center" for="defective_date">처리일</label>
+	                        <div class="col-sm-4 d-flex">
+	                            <input class="form-control" type="date" id="defective_date_start" name="defective_date_start"> ~
+	                            <input class="form-control" type="date" id="defective_date_end" name="defective_date_end">
+	                        </div>
+	                        </div>
+	                    <div class="form-group row">
+							<label class="col-sm-2 col-form-label text-center" for="items">품목 코드</label>
 	                        <div class="input-group col-sm-4">
-	                            <input id="quality_id" class="form-control" type="text" name="quality_id">
+	                            <input id="items" class="form-control" type="text" name="items">
 	                            <div class="input-group-append">
-	                                <span id="find-quality_id" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
+	                                <span id="find-items" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
 	                            </div>
 	                        </div>
-	                    </div>
-						<div class="d-flex justify-content-end mt-3">
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
 						  <button class="btn btn-primary">조회</button>
-						</div>
+						</div> 
+                    </div>
+						
 					</div>
 	            </div>
             </div>
@@ -137,52 +143,58 @@
    						<table id="example2" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
                   <thead>
                   <tr>
-					<th class="sorting sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Rendering engine: activate to sort column descending" aria-sort="ascending">단계</th>
+					<th class="sorting sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Rendering engine: activate to sort column descending" aria-sort="ascending">반품 번호</th>
 					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">품목</th>
 					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">담당자</th>
 					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">검사 요청 번호</th>
 					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">처리일</th>
+					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">품목코드</th>
 					<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">처리상태</th>
 										
 				</tr>
                   </thead>
                   <tbody>
                   
-                  </tr><tr class="even">
-                    <td class="dtr-control sorting_1" tabindex="0">Gecko</td>
-                    <td>Camino 1.5</td>
-                    <td>OSX.3+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-					<td>A</td>
+                  <tr class="even">
+                    <td class="dtr-control sorting_1" tabindex="0">RT_0010</td>
+                    <td>패티</td>
+                    <td>김철수</td>
+                    <td>QA_SM_0001</td>
+                    <td>2024-10-22</td>
+					<td>PD1234</td>
+					<td>반품</td>
                   </tr><tr class="odd">
-                    <td class="dtr-control sorting_1" tabindex="0">Gecko</td>
-                    <td>Netscape 7.2</td>
-                    <td>Win 95+ / Mac OS 8.6-9.2</td>
-                    <td>1.7</td>
-                    <td>A</td>
-					<td>A</td>
+                    <td class="dtr-control sorting_1" tabindex="0">RT_0010</td>
+                    <td>패티</td>
+                    <td>김철수</td>
+                    <td>QA_SM_0001</td>
+                    <td>2024-10-22</td>
+					<td>PD1234</td>
+					<td>반품</td>
                   </tr><tr class="even">
-                    <td class="dtr-control sorting_1" tabindex="0">Gecko</td>
-                    <td>Netscape Browser 8</td>
-                    <td>Win 98SE+</td>
-                    <td>1.7</td>
-                    <td>A</td>
-					<td>A</td>
+                    <td class="dtr-control sorting_1" tabindex="0">RT_0010</td>
+                    <td>패티</td>
+                    <td>김철수</td>
+                    <td>QA_SM_0001</td>
+                    <td>2024-10-22</td>
+					<td>PD1234</td>
+					<td>반품</td>
                   </tr><tr class="odd">
-                    <td class="dtr-control sorting_1" tabindex="0">Gecko</td>
-                    <td>Netscape Navigator 9</td>
-                    <td>Win 98+ / OSX.2+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-					<td>A</td>
+                    <td class="dtr-control sorting_1" tabindex="0">RT_0010</td>
+                    <td>패티</td>
+                    <td>김철수</td>
+                    <td>QA_SM_0001</td>
+                    <td>2024-10-22</td>
+					<td>PD1234</td>
+					<td>반품</td>
                   </tr><tr class="even">
-                    <td class="dtr-control sorting_1" tabindex="0">Gecko</td>
-                    <td>Mozilla 1.0</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1</td>
-                    <td>A</td>
-					<td>A</td>
+                    <td class="dtr-control sorting_1" tabindex="0">RT_0010</td>
+                    <td>패티</td>
+                    <td>김철수</td>
+                    <td>QA_SM_0001</td>
+                    <td>2024-10-22</td>
+					<td>PD1234</td>
+					<td>반품</td>
                   </tr></tbody>
                   <tfoot>
               
@@ -214,7 +226,6 @@
          		</div>
    			</div>
       		
-		
       		</div>
 
         </div>
