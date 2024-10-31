@@ -27,18 +27,6 @@ public class MainDashBoardService {
 	private final MainDashBoardSaleRepository dashBoardSaleRepository;
 	
 
-
-//	 public List<ItemDashDTO> getItemListByType(String itemType) {
-//	        List<ItemDashDTO> ItemList = mainDashBoardRepository.findByItemType(itemType);
-//	        
-//	        for (ItemDashDTO item : ItemList) {
-//	            System.out.println("Quantity: " + item.getQuantity() + ", Item Name: " + item.getItemName());
-//	        }
-//	        
-//	     
-//	        return ItemList;
-//	    }
-//	
 	 public List<DefectiveDTO> findByItemSatus(String status) {
 	        List<DefectiveDTO> ItemList = mainDashBoardRepository.findByItemSatus(status);
 	        

@@ -16,6 +16,7 @@ import com.itwillbs.entity.dashboard.Sale;
 import com.itwillbs.service.MainDashBoardService;
 
 import ch.qos.logback.core.model.Model;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -80,6 +81,14 @@ public class MainDashBoardController {
 			
 		
 		return "main";
+	}
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		
+		session.invalidate();
+		
+		return "redirect:/login";
 	}
 	
 	
