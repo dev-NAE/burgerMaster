@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 
-/**
- *  전체 조회 메서드명: get...() <br>
- *  검색 조회 메서드명: find...() <br>
- */
+
 @Service
 @RequiredArgsConstructor
 @Log
@@ -27,22 +24,27 @@ public class InventoryService {
 	public List<InventoryItemDTO> getInventoryItems() {
 		log.info("getInventoryitems()");
 		
-		return inventoryRepository.getItemInventory();
+		return inventoryRepository.getAllInventoryItems();
 	}
     
   
-    
-	//재고 검색
-	//품목코드, 품목명, 품목유형이 빈문자('')라도 검색가능
-    public List<InventoryItemDTO> findInventoryItems(InventoryItemDTO inventoryItemDTO) {
-    	log.info("findInventoryitems()");
-    	
-        return inventoryRepository.findItemWithInventory(
-            inventoryItemDTO.getItemCode(),
-            inventoryItemDTO.getItemName(),
-            inventoryItemDTO.getItemType()
-        );
-    }
+
+	public List<InventoryItemDTO> findInventoryItemOnlyOutOfStock() {
+		
+		
+		return inventoryRepository.findInventoryItemsByOutOfStock();
+	}
+
+
+	
+	
+	public List<InventoryItemDTO> findInventoryItem(String itemCodeOrName, String itemType) {
+		
+		return inventoryRepository.findInventoryItems(itemCodeOrName, itemType);
+	}
+
+
+
 
 
 

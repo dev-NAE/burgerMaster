@@ -1,7 +1,9 @@
 package com.itwillbs.controller;
 
+
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.service.InventoryService;
-import com.itwillbs.service.MainDashBoardService;
-
 
 @Controller
 @RequestMapping("/inven")
@@ -37,19 +38,25 @@ public class InventoryController {
 		//DB에 저장된 재고들의 목록을 불러옴
 		List<InventoryItemDTO> inventoryItemDTOs = inventoryService.getInventoryItems();
 		
+		
+		
 		//model에 저장
+		model.addAttribute("inventoryItemDTOs", inventoryItemDTOs);
 		
-		
-		
-		return VIEW_PATH + "inventory/list";
+		return VIEW_PATH + "inventory_list";
 	}
+	
+
+		
+		
+
 	
 	//입고 등록
 	@GetMapping("/incomingInsert")
 	public String incomingInsert() {
 		log.info("InventroyController incomingInsert()");
 		
-		return VIEW_PATH + "incoming/insert";
+		return VIEW_PATH + "incoming_insert";
 	}
 	
 	//입고 조회
@@ -57,7 +64,7 @@ public class InventoryController {
 	public String incomingList() {
 		log.info("InventroyController incomingList()");
 		
-		return VIEW_PATH + "incoming/list";
+		return VIEW_PATH + "incoming_list";
 	}
 	
 	//출고 등록
@@ -65,7 +72,7 @@ public class InventoryController {
 	public String outgoingInsert() {
 		log.info("InventroyController outgoingInsert()");
 		
-		return VIEW_PATH + "outgoing/insert";
+		return VIEW_PATH + "outgoing_insert";
 	}
 	
 	//출고 조회
@@ -73,7 +80,7 @@ public class InventoryController {
 	public String outgoingList() {
 		log.info("InventroyController outgoingList()");
 		
-		return VIEW_PATH + "outgoing/list";
+		return VIEW_PATH + "outgoing_list";
 	}
 	
 }
