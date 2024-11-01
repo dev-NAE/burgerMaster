@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.itwillbs.domain.dashboard.DefectiveDTO;
 import com.itwillbs.domain.dashboard.IncomingItemDTO;
@@ -90,6 +91,8 @@ public class MainDashBoardController {
 		
 		return "redirect:/login";
 	}
+	
+
 	
 	
 	

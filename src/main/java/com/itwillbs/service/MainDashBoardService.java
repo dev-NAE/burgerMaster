@@ -9,6 +9,7 @@ import com.itwillbs.domain.dashboard.IncomingItemDTO;
 import com.itwillbs.domain.dashboard.InventoryItemDTO;
 import com.itwillbs.domain.dashboard.ItemDashDTO;
 import com.itwillbs.entity.dashboard.IncommingItem;
+import com.itwillbs.entity.dashboard.InventoryItem;
 import com.itwillbs.entity.dashboard.Sale;
 import com.itwillbs.repository.MainDashBoardItemRepository;
 import com.itwillbs.repository.MainDashBoardSaleRepository;
@@ -74,6 +75,9 @@ public class MainDashBoardService {
      
 		return ItemList;
 	}
+
+	
+	
 
 	
 	
