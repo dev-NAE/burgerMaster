@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,18 +67,18 @@ public class MasterDataController {
 		return itemService.findItemByCode(itemCode).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
-	// 아이템 저장 saveItem() @Validated
+	// 아이템 저장 saveItem() 
 	@PostMapping("/api/items")
 	@ResponseBody
-	public ResponseEntity<Item> saveItem(@RequestBody Item item) {
+	public ResponseEntity<Item> saveItem(@RequestBody @Validated Item item) {
 		Item savedItem = itemService.saveItem(item);
 		return ResponseEntity.ok(savedItem);
 	}
 
-	// 아이템 수정 saveItem() @Validated
+	// 아이템 수정 saveItem() 
 	@PutMapping("/api/items/{itemCode}")
 	@ResponseBody
-	public ResponseEntity<Item> updateItem(@PathVariable(name = "itemCode") String itemCode, @RequestBody Item item) {
+	public ResponseEntity<Item> updateItem(@PathVariable(name = "itemCode") String itemCode, @RequestBody @Validated Item item) {
 		item.setItemCode(itemCode);
 		Item updatedItem = itemService.updateItem(item);
 		return ResponseEntity.ok(updatedItem);

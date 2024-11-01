@@ -4,8 +4,10 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.itwillbs.domain.masterdata.ItemSearchDTO;
 import com.itwillbs.entity.Item;
@@ -25,30 +27,39 @@ public class ItemService {
 
 	@Transactional
 	public Item saveItem(Item item) {
-		validateItem(item);
+		validateItemCode(item);
+		validateDuplicate(item);
+		validateItemName(item);
 		return itemRepository.save(item);
 	}
 
 	@Transactional
 	public Item updateItem(Item item) {
-		validateItem(item);
+		validateItemCode(item);
+		validateItemName(item);
 		return itemRepository.save(item);
 	}
 
-	private void validateItem(Item item) {
-//		if (!item.getItemCode().matches("^(RM|PP|FP)\\d{3}$")) {
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목코드 형식이 올바르지 않습니다. (RM/PP/FP + 3자리 숫자)");
-//		}
-//		if (itemRepository.existsByItemCode(item.getItemCode())) {
-//			throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 품목코드입니다.");
-//		}
-//		String codePrefix = item.getItemCode().substring(0, 2);
-//		if (!codePrefix.equals(item.getItemType())) {
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목 유형과 코드 prefix가 일치하지 않습니다.");
-//		}
-//		if (item.getUseYN() != 'Y' && item.getUseYN() != 'N') {
-//			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용 여부는 Y 또는 N이어야 합니다.");
-//		}
+	// 공통 검증 메서드들
+	private void validateItemCode(Item item) {
+		if (!item.getItemCode().matches("^(RM|PP|FP)\\d{3}$")) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목코드는 RM/PP/FP로 시작하고 3자리 숫자여야 합니다.");
+		}
+		if (!item.getItemCode().startsWith(item.getItemType())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목코드와 품목유형이 일치하지 않습니다.");
+		}
+	}
+
+	private void validateDuplicate(Item item) {
+		if (itemRepository.existsByItemCode(item.getItemCode())) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 품목코드입니다.");
+		}
+	}
+
+	private void validateItemName(Item item) {
+		if (!item.getItemName().matches("^[가-힣A-Za-z0-9\\s\\-\\_]+$")) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목명에 허용되지 않는 문자가 포함되어 있습니다.");
+		}
 	}
 
 	public void deleteItem(String itemCode) {

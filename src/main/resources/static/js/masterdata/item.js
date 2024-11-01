@@ -11,6 +11,7 @@ $(document).ready(function() {
 function setupEventHandlers() {
 	$('#searchForm').on('submit', e => {
 		e.preventDefault();
+		currentPage = 0;
 		loadItems();
 	});
 
@@ -20,8 +21,13 @@ function setupEventHandlers() {
 	$('#editBtn').click(switchToEditMode);
 	$('#deleteBtn').click(deleteItem);
 
-	// change 유효성검사
-	$('#itemForm input, #itemForm select').on('change', function() {
+	// 입력 필드: 실시간 검사 + 포커스 아웃
+	$('#itemForm input').on('input blur', function() {
+		validateField($(this));
+	});
+
+	// select 요소: 변경 시점
+	$('#itemForm select').on('change', function() {
 		validateField($(this));
 	});
 
@@ -36,11 +42,11 @@ function setupEventHandlers() {
 		});
 
 		if (!isValid) {
-			//			Swal.fire({
-			//				icon: 'error',
-			//				title: '입력 오류',
-			//				text: '입력값을 확인해주세요.'
-			//			});
+			Swal.fire({
+				icon: 'error',
+				title: '입력 오류',
+				text: '입력값을 확인해주세요.'
+			});
 			return;
 		}
 
@@ -51,15 +57,21 @@ function setupEventHandlers() {
 
 // 아이템 목록 로드
 function loadItems() {
-	const formData = new FormData($('#searchForm')[0]);
-	const searchParams = new URLSearchParams();
+	// 검색 조건 구성
+	const searchParams = new URLSearchParams({
+		page: currentPage,
+		size: PAGE_SIZE
+	});
 
-	for (let pair of formData.entries()) {
-		if (pair[1]) {
-			searchParams.append(pair[0], pair[1]);
+	// 폼 데이터 처리
+	const formData = new FormData($('#searchForm')[0]);
+	for (let [key, value] of formData.entries()) {
+		if (value) {
+			searchParams.append(key, value);
 		}
 	}
 
+	// 미사용 포함 여부
 	searchParams.append('includeUnused', $('#includeUnused').is(':checked'));
 
 	$.get('/masterdata/api/items?' + searchParams.toString())
@@ -67,7 +79,13 @@ function loadItems() {
 			displayItems(response.content);
 			displayPagination(response);
 		})
-		.fail(() => alert('데이터 로드 실패'));
+		.fail(() => {
+			Swal.fire({
+				icon: 'error',
+				title: '데이터 로드 실패',
+				text: '데이터를 불러오는데 실패했습니다.'
+			});
+		});
 }
 
 // 아이템 목록 표시
@@ -100,37 +118,44 @@ function getItemTypeName(type) {
 	}[type] || type;
 }
 
-// 페이지네이션 함수
+// 페이지네이션
+let currentPage = 0;
+const PAGE_SIZE = 10;
+
 function displayPagination(response) {
 	const pagination = $('#pagination');
 	pagination.empty();
 
-	const totalPages = Math.min(response.totalPages, 10);
+	totalPages = response.totalPages;
+	const maxPages = Math.min(totalPages, 10);
 
 	pagination.append(`
-        <li class="page-item ${response.first ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${response.number - 1}); return false;">이전</a>
-        </li>
-    `);
+	        <li class="page-item ${response.first ? 'disabled' : ''}">
+	            <button class="page-link" onclick="changePage(${response.number - 1})" 
+	                    ${response.first ? 'disabled' : ''}>이전</button>
+	        </li>
+	    `);
 
-	for (let i = 0; i < totalPages; i++) {
+	for (let i = 0; i < maxPages; i++) {
 		pagination.append(`
-            <li class="page-item ${response.number === i ? 'active' : ''}">
-                <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i + 1}</a>
-            </li>
-        `);
+	            <li class="page-item ${response.number === i ? 'active' : ''}">
+	                <button class="page-link" onclick="changePage(${i})">${i + 1}</button>
+	            </li>
+	        `);
 	}
 
 	pagination.append(`
-        <li class="page-item ${response.last ? 'disabled' : ''}">
-            <a class="page-link" href="#" onclick="changePage(${response.number + 1}); return false;">다음</a>
-        </li>
-    `);
+	        <li class="page-item ${response.last ? 'disabled' : ''}">
+	            <button class="page-link" onclick="changePage(${response.number + 1})"
+	                    ${response.last ? 'disabled' : ''}>다음</button>
+	        </li>
+	    `);
 }
 
 function changePage(page) {
-	if (page < 0 || page >= totalPages) return;
-
+	if (page < 0 || page >= totalPages) {
+		return;
+	}
 	currentPage = page;
 	loadItems();
 }
@@ -152,6 +177,7 @@ function openModal(mode, itemCode = null) {
 
 	if (mode === 'register') {
 		$('#modalTitle').text('품목 등록');
+		$('#itemForm').data('mode', 'register');
 		form.show();
 		$('#saveBtn').show();
 		$('#itemType').prop('disabled', false);
@@ -194,40 +220,81 @@ function getItemDetailHtml(item) {
 
 // 아이템 저장
 function saveItem() {
-	const mode = $('#itemForm').data('mode');
-	const itemCode = $('#itemCode').val();
-
 	const formData = $('#itemForm').serializeArray();
 	const jsonData = {};
 	formData.forEach(item => {
 		jsonData[item.name] = item.value;
 	});
 
+	const isEdit = $('#itemForm').data('mode') === 'edit';
+	const itemCode = $('#itemCode').val();
+
 	$.ajax({
-		url: mode === 'edit' ?
-			`/masterdata/api/items/${itemCode}` :
-			'/masterdata/api/items',
-		type: mode === 'edit' ? 'PUT' : 'POST',
-		beforeSend : function(xhr)
-		        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-		            xhr.setRequestHeader(header, token);
-		        },
+		url: isEdit ? `/masterdata/api/items/${itemCode}` : '/masterdata/api/items',
+		type: isEdit ? 'PUT' : 'POST',
 		contentType: 'application/json',
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
 		data: JSON.stringify(jsonData),
 		success: function() {
-			$('#itemModal').modal('hide');
-			loadItems();
+			Swal.fire({
+				icon: 'success',
+				title: isEdit ? '수정 완료' : '저장 완료',
+				text: isEdit ? '성공적으로 수정되었습니다.' : '성공적으로 저장되었습니다.'
+			}).then(() => {
+				$('#itemModal').modal('hide');
+				loadItems();
+			});
 		},
-		error: xhr => alert(xhr.responseJSON?.message || '저장 실패')
+		error: function(xhr) {
+			switch (xhr.status) {
+				case 409:
+					Swal.fire({
+						icon: 'error',
+						title: '저장 실패 (409 Conflict)',
+						text: '이미 존재하는 품목코드입니다.'
+					});
+					break;
+				case 400:
+					if (xhr.responseJSON.errors) {
+						const errors = xhr.responseJSON.errors;
+						Object.keys(errors).forEach(field => {
+							showError($(`#${field}`), errors[field]);
+						});
+						Swal.fire({
+							icon: 'error',
+							title: '입력값 오류 (400 Bad Request validated)',
+							text: `검증 오류: ${Object.values(errors).join(', ')}`
+						});
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: '비즈니스 규칙 위반 (400 Bad Request service)',
+							text: xhr.responseJSON.message
+						});
+					}
+					break;
+				default:
+					Swal.fire({
+						icon: 'error',
+						title: `서버 오류 (${xhr.status})`,
+						text: xhr.responseJSON?.message || '오류가 발생했습니다.'
+					});
+			}
+		}
 	});
 }
 
-// 수정 모드로 전환
+// 수정 모드로 전환 함수도 수정
 function switchToEditMode() {
 	$('#viewSection').hide();
 	$('#itemForm').show();
 	$('#editBtn').hide();
 	$('#saveBtn').show();
+
+	// 수정 모드 설정
+	$('#itemForm').data('mode', 'edit');
 
 	$('#itemCode').prop('readonly', true);
 	$('#itemType').prop('disabled', true);
@@ -237,18 +304,44 @@ function switchToEditMode() {
 
 // 삭제
 function deleteItem() {
-	if (!confirm('정말 삭제하시겠습니까?')) return;
-
-	$.ajax({
-		url: '/masterdata/api/items/' + $('#itemCode').val(),
-		type: 'DELETE',
-		success: () => {
-			$('#itemModal').modal('hide');
-			loadItems();
-		},
-		error: () => alert('삭제 실패')
+	Swal.fire({
+		title: '삭제 확인',
+		text: '정말 삭제하시겠습니까?',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#d33',
+		cancelButtonColor: '#3085d6',
+		confirmButtonText: '삭제',
+		cancelButtonText: '취소'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+				url: '/masterdata/api/items/' + $('#itemCode').val(),
+				type: 'DELETE',
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				success: () => {
+					$('#itemModal').modal('hide');
+					loadItems();
+					Swal.fire({
+						icon: 'success',
+						title: '삭제 완료',
+						text: '성공적으로 삭제되었습니다.'
+					});
+				},
+				error: (xhr) => {
+					Swal.fire({
+						icon: 'error',
+						title: `삭제 실패 (${xhr.status})`,
+						text: xhr.responseJSON?.message || '서버에서 오류가 발생했습니다.'
+					});
+				}
+			});
+		}
 	});
 }
+
 
 // 품목코드 검색 버튼 시 자동입력
 function updateItemCode() {
@@ -258,6 +351,7 @@ function updateItemCode() {
 			.done(code => {
 				$('#itemCode').val(code);
 				validateField($('#itemCode'));
+				validateField($('#itemType'));
 			});
 	}
 }
@@ -266,66 +360,79 @@ function updateItemCode() {
 function validateField(field) {
 	const id = field.attr('id');
 	const value = field.val();
-	let isValid = true;
 
 	switch (id) {
 		case 'itemName':
 			if (!value) {
 				showError(field, '품목명을 입력하세요.');
-				isValid = false;
+				return false;
 			}
-			break;
-
-		case 'itemCode':
-			const itemType = $('#itemType').val();
-			if (!value) {
-				if (itemType) {
-					showError(field, '검색 버튼을 눌러 품목코드를 생성하세요.');
-				} else {
-					showError(field, '품목 유형을 먼저 선택하세요.');
-				}
-				isValid = false;
-				break;
+			if (value.length < 2 || value.length > 100) {
+				showError(field, '품목명은 2~100자 사이여야 합니다.');
+				return false;
 			}
-			const codePattern = /^(RM|PP|FP)\d{3}$/;
-			if (!codePattern.test(value)) {
-				showError(field, '품목코드 형식이 올바르지 않습니다.');
-				isValid = false;
-			} else {
-				const itemType = $('#itemType').val();
-				if (itemType && value.substring(0, 2) !== itemType) {
-					showError(field, '품목코드와 품목유형이 일치하지 않습니다.');
-					isValid = false;
-				}
+			if (!/^[가-힣A-Za-z0-9\s\-\_]+$/.test(value)) {
+				showError(field, '허용되지 않는 문자가 포함되어 있습니다.');
+				return false;
 			}
 			break;
 
 		case 'itemType':
 			if (!value) {
 				showError(field, '품목 유형을 선택하세요.');
-				isValid = false;
-			} else {
-				const itemCode = $('#itemCode').val();
-				if (itemCode)
-				validateField($('#itemCode'));
+				return false;
+			}
+			if (!['RM', 'PP', 'FP'].includes(value)) {
+				showError(field, '올바른 품목 유형이 아닙니다.');
+				return false;
+			}
+			const itemCode = $('#itemCode').val();
+			if (itemCode && !itemCode.startsWith(value)) {
+				showError(field, '품목코드와 품목유형이 일치하지 않습니다.');
+				return false;
+			}
+			break;
+
+		case 'itemCode':
+			if (!value) {
+				showError(field, '품목코드를 생성하세요.');
+				return false;
+			}
+			if (!/^(RM|PP|FP)\d{3}$/.test(value)) {
+				showError(field, '품목코드 형식이 올바르지 않습니다.');
+				return false;
+			}
+			const itemType = $('#itemType').val();
+			if (itemType && !value.startsWith(itemType)) {
+				showError(field, '품목코드와 품목유형이 일치하지 않습니다.');
+				return false;
+			}
+			break;
+
+		case 'useYN':
+			if (!value) {
+				showError(field, '사용 여부를 선택하세요.');
+				return false;
+			}
+			if (!['Y', 'N'].includes(value)) {
+				showError(field, '올바른 사용 여부 값이 아닙니다.');
+				return false;
 			}
 			break;
 	}
 
-	if (isValid) {
-		clearError(field);
-	}
-	return isValid;
+	clearError(field);
+	return true;
 }
 
 // 에러 표시
 function showError(field, message) {
-    field.addClass('is-invalid');
-    $(`#validate${field.attr('id')}`).text(message);
+	field.addClass('is-invalid');
+	$(`#validate${field.attr('id')}`).text(message);
 }
 
 // 에러 제거
 function clearError(field) {
-    field.removeClass('is-invalid');
-    $(`#validate${field.attr('id')}`).text('');
+	field.removeClass('is-invalid');
+	$(`#validate${field.attr('id')}`).text('');
 }
