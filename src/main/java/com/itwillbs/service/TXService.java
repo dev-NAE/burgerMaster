@@ -15,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log
 @RequiredArgsConstructor
@@ -45,7 +46,7 @@ public class TXService {
         for (OrderItemsDTO item : orderItems) {
             OrderItems orderItem = new OrderItems();
             BeanUtils.copyProperties(item, orderItem);
-            orderItem.setOrderId(orderId);
+            orderItem.setOrder(order);
             orderItem.setOrderItemId(orderId + item.getItemCode());
             log.info(orderItem.toString());
             orderItemsRepository.save(orderItem);
@@ -55,13 +56,15 @@ public class TXService {
     public String generateNextOrderId() {
         String maxOrderId = orderRepository.findMaxOrderId();
 
-        String newOrderId;
+        String newOrderId = null;
+
         if (maxOrderId == null) {
             newOrderId = "OD0001";
         } else {
             int numberPart = Integer.parseInt(maxOrderId.substring(2));
             newOrderId = String.format("OD%04d", numberPart + 1);
         }
+        log.info("TXService: generateNextOrderId + newOrderId = " + newOrderId);
 
         return newOrderId;
     }
@@ -88,8 +91,28 @@ public class TXService {
         // 사용중인 코드 + 구매할 수 있는 아이템 한정, 재고수량 오름차순으로 수정 필요
     }
 
-    public List<Order> getOrderList() {
-        return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "orderId"));
+    public List<OrderDTO> getOrderList() {
+
+        log.info("TXService: getOrderList");
+        List<Order> allOrders = orderRepository.findAll(Sort.by(Sort.Direction.DESC, "orderId"));
+
+        return allOrders.stream().map (order -> {
+            OrderDTO orderDTO = new OrderDTO();
+            orderDTO.setOrderId(order.getOrderId());
+            orderDTO.setTotalPrice(order.getTotalPrice());
+            orderDTO.setOrderDate(order.getOrderDate());
+            orderDTO.setDueDate(order.getDueDate());
+            orderDTO.setStatus(order.getStatus());
+
+            orderDTO.setSupplierName(orderRepository.findSupplierNameByOrderId(order.getOrderId()));
+            List<String> firstItem = orderRepository.findFirstItemNameByOrder(order);
+            orderDTO.setItemName(firstItem.isEmpty() ? null : firstItem.get(0));
+            orderDTO.setItemCount(orderRepository.findOrderItemCountByOrder(order));
+
+            return orderDTO;
+        })
+        .collect(Collectors.toList());
+
     }
 
     public Order getOrderById(String orderId) {
@@ -101,8 +124,8 @@ public class TXService {
         }
     }
 
-    public List<OrderItems> getOrderedItems(String orderId) {
-        return orderItemsRepository.findByOrderId(orderId);
+    public List<OrderItems> getOrderedItems(Order order) {
+        return orderItemsRepository.findByOrder(order);
     }
 
     public List<Item> getSaleItems() {

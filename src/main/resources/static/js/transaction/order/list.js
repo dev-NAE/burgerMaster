@@ -31,3 +31,17 @@ $('#find-supplier').on('click', function(event) {
 function setSupplier(supplierCode, supplierName) {
     $('#supplier-name').val(supplierName);
 }
+
+// 데이터테이블 커스텀
+$(function () {
+    $('#example2').DataTable({
+        "paging": false,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": false,
+        "autoWidth": false,
+        "responsive": true,
+        "order": [[0, "desc"]]
+    });
+});

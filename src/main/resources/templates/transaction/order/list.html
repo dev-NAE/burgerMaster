@@ -131,13 +131,13 @@
                                         </thead>
                                         <tbody>
                                         <tr th:each="order : ${orders}" class="text-center" th:onclick="|location.href='@{/tx/orderDetail(orderId=${order.orderId})}'|" style="cursor:pointer;">
-                                            <td th:text="${order.orderId}"></td>
-                                            <td th:text="${order.supplierCode}">맛있다정육</td>
-                                            <td>패티용소고기 외 3건</td>
-                                            <td th:text="${order.totalPrice}" class="text-right">1,000,000</td>
-                                            <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}">2024-10-29</td>
-                                            <td th:text="${#dates.format(order.dueDate, 'yyyy-MM-dd')}">2024-11-05</td>
-                                            <td th:text="${order.status}">발주등록(저장)</td>
+                                            <td th:text="${order.orderId}" aria-sort="descending"></td>
+                                            <td th:text="${order.supplierName}"></td>
+                                            <td th:text="${order.itemName + (order.itemCount > 1 ? (' 외 ' + (order.itemCount - 1) + '건') : '')}"></td>
+                                            <td th:text="${#numbers.formatInteger(order.totalPrice, 0, 'COMMA')}" class="text-right"></td>
+                                            <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></td>
+                                            <td th:text="${#dates.format(order.dueDate, 'yyyy-MM-dd')}"></td>
+                                            <td th:text="${order.status}"></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -145,7 +145,7 @@
                                 <!-- 페이지네이션 -->
                                 <div class="row mt-3">
                                     <div class="col-sm-12 col-md-5 d-flex justify-content-start pl-4">
-                                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">총 2개 중 2개 항목</div>
+                                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">총 <span th:text="${orders.size()}"></span>개 항목</div>
                                     </div>
                                     <div class="col-sm-12 col-md-7 d-flex justify-content-end pr-2">
                                         <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
@@ -209,19 +209,6 @@
     <!-- custom js -->
     <script src="/js/transaction/order/list.js"></script>
 
-    <script>
-        $(function () {
-            $('#example2').DataTable({
-                "paging": false,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": false,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-    </script>
 
 </body>
 

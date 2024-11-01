@@ -70,8 +70,16 @@ function setItemInfo(itemCode, itemName) {
     checkInputs();
 }
 
+// 엔터제출 방지
+$(document).on('keydown', 'input', function(event) {
+    if (event.keyCode === 13) { // Enter key
+        event.preventDefault();
+    }
+});
+
 // 단가, 수량 입력 시 소계, 총계 자동 산출
 $(document).on('input', '.item-price, .item-quantity', function() {
+
     const $row = $(this).closest('.item-row');
     const price = parseInt($row.find('.item-price').val()) || 0;
     const quantity = parseInt($row.find('.item-quantity').val()) || 0;
@@ -157,9 +165,6 @@ $(document).ready(function() {
             items: items
         }
 
-        console.log(header);
-        console.log(token);
-
         // 등록처리를 위한 전송
         $.ajax({
             url: '/tx/saveOrder',
@@ -171,8 +176,10 @@ $(document).ready(function() {
             },
             data: JSON.stringify(orderRequest),
             success: function(response) {
-                alert('발주가 등록되었습니다.');
-                window.location.href = '/tx/orderList';
+                if (response === "success") {
+                    alert('발주가 등록되었습니다.');
+                    window.location.href = '/tx/orderList';
+                }
             },
             error: function(error) {
                 console.log('Error: :', error)

@@ -1,26 +1,24 @@
 package com.itwillbs.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "OrderItems")
+@Table(name = "order_items")
 @Getter
 @Setter
 @ToString
 public class OrderItems {
 
     @Id
-    @Column(name = "order_id")
-    private String orderId;
-
     @Column(name = "orderitem_id")
     private String orderItemId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     @Column(name = "quantity")
     private int quantity;
@@ -31,9 +29,10 @@ public class OrderItems {
     @Column(name = "subtotal_price")
     private int subtotalPrice;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "item_code")
     @Column(name = "item_code")
     private String itemCode;
-
 
 
 }

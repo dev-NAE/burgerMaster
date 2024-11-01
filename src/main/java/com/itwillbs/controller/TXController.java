@@ -1,5 +1,6 @@
 package com.itwillbs.controller;
 
+import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.domain.transaction.OrderDTO;
 import com.itwillbs.domain.transaction.OrderItemsDTO;
 import com.itwillbs.domain.transaction.OrderRequestDTO;
@@ -34,8 +35,14 @@ public class TXController {
     @GetMapping("/insertOrder")
     public String insertOrder(Model model, HttpSession session) {
         model.addAttribute("today", LocalDate.now());
+
         // 접속자 id, name 가져와서 model에 담기
-        String managerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        String managerId = SecurityUtil.getUserId();
+
+        if (managerId != null) {
+            managerId = "admin";
+        } // 완성 전 테스트용 임시 조치. 이후 삭제.
+
         model.addAttribute("id", managerId);
         String managerName = txService.getManagerName(managerId);
         model.addAttribute("name", managerName);
@@ -47,7 +54,9 @@ public class TXController {
     public String saveOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
         log.info("Controller saveOrder()");
         OrderDTO orderDTO = orderRequestDTO.getOrder();
+        log.info("orderDTO: " + orderDTO);
         List<OrderItemsDTO> orderItems = orderRequestDTO.getItems();
+        log.info("orderItems: " + orderItems);
         txService.saveOrder(orderDTO, orderItems);
         return "success";
     }
@@ -75,16 +84,16 @@ public class TXController {
 
     @GetMapping("/orderList")
     public String orderList(Model model) {
-        List<Order> orders = txService.getOrderList();
+        List<OrderDTO> orders = txService.getOrderList();
+        log.info("orders: " + orders);
         model.addAttribute("orders", orders);
-        // 속한 품목명, 개수 표시해줄 방법 찾기...
         return "transaction/order/list";
     }
 
     @GetMapping("/orderDetail")
     public String orderDetail(@RequestParam String orderId, Model model) {
         Order order = txService.getOrderById(orderId);
-        List<OrderItems> items = txService.getOrderedItems(orderId);
+        List<OrderItems> items = txService.getOrderedItems(order);
         model.addAttribute("order", order);
         model.addAttribute("items", items);
         return "transaction/order/detail";
