@@ -15,6 +15,10 @@ public class InventoryItemDTO {//item테이블과 inventoryItem테이블을 join
     private Integer quantity;
     private Integer minReqQuantity;
 	
+    public InventoryItemDTO(String itemCode) {
+        this.itemCode = itemCode;
+    }
+    
     public InventoryItemDTO(String itemCode, String itemName, String itemType, Integer quantity, Integer minReqQuantity) {
 		super();
 		this.itemCode = itemCode;

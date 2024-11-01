@@ -19,15 +19,20 @@ import java.util.List;
 public interface InventoryRepository extends JpaRepository<InventoryItem, String> {
 
 	
+	//test 재고테이블 조회
+	@Query("SELECT new com.itwillbs.domain.inventory.InventoryItemDTO(itemCode) " +
+				"FROM InventoryItem")
+	List<InventoryItemDTO> getInventoryItems();
 	
 	
 	/**
 	 * 재고 전체 조회 쿼리<br>
 	 * 품목코드, 품목명, 품목유형, 재고량, 최소필요재고량<br>
 	 */
-	@Query("SELECT new com.itwillbs.domain.inventory.InventoryItemDTO(i.item_code, i.item_name, i.item_type, ii.quantity, ii.min_req_quantity) " +
-		       "FROM Item i LEFT JOIN inventory_items ii ON i.itemCode = ii.itemCode")
+	@Query("SELECT new com.itwillbs.domain.inventory.InventoryItemDTO(i.itemCode, i.itemName, i.itemType, ii.quantity, ii.minReqQuantity) " +
+		       "FROM Item i LEFT JOIN InventoryItem ii ON i.itemCode = ii.itemCode")
 		List<InventoryItemDTO> getAllInventoryItems();
+
 	
 	/**
 	 * 재고 부족 품목만 조회 쿼리<br>

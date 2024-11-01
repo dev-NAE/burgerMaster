@@ -25,6 +25,7 @@ public class InventoryService {
 		log.info("getInventoryitems()");
 		
 		return inventoryRepository.getAllInventoryItems();
+//		return inventoryRepository.getInventoryItems();
 	}
     
   

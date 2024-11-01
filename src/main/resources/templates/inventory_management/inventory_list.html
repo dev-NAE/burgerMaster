@@ -69,7 +69,7 @@
 					<!-- Main row -->
 					<div class="row">
 
-						<section class="col-lg-10 connectedSortable">
+						<section class="col-lg-12 connectedSortable">
 
 
 
@@ -78,11 +78,11 @@
 
 								<!--검색 구역 시작-->
 								<div class="row">
-									<div class="col-sm-12 col-md-6">
+									<div class="col-sm-12 col-md-8">
 										<div class="row">
 											<!-- text input -->
 											<!-- HTML Form 수정 -->
-											<div class="col-8">
+											<div class="col-6">
 												<div class="form-group">
 													<label>품목코드/품목명</label>
 													<input type="text" class="form-control" id="itemCodeOrName"
@@ -132,82 +132,81 @@
 													</tr>
 												</thead>
 												<tbody id="inventoryTableBody">
-												    <tr th:each="item : ${inventoryItems}">
-												        <td th:text="${item.itemCode}"></td>
-												        <td th:text="${item.itemName}"></td>
-												        <td th:text="${item.itemType}"></td>
-												        <td th:text="${item.quantity}"></td>
-												        <td th:text="${item.minReqQuantity}"></td>
-												    </tr>
+													<tr th:each="item : ${inventoryItemDTOs}">
+														<td th:text="${item.itemCode}"></td>
+														<td th:text="${item.itemName}"></td>
+														<td th:text="${item.itemType}"></td>
+														<td th:text="${item.quantity}"></td>
+														<td th:text="${item.minReqQuantity}"></td>
+													</tr>
 												</tbody>
 											</table>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-5">
+										<div class="dataTables_info" id="example2_info" role="status"
+											aria-live="polite">Showing 1 to 10 of 57 entries
 
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-sm-12 col-md-5">
-											<div class="dataTables_info" id="example2_info" role="status"
-												aria-live="polite">Showing 1 to 10 of 57 entries
-
-											</div>
-										</div>
-										<div class="col-sm-12 col-md-7">
-											<div class="dataTables_paginate paging_simple_numbers"
-												id="example2_paginate">
-												<ul class="pagination">
-													<li class="paginate_button page-item previous disabled"
-														id="example2_previous">
-														<a href="#" aria-controls="example2" data-dt-idx="0"
-															tabindex="0" class="page-link">Previous
-														</a>
-													</li>
-													<li class="paginate_button page-item active">
-														<a href="#" aria-controls="example2" data-dt-idx="1"
-															tabindex="0" class="page-link">1</a>
-													</li>
-													<li class="paginate_button page-item ">
-														<a href="#" aria-controls="example2" data-dt-idx="2"
-															tabindex="0" class="page-link">2</a>
-													</li>
-													<li class="paginate_button page-item ">
-														<a href="#" aria-controls="example2" data-dt-idx="6"
-															tabindex="0" class="page-link">3</a>
-													</li>
-													<li class="paginate_button page-item next" id="example2_next">
-														<a href="#" aria-controls="example2" data-dt-idx="7"
-															tabindex="0" class="page-link">Next</a>
-													</li>
-												</ul>
-											</div>
+									<div class="col-sm-12 col-md-7">
+										<div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+											<ul class="pagination">
+												<li class="paginate_button page-item previous disabled"
+													id="example2_previous">
+													<a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0"
+														class="page-link">Previous
+													</a>
+												</li>
+												<li class="paginate_button page-item active">
+													<a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0"
+														class="page-link">1</a>
+												</li>
+												<li class="paginate_button page-item ">
+													<a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0"
+														class="page-link">2</a>
+												</li>
+												<li class="paginate_button page-item ">
+													<a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0"
+														class="page-link">3</a>
+												</li>
+												<li class="paginate_button page-item next" id="example2_next">
+													<a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0"
+														class="page-link">Next</a>
+												</li>
+											</ul>
 										</div>
 									</div>
 								</div>
 							</div>
-
-
-
-
-
-
-
-
-						</section>
-
 					</div>
-					<!-- /.row (main row) -->
-				</div><!-- /.container-fluid -->
+
+
+
+
+
+
+
+
 			</section>
-			<!-- /.content -->
+
 		</div>
-		<!-- /.content-wrapper -->
+		<!-- /.row (main row) -->
+	</div><!-- /.container-fluid -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
 
 
 
-		<!-- Control Sidebar -->
-		<!--  <aside class="control-sidebar control-sidebar-dark">-->
-		<!-- Control sidebar content goes here -->
-		<!--  </aside>-->
-		<!-- /.control-sidebar -->
+	<!-- Control Sidebar -->
+	<!--  <aside class="control-sidebar control-sidebar-dark">-->
+	<!-- Control sidebar content goes here -->
+	<!--  </aside>-->
+	<!-- /.control-sidebar -->
 	</div>
 	<!-- ./wrapper -->
 
@@ -230,52 +229,52 @@
 	<!-- daterangepicker -->
 	<script src="plugins/moment/moment.min.js"></script>
 	<script src="plugins/daterangepicker/daterangepicker.js"></script>
-	
+
 	<script>
-		$(document).ready(function() {
-		    // 품목 유형 선택 시 AJAX로 필터링
-		    $('#itemTypeSelect').change(function() {
-		        searchItems();
-		    });
+		$(document).ready(function () {
+			// 품목 유형 선택 시 AJAX로 필터링
+			$('#itemTypeSelect').change(function () {
+				searchItems();
+			});
 
-		    // 재고 부족 품목 체크박스 선택 시 AJAX로 필터링
-		    $('#shortageOnlyCheckbox').change(function() {
-		        searchItems();
-		    });
+			// 재고 부족 품목 체크박스 선택 시 AJAX로 필터링
+			$('#shortageOnlyCheckbox').change(function () {
+				searchItems();
+			});
 
-		    // 품목명 검색 버튼 클릭 시 AJAX로 검색
-		    $('#searchButton').click(function() {
-		        searchItems();
-		    });
+			// 품목명 검색 버튼 클릭 시 AJAX로 검색
+			$('#searchButton').click(function () {
+				searchItems();
+			});
 
-		    function searchItems() {
-		        const itemCodeOrName = $('#itemCodeOrNameInput').val();
-		        const itemType = $('#itemTypeSelect').val();
-		        const shortageOnly = $('#shortageOnlyCheckbox').is(':checked');
+			function searchItems() {
+				const itemCodeOrName = $('#itemCodeOrNameInput').val();
+				const itemType = $('#itemTypeSelect').val();
+				const shortageOnly = $('#shortageOnlyCheckbox').is(':checked');
 
-		        $.ajax({
-		            url: '/inven/filterInventory',
-		            type: 'GET',
-		            data: {
-		                itemCodeOrName: itemCodeOrName,
-		                itemType: itemType,
-		                findOutOfStock: shortageOnly
-		            },
-		            success: function(data) {
-		                // 테이블 갱신하는 로직 작성
-		                updateTable(data);
-		            },
-		            error: function(error) {
-		                console.error('Error fetching inventory data:', error);
-		            }
-		        });
-		    }
+				$.ajax({
+					url: '/inven/filterInventory',
+					type: 'GET',
+					data: {
+						itemCodeOrName: itemCodeOrName,
+						itemType: itemType,
+						findOutOfStock: shortageOnly
+					},
+					success: function (data) {
+						// 테이블 갱신하는 로직 작성
+						updateTable(data);
+					},
+					error: function (error) {
+						console.error('Error fetching inventory data:', error);
+					}
+				});
+			}
 
-		    function updateTable(items) {
-		        // 테이블 데이터를 지우고, 새로운 데이터를 넣습니다.
-		        $('#inventoryTable tbody').empty();
-		        items.forEach(item => {
-		            const row = `
+			function updateTable(items) {
+				// 테이블 데이터를 지우고, 새로운 데이터를 넣습니다.
+				$('#inventoryTable tbody').empty();
+				items.forEach(item => {
+					const row = `
 		                <tr>
 		                    <td>${item.itemCode}</td>
 		                    <td>${item.itemName}</td>
@@ -284,9 +283,9 @@
 		                    <td>${item.minReqQuantity}</td>
 		                </tr>
 		            `;
-		            $('#inventoryTable tbody').append(row);
-		        });
-		    }
+					$('#inventoryTable tbody').append(row);
+				});
+			}
 		});
 
 	</script>
