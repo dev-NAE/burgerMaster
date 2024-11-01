@@ -28,4 +28,10 @@ public class MFController {
 		
 		return "/manufacture/BOM";
 	}
+	
+	@GetMapping("/insert")
+	public String insert() {
+		
+		return "/manufacture/orderInsert";
+	}
 }

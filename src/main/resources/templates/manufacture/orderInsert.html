@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>작업 지시 조회</title>
+  <title>작업 지시 작성</title>
   <!-- 기본 css 링크-->
   <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
   <!-- Google Font: Source Sans Pro -->
@@ -36,12 +36,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">작업 지시 조회</h1>
+            <h1 class="m-0">작업 지시 작성</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">작업 지시 조회</li>
+              <li class="breadcrumb-item active">작업 지시 작성</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -55,18 +55,71 @@
 
         <!-- Main row -->
         <div class="row">
+			
+<!--			작업 지시 등록 폼-->
+		  <form>
+			<div class="card card-default">
+				
+			  <div class="card-header">
+			  	  <h3 class="">새 작업 지시 등록</h3>
+			  </div>
+<!--			cardheader-->
 
+			  <div class="card-body">
+				<div class="row">
+					<div class="form-group">
+						<label>생산할 물품</label>
+						<select class="form-control select2 select2-hidden-accessible" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+		                    <option selected="selected" data-select2-id="3">Alabama</option>
+		                    <option data-select2-id="35">Alaska</option>
+		                    <option data-select2-id="36">California</option>
+		                    <option data-select2-id="37">Delaware</option>
+		                    <option data-select2-id="38">Tennessee</option>
+		                    <option data-select2-id="39">Texas</option>
+		                    <option data-select2-id="40">Washington</option>
+						</select>
+						<span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="2" style="width: 100%;">
+							<span class="selection">
+								<span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-fmt3-container">
+									<span class="select2-selection__rendered" id="select2-fmt3-container" role="textbox" aria-readonly="true" title="Alabama">
+										Alabama
+									</span>
+									<span class="select2-selection__arrow" role="presentation">
+										<b role="presentation"></b>
+									</span>
+								</span>
+							</span>
+							<span class="dropdown-wrapper" aria-hidden="true">
+								
+							</span>
+						</span>
+					</div>
+<!--					form-group-->
+					
+				  <div class="form-group">
+                    <label for="amount">수량</label>
+                    <input type="number" class="form-control" id="amount" placeholder="수량을 입력하십시오">
+                  </div>
+<!--				  form-group-->
+
+				</div>
+<!--				row-->
+
+			  </div>
+<!--			  cardbody-->
+
+			</div>
+<!--			card-->
+
+		  </form>
+			
+<!--			생산에 필요한 재료 목록과 현황-->
             <table class="table table-secondary table-striped">
 				<thead>
 					<tr>
 						<th>식별번호</th>
 						<th>가공품명</th>
-						<th>수량</th>
-						<th>데드라인</th>
-						<th>요청일</th>
-						<th>작업 상태</th>
-						<th>작업 전달 확인</th>
-						<th>작업 완료 확인</th>
+						<th>재료</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -74,84 +127,19 @@
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
 					</tr>
 					<tr>
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
 					</tr>
 					<tr>
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
 					</tr>
 				</tbody>
 			</table>
-			
-			<nav aria-label="Page navigation" style="width:100%;">
-			  <div>
-				
-<!--				페이지네이션-->
-			  <div style="display: inline-block;">
-			  <ul class="pagination">
-			    <li class="page-item"><a class="page-link" href="#">◀</a></li>
-			    <li class="page-item"><a class="page-link" href="#">1</a></li>
-			    <li class="page-item"><a class="page-link" href="#">2</a></li>
-			    <li class="page-item"><a class="page-link" href="#">3</a></li>
-			    <li class="page-item"><a class="page-link" href="#">▶</a></li>
-			  </ul>
-			  </div>
-			  
-<!--			  검색 도구-->
-			  <div class="searching" style="float: right;">
-			  
-<!--				키워드 분류-->
-			  <div style="display: inline-block;">
-			    <select class="form-control">
-					<option th:text="식별번호"></option>
-					<option th:text="가공품명"></option>
-					<option th:text="요청일"></option>
-				</select>
-			  </div>
-			  
-<!--			  작업 상태 분류-->
-			  <div style="display: inline-block;">
-			    <select class="form-control">
-			  	  <option th:text="작업완료"></option>
-			  	  <option th:text="작업전달전"></option>
-			  	  <option th:text="작업중"></option>
-				  <option th:text="작업완료"></option>
-			  	</select>
-			  </div>
-			  
-			  <div style="display: inline-block;">
-			  	<input type="text" name="keyword" placeholder="검색어">
-			  </div>
-			  
-			  <div style="display: inline-block;">
-				<button type="button" class="btn btn-success">검색</button>
-			  </div>
-			  
-			  </div>
-<!--			  searching-->
-			  
-			  </div>
-			</nav>
 
         </div>
         <!-- /.row (main row) -->
