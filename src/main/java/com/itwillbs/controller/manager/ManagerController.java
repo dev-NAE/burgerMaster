@@ -1,7 +1,5 @@
-package com.itwillbs.controller;
+package com.itwillbs.controller.manager;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.entity.Manager;
 import com.itwillbs.service.ManagerService;
@@ -22,16 +20,6 @@ import java.util.List;
 public class ManagerController {
     private final ManagerService managerService;
 
-    @PostMapping(value="/manager/create", produces = "application/text; charset=UTF-8")
-    @ResponseBody
-    public String create(Manager manager) {
-        log.info("ManagerController create()");
-
-        String json = managerService.createManger(manager);;
-        log.info(manager.toString());
-
-        return json;
-    }
 
     @GetMapping("/login")
     public String login(){
