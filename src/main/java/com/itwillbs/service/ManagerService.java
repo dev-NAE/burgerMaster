@@ -59,8 +59,9 @@ public class ManagerService {
         log.info("ManagerService Checking manager");
         boolean result = false;
 
-        log.info("manage DB : "+managerRepository.findById(managerId));
-        if(managerRepository.findById(managerId).get() != null) {
+        log.info("manage DB : "+managerRepository.findById(managerId).isPresent());
+
+        if(managerRepository.findById(managerId).isPresent()) {
             result = true;
         }
         return result;

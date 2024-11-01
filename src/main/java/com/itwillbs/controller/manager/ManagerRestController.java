@@ -24,11 +24,11 @@ public class ManagerRestController {
         return json;
     }
 
-    @PostMapping(value = "/manager/check/id", produces = "application/text; charset=UTF-8")
+    @PostMapping(value = "/manager/check/id")
     public Boolean  checkId(String managerId) {
         log.info("ManagerRestController checkId()");
         boolean result = false;
-        // false 중복 없음, true 중복 있음
+        // false 중복 없음, true 중복 있음min
         result = managerService.checkManagerId(managerId);
         log.info("managerId : "+managerId);
         log.info("result : "+result);
