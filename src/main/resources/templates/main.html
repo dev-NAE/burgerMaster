@@ -339,7 +339,7 @@
 		
 	
 			
-		const labels = rmItemList.map(item => item.itemName);  // 항목 이름
+		const labels = rmInventoryList.map(item => item.itemName);  // 항목 이름
 		//const invenlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
 		const data = {
 			labels: labels,
@@ -410,8 +410,8 @@
 				{
 					label: '총 재고',
 					data: fpInventory,  // 재량 필드로 사용 (예시)
-					backgroundColor: 'lightgreen',
-					borderColor: 'lightgreen',
+					backgroundColor: fpInventory.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
+					borderColor: fpInventory.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
 					borderWidth: 1
 				}
 			]
@@ -425,7 +425,8 @@
 					y: {
 						beginAtZero: true
 					}
-				}
+				},
+				
 			}
 		};
 
@@ -449,8 +450,8 @@
 
 					label: '총 재고',
 					data: ppInventoryList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-					backgroundColor: 'lightgreen',
-					borderColor: 'lightgreen',
+					backgroundColor: ppInventoryList.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
+					borderColor: ppInventoryList.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
 					borderWidth: 1
 				}
 			]
