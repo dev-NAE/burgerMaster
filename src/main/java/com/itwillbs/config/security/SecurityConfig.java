@@ -36,7 +36,6 @@ public class SecurityConfig {
                 "/main/**",
                 "/managers/**",
                 "/login/**",
-                "/login/**",
                 "/error/**",
                 "/css/**",
                 "/js/**",
@@ -48,7 +47,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(urlsToBePermittedAll).permitAll()
                 .requestMatchers("/manager/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
         );
         // 로그인 처리
 		http.formLogin(formLogin -> formLogin
