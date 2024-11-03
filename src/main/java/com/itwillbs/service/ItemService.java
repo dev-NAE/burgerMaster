@@ -14,6 +14,7 @@ import com.itwillbs.entity.Item;
 import com.itwillbs.repository.ItemRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class ItemService {
 	private final ItemRepository itemRepository;
 
@@ -21,8 +22,8 @@ public class ItemService {
 		this.itemRepository = itemRepository;
 	}
 
-	public Optional<Item> findItemByCode(String code) {
-		return itemRepository.findById(code);
+	public Optional<Item> findItemByCode(String itemCode) {
+		return itemRepository.findById(itemCode);
 	}
 
 	@Transactional
@@ -40,7 +41,6 @@ public class ItemService {
 		return itemRepository.save(item);
 	}
 
-	// 공통 검증 메서드들
 	private void validateItemCode(Item item) {
 		if (!item.getItemCode().matches("^(RM|PP|FP)\\d{3}$")) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목코드는 RM/PP/FP로 시작하고 3자리 숫자여야 합니다.");
@@ -51,7 +51,7 @@ public class ItemService {
 	}
 
 	private void validateDuplicate(Item item) {
-		if (itemRepository.existsByItemCode(item.getItemCode())) {
+		if (itemRepository.existsById(item.getItemCode())) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 품목코드입니다.");
 		}
 	}
@@ -62,6 +62,7 @@ public class ItemService {
 		}
 	}
 
+	@Transactional
 	public void deleteItem(String itemCode) {
 		itemRepository.deleteById(itemCode);
 	}

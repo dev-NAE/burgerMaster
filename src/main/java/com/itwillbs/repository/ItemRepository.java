@@ -28,5 +28,4 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 	    Pageable pageable
 	);
 
-	 boolean existsByItemCode(String itemCode);
 }
