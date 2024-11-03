@@ -35,7 +35,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         log.info("username:{}", username);
 
         // 사용자 정보 조회
-        Manager managerInfo = managerService.getAdminByAdminId(username);
+        Manager managerInfo = managerService.getManagerByManagerId(username);
 
         // password 일치 여부 체크
         if(!bCryptPasswordEncoder.matches(password, managerInfo.getPass()))

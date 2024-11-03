@@ -6,6 +6,7 @@ import com.itwillbs.entity.Manager;
 import com.itwillbs.repository.ManagerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,9 +21,9 @@ public class ManagerService {
     private final ManagerRepository managerRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public Manager getAdminByAdminId(final String adminId) {
+    public Manager getManagerByManagerId(final String managerId) {
         Optional<Manager> manager;
-        manager = managerRepository.findById(adminId);
+        manager = managerRepository.findById(managerId);
 
         if (manager.isPresent()) {
             return manager.get();
@@ -65,5 +66,25 @@ public class ManagerService {
             result = true;
         }
         return result;
+    }
+
+    public String updateManager(Manager manager) {
+        log.info("ManagerService Updating manager");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Manager managerDB = getManagerByManagerId(manager.getManagerId());
+        String json = null;
+        SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        if(managerDB != null) {
+            manager.setPass(managerDB.getPass());
+            log.info("manager : " + manager);
+            managerRepository.save(manager);
+            try {
+                json = objectMapper.writeValueAsString(manager);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return json;
     }
 }
