@@ -91,7 +91,7 @@
 											</div>
 											<div class="col-2">
 												<label>&nbsp;</label>
-												<button type="button" id="search-button"
+												<button type="button" id="searchButton"
 													class="btn btn-block btn-primary">검색</button>
 											</div>
 
@@ -100,9 +100,12 @@
 													<label>품목 유형</label>
 													<select class="form-control" id="itemTypeSelect">
 														<option value="">전체</option>
-														<option value="원재료">원재료</option>
-														<option value="가공품">가공품</option>
-														<option value="완제품">완제품</option>
+<!--														RM-->
+														<option value="RM">원재료</option> 
+<!--														PP-->
+														<option value="PP">가공품</option>
+<!--														FP-->
+														<option value="FP">완제품</option>
 													</select>
 												</div>
 											</div>
@@ -132,14 +135,15 @@
 													</tr>
 												</thead>
 												<tbody id="inventoryTableBody">
-													<tr th:each="item : ${inventoryItemDTOs}">
-														<td th:text="${item.itemCode}"></td>
-														<td th:text="${item.itemName}"></td>
-														<td th:text="${item.itemType}"></td>
-														<td th:text="${item.quantity}"></td>
-														<td th:text="${item.minReqQuantity}"></td>
-													</tr>
+												    <tr th:each="item : ${inventoryItemDTOs}">
+												        <td th:text="${item.itemCode}"></td>
+												        <td th:text="${item.itemName}"></td>
+												        <td th:text="${#strings.equals(item.itemType, 'FP') ? '완제품' : (#strings.equals(item.itemType, 'RM') ? '원재료' : (#strings.equals(item.itemType, 'PP') ? '가공품' : item.itemType))}"></td>
+												        <td th:text="${item.quantity}"></td>
+												        <td th:text="${item.minReqQuantity}"></td>
+												    </tr>
 												</tbody>
+
 											</table>
 										</div>
 									</div>
@@ -181,32 +185,32 @@
 									</div>
 								</div>
 							</div>
+
+
+
+
+
+
+
+
+
+						</section>
+
 					</div>
-
-
-
-
-
-
-
-
+					<!-- /.row (main row) -->
+				</div><!-- /.container-fluid -->
 			</section>
-
+			<!-- /.Main-content -->
 		</div>
-		<!-- /.row (main row) -->
-	</div><!-- /.container-fluid -->
-	</section>
-	<!-- /.content -->
-	</div>
-	<!-- /.content-wrapper -->
+		<!-- /.content-wrapper -->
 
 
 
-	<!-- Control Sidebar -->
-	<!--  <aside class="control-sidebar control-sidebar-dark">-->
-	<!-- Control sidebar content goes here -->
-	<!--  </aside>-->
-	<!-- /.control-sidebar -->
+		<!-- Control Sidebar -->
+		<!--  <aside class="control-sidebar control-sidebar-dark">-->
+		<!-- Control sidebar content goes here -->
+		<!--  </aside>-->
+		<!-- /.control-sidebar -->
 	</div>
 	<!-- ./wrapper -->
 
@@ -238,7 +242,7 @@
 			});
 
 			// 재고 부족 품목 체크박스 선택 시 AJAX로 필터링
-			$('#shortageOnlyCheckbox').change(function () {
+			$('#shortageOnly').change(function () {
 				searchItems();
 			});
 
@@ -248,43 +252,58 @@
 			});
 
 			function searchItems() {
-				const itemCodeOrName = $('#itemCodeOrNameInput').val();
+				const itemCodeOrName = $('#itemCodeOrName').val();
 				const itemType = $('#itemTypeSelect').val();
-				const shortageOnly = $('#shortageOnlyCheckbox').is(':checked');
+				const findOutOfStock = $('#shortageOnly').is(':checked');
 
 				$.ajax({
-					url: '/inven/filterInventory',
+					url: '/restInven/filterInventory',
 					type: 'GET',
 					data: {
 						itemCodeOrName: itemCodeOrName,
 						itemType: itemType,
-						findOutOfStock: shortageOnly
+						findOutOfStock: findOutOfStock
 					},
 					success: function (data) {
 						// 테이블 갱신하는 로직 작성
 						updateTable(data);
 					},
 					error: function (error) {
-						console.error('Error fetching inventory data:', error);
+						console.error('재고 데이터 fetch error:', error);
 					}
 				});
 			}
 
 			function updateTable(items) {
-				// 테이블 데이터를 지우고, 새로운 데이터를 넣습니다.
-				$('#inventoryTable tbody').empty();
-				items.forEach(item => {
-					const row = `
-		                <tr>
-		                    <td>${item.itemCode}</td>
-		                    <td>${item.itemName}</td>
-		                    <td>${item.itemType}</td>
-		                    <td>${item.quantity}</td>
-		                    <td>${item.minReqQuantity}</td>
-		                </tr>
-		            `;
-					$('#inventoryTable tbody').append(row);
-				});
+			    // 테이블 데이터를 지우고, 새로운 데이터를 넣습니다.
+			    $('#inventoryTableBody').empty();
+			    items.forEach(item => {
+			        let itemTypeText;
+			        switch (item.itemType) {
+			            case 'FP':
+			                itemTypeText = '완제품';
+			                break;
+			            case 'RM':
+			                itemTypeText = '원재료';
+			                break;
+			            case 'PP':
+			                itemTypeText = '가공품';
+			                break;
+			            default:
+			                itemTypeText = item.itemType;
+			        }
+
+			        const row = `
+			            <tr>
+			                <td>${item.itemCode}</td>
+			                <td>${item.itemName}</td>
+			                <td>${itemTypeText}</td>
+			                <td>${item.quantity}</td>
+			                <td>${item.minReqQuantity}</td>
+			            </tr>
+			        `;
+			        $('#inventoryTableBody').append(row);
+			    });
 			}
 		});
 

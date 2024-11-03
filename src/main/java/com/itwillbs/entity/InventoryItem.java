@@ -23,9 +23,9 @@ public class InventoryItem {
 	private String itemCode;
 	
 	@Column(name = "quantity", columnDefinition = "INT DEFAULT 0")
-	private int quantity;
+	private Integer quantity;
 	
 	@Column(name = "min_req_quantity", columnDefinition = "INT DEFAULT -1")
-	private int minReqQuantity;
+	private Integer minReqQuantity;
 	
 }
