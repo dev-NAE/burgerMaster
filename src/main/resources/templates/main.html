@@ -63,14 +63,20 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0">Dashboard</h1>
+							<h1 class="m-0">Home : Dashboard</h1>
+							
 						</div><!-- /.col -->
 						<div class="col-sm-6">
+							
 							<ol class="breadcrumb float-sm-right">
+								
 								<li class="breadcrumb-item"><a href="/main">Home</a></li> / Dashboard
 								<!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
+								
 							</ol>
+							
 						</div><!-- /.col -->
+						
 					</div><!-- /.row -->
 				</div><!-- /.container-fluid -->
 			</div>
@@ -179,35 +185,29 @@
 
 
 
-
-					<div class="card card-danger" style="margin: 5px;">
-						<div class="card-header">
-							<h3 class="card-title">불량률</h3>
-							<div class="card-tools">
-								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-								<!--			<i class="fas fa-minus"></i>-->
-								<!--			</button>-->
-								<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-								<!--			<i class="fas fa-times"></i>-->
-								<!--			</button>-->
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="chartjs-size-monitor">
-								<div class="chartjs-size-monitor-expand">
-									<div class=""></div>
-								</div>
-								<div class="chartjs-size-monitor-shrink">
-									<div class=""></div>
+					<a href="/defective/defectiveList">
+						<div class="card card-danger" style="margin: 5px;">
+							<div class="card-header">
+								<h3 class="card-title">반품률</h3>
+								<div class="card-tools">
 								</div>
 							</div>
-							<canvas id="pieChart1"
-								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
-								width="375" height="250" class="chartjs-render-monitor"></canvas>
+							<div class="card-body">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class=""></div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="pieChart1"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+									width="375" height="250" class="chartjs-render-monitor"></canvas>
+							</div>
+
 						</div>
-
-					</div>
-
+					</a>
 
 
 
@@ -216,16 +216,10 @@
 
 
 
-					<div class="card card-danger" style="margin: 5px 500px 0  5px;">
+					<div class="card card-danger" style="margin: 5px ;">
 						<div class="card-header">
-							<h3 class="card-title">반품률</h3>
+							<h3 class="card-title">폐기율</h3>
 							<div class="card-tools">
-								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-								<!--			<i class="fas fa-minus"></i>-->
-								<!--			</button>-->
-								<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-								<!--			<i class="fas fa-times"></i>-->
-								<!--			</button>-->
 							</div>
 						</div>
 						<div class="card-body">
@@ -245,72 +239,41 @@
 					</div>
 
 
-					<!-- solid sales graph -->
-
-					<div class="card bg-gradient-info" style="margin: 5px ;">
-						<div class="card-header border-0">
-							<h3 class="card-title">
-								<!--                  <i class="fas fa-th mr-1"></i>-->
-								월간 수주량
-							</h3>
-
+					<div class="card card-primary" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">월간 수주 현황</h3>
 							<div class="card-tools">
-								<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="collapse">-->
-								<!--                    <i class="fas fa-minus"></i>-->
-								<!--                  </button>-->
-								<!--                  <button type="button" class="btn bg-info btn-sm" data-card-widget="remove">-->
-								<!--                    <i class="fas fa-times"></i>-->
-								<!--                  </button>-->
 							</div>
 						</div>
 						<div class="card-body">
-							<canvas class="chart" id="line-chart"
-								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-						</div>
-						<!-- /.card-body -->
-						<div class="card-footer bg-transparent">
-							<div class="row">
-								<!--                  <div class="col-4 text-center">-->
-								<!--                    <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"-->
-								<!--                           data-fgColor="#39CCCC">-->
-
-								<!--                    <div class="text-white">Mail-Orders</div>-->
-								<!--                  </div>-->
-								<!-- ./col -->
-								<!--                  <div class="col-4 text-center">-->
-								<!--                    <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"-->
-								<!--                           data-fgColor="#39CCCC">-->
-
-								<!--                    <div class="text-white">Online</div>-->
-								<!--                  </div>-->
-								<!-- ./col -->
-								<div class="col-4 text-center">
-									<!--                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"-->
-									<!--                           data-fgColor="#39CCCC">-->
-
-									<!--                    <div class="text-white">월간 수주량</div>-->
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class=""></div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
 								</div>
-								<!-- ./col -->
+								<canvas id="areaChart"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 636px;"
+									width="636" height="250" class="chartjs-render-monitor"></canvas>
 							</div>
-							<!-- /.row -->
 						</div>
-						<!-- /.card-footer -->
+
 					</div>
-					<!-- /.card -->
-
-
-
-
-
-
-
-					<!--          </section>-->
-					<!-- right col -->
 				</div>
-				<!-- /.row (main row) -->
-		</div><!-- /.container-fluid -->
-		</section>
-		<!-- /.content -->
+
+
+
+
+				<!--          </section>-->
+				<!-- right col -->
+		</div>
+		<!-- /.row (main row) -->
+	</div><!-- /.container-fluid -->
+	</section>
+	<!-- /.content -->
 	</div>
 	<!-- /.content-wrapper -->
 
@@ -368,13 +331,22 @@
 
 
 	<script th:inline="javascript">
-		
-		// 원재료
+
+		// 원재료 입고
 		const rmItemList = /*[[${rmItemList}]]*/[
 		];
+
+		const rmInventoryList = /*[[${rmInventoryList}]]*/[
+		];
+		//alert(JSON.stringify(rmInventoryList));
 		//alert(JSON.stringify(rmItemList));
 
-		const labels = rmItemList.map(item => item.itemName);  // 항목 이름
+		const rmInventory = rmInventoryList.map(item => item.quantity);  // 항목 이름
+		
+	
+			
+		const labels = rmInventoryList.map(item => item.itemName);  // 항목 이름
+		//const invenlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
 		const data = {
 			labels: labels,
 			datasets: [
@@ -384,10 +356,11 @@
 					backgroundColor: 'lightblue',
 					borderColor: 'lightblue',
 					borderWidth: 1
+					
 				},
 				{
 					label: '총 재고',
-					data: rmItemList.map(item => item.quantity),  // 총 재고 필드로 사용
+					data: rmInventory,  // 총 재고 필드로 사용
 					backgroundColor: 'lightgreen',
 					borderColor: 'lightgreen',
 					borderWidth: 1
@@ -395,10 +368,13 @@
 			]
 		};
 
+
+
 		const config = {
 			type: 'bar',
 			data: data,
 			options: {
+				
 				scales: {
 					y: {
 						beginAtZero: true
@@ -408,8 +384,8 @@
 		};
 
 		// Chart.js를 사용하여 차트 생성
-		  const ctx = document.getElementById('myChart').getContext('2d');
-		  new Chart(ctx, config);
+		const ctx = document.getElementById('myChart').getContext('2d');
+		new Chart(ctx, config);
 
 
 
@@ -419,10 +395,16 @@
 		//완재품
 		const fpItemList = /*[[${fpItemList}]]*/[
 		];
+		const fpInventoryList = /*[[${fpInventoryList}]]*/[
+		];
 
-		//alert("fpItemList"+JSON.stringify(fpItemList));
 		
-		const labels2 = fpItemList.map(item => item.itemName);  // 항목 이름
+		const fpInventory = fpInventoryList.map(item => item.quantity); 
+				
+		
+		//alert("fpItemList"+JSON.stringify(fpItemList));
+
+		const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
 		const data2 = {
 			labels: labels2,
 			datasets: [
@@ -435,9 +417,9 @@
 				},
 				{
 					label: '총 재고',
-					data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-					backgroundColor: 'lightgreen',
-					borderColor: 'lightgreen',
+					data: fpInventory,  // 재량 필드로 사용 (예시)
+					backgroundColor: fpInventory.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
+					borderColor: fpInventory.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
 					borderWidth: 1
 				}
 			]
@@ -451,36 +433,33 @@
 					y: {
 						beginAtZero: true
 					}
-				}
+				},
+				
 			}
 		};
 
 		// Chart.js를 사용하여 차트 생성
-				  const ctx2 = document.getElementById('myChart2').getContext('2d');
-				  new Chart(ctx2, config2);
+		const ctx2 = document.getElementById('myChart2').getContext('2d');
+		new Chart(ctx2, config2);
 
 		//가공품
-		const ppItemList = /*[[${ppItemList}]]*/[
+		const ppInventoryList = /*[[${ppInventoryList}]]*/[
 		];
-		
+
+
 		//alert("ppItemList:"+JSON.stringify(ppItemList));
 
-		const labels3 = ppItemList.map(item => item.itemName);  // 항목 이름
+		const labels3 = ppInventoryList.map(item => item.itemName);  // 항목 이름
 		const data3 = {
 			labels: labels3,
 			datasets: [
 				{
-					label: '가공품 입고량',
-					data: ppItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-					backgroundColor: 'lightblue',
-					borderColor: 'lightblue',
-					borderWidth: 1
-				},
-				{
+
+
 					label: '총 재고',
-					data: ppItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-					backgroundColor: 'lightgreen',
-					borderColor: 'lightgreen',
+					data: ppInventoryList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					backgroundColor: ppInventoryList.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
+					borderColor: ppInventoryList.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
 					borderWidth: 1
 				}
 			]
@@ -499,69 +478,177 @@
 		};
 
 		// Chart.js를 사용하여 차트 생성
-				  const ctx3 = document.getElementById('myChart3').getContext('2d');
-				  new Chart(ctx3, config3);
+		const ctx3 = document.getElementById('myChart3').getContext('2d');
+		new Chart(ctx3, config3);
 
+
+		// 반품 데이터
+		const dfItemList = /*[[${dfItemList}]]*/[];
+
+		// 데이터 확인을 위한 alert
+		//alert("dfItemList:" + JSON.stringify(dfItemList));
+
+		// 차트 컨텍스트 가져오기
+		var pieChartCanvas = $('#pieChart1').get(0).getContext('2d');
+
+		// 차트 옵션
+		var pieOptions = {
+			maintainAspectRatio: false,
+			responsive: true,
+		};
+
+		// 색상 자동 생성 함수
+		function generateRandomColors(count) {
+			const colors = [];
+			for (let i = 0; i < count; i++) {
+
+				// RGB 랜덤 색상 생성
+				const color = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(80 + Math.random() * 255)}, ${50 + Math.floor(Math.random() * 255)})`;
+				colors.push(color);
+			}
+			return colors;
+		}
+
+		// 라벨 및 데이터 설정
+		const labels4 = dfItemList.map(item => item.itemName);  // 항목 이름
+		const data4 = {
+			labels: labels4,
+			datasets: [
+				{
+					label: '총 재고',
+					data: dfItemList.map(item => item.quantity),  // 수량 필드 사용
+					backgroundColor: generateRandomColors(dfItemList.length),  // 각 항목의 색상 배열
+					//borderColor: generateRandomColors(dfItemList.length),
+					borderWidth: 0
+				}
+			]
+		};
+
+		// 차트 생성
+		new Chart(pieChartCanvas, {
+			type: 'pie',
+			data: data4,
+			options: pieOptions
+		});
+
+		//
+		// 폐기 데이터
+		const discardItemList = /*[[${discardItemList}]]*/[];
+
+		// 데이터 확인을 위한 alert
+		//alert("dfItemList:" + JSON.stringify(dfItemList));
+
+		// 차트 컨텍스트 가져오기
+		var pieChartCanvas2 = $('#pieChart2').get(0).getContext('2d');
+
+		// 차트 옵션
+		var pieOptions2 = {
+			maintainAspectRatio: false,
+			responsive: true,
+		};
+
+		// 색상 자동 생성 함수
+		function generateRandomColors2(count) {
+			const colors = [];
+			for (let i = 0; i < count; i++) {
+
+				// RGB 랜덤 색상 생성
+				const color = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(80 + Math.random() * 255)}, ${50 + Math.floor(Math.random() * 255)})`;
+				colors.push(color);
+			}
+			return colors;
+		}
+
+		// 라벨 및 데이터 설정
+		const labels5 = discardItemList.map(item => item.itemName);  // 항목 이름
+		const data5 = {
+			labels: labels5,
+			datasets: [
+				{
+					label: '총 재고',
+					data: discardItemList.map(item => item.quantity),  // 수량 필드 사용
+					backgroundColor: generateRandomColors2(discardItemList.length),  // 각 항목의 색상 배열
+					//borderColor: generateRandomColors(dfItemList.length),
+					borderWidth: 0
+				}
+			]
+		};
+
+		// 차트 생성
+		new Chart(pieChartCanvas2, {
+			type: 'pie',
+			data: data5,
+			options: pieOptions2
+		});
+
+
+		// 수주 데이터
+		const saleItemList = /*[[${saleItemList}]]*/[];
+
+		// 월별 총 수주 금액 초기화 (1월부터 12월까지)
+		const monthlyData = Array(12).fill(0); // 1월~12월
+
+		// 월별 총 수주 금액 계산
+		saleItemList.forEach(item => {
+			const month = new Date(item.dueDate).getMonth(); // 0: January, 11: December
+			monthlyData[month] += item.totalPrice; // 월별로 총 수주 금액을 더함
+		});
+
+		// 차트 데이터 설정
+		var areaChartCanvas = $('#areaChart').get(0).getContext('2d');
+		var areaChartData = {
+			labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			datasets: [
+				{
+					label: '월별 총 수주 금액',
+					backgroundColor: 'steelblue',
+					borderColor: 'steelblue',
+					pointRadius: 3,
+					pointColor: '#3b8bba',
+					pointStrokeColor: 'rgba(60,141,188,1)',
+					pointHighlightFill: '#fff',
+					pointHighlightStroke: 'rgba(60,141,188,1)',
+					data: monthlyData // 월별 총 수주 금액 데이터 사용
+				},
+			]
+		};
+
+		// 차트 옵션 설정
+		var areaChartOptions = {
+			maintainAspectRatio: false,
+			responsive: true,
+			legend: {
+				display: true
+			},
+			scales: {
+				xAxes: [{
+					gridLines: {
+						display: false,
+					}
+				}],
+				yAxes: [{
+					gridLines: {
+						display: true,
+					}
+				}]
+			}
+		};
+
+		// 차트 생성
+		new Chart(areaChartCanvas, {
+			type: 'line',
+			data: areaChartData,
+			options: areaChartOptions
+		});
 
 
 
 	</script>
 
 
-	<!--<script>-->
-	<!--  $(function () {-->
-	<!--    /* ChartJS-->
-	<!--     * --------->
-	<!--     * Here we will create a few charts using ChartJS-->
-	<!--     */-->
 
 
 
-	<!--    //--------------->
-	<!--    //- PIE CHART --->
-	<!--    //--------------->
-	<!--    // Get context with jQuery - using jQuery's .get() method.-->
-	<!--    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')-->
-	<!--    var pieData        = donutData;-->
-	<!--    var pieOptions     = {-->
-	<!--      maintainAspectRatio : false,-->
-	<!--      responsive : true,-->
-	<!--    }-->
-	<!--    //Create pie or douhnut chart-->
-	<!--    // You can switch between pie and douhnut using the method below.-->
-	<!--    new Chart(pieChartCanvas, {-->
-	<!--      type: 'pie',-->
-	<!--      data: pieData,-->
-	<!--      options: pieOptions-->
-	<!--    })-->
-
-	<!--    //--------------->
-	<!--    //- BAR CHART --->
-	<!--    //--------------->
-	<!--    var barChartCanvas = $('#barChart1').get(0).getContext('2d')-->
-	<!--    var barChartData = $.extend(true, {}, areaChartData)-->
-	<!--    var temp0 = areaChartData.datasets[0]-->
-	<!--    var temp1 = areaChartData.datasets[1]-->
-	<!--    barChartData.datasets[0] = temp1-->
-	<!--    barChartData.datasets[1] = temp0-->
-
-	<!--    var barChartOptions = {-->
-	<!--      responsive              : true,-->
-	<!--      maintainAspectRatio     : false,-->
-	<!--      datasetFill             : false-->
-	<!--    }-->
-
-	<!--    new Chart(barChartCanvas, {-->
-	<!--      type: 'bar',-->
-	<!--      data: barChartData,-->
-	<!--      options: barChartOptions-->
-	<!--    })-->
-
-
-	<!--  })-->
-
-
-	<!--</script>-->
 </body>
 
 </html>
