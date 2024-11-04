@@ -20,9 +20,9 @@ public interface InventoryRepository extends JpaRepository<InventoryItem, String
 
 	
 	//test 재고테이블 조회
-	@Query("SELECT new com.itwillbs.domain.inventory.InventoryItemDTO(itemCode) " +
-				"FROM InventoryItem")
-	List<InventoryItemDTO> getInventoryItems();
+//	@Query("SELECT new com.itwillbs.domain.inventory.InventoryItemDTO(itemCode) " +
+//				"FROM InventoryItem")
+//	List<InventoryItemDTO> getInventoryItems();
 	
 	
 	/**
@@ -51,10 +51,13 @@ public interface InventoryRepository extends JpaRepository<InventoryItem, String
 	 */
 	@Query("SELECT new com.itwillbs.domain.inventory.InventoryItemDTO(i.itemCode, i.itemName, i.itemType, ii.quantity, ii.minReqQuantity) " +
 		       "FROM Item i LEFT JOIN InventoryItem ii ON i.itemCode = ii.itemCode " +
-		       "WHERE (:itemCodeOrName = '' OR i.itemCode LIKE CONCAT('%', :itemCodeOrName, '%') OR i.itemName LIKE CONCAT('%', :itemCodeOrName, '%')) " +
+		       "WHERE (:itemCodeOrName IS NULL OR :itemCodeOrName = '' OR i.itemCode LIKE CONCAT('%', :itemCodeOrName, '%') OR i.itemName LIKE CONCAT('%', :itemCodeOrName, '%')) " +
 		       "AND (:itemType = '' OR i.itemType = :itemType)")
 		List<InventoryItemDTO> findInventoryItems(
 		       @Param("itemCodeOrName") String itemCodeOrName,
 		       @Param("itemType") String itemType);
 
+	
+	
+	
 }
