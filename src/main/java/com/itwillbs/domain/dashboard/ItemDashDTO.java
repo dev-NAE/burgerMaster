@@ -1,4 +1,4 @@
-package com.itwillbs.domain.test;
+package com.itwillbs.domain.dashboard;
 
 import java.math.BigDecimal;
 
