@@ -6,5 +6,5 @@ import lombok.Data;
 public class ItemSearchDTO {
 	private String itemName;
 	private String itemType;
-	private Boolean includeUnused;
+	private Boolean includeUnused = false;
 }
