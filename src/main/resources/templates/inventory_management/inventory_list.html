@@ -49,7 +49,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0">페이지이름</h1>
+							<h1 class="m-0">재고 조회</h1>
 						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -78,24 +78,24 @@
 
 								<!--검색 구역 시작-->
 								<div class="row">
-									<div class="col-sm-12 col-md-8">
+									<div class="col-sm-12 col-md-10">
 										<div class="row">
 											<!-- text input -->
 											<!-- HTML Form 수정 -->
-											<div class="col-6">
+											<div class="col-sm-8 col-md-4">
 												<div class="form-group">
 													<label>품목코드/품목명</label>
 													<input type="text" class="form-control" id="itemCodeOrName"
 														placeholder="품목코드 또는 품목명을 입력하세요">
-												</div>
+												</div>	
 											</div>
-											<div class="col-2">
+											<div class="col-sm-4 col-md-2">
 												<label>&nbsp;</label>
 												<button type="button" id="searchButton"
 													class="btn btn-block btn-primary">검색</button>
 											</div>
-
-											<div class="col-4">
+											<div class="col-sm-12 col-md-1"></div>
+											<div class="col-sm-6 col-md-2">
 												<div class="form-group">
 													<label>품목 유형</label>
 													<select class="form-control" id="itemTypeSelect">
@@ -109,18 +109,15 @@
 													</select>
 												</div>
 											</div>
-											<div class="col-6">
-												<div class="form-group">
-													<label>&nbsp;</label>
-													<div class="form-check">
-														<input class="form-check-input" type="checkbox"
-															id="shortageOnly" name="findOutOfStock">
-														<label class="form-check-label" for="shortageOnly">
-															재고 부족 품목만 보기
-														</label>
-													</div>
-												</div>
+											<div class="col-sm-6 col-md-3">
+											    <div class="form-group d-flex align-items-center justify-content-end h-100">
+											        <div class="form-check">
+											            <input class="form-check-input" type="checkbox" id="shortageOnly" name="findOutOfStock">
+											            <label class="form-check-label" for="shortageOnly">재고 부족 품목만 보기</label>
+											        </div>
+											    </div>
 											</div>
+
 
 											<!-- 테이블 -->
 											<table id="example2"
@@ -134,11 +131,15 @@
 														<th>최소 필요 재고량</th>
 													</tr>
 												</thead>
+											<!-- DB에서 데이터를 받아 재고 테이블 내용을 출력-->
 												<tbody id="inventoryTableBody">
 												    <tr th:each="item : ${inventoryItemDTOs}">
 												        <td th:text="${item.itemCode}"></td>
 												        <td th:text="${item.itemName}"></td>
-												        <td th:text="${#strings.equals(item.itemType, 'FP') ? '완제품' : (#strings.equals(item.itemType, 'RM') ? '원재료' : (#strings.equals(item.itemType, 'PP') ? '가공품' : item.itemType))}"></td>
+												        <td th:text="${#strings.equals(item.itemType, 'FP') ? '완제품' 
+																		: (#strings.equals(item.itemType, 'RM') ? '원재료' 
+																		: (#strings.equals(item.itemType, 'PP') ? '가공품' 
+																		: item.itemType))}"></td>
 												        <td th:text="${item.quantity}"></td>
 												        <td th:text="${item.minReqQuantity}"></td>
 												    </tr>
@@ -149,40 +150,31 @@
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-sm-12 col-md-5">
-										<div class="dataTables_info" id="example2_info" role="status"
-											aria-live="polite">Showing 1 to 10 of 57 entries
-
-										</div>
-									</div>
-									<div class="col-sm-12 col-md-7">
-										<div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-											<ul class="pagination">
-												<li class="paginate_button page-item previous disabled"
-													id="example2_previous">
-													<a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0"
-														class="page-link">Previous
-													</a>
-												</li>
-												<li class="paginate_button page-item active">
-													<a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0"
-														class="page-link">1</a>
-												</li>
-												<li class="paginate_button page-item ">
-													<a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0"
-														class="page-link">2</a>
-												</li>
-												<li class="paginate_button page-item ">
-													<a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0"
-														class="page-link">3</a>
-												</li>
-												<li class="paginate_button page-item next" id="example2_next">
-													<a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0"
-														class="page-link">Next</a>
-												</li>
-											</ul>
-										</div>
-									</div>
+									<div class="col-sm-12 col-md-10">
+										<div class="row">
+											<div class="col-8">
+												<div class="dataTables_info" id="example2_info" role="status"
+													aria-live="polite">Showing 1 to 10 of 57 entries
+		
+												</div>
+											</div>
+											<div class="col-4">
+												<div class="dataTables_paginate paging_simple_numbers d-flex align-items-center justify-content-end h-100" id="example2_paginate">
+												    <ul class="pagination">
+												        <li th:classappend="${currentPage == 0} ? 'disabled' : ''" class="paginate_button page-item previous">
+												            <a th:href="@{|/inven/inventoryList?page=${currentPage - 1}&itemCodeOrName=${itemCodeOrName}&itemType=${itemType}&findOutOfStock=${findOutOfStock}|}" class="page-link">이전</a>
+												        </li>
+												        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active' : ''" class="paginate_button page-item">
+												            <a th:href="@{|/inven/inventoryList?page=${i}&itemCodeOrName=${itemCodeOrName}&itemType=${itemType}&findOutOfStock=${findOutOfStock}|}" class="page-link" th:text="${i + 1}"></a>
+												        </li>
+												        <li th:classappend="${currentPage == totalPages - 1} ? 'disabled' : ''" class="paginate_button page-item next">
+												            <a th:href="@{|/inven/inventoryList?page=${currentPage + 1}&itemCodeOrName=${itemCodeOrName}&itemType=${itemType}&findOutOfStock=${findOutOfStock}|}" class="page-link">다음</a>
+												        </li>
+												    </ul>
+												</div>
+											</div>
+										</div>	
+									</div>	
 								</div>
 							</div>
 
@@ -255,6 +247,7 @@
 				const itemCodeOrName = $('#itemCodeOrName').val();
 				const itemType = $('#itemTypeSelect').val();
 				const findOutOfStock = $('#shortageOnly').is(':checked');
+				const page = 1;
 
 				$.ajax({
 					url: '/restInven/filterInventory',
@@ -262,7 +255,7 @@
 					data: {
 						itemCodeOrName: itemCodeOrName,
 						itemType: itemType,
-						findOutOfStock: findOutOfStock
+						findOutOfStock: findOutOfStock,
 					},
 					success: function (data) {
 						// 테이블 갱신하는 로직 작성
@@ -275,8 +268,12 @@
 			}
 
 			function updateTable(items) {
-			    // 테이블 데이터를 지우고, 새로운 데이터를 넣습니다.
+			    // 기존 테이블 데이터를 지우고, 새로운 데이터 넣기.
 			    $('#inventoryTableBody').empty();
+				
+				// 페이지를 항상 1로 초기화
+				const page = 1;
+				
 			    items.forEach(item => {
 			        let itemTypeText;
 			        switch (item.itemType) {

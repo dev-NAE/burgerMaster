@@ -1,6 +1,9 @@
 package com.itwillbs.service;
 
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.itwillbs.domain.inventory.InventoryItemDTO;
@@ -16,37 +19,22 @@ import lombok.extern.java.Log;
 @Log
 public class InventoryService {
     private final InventoryRepository inventoryRepository;
-   
 
-    
-    
-    //재고 전체 조회
-	public List<InventoryItemDTO> getInventoryItems() {
-		log.info("getInventoryitems()");
-		
-		return inventoryRepository.getAllInventoryItems();
-//		return inventoryRepository.getInventoryItems();
-	}
-    
-  
+    // 재고 전체 조회 (페이지네이션 지원)
+    public Page<InventoryItemDTO> getInventoryItems(Pageable pageable) {
+        log.info("getInventoryItems()");
+        return inventoryRepository.getAllInventoryItems(pageable);
+    }
 
-	public List<InventoryItemDTO> findInventoryItemsByOutOfStock() {
-		
-		
-		return inventoryRepository.findInventoryItemsByOutOfStock();
-	}
+    // 재고 부족 품목 조회 (검색 조건 포함)
+    public Page<InventoryItemDTO> findInventoryItemsByOutOfStock(String itemCodeOrName, String itemType, Pageable pageable) {
+        log.info("findInventoryItemsByOutOfStock()");
+        return inventoryRepository.findInventoryItemsByOutOfStock(itemCodeOrName, itemType, pageable);
+    }
 
-
-	
-	
-	public List<InventoryItemDTO> findInventoryItems(String itemCodeOrName, String itemType) {
-		
-		return inventoryRepository.findInventoryItems(itemCodeOrName, itemType);
-	}
-
-
-
-
-
-
+    // 재고 검색 (검색 조건과 페이지네이션)
+    public Page<InventoryItemDTO> findInventoryItems(String itemCodeOrName, String itemType, Pageable pageable) {
+        log.info("findInventoryItems()");
+        return inventoryRepository.findInventoryItems(itemCodeOrName, itemType, pageable);
+    }
 }

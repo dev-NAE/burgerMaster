@@ -3,6 +3,9 @@ package com.itwillbs.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,22 +30,32 @@ public class InventoryController {
     private final InventoryService inventoryService;
     
     
-	//재고 조회
-	@GetMapping("/inventoryList")
-	public String inventoryList(Model model) {
-		log.info("InventroyController inventoryList()");
-		
-		
-		//DB에 저장된 재고들의 목록을 불러옴
-		List<InventoryItemDTO> inventoryItemDTOs = inventoryService.getInventoryItems();
-		
-		
-		
-		//model에 저장
-		model.addAttribute("inventoryItemDTOs", inventoryItemDTOs);
-		
-		return VIEW_PATH + "inventory_list";
-	}
+    @GetMapping("/inventoryList")
+    public String inventoryList(
+            @RequestParam(name = "itemCodeOrName", required = false) String itemCodeOrName,
+            @RequestParam(name = "itemType", required = false) String itemType,
+            @RequestParam(name = "findOutOfStock", defaultValue = "false") boolean findOutOfStock,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            Model model) {
+
+        log.info("InventoryController inventoryList()");
+
+        // Pageable 객체를 생성하여 페이지 정보를 설정
+        Pageable pageable = PageRequest.of(page, size);
+        // 검색 조건과 페이지 정보를 사용하여 재고 조회
+//        Page<InventoryItemDTO> inventoryItemDTOs = inventoryService.findInventoryItems(itemCodeOrName, itemType, findOutOfStock, pageable);
+
+        // 모델에 조회된 재고 데이터를 저장
+//        model.addAttribute("inventoryItemDTOs", inventoryItemDTOs);
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", inventoryItemDTOs.getTotalPages());
+//        model.addAttribute("itemCodeOrName", itemCodeOrName);
+//        model.addAttribute("itemType", itemType);
+//        model.addAttribute("findOutOfStock", findOutOfStock);
+
+        return VIEW_PATH + "inventory_list";
+    }
 	
 
 		
