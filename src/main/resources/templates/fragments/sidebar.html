@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+
+</head>
+
+<body>
+	<th:block th:fragment="sidebarFragment">
+		<!-- Main Sidebar Container -->
+		<aside class="main-sidebar elevation-4 sidebar-light-olive">
+			<!--        <aside class="main-sidebar sidebar-dark-primary elevation-4">-->
+			<!-- Brand Logo -->
+			<a href="/main" class="brand-link">
+				<img src="/img/sidebar/bugerMasterLogo2.png" alt="AdminLTE Logo"
+					class="brand-image img-circle elevation-3" style=" opacity: .8"><br>
+				<span class="brand-text font-weight-light">BugerMaster</span>
+			</a>
+
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<!-- Sidebar user panel (optional) -->
+				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+					<div class="image">
+						<img src="/img/sidebar/testuser.png" class="img-circle elevation-2" alt="User Image">
+					</div>
+					<div class="info">
+						<a href="#" class="d-block">
+							<div sec:authorize="isAuthenticated()">
+								<span sec:authentication="name"></span>님<br>
+								<a th:href="@{/logout}">로그아웃</a>
+
+							</div>
+						</a>
+					</div>
+				</div>
+
+				<!-- Sidebar Menu -->
+				<nav class="mt-2">
+					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+						data-accordion="false">
+						<!-- 기준정보관리 -->
+						<li class="nav-item">
+							<a href="#" class="nav-link ">
+								<img src="/img/sidebar/1.png" alt="Icon" class="nav-icon">
+
+								<!--                                <i class="nav-icon fas fa-copy"></i>-->
+								<p>기준정보관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="/masterdata/items" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>품목 관리</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="/masterdata/boms" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p> BOM 관리
+										</p>
+									</a>
+								</li>
+
+								<li class="nav-item">
+									<a href="/masterdata/suppliers" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p> 거래처관리
+										</p>
+									</a>
+								</li>
+
+								<li class="nav-item">
+									<a href="/masterdata/franchises" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p> 가맹점관리
+										</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+						</li>
+
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<img src="/img/sidebar/2.png" alt="Icon" class="nav-icon">
+								<p>거래관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>발주관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/tx/insertOrder" class="nav-link">
+												<p>발주등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/tx/orderList" class="nav-link">
+												<p>발주현황</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>수주관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="/tx/insertSale" class="nav-link">
+												<p>수주등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/tx/saleList" class="nav-link">
+												<p>수주조회</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>출하관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="/tx/insertShip" class="nav-link">
+												<p>출하등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/tx/shipList" class="nav-link">
+												<p>출하조회</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+
+
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<img src="/img/sidebar/3.png" alt="Icon" class="nav-icon">
+								<p>자재/제품관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>재고관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/inven/inventoryList" class="nav-link">
+												<p>재고조회</p>
+											</a>
+										</li>
+
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>입고관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="/inven/incomingInsert" class="nav-link">
+												<p>입고등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/inven/incomingList" class="nav-link">
+												<p>입고조회</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>출고관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="/inven/outgoingInsert" class="nav-link">
+												<p>출고등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/inven/outgoingList" class="nav-link">
+												<p>출고조회</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<!-- 생산작업관리 -->
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<!--                                <i class="nav-icon fas fa-copy"></i>-->
+								<img src="/img/sidebar/4.png" alt="Icon" class="nav-icon">
+								<p>생산작업관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>가공품목록<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/MFBom" class="nav-link">
+												<p>가공품 상세 정보</p>
+											</a>
+										</li>
+
+
+
+
+									</ul>
+
+								</li>
+							</ul>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p> 작업 지시 관리
+											<i class="right fas fa-angle-left"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/MFInsert" class="nav-link">
+												<p>작업지시 등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/MFOrders" class="nav-link">
+												<p>작업지시 목록</p>
+											</a>
+										</li>
+
+
+
+
+									</ul>
+
+								</li>
+							</ul>
+
+
+							<!-- 품질관리 -->
+						<li class="nav-item">
+							<a href="#" class="nav-link">
+								<img src="/img/sidebar/5.png" alt="Icon" class="nav-icon">
+								<p>품질관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>품질관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/quality/quality_order" class="nav-link">
+												<p>입하검품</p>
+											</a>
+										</li>
+
+										<li class="nav-item">
+											<a href="/quality/quality_sale" class="nav-link">
+												<p>출고검품</p>
+											</a>
+										</li>
+
+										<li class="nav-item">
+											<a href="/quality/quality_shipment" class="nav-link">
+												<p>출하검품</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/quality/qualityList" class="nav-link">
+												<p>품질관리리스트</p>
+											</a>
+										</li>
+
+									</ul>
+
+
+
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p>반품관리<i class="right fas fa-angle-left"></i></p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+										<li class="nav-item">
+											<a href="/defective/defectiveList" class="nav-link">
+												<p>반품 품목 조회</p>
+											</a>
+										</li>
+
+									</ul>
+								</li>
+
+
+							</ul>
+						</li>
+
+						<!-- 관리자관리 -->
+						<li class="nav-item" sec:authorize="hasRole('ADMIN')">
+							<a href="#" class="nav-link">
+								<img src="/img/sidebar/6.png" alt="Icon" class="nav-icon">
+								<!--                                <i class="nav-icon fas fa-copy"></i>-->
+								<p>관리자관리<i class="right fas fa-angle-left"></i></p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="/manager/list" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>관리자목록</p>
+									</a>
+								</li>
+
+							</ul>
+						</li>
+					</ul>
+				</nav>
+				<!-- /.sidebar-menu -->
+			</div>
+			<!-- /.sidebar -->
+		</aside>
+	</th:block>
+</body>
+
+</html>
