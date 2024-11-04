@@ -30,7 +30,7 @@ public class InventoryService {
     
   
 
-	public List<InventoryItemDTO> findInventoryItemOnlyOutOfStock() {
+	public List<InventoryItemDTO> findInventoryItemsByOutOfStock() {
 		
 		
 		return inventoryRepository.findInventoryItemsByOutOfStock();
@@ -39,7 +39,7 @@ public class InventoryService {
 
 	
 	
-	public List<InventoryItemDTO> findInventoryItem(String itemCodeOrName, String itemType) {
+	public List<InventoryItemDTO> findInventoryItems(String itemCodeOrName, String itemType) {
 		
 		return inventoryRepository.findInventoryItems(itemCodeOrName, itemType);
 	}

@@ -15,32 +15,32 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
 @RestController
-@RequestMapping("/inven")
+@RequestMapping("/restInven")
 @Log
 @RequiredArgsConstructor
 public class RestInventoryController {
 	
-	// 공통된 View 경로를 상수로 정의
-    private static final String VIEW_PATH = "inventory_management/";
+
     
     private final InventoryService inventoryService;
     
 	//재고 조회 ajax 비동기 검색
-	@GetMapping("/filterInventory")
-	public ResponseEntity<List<InventoryItemDTO>> filterInventory(
-	        @RequestParam(required = false) String itemCodeOrName,
-	        @RequestParam(required = false) String itemType,
-	        @RequestParam(defaultValue = "false") boolean findOutOfStock) {
-
+    @GetMapping("/filterInventory")
+    public ResponseEntity<List<InventoryItemDTO>> filterInventory(
+        @RequestParam(name = "itemCodeOrName", required = false) String itemCodeOrName,
+        @RequestParam(name = "itemType", required = false) String itemType,
+        @RequestParam(name = "findOutOfStock", defaultValue = "false") boolean findOutOfStock) {
+		log.info("RestInventoryController filterInventory()");
+		
 		List<InventoryItemDTO> filteredItems = null;
 		
 		
 		if(findOutOfStock == true) {
 			//findOutOfStock(재고부족품목만 찾기)의 값이 true면? -> (재고량 < 최소필요재고량인 품목만 조회)
-			filteredItems = inventoryService.findInventoryItemOnlyOutOfStock();
+			filteredItems = inventoryService.findInventoryItemsByOutOfStock();
 		}else {
 			//false면? -> 검색한 품목 조회
-			filteredItems = inventoryService.findInventoryItem(itemCodeOrName, itemType);
+			filteredItems = inventoryService.findInventoryItems(itemCodeOrName, itemType);
 		}
 	    return ResponseEntity.ok(filteredItems);
 	}

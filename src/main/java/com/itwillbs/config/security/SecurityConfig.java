@@ -3,6 +3,7 @@ package com.itwillbs.config.security;
 import com.itwillbs.config.security.handler.*;
 import com.itwillbs.config.security.provider.CustomAuthenticationProvider;
 import com.itwillbs.service.ManagerService;
+import com.itwillbs.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final ManagerService managerService;
+    private final SecurityService securityService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -72,7 +73,7 @@ public class SecurityConfig {
     }
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(bCryptPasswordEncoder, managerService);
+        return new CustomAuthenticationProvider(bCryptPasswordEncoder, securityService);
     }
 
     @Bean

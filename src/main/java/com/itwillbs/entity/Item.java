@@ -33,6 +33,10 @@ public class Item {
 	@Column(name = "item_type", length = 10, nullable = false)
 	private String itemType;
 
+    
+    
+    
+    
 	@Column(name = "use_yn", nullable = false)
 	private char useYN = 'Y';
 
