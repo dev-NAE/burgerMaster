@@ -342,6 +342,7 @@
 		//alert(JSON.stringify(rmItemList));
 
 		const rmInventory = rmInventoryList.map(item => item.quantity);  // 항목 이름
+		const minReqQuantitiesrm = rmInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
 		
 	
 			
@@ -393,54 +394,55 @@
 
 
 		//완재품
-		const fpItemList = /*[[${fpItemList}]]*/[
-		];
-		const fpInventoryList = /*[[${fpInventoryList}]]*/[
-		];
+				const fpItemList = /*[[${fpItemList}]]*/[
+				];
+				const fpInventoryList = /*[[${fpInventoryList}]]*/[
+				];
 
-		
-		const fpInventory = fpInventoryList.map(item => item.quantity); 
 				
-		
-		//alert("fpItemList"+JSON.stringify(fpItemList));
+				const fpInventory = fpInventoryList.map(item => item.quantity); 
+				const minReqQuantitiesfp = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
 
-		const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
-		const data2 = {
-			labels: labels2,
-			datasets: [
-				{
-					label: '완재품 입고량',
-					data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-					backgroundColor: 'lightblue',
-					borderColor: 'lightblue',
-					borderWidth: 1
-				},
-				{
-					label: '총 재고',
-					data: fpInventory,  // 재량 필드로 사용 (예시)
-					backgroundColor: fpInventory.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
-					borderColor: fpInventory.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
-					borderWidth: 1
-				}
-			]
-		};
+				
+				//alert("fpItemList"+JSON.stringify(fpItemList));
 
-		const config2 = {
-			type: 'bar',
-			data: data2,
-			options: {
-				scales: {
-					y: {
-						beginAtZero: true
+				const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
+				const data2 = {
+					labels: labels2,
+					datasets: [
+						{
+							label: '완재품 입고량',
+							data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+							backgroundColor: 'lightblue',
+							borderColor: 'lightblue',
+							borderWidth: 1
+						},
+						{
+							label: '총 재고',
+							data: fpInventory,  // 재량 필드로 사용 (예시)
+							backgroundColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
+							borderColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
+							borderWidth: 1
+						}
+					]
+				};
+
+				const config2 = {
+					type: 'bar',
+					data: data2,
+					options: {
+						scales: {
+							y: {
+								beginAtZero: true
+							}
+						},
+						
 					}
-				},
-				
-			}
-		};
+				};
 
-		// Chart.js를 사용하여 차트 생성
-		const ctx2 = document.getElementById('myChart2').getContext('2d');
-		new Chart(ctx2, config2);
+				// Chart.js를 사용하여 차트 생성
+				const ctx2 = document.getElementById('myChart2').getContext('2d');
+				new Chart(ctx2, config2);
 
 		//가공품
 		const ppInventoryList = /*[[${ppInventoryList}]]*/[

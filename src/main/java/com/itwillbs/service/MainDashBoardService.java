@@ -76,6 +76,11 @@ public class MainDashBoardService {
 		return ItemList;
 	}
 
+	public List<InventoryItemDTO> getNotifications() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 
