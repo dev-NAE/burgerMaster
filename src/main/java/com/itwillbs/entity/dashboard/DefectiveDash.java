@@ -23,7 +23,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Defective {
+public class DefectiveDash {
 	
 	 @Id
 	 @Column(name = "defective_id", length = 20, nullable = false)

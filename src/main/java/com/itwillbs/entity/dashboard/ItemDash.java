@@ -1,10 +1,12 @@
-package com.itwillbs.entity;
+package com.itwillbs.entity.dashboard;
 
+import com.itwillbs.entity.dashboard.InventoryItemDash;
 import org.hibernate.validator.constraints.Length;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -18,7 +20,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Item {
+public class ItemDash {
 
 	@Id
 	@Column(name = "item_code", length = 20)
@@ -36,6 +38,9 @@ public class Item {
     
     
     
+    // InventoryItem과 일대일 관계 설정 
+    @OneToOne(mappedBy = "item")
+    private InventoryItemDash inventoryItem; 
     
 	@Column(name = "use_yn", nullable = false)
 	private char useYN = 'Y';

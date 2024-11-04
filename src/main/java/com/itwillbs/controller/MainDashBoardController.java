@@ -11,9 +11,8 @@ import com.itwillbs.domain.dashboard.DefectiveDTO;
 import com.itwillbs.domain.dashboard.IncomingItemDTO;
 import com.itwillbs.domain.dashboard.InventoryItemDTO;
 import com.itwillbs.domain.dashboard.ItemDashDTO;
-import com.itwillbs.entity.Item;
-import com.itwillbs.entity.dashboard.IncommingItem;
-import com.itwillbs.entity.dashboard.Sale;
+import com.itwillbs.entity.dashboard.IncommingItemDash;
+import com.itwillbs.entity.dashboard.SaleDash;
 import com.itwillbs.service.MainDashBoardService;
 
 import ch.qos.logback.core.model.Model;
@@ -66,17 +65,17 @@ public class MainDashBoardController {
 			
 			
 			//반품률
-			List<DefectiveDTO>dfItemList=mainDashBoardService.findByItemSatus("반품");
+			List<DefectiveDTO>dfItemList=mainDashBoardService.findByStatus("반품");
 			System.out.println("MainDashBoardController dfItemList:"+dfItemList);
 			model.addAttribute("dfItemList", dfItemList);
 			
 			//폐기율
-			List<DefectiveDTO>discardItemList=mainDashBoardService.findByItemSatus("폐기");
+			List<DefectiveDTO>discardItemList=mainDashBoardService.findByStatus("폐기");
 			System.out.println("MainDashBoardController discardItemList:"+discardItemList);
 			model.addAttribute("discardItemList", discardItemList);
 			
 			//수주
-			List<Sale>saleItemList=mainDashBoardService.findBySaleStatus("수주완료");
+			List<SaleDash>saleItemList=mainDashBoardService.findBySaleStatus("수주완료");
 			System.out.println("MainDashBoardController saleItemList:"+saleItemList);
 			model.addAttribute("saleItemList", saleItemList);
 			

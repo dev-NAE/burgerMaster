@@ -8,9 +8,9 @@ import com.itwillbs.domain.dashboard.DefectiveDTO;
 import com.itwillbs.domain.dashboard.IncomingItemDTO;
 import com.itwillbs.domain.dashboard.InventoryItemDTO;
 import com.itwillbs.domain.dashboard.ItemDashDTO;
-import com.itwillbs.entity.dashboard.IncommingItem;
-import com.itwillbs.entity.dashboard.InventoryItem;
-import com.itwillbs.entity.dashboard.Sale;
+import com.itwillbs.entity.dashboard.IncommingItemDash;
+import com.itwillbs.entity.dashboard.InventoryItemDash;
+import com.itwillbs.entity.dashboard.SaleDash;
 import com.itwillbs.repository.MainDashBoardItemRepository;
 import com.itwillbs.repository.MainDashBoardSaleRepository;
 
@@ -28,8 +28,8 @@ public class MainDashBoardService {
 	private final MainDashBoardSaleRepository dashBoardSaleRepository;
 	
 
-	 public List<DefectiveDTO> findByItemSatus(String status) {
-	        List<DefectiveDTO> ItemList = mainDashBoardRepository.findByItemSatus(status);
+	 public List<DefectiveDTO> findByStatus(String status) {
+	        List<DefectiveDTO> ItemList = mainDashBoardRepository.findByStatus(status);
 	        
 	        for (DefectiveDTO item : ItemList) {
 	            System.out.println("Quantity: " + item.getQuantity() + ", Item Name: " + item.getItemName());
@@ -39,10 +39,10 @@ public class MainDashBoardService {
 	        return ItemList; 
 	    }
 	
-	 public List<Sale> findBySaleStatus(String status) {
-	        List<Sale> ItemList = dashBoardSaleRepository.findByStatus(status);
+	 public List<SaleDash> findBySaleStatus(String status) {
+	        List<SaleDash> ItemList = dashBoardSaleRepository.findByStatus(status);
 	        
-	        for (Sale item : ItemList) {
+	        for (SaleDash item : ItemList) {
 	            System.out.println("totalPrice: " + item.getTotalPrice() + ", dueDate: " + item.getDueDate());
 	        }
 	        

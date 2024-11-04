@@ -16,8 +16,8 @@ import com.itwillbs.domain.dashboard.IncomingItemDTO;
 import com.itwillbs.domain.dashboard.InventoryItemDTO;
 import com.itwillbs.domain.dashboard.ItemDashDTO;
 import com.itwillbs.entity.Item;
-import com.itwillbs.entity.dashboard.IncommingItem;
-import com.itwillbs.entity.dashboard.Sale;
+import com.itwillbs.entity.dashboard.IncommingItemDash;
+import com.itwillbs.entity.dashboard.SaleDash;
 import com.itwillbs.service.MainDashBoardService;
 
 import ch.qos.logback.core.model.Model;

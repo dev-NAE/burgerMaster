@@ -1,16 +1,18 @@
-package com.itwillbs.controller;
+package com.itwillbs.controller.manager;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.entity.Manager;
 import com.itwillbs.service.ManagerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,16 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ManagerController {
     private final ManagerService managerService;
 
-    @PostMapping(value="/manager/create", produces = "application/text; charset=UTF-8")
-    @ResponseBody
-    public String create(Manager manager) {
-        log.info("ManagerController create()");
 
-        String json = managerService.createManger(manager);;
-        log.info(manager.toString());
-
-        return json;
-    }
     @GetMapping("/login")
     public String login(){
         log.info("AdminsController login()");
@@ -35,14 +28,18 @@ public class ManagerController {
     }
 
     @GetMapping("/manager/list")
-    public String admins(){
+    public String managerList(Model model){
         log.info("AdminsController managers()");
         log.info("isAuthenticated : "+SecurityContextHolder.getContext()
                 .getAuthentication().isAuthenticated());
         log.info("authorities : "+SecurityContextHolder.getContext()
                 .getAuthentication().getAuthorities());
-        log.info("name : "+SecurityContextHolder.getContext()
-                .getAuthentication().getName());
+        log.info("security util name : " + SecurityUtil.getUserId());
+
+        List<Manager> managers = managerService.getManagerList();
+
+        model.addAttribute("managers", managers);
+
         return "managers/managers";
     }
     @GetMapping("error/403")

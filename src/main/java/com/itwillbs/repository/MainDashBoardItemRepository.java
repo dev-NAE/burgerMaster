@@ -12,8 +12,6 @@ import com.itwillbs.domain.dashboard.IncomingItemDTO;
 import com.itwillbs.domain.dashboard.InventoryItemDTO;
 import com.itwillbs.domain.dashboard.ItemDashDTO;
 import com.itwillbs.entity.Item;
-import com.itwillbs.entity.dashboard.IncommingItem;
-import com.itwillbs.entity.dashboard.Sale;
 
 
 @Repository
@@ -25,19 +23,19 @@ public interface MainDashBoardItemRepository extends JpaRepository<Item, String>
 
 	//반품 폐기
 	 @Query("SELECT new com.itwillbs.domain.dashboard.DefectiveDTO(d.quantity, i.itemName, d.status) " +
-		       "FROM Defective d JOIN Item i ON i.itemCode = d.itemCode.itemCode " +  
+		       "FROM DefectiveDash d JOIN ItemDash i ON i.itemCode = d.itemCode.itemCode " +  
 		       "WHERE d.status = :status")
-	    List<DefectiveDTO> findByItemSatus(@Param("status") String status);
+	    List<DefectiveDTO> findByStatus(@Param("status") String status);
 	 
 	 //입고량
 	 @Query("SELECT new com.itwillbs.domain.dashboard.IncomingItemDTO(c.quantity, i.itemName) " +
-		       "FROM IncommingItem c JOIN Item i ON i.itemCode = c.itemCode.itemCode " +  
+		       "FROM IncommingItemDash c JOIN ItemDash i ON i.itemCode = c.itemCode.itemCode " +  
 		       "WHERE i.itemType = :itemType")
 	    List<IncomingItemDTO> findByItemType(@Param("itemType") String itemType);
 	 
 	 //재고량
 	 @Query("SELECT new com.itwillbs.domain.dashboard.InventoryItemDTO(v.quantity, i.itemName,v.minReqQuantity) " +
-		       "FROM InventoryItem v JOIN Item i ON i.itemCode = v.itemCode " +  
+		       "FROM InventoryItemDash v JOIN ItemDash i ON i.itemCode = v.itemCode " +  
 		       "WHERE i.itemType = :itemType")
 	    List<InventoryItemDTO> findByInventoryItemType(@Param("itemType") String itemType);
 	

@@ -19,7 +19,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class Sale {
+public class SaleDash {
 	
 	
 	@Id

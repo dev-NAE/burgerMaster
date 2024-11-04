@@ -6,16 +6,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.itwillbs.entity.dashboard.Sale;
+import com.itwillbs.entity.dashboard.SaleDash;
 
 
 @Repository
-public interface MainDashBoardSaleRepository extends JpaRepository<Sale, String> {
+public interface MainDashBoardSaleRepository extends JpaRepository<SaleDash, String> {
 
 	
 
 	
-	    List<Sale> findByStatus(@Param("status") String status);
+	    List<SaleDash> findByStatus(@Param("status") String status);
 	 
 	 
 	 

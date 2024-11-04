@@ -45,5 +45,5 @@ public class Franchise {
     private LocalDate contractEndDate;
 
     @Column(name = "use_yn", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'Y'")
-    private char useYN;
+    private char useYN = 'Y';
 }
