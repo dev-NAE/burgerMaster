@@ -7,11 +7,8 @@ import com.itwillbs.domain.transaction.OrderRequestDTO;
 import com.itwillbs.entity.*;
 import com.itwillbs.service.TXService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,8 +54,13 @@ public class TXController {
         log.info("orderDTO: " + orderDTO);
         List<OrderItemsDTO> orderItems = orderRequestDTO.getItems();
         log.info("orderItems: " + orderItems);
-        txService.saveOrder(orderDTO, orderItems);
-        return "success";
+        // 담당자, 거래처 정보 DB 매치 확인
+        if (txService.checkValidation(orderDTO)) {
+            txService.saveOrder(orderDTO, orderItems);
+            return "success";
+        } else {
+            return "mismatch";
+        }
     }
 
     @GetMapping("/findManager")
@@ -76,7 +78,7 @@ public class TXController {
     }
 
     @GetMapping("/addItems")
-    public String addItems(Model model) {
+    public String addOrderItems(Model model) {
         List<Item> items = txService.getOrderItems();
         model.addAttribute("items", items);
         return "transaction/order/addItems";

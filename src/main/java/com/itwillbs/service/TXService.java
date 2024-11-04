@@ -27,6 +27,7 @@ public class TXService {
     private final ManagerRepository managerRepository;
     private final SupplierRepository supplierRepository;
     private final ItemRepository itemRepository;
+    private final InventoryRepository inventoryRepository;
 
     @Transactional
     public void saveOrder(OrderDTO orderDTO, List<OrderItemsDTO> orderItems) {
@@ -51,6 +52,15 @@ public class TXService {
             log.info(orderItem.toString());
             orderItemsRepository.save(orderItem);
         }
+    }
+
+    public boolean checkValidation(OrderDTO orderDTO) {
+        String managerId = orderDTO.getManager();
+        String supplierCode = orderDTO.getSupplierCode();
+        Optional<Manager> manager = managerRepository.findById(managerId);
+        Optional<Supplier> supplier = supplierRepository.findById(supplierCode);
+        // 입력한 매니저아이디, 거래처코드가 DB에 존재하는 값인지 검증
+        return manager.isPresent() && supplier.isPresent();
     }
 
     public String generateNextOrderId() {

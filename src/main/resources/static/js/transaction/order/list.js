@@ -33,15 +33,78 @@ function setSupplier(supplierCode, supplierName) {
 }
 
 // 데이터테이블 커스텀
+let listData = [];
+
 $(function () {
-    $('#example2').DataTable({
-        "paging": false,
+    $('#order-list').DataTable({
+        data: data,
+        "paging": true,
+        "pageLength": 10,
         "lengthChange": false,
         "searching": false,
         "ordering": true,
         "info": false,
         "autoWidth": false,
         "responsive": true,
-        "order": [[0, "desc"]]
+        "order": [[0, "desc"]],
+        "language": {
+            decimal: "",
+            emptyTable: "조건에 맞는 데이터가 없습니다",
+            loadingRecords: "로딩 중...",
+            zeroRecords: "항목이 존재하지 않습니다",
+            paginate: {
+                "first": "처음",
+                "last": "마지막",
+                "next": "다음",
+                "previous": "이전"
+            }
+        },
+        "columnDefs": [
+
+        ],
+        "columns": [
+            {
+                data: "orderId",
+                render: function(data) {
+                    return data;
+                }
+            },
+            {
+                data: "supplierName",
+                render: function(data) {
+                    return data;
+                }
+            },
+            {
+                data: "itemName",
+                render: function(data) {
+                    return data;
+                }
+            },
+            {
+                data: "totalPrice",
+                render: function(data) {
+                    return data;
+                }
+            },
+            {
+                data: "orderDate",
+                render: function (data) {
+                    return data;
+                }
+            },
+            {
+                data: "dueDate",
+                render: function(data) {
+                    return data;
+                }
+            },
+            {
+                data: "status",
+                render: function (data) {
+                    return data;
+                }
+            }
+        ]
     });
 });
