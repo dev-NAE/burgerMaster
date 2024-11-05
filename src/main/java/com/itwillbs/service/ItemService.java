@@ -22,6 +22,11 @@ public class ItemService {
 		this.itemRepository = itemRepository;
 	}
 
+	public Page<Item> searchItems(ItemSearchDTO searchDTO, Pageable pageable) {
+		return itemRepository.findBySearchConditions(searchDTO.getItemName(), searchDTO.getItemType(),
+				searchDTO.getIncludeUnused(), pageable);
+	}
+	
 	public Optional<Item> findItemByCode(String itemCode) {
 		return itemRepository.findById(itemCode);
 	}
@@ -75,9 +80,5 @@ public class ItemService {
 		int nextNumber = Integer.parseInt(maxCode.substring(2)) + 1;
 		return String.format("%s%03d", itemType, nextNumber);
 	}
-
-	public Page<Item> searchItems(ItemSearchDTO searchDto, Pageable pageable) {
-		return itemRepository.findBySearchConditions(searchDto.getItemName(), searchDto.getItemType(),
-				searchDto.getIncludeUnused(), pageable);
-	}
+	
 }

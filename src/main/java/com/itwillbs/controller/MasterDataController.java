@@ -2,6 +2,8 @@ package com.itwillbs.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -14,9 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.itwillbs.domain.masterdata.ItemSearchDTO;
+import com.itwillbs.domain.masterdata.SupplierSearchDTO;
 import com.itwillbs.entity.Item;
+import com.itwillbs.entity.Supplier;
 import com.itwillbs.service.BOMService;
 import com.itwillbs.service.FranchiseService;
 import com.itwillbs.service.ItemService;
@@ -45,65 +50,122 @@ public class MasterDataController {
 		return "masterdata/layout";
 	}
 
-	// Item Management
 	// 목록 페이지
 	@GetMapping("/items")
 	public String listItems() {
 		return "masterdata/items";
 	}
 
-	// 아이템 목록 조회 loadItems()
-	@GetMapping("/api/items")
-	@ResponseBody
-	public Page<Item> getItems(ItemSearchDTO searchDto, @RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size) {
-		return itemService.searchItems(searchDto, PageRequest.of(page, size));
+	@GetMapping("/boms")
+	public String listBOMs() {
+		return "masterdata/boms";
 	}
 
-	// 아이템 상세 조회 loadItemDetail(itemCode)
+	@GetMapping("/franchises")
+	public String listFranchises() {
+		return "masterdata/franchises";
+	}
+
+	@GetMapping("/suppliers")
+	public String listSuppliers() {
+		return "masterdata/suppliers";
+	}
+
+	// 목록 조회 loadItems()
+	@GetMapping("/api/items")
+	@ResponseBody
+	public Page<Item> getItems(ItemSearchDTO searchDTO, @RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size) {
+		return itemService.searchItems(searchDTO, PageRequest.of(page, size));
+	}
+
+	@GetMapping("/api/suppiers")
+	@ResponseBody
+	public Page<Supplier> getSuppliers(SupplierSearchDTO searchDTO,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size) {
+		return supplierService.searchItems(searchDTO, PageRequest.of(page, size));
+	}
+
+	// 상세 조회 loadItemDetail(itemCode) 200 404
 	@GetMapping("/api/items/{itemCode}")
 	@ResponseBody
 	public ResponseEntity<Item> getItem(@PathVariable(name = "itemCode") String itemCode) {
-		return itemService.findItemByCode(itemCode).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+		return itemService.findItemByCode(itemCode).map(ResponseEntity::ok)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						String.format("품목코드 %s를 찾을 수 없습니다.", itemCode)));
 	}
 
-	// 아이템 저장 saveItem() 
+	@GetMapping("/api/suppliers/{supplierCode}")
+	@ResponseBody
+	public ResponseEntity<Supplier> getSupplier(@PathVariable(name = "supplierCode") String supplierCode) {
+		return supplierService.findSupplierByCode(supplierCode).map(ResponseEntity::ok)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						String.format("거래처코드 %s를 찾을 수 없습니다.", supplierCode)));
+	}
+
+	// 저장 saveItem() 201
 	@PostMapping("/api/items")
 	@ResponseBody
 	public ResponseEntity<Item> saveItem(@RequestBody @Validated Item item) {
-		Item savedItem = itemService.saveItem(item);
-		return ResponseEntity.ok(savedItem);
+		return ResponseEntity.status(HttpStatus.CREATED).body(itemService.saveItem(item));
 	}
 
-	// 아이템 수정 saveItem() 
+	@PostMapping("/api/suppliers")
+	@ResponseBody
+	public ResponseEntity<Supplier> saveSupplier(@RequestBody @Validated Supplier supplier) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(supplierService.saveSupplier(supplier));
+	}
+
+	// 수정 saveItem() 200
 	@PutMapping("/api/items/{itemCode}")
 	@ResponseBody
-	public ResponseEntity<Item> updateItem(@PathVariable(name = "itemCode") String itemCode, @RequestBody @Validated Item item) {
-		item.setItemCode(itemCode);
-		Item updatedItem = itemService.updateItem(item);
-		return ResponseEntity.ok(updatedItem);
+	public ResponseEntity<Item> updateItem(@PathVariable(name = "itemCode") String itemCode,
+			@RequestBody @Validated Item item) {
+		if (!itemCode.equals(item.getItemCode())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "경로의 itemCode와 요청 본문의 itemCode가 일치하지 않습니다.");
+		}
+		return ResponseEntity.ok(itemService.updateItem(item));
 	}
 
-	// 아이템 삭제 deleteItem()
+	@PutMapping("/api/suppliers/{supplierCode}")
+	@ResponseBody
+	public ResponseEntity<Supplier> updateSupplier(@PathVariable(name = "supplierCode") String supplierCode,
+			@RequestBody @Validated Supplier supplier) {
+		if(!supplierCode.equals(supplier.getSupplierCode())){
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "경로의 supplierCode와 요청 본문의 supplierCode가 일치하지 않습니다.");
+		}
+		return ResponseEntity.ok(supplierService.updateSupplier(supplier));
+	}
+
+	// 삭제 deleteItem() 204
 	@DeleteMapping("/api/items/{itemCode}")
 	@ResponseBody
 	public ResponseEntity<Void> deleteItem(@PathVariable(name = "itemCode") String itemCode) {
 		itemService.deleteItem(itemCode);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
+	}
+	
+	@DeleteMapping("/api/suppliers/{supplierCode}")
+	@ResponseBody
+	public ResponseEntity<Void> deleteSupplier(@PathVariable(name ="supplierCode") String supplierCode) {
+		supplierService.deleteSupplier(supplierCode);
+		return ResponseEntity.noContent().build();
 	}
 
 	// 코드 최대값+1 조회 updateItemCode()
 	@GetMapping("/api/items/nextCode")
 	@ResponseBody
-	public String getNextCode(@RequestParam(name = "itemType") String itemType) {
-	    return itemService.generateNextCode(itemType);
+	public String getNextItemCode(@RequestParam(name = "itemType") String itemType) {
+		return itemService.generateNextCode(itemType);
+	}
+	
+	@GetMapping("/api/suppliers/nextCode")
+	@ResponseBody
+	public String getNextSupplierCode() {
+		return supplierService.generateNextCode();
 	}
 
-//	// BOM Management
-//	@GetMapping("/boms")
-//	public String listBOMs() {
-//		return "masterdata/boms";
-//	}
 //
 //	@GetMapping("/boms/{id}")
 //	public String bomDetail(@PathVariable Long id) {
@@ -115,22 +177,13 @@ public class MasterDataController {
 //		return "masterdata/bom-select";
 //	}
 //
-//	// Supplier Management
-//	@GetMapping("/suppliers")
-//	public String listSuppliers() {
-//		return "masterdata/suppliers";
-//	}
 //
 //	@GetMapping("/suppliers/{id}")
 //	public String supplierDetail(@PathVariable Long id) {
 //		return "masterdata/supplier-detail";
 //	}
 //
-//	// Franchise Management
-//	@GetMapping("/franchises")
-//	public String listFranchises() {
-//		return "masterdata/franchises";
-//	}
+
 //
 //	@GetMapping("/franchises/{id}")
 //	public String franchiseDetail(@PathVariable Long id) {

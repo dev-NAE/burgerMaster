@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta name="_csrf" th:content="${_csrf.token}" />
 	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 	<title>BurgerMaster | MasterDataManagement</title>
@@ -17,18 +17,18 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
-	<div th:replace="~{/fragments/header :: headerFragment}"></div>
-	<div th:replace="~{/fragments/sidebar :: sidebarFragment}"></div>
+	<div th:replace="~{fragments/header :: headerFragment}"></div>
+	<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
 
 	<div class="wrapper">
-		<div th:replace="~{/fragments/Preloader :: PreloaderFragment}"></div>
+		<div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
 
 		<div class="content-wrapper">
 			<div class="content-header">
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0">기준정보관리 - 품목관리</h1>
+							<h1 class="m-0">기준정보관리 - 거래처관리</h1>
 						</div>
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -49,31 +49,36 @@
 									<form id="searchForm" class="mb-0">
 										<div class="form-row align-items-center">
 
-											<div class="col-md-item">
+											<div class="col-md-3">
 												<div class="input-group">
 													<div class="input-group-prepend">
 														<span class="input-group-text">
-															<i class="fas fa-search"></i>
-														</span>
+															<i class="fas fa-building"></i> </span>
 													</div>
-													<input type="text" class="form-control" name="itemName"
-														placeholder="품목명">
+													<input type="text" class="form-control" name="supplierName"
+														placeholder="거래처명">
 												</div>
 											</div>
 
-											<div class="col-md-item">
+											<div class="col-md-3">
 												<div class="input-group">
 													<div class="input-group-prepend">
 														<span class="input-group-text">
-															<i class="fas fa-tags"></i>
-														</span>
+															<i class="fas fa-id-card"></i> </span>
 													</div>
-													<select class="form-control" name="itemType">
-														<option value="">모든 품목</option>
-														<option value="RM">원재료</option>
-														<option value="PP">가공품</option>
-														<option value="FP">완제품</option>
-													</select>
+													<input type="text" class="form-control" name="businessNumber"
+														pattern="\d{3}-\d{2}-\d{5}" placeholder="000-00-00000">
+												</div>
+											</div>
+
+											<div class="col-md-2">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">
+															<i class="fas fa-user"></i> </span>
+													</div>
+													<input type="text" class="form-control" name="contactPerson"
+														placeholder="담당자명">
 												</div>
 											</div>
 
@@ -86,7 +91,7 @@
 
 											<div class="col-auto">
 												<button type="submit" class="btn btn-primary">
-													<i class="fas fa-search"></i> 검색
+													<i class="fas fa-search"></i>검색
 												</button>
 												<button type="button" class="btn btn-success"
 													onclick="openModal('register')">
@@ -98,16 +103,19 @@
 								</div>
 
 								<div class="card-body">
-									<table id="itemTable" class="table table-bordered table-striped">
+									<table id="supplierTable" class="table table-bordered table-striped">
 										<thead>
 											<tr>
-												<th>품목코드</th>
-												<th>품목명</th>
-												<th>품목 유형</th>
-												<th class="text-center">사용 여부</th>
+												<th>거래처코드</th>
+												<th>거래처명</th>
+												<th>사업자번호</th>
+												<th>담당자명</th>
+												<th>이메일</th>
+												<th>주소</th>
+												<th class="text-center">사용여부</th>
 											</tr>
 										</thead>
-										<tbody id="itemList">
+										<tbody id="supplierList">
 
 										</tbody>
 									</table>
@@ -126,11 +134,11 @@
 			</section>
 		</div>
 
-		<div class="modal fade" id="itemModal">
+		<div class="modal fade" id="supplierModal">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header bg-primary">
-						<h5 class="modal-title text-white" id="modalTitle">품목</h5>
+						<h5 class="modal-title text-white" id="modalTitle">거래처</h5>
 						<button type="button" class="close text-white" data-dismiss="modal">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -139,72 +147,105 @@
 						<div id="viewSection">
 
 						</div>
-						<form id="itemForm">
-							
+						<form id="supplierForm">
+
 							<div class="form-group">
-								<label for="itemCode">품목코드</label>
+								<label for="supplierCode">거래처코드</label>
 								<div class="input-group">
 									<div class="input-group-prepend">
 										<span class="input-group-text">
 											<i class="fas fa-barcode"></i>
 										</span>
 									</div>
-									<input type="text" class="form-control" id="itemCode" name="itemCode" readonly>
+									<input type="text" class="form-control" id="supplierCode" name="supplierCode"
+										readonly>
 								</div>
-								<div class="invalid-feedback" id="validateitemCode"></div>
+								<div class="invalid-feedback" id="validatesupplierCode"></div>
 							</div>
 
 							<div class="form-group">
-								<label for="itemName">품목명</label>
+								<label for="supplierName">거래처명</label>
 								<div class="input-group">
 									<div class="input-group-prepend">
 										<span class="input-group-text">
-											<i class="fas fa-box"></i>
+											<i class="fas fa-building"></i>
 										</span>
 									</div>
-									<input type="text" class="form-control" id="itemName" name="itemName" required>
+									<input type="text" class="form-control" id="supplierName" name="supplierName"
+										required>
 								</div>
-								<div class="invalid-feedback" id="validateitemName"></div>
-							</div>
+								<div class="invalid-feedback" id="validatesupplierName">
+								</div>
 
-							<div class="form-group">
-								<label for="itemType">품목 유형</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-tags"></i>
-										</span>
+								<div class="form-group">
+									<label for="businessNumber">사업자번호</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fas fa-id-card"></i>
+											</span>
+										</div>
+										<input type="text" class="form-control" name="businessNumber"
+											pattern="\d{3}-\d{2}-\d{5}" placeholder="000-00-00000" required>
 									</div>
-									<select class="form-control" id="itemType" name="itemType" required>
-										<option value="">선택</option>
-										<option value="RM">원재료</option>
-										<option value="PP">가공품</option>
-										<option value="FP">완제품</option>
-									</select>
-									<div class="input-group-append" id="searchCodeBtnGroup">
-										<button class="btn btn-outline-primary" type="button" id="searchCodeBtn">
-											<i class="fas fa-search"></i> 검색
-										</button>
-									</div>
+									<div class="invalid-feedback" id="validationsupplierName"></div>
 								</div>
-								<div class="invalid-feedback" id="validateitemType"></div>
-							</div>
 
-							<div class="form-group">
-								<label for="useYN">사용 여부</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-toggle-on"></i>
-										</span>
+								<div class="form-group">
+									<label for="contactPerson">담당자명</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fas fa-user"></i>
+											</span>
+										</div>
+										<input type="text" class="form-control" id="contactPerson" name="contactPerson"
+											required>
 									</div>
-									<select class="form-control" id="useYN" name="useYN" required>
-										<option value="Y">사용</option>
-										<option value="N">미사용</option>
-									</select>
+									<div class="invalid-feedback" id="validationcontactPerson"></div>
 								</div>
-								<div class="invalid-feedback" id="validateuseYN"></div>
-							</div>
+
+								<div class="form-group">
+									<label for="email">이메일</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fas fa-envelope"></i>
+											</span>
+										</div>
+										<input type="email" class="form-control" name="email"
+											placeholder="example@email.com" required>
+									</div>
+									<div class="invalid-feedback" id="validationemail"></div>
+								</div>
+
+								<div class="form-group">
+									<label for="address">주소</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">
+												<i class="fas fa-map-marker-alt"></i></span>
+										</div>
+										<input type="text" class="form-control" id="address" name="address">
+									</div>
+									<div class="invalid-feedback" id="validateaddress"></div>
+
+									<div class="form-group">
+										<label for="useYN">사용 여부</label>
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text">
+													<i class="fas fa-toggle-on"></i>
+												</span>
+											</div>
+											<select class="form-control" id="useYN" name="useYN" required>
+												<option value="Y">사용</option>
+												<option value="N">미사용</option>
+											</select>
+										</div>
+										<div class="invalid-feedback" id="validateuseYN"></div>
+									</div>
+
 						</form>
 					</div>
 					<div class="modal-footer">
@@ -225,7 +266,7 @@
 			</div>
 		</div>
 	</div>
-	<div th:replace="~{/fragments/footer :: footerFragment}"></div>
+	<div th:replace="~{fragments/footer :: footerFragment}"></div>
 	</div>
 
 	<th:block th:replace="~{/fragments/basicLink :: basicLinkJsFragment}"></th:block>
@@ -233,7 +274,7 @@
 	<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="/plugins/select2/js/select2.full.min.js"></script>
 	<script src="/plugins/sweetalert2/sweetalert2.all.min.js"></script>
-	<script src="/js/masterdata/items.js"></script>
+	<script src="/js/masterdata/suppliers.js"></script>
 </body>
 
 </html>
