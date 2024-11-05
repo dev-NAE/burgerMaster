@@ -9,6 +9,7 @@ import com.itwillbs.service.TXService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -84,12 +85,12 @@ public class TXController {
         return "transaction/order/addItems";
     }
 
+    @ResponseBody
     @GetMapping("/orderList")
-    public String orderList(Model model) {
+    public ResponseEntity<List<OrderDTO>> orderList() {
         List<OrderDTO> orders = txService.getOrderList();
         log.info("orders: " + orders);
-        model.addAttribute("orders", orders);
-        return "transaction/order/list";
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/orderDetail")

@@ -33,11 +33,15 @@ function setSupplier(supplierCode, supplierName) {
 }
 
 // 데이터테이블 커스텀
-let listData = [];
-
 $(function () {
     $('#order-list').DataTable({
-        data: data,
+        ajax: {
+            url: "/tx/orderList",
+            type: "GET",
+            dataType: "json",
+            contentType: "application/json",
+            dataSrc: ''
+        },
         "paging": true,
         "pageLength": 10,
         "lengthChange": false,
@@ -59,52 +63,55 @@ $(function () {
                 "previous": "이전"
             }
         },
-        "columnDefs": [
-
-        ],
         "columns": [
-            {
-                data: "orderId",
+            { data: "orderId" },
+            { data: "supplierName" },
+            { data: "itemName",
+                render: function(data, type, row) {
+                    return row.itemCount > 1 ? `${data} 외 ${row.itemCount}건` : data;
+                }
+            },
+            { data: "totalPrice",
                 render: function(data) {
-                    return data;
+                    return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
             },
-            {
-                data: "supplierName",
+            { data: "orderDate",
                 render: function(data) {
-                    return data;
+                    return formatDate(data);
                 }
             },
-            {
-                data: "itemName",
+            { data: "dueDate",
                 render: function(data) {
-                    return data;
+                    return formatDate(data);
                 }
             },
-            {
-                data: "totalPrice",
-                render: function(data) {
-                    return data;
-                }
-            },
-            {
-                data: "orderDate",
-                render: function (data) {
-                    return data;
-                }
-            },
-            {
-                data: "dueDate",
-                render: function(data) {
-                    return data;
-                }
-            },
-            {
-                data: "status",
-                render: function (data) {
-                    return data;
+            { data: "status",
+                render: function(data, type, row) {
+                    let color = data === '발주완료' ? 'blue' : data === '발주취소' ? 'red' : 'black';
+                    return `<span style="color:${color}">${data}</span>`;
                 }
             }
-        ]
+        ],
+        rowCallback: function(row, data, index) {
+
+            if (data.status === '발주 완료') {
+                $(row).css('background-color', '#83d6ff');
+            } else if (data.status === '발주 취소') {
+                $(row).css('background-color', '#f8dede');
+            }
+        }
     });
+
+    console.log('테이블 행 개수:', table.rows().count());
+
+    let formatDate = (date) => {
+        if (!date) return "";
+        let d = new Date(date);
+        let year = d.getFullYear();
+        let month = String(d.getMonth() + 1).padStart(2, '0');
+        let day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
 });

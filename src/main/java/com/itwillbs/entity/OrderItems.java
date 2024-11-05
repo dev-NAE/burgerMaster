@@ -9,7 +9,6 @@ import lombok.ToString;
 @Table(name = "order_items")
 @Getter
 @Setter
-@ToString
 public class OrderItems {
 
     @Id

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.List;
 @Table(name = "orders")
 @Getter
 @Setter
-@ToString
 public class Order {
 
     @Id
@@ -31,6 +31,7 @@ public class Order {
     @Column(name = "due_date")
     private Timestamp dueDate;
 
+    @CreationTimestamp
     @Column(name = "real_date")
     private Timestamp realDate;
 

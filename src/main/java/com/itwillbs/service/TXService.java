@@ -39,8 +39,7 @@ public class TXService {
         Order order = new Order();
         BeanUtils.copyProperties(orderDTO, order);      // orderDTO -> order 필드값 복사
         order.setOrderId(orderId);                        // 발주등록번호
-        order.setRealDate(new Timestamp(System.currentTimeMillis()));   // 실제등록일
-        order.setStatus("발주등록(저장)");                                // 발주상태
+        order.setStatus("발주등록(저장)");                  // 발주상태
         orderRepository.save(order);
 
         // 발주 품목정보 저장
