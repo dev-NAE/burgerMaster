@@ -168,7 +168,7 @@ $(function () {
         buttons: [
             {
                 extend: 'excelHtml5',
-                title: '발주 현황',
+                title: '발주 현황(' + getCurrentDateTime() + ')',
                 text: '.xlsx로 저장'
             }
         ]
@@ -177,5 +177,19 @@ $(function () {
     $('#download-to-excel').on('click', function() {
         dataTable.button('.buttons-excel').trigger();
     });
-
 });
+
+// 엑셀파일명 시간출력용
+function getCurrentDateTime() {
+    const now = new Date();
+
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const day = String(now.getDate()).padStart(2, '0');
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
+}

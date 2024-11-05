@@ -82,7 +82,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center" for="order_date">등록일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" name="order_date" id="order_date" th:value="${order.orderDate}" readonly>
+                                            <input class="form-control" type="date" name="order_date" id="order_date" th:value="${#dates.format(order.orderDate, 'yyyy-MM-dd')}" readonly>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="manager-code">담당자</label>
                                         <div class="input-group col-sm-4">
@@ -104,7 +104,7 @@
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="due_date">납기일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" id="due_date" name="due_date" th:value="${order.dueDate}" readonly>
+                                            <input class="form-control" type="date" id="due_date" name="due_date" th:value="${#dates.format(order.dueDate, 'yyyy-MM-dd')}" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -121,12 +121,20 @@
                                     <div class="item-list card-body border">
                                         <table id="item-list-table" class="table table-bordered table-hover dataTable dtr-inline">
                                             <tr class="bg-lightblue">
-                                                <th class="text-center" style="width:10%">선택삭제</th>
+                                                <th class="text-center" style="width:10%"></th>
                                                 <th class="text-center" style="width:15%;">품목코드</th>
                                                 <th class="text-center" style="width:30%;">품목명</th>
                                                 <th class="text-center" style="width:15%;">단가(원)</th>
                                                 <th class="text-center" style="width:15%;">수량(단위)</th>
                                                 <th class="text-center" style="width:15%;">소계(원)</th>
+                                            </tr>
+                                            <tr class="item-row" th:each="i : ${items}">
+                                                <td class="text-center"></td>
+                                                <td class="text-center"><span class="item-code" th:text="${i.item.itemCode}"></span></td>
+                                                <td class="text-center"><span class="item-name" th:text="${i.item.itemName}"></span></td>
+                                                <td class="text-right"><input class="col-sm-8 item-price" type="text" th:value="${i.price}" style="text-align:right;" readonly> 원</td>
+                                                <td class="text-center"><input class="col-sm-6 item-quantity" type="text" th:value="${i.quantity}" style="text-align:right;" readonly> (단위)</td>
+                                                <td class="text-right"><span class="subtotal" th:text="${i.subtotalPrice}"></span> 원</td>
                                             </tr>
                                         </table>
                                         <div class="calculating-brief row my-2 py-3 px-2 bg-light">
@@ -138,7 +146,7 @@
                             </div>
                             <div class="submit-btn-area row">
                                 <div class="col-5 d-flex justify-content-start">
-                                    <button class="btn btn-lg btn-secondary my-3">목록으로 이동</button>
+                                    <button id="back-to-list" class="btn btn-lg btn-secondary my-3">목록으로 이동</button>
                                 </div>
                                 <div class="col-7 d-flex justify-content-end">
                                     <button class="btn btn-lg btn-success my-3 mx-2">수정</button>
@@ -182,7 +190,7 @@
     <div th:replace="~{fragments/footer :: footerFragment}"></div>
 
     <!-- custom js -->
-    <script src="/js/transaction/order/insert.js"></script>
+    <script src="/js/transaction/order/detail.js"></script>
 
 </body>
 
