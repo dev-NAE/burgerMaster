@@ -34,8 +34,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         String[] urlsToBePermittedAll = {
                 "/",
-                "/main/**",
-                "/managers/**",
                 "/login/**",
                 "/error/**",
                 "/css/**",
@@ -44,10 +42,29 @@ public class SecurityConfig {
                 "/img/**",
                 "/plugins/**"
         };
+        String[] masterDataUrls = {
+                "/masterdata/**"
+        };
+        String[] TxUrls = {
+                "/tx/**"
+        };
+        String[] mfcUrls = {
+                "/mf/**"
+        };
+        String[] qualityUrls ={
+                "/quality/**",
+                "/defective/**"
+        };
+
         // url 접근 제한
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(urlsToBePermittedAll).permitAll()
                 .requestMatchers("/manager/**").hasRole("ADMIN")
+                .requestMatchers(masterDataUrls).hasAnyRole("MASTERDATA", "ADMIN")
+                .requestMatchers(TxUrls).hasAnyRole("TRANSACTION", "ADMIN")
+                .requestMatchers("/inven/**").hasAnyRole("INVENTORY", "ADMIN")
+                .requestMatchers(mfcUrls).hasAnyRole("MANUFACTURE", "ADMIN")
+                .requestMatchers(qualityUrls).hasAnyRole("QUALITY", "ADMIN")
                 .anyRequest().authenticated()
         );
         // 로그인 처리

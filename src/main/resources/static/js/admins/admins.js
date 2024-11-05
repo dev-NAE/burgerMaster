@@ -25,8 +25,10 @@ function funcFillChangeModal(){
         let roleText = $(this).children('td:eq(4)').text();
         let roles = roleText.split(",");
         $('input[name=changeRole]').prop('checked', false);
-        for(let index in roles){
-            $('input[name=changeRole][value='+roles[index]+']').prop("checked",true);
+        if(roleText !== ''){
+            for(let index in roles){
+                $('input[name=changeRole][value='+roles[index]+']').prop("checked",true);
+            }
         }
     });
 }
@@ -91,7 +93,7 @@ function showRegexp() {
 //정규식 검사
 function check_modal_text(action){
     let id = $('#manager_id_'+ action +'_modal');
-    let pass;
+    let pass = $('#manager_pass_'+ action +'_modal');
     let phone = $('#manager_phone_'+ action +'_modal');
     let email = $('#manager_email_'+ action +'_modal');
 
@@ -106,14 +108,11 @@ function check_modal_text(action){
         id.focus();
         return false;
     }
-    if(action === 'create'){
-        pass = $('#manager_pass_'+ action +'_modal');
-        if(!passRegexp.test(pass.val())){
-            console.log(pass.val());
-            pass.addClass('is-invalid');
-            pass.focus();
-            return false;
-        }
+    if(!passRegexp.test(pass.val())){
+        console.log(pass.val());
+        pass.addClass('is-invalid');
+        pass.focus();
+        return false;
     }
     if(!phoneRegexp.test(phone.val())){
         console.log(phone.val());
@@ -229,6 +228,7 @@ function changeManager(){
             url : "/manager/update",
             data : {
                 managerId : $("#manager_id_change_modal").val().trim(),
+                pass : $("#manager_pass_change_modal").val().trim(),
                 name : $("#manager_name_change_modal").val().trim(),
                 phone : $("#manager_phone_change_modal").val().trim(),
                 email : $("#manager_email_change_modal").val().trim(),
