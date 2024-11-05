@@ -1,11 +1,11 @@
 package com.itwillbs.controller.manager;
 
 import com.itwillbs.entity.Manager;
+import com.itwillbs.repository.ManagerRepository;
 import com.itwillbs.service.ManagerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -13,15 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Log
 public class ManagerRestController {
     private final ManagerService managerService;
+    private final ManagerRepository managerRepository;
 
     @PostMapping(value="/manager/create", produces = "application/text; charset=UTF-8")
     public String create(Manager manager) {
         log.info("ManagerRestController create()");
 
-        String json = managerService.createManger(manager);
-        log.info(manager.toString());
-
-        return json;
+        return managerService.createManger(manager);
     }
 
     @PostMapping(value = "/manager/check/id")
@@ -34,5 +32,20 @@ public class ManagerRestController {
         log.info("result : "+result);
 
         return result;
+    }
+
+    @PostMapping(value = "/manager/update")
+    public String update(Manager manager) {
+        log.info("ManagerRestController update()");
+        String json = managerService.updateManager(manager);
+
+        return json;
+    }
+    @PostMapping(value = "/manager/delete")
+    public String delete(Manager manager) {
+        log.info("ManagerRestController delete()");
+        String json = null;
+
+        return json;
     }
 }
