@@ -67,9 +67,11 @@
                     <a class="btn-sm btn-primary" href="#" id="createManager">관리자 생성</a>
                   </div>
                   <div class="input-group input-group-sm" style="width: 250px;">
-                      <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                    <input type="text" name="search" class="form-control float-right" placeholder="Search"
+                             th:if="${search ne ''}" th:value="${search}">
+                    <input type="text" id="search" name="search" class="form-control float-right" placeholder="Search" th:unless="${search ne ''}">
                     <div class="input-group-append">
-                      <button type="submit" class="btn btn-default">
+                      <button type="submit" class="btn btn-default" id="btn_search">
                         <i class="fas fa-search"></i>
                       </button>
                     </div>
@@ -111,7 +113,7 @@
         <!-- row page controllbar-->
         <div class="row">
           <div class="col-sm-12 col-md-5">
-            <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+            <div class="dataTables_info" id="example2_info" role="status" aria-live="polite" >Showing [[${data}]] to [[${data}]] of 57 manager</div>
           </div>
           <div class="col-sm-12 col-md-7">
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
@@ -121,7 +123,8 @@
                 </li>
                 <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
                     class="paginate_button page-item" th:classappend="${currentPage eq page} ? 'active' ">
-                  <a th:href="@{/manager/list(page=${page})}" th:text="${page}" aria-controls="example2"  class="page-link" ></a>
+                  <a th:if="${search ne ''}" th:href="@{/manager/list(page=${page},search=${search})}" th:text="${page}" aria-controls="example2"  class="page-link"></a>
+                  <a th:unless="${search ne ''}" th:href="@{/manager/list(page=${page})}" th:text="${page}" aria-controls="example2"  class="page-link" ></a>
                 </li>
 
                 <li th:if="${currentPage  < totalPages}" class="paginate_button page-item next" id="example2_next">
