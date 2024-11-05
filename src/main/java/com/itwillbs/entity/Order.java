@@ -41,7 +41,7 @@ public class Order {
     private String note;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "manager")
+//    @JoinColumn(name = "manager") manager 엔티티를 변수 타입으로 사용하셔야 할 것 같습니다.
     @Column(name = "manager")
     private String manager;
 
