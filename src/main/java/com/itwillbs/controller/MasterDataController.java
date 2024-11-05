@@ -79,7 +79,7 @@ public class MasterDataController {
 		return itemService.searchItems(searchDTO, PageRequest.of(page, size));
 	}
 
-	@GetMapping("/api/suppiers")
+	@GetMapping("/api/suppliers")
 	@ResponseBody
 	public Page<Supplier> getSuppliers(SupplierSearchDTO searchDTO,
 			@RequestParam(name = "page", defaultValue = "0") int page,
@@ -132,8 +132,9 @@ public class MasterDataController {
 	@ResponseBody
 	public ResponseEntity<Supplier> updateSupplier(@PathVariable(name = "supplierCode") String supplierCode,
 			@RequestBody @Validated Supplier supplier) {
-		if(!supplierCode.equals(supplier.getSupplierCode())){
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "경로의 supplierCode와 요청 본문의 supplierCode가 일치하지 않습니다.");
+		if (!supplierCode.equals(supplier.getSupplierCode())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+					"경로의 supplierCode와 요청 본문의 supplierCode가 일치하지 않습니다.");
 		}
 		return ResponseEntity.ok(supplierService.updateSupplier(supplier));
 	}
@@ -145,10 +146,10 @@ public class MasterDataController {
 		itemService.deleteItem(itemCode);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@DeleteMapping("/api/suppliers/{supplierCode}")
 	@ResponseBody
-	public ResponseEntity<Void> deleteSupplier(@PathVariable(name ="supplierCode") String supplierCode) {
+	public ResponseEntity<Void> deleteSupplier(@PathVariable(name = "supplierCode") String supplierCode) {
 		supplierService.deleteSupplier(supplierCode);
 		return ResponseEntity.noContent().build();
 	}
@@ -159,7 +160,7 @@ public class MasterDataController {
 	public String getNextItemCode(@RequestParam(name = "itemType") String itemType) {
 		return itemService.generateNextCode(itemType);
 	}
-	
+
 	@GetMapping("/api/suppliers/nextCode")
 	@ResponseBody
 	public String getNextSupplierCode() {

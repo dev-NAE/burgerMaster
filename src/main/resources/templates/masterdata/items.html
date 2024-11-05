@@ -49,7 +49,7 @@
 									<form id="searchForm" class="mb-0">
 										<div class="form-row align-items-center">
 
-											<div class="col-md-item">
+											<div class="col-md-4">
 												<div class="input-group">
 													<div class="input-group-prepend">
 														<span class="input-group-text">
@@ -61,7 +61,7 @@
 												</div>
 											</div>
 
-											<div class="col-md-item">
+											<div class="col-md-3">
 												<div class="input-group">
 													<div class="input-group-prepend">
 														<span class="input-group-text">
@@ -150,8 +150,8 @@
 										</span>
 									</div>
 									<input type="text" class="form-control" id="itemCode" name="itemCode" readonly>
+									<div class="invalid-feedback" id="validateitemCode"></div>
 								</div>
-								<div class="invalid-feedback" id="validateitemCode"></div>
 							</div>
 
 							<div class="form-group">
@@ -163,8 +163,8 @@
 										</span>
 									</div>
 									<input type="text" class="form-control" id="itemName" name="itemName" required>
+									<div class="invalid-feedback" id="validateitemName"></div>
 								</div>
-								<div class="invalid-feedback" id="validateitemName"></div>
 							</div>
 
 							<div class="form-group">
@@ -181,13 +181,13 @@
 										<option value="PP">가공품</option>
 										<option value="FP">완제품</option>
 									</select>
+									<div class="invalid-feedback" id="validateitemType"></div>
 									<div class="input-group-append" id="searchCodeBtnGroup">
 										<button class="btn btn-outline-primary" type="button" id="searchCodeBtn">
 											<i class="fas fa-search"></i> 검색
 										</button>
 									</div>
 								</div>
-								<div class="invalid-feedback" id="validateitemType"></div>
 							</div>
 
 							<div class="form-group">
@@ -202,8 +202,8 @@
 										<option value="Y">사용</option>
 										<option value="N">미사용</option>
 									</select>
+									<div class="invalid-feedback" id="validateuseYN"></div>
 								</div>
-								<div class="invalid-feedback" id="validateuseYN"></div>
 							</div>
 						</form>
 					</div>

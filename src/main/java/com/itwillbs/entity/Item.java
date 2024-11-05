@@ -2,6 +2,7 @@ package com.itwillbs.entity;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,6 +44,7 @@ public class Item {
 	 // InventoryItem과 일대일 관계 설정 소연
 	//삭제 x 
     @OneToOne(mappedBy = "item")
+    @JsonIgnore //순환 참조 강수
     private InventoryItem inventoryItem; 
 
 }

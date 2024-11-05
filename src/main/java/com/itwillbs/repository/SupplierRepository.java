@@ -16,7 +16,9 @@ public interface SupplierRepository extends JpaRepository<Supplier, String> {
 			"FROM Supplier s ")
 	String findMaxSupplierCode();
 	
-	@Query("select s from Supplier s where (:supplierName is null or s.supplierName like %:supplierName%)"
+	@Query("select s "
+			+ "from Supplier s "
+			+ "where (:supplierName is null or s.supplierName like %:supplierName%)"
 			+ "and (:businessNumber is null or s.businessNumber like %:businessNumber%)"
 			+ "and (:contactPerson is null or s.contactPerson like %:contactPerson%)"
 			+ "and ((:includeUnused = true) or s.useYN = 'Y')")

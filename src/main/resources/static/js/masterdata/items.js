@@ -104,7 +104,11 @@ function displayItems(items) {
                 <td>${item.itemCode}</td>
                 <td>${item.itemName}</td>
                 <td>${getItemTypeName(item.itemType)}</td>
-                <td>${item.useYN === 'Y' ? '사용' : '미사용'}</td>
+				<td class="text-center">
+                    <span class="badge ${item.useYN === 'Y' ? 'badge-success' : 'badge-danger'}">
+                        ${item.useYN === 'Y' ? '사용' : '미사용'}
+                    </span>
+                </td>
             </tr>
         `);
 	});
@@ -121,6 +125,7 @@ function getItemTypeName(type) {
 // 페이지네이션
 let currentPage = 0;
 const PAGE_SIZE = 10;
+let totalPages = 0;
 
 function displayPagination(response) {
 	const pagination = $('#pagination');
@@ -425,14 +430,13 @@ function validateField(field) {
 	return true;
 }
 
-// 에러 표시
 function showError(field, message) {
-	field.addClass('is-invalid');
-	$(`#validate${field.attr('id')}`).text(message);
+    field.addClass('is-invalid');
+    $(`#validate${field.attr('id')}`).text(message); 
 }
 
-// 에러 제거
 function clearError(field) {
-	field.removeClass('is-invalid');
-	$(`#validate${field.attr('id')}`).text('');
+    field.removeClass('is-invalid');
+    $(`#validate${field.attr('id')}`).text(''); 
 }
+
