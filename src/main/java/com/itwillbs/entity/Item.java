@@ -2,9 +2,11 @@ package com.itwillbs.entity;
 
 import org.hibernate.validator.constraints.Length;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -39,5 +41,12 @@ public class Item {
     
 	@Column(name = "use_yn", nullable = false)
 	private char useYN = 'Y';
+	
+	
+	
+	 // InventoryItem과 일대일 관계 설정 소연
+	//삭제 x 
+    @OneToOne(mappedBy = "item")
+    private InventoryItem inventoryItem; 
 
 }

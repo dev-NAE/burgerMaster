@@ -8,8 +8,6 @@ import com.itwillbs.domain.dashboard.DefectiveDTO;
 import com.itwillbs.domain.dashboard.IncomingItemDTO;
 import com.itwillbs.domain.dashboard.InventoryItemDTO;
 import com.itwillbs.domain.dashboard.ItemDashDTO;
-import com.itwillbs.entity.dashboard.IncommingItemDash;
-import com.itwillbs.entity.dashboard.InventoryItemDash;
 import com.itwillbs.entity.dashboard.SaleDash;
 import com.itwillbs.repository.MainDashBoardItemRepository;
 import com.itwillbs.repository.MainDashBoardSaleRepository;
@@ -76,10 +74,6 @@ public class MainDashBoardService {
 		return ItemList;
 	}
 
-	public List<InventoryItemDTO> getNotifications() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	
 	

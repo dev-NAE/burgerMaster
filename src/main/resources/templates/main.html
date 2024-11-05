@@ -64,19 +64,19 @@
 					<div class="row mb-2">
 						<div class="col-sm-6">
 							<h1 class="m-0">Home : Dashboard</h1>
-							
+
 						</div><!-- /.col -->
 						<div class="col-sm-6">
-							
+
 							<ol class="breadcrumb float-sm-right">
-								
+
 								<li class="breadcrumb-item"><a href="/main">Home</a></li> / Dashboard
 								<!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
-								
+
 							</ol>
-							
+
 						</div><!-- /.col -->
-						
+
 					</div><!-- /.row -->
 				</div><!-- /.container-fluid -->
 			</div>
@@ -185,29 +185,27 @@
 
 
 
-					<a href="/defective/defectiveList">
-						<div class="card card-danger" style="margin: 5px;">
-							<div class="card-header">
-								<h3 class="card-title">반품률</h3>
-								<div class="card-tools">
-								</div>
+					<div class="card card-danger" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">반품률</h3>
+							<div class="card-tools">
 							</div>
-							<div class="card-body">
-								<div class="chartjs-size-monitor">
-									<div class="chartjs-size-monitor-expand">
-										<div class=""></div>
-									</div>
-									<div class="chartjs-size-monitor-shrink">
-										<div class=""></div>
-									</div>
-								</div>
-								<canvas id="pieChart1"
-									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
-									width="375" height="250" class="chartjs-render-monitor"></canvas>
-							</div>
-
 						</div>
-					</a>
+						<div class="card-body">
+							<div class="chartjs-size-monitor">
+								<div class="chartjs-size-monitor-expand">
+									<div class=""></div>
+								</div>
+								<div class="chartjs-size-monitor-shrink">
+									<div class=""></div>
+								</div>
+							</div>
+							<canvas id="pieChart1"
+								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+								width="375" height="250" class="chartjs-render-monitor"></canvas>
+						</div>
+
+					</div>
 
 
 
@@ -343,9 +341,9 @@
 
 		const rmInventory = rmInventoryList.map(item => item.quantity);  // 항목 이름
 		const minReqQuantitiesrm = rmInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
-		
-	
-			
+
+
+
 		const labels = rmInventoryList.map(item => item.itemName);  // 항목 이름
 		//const invenlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
 		const data = {
@@ -357,7 +355,7 @@
 					backgroundColor: 'lightblue',
 					borderColor: 'lightblue',
 					borderWidth: 1
-					
+
 				},
 				{
 					label: '총 재고',
@@ -375,7 +373,7 @@
 			type: 'bar',
 			data: data,
 			options: {
-				
+
 				scales: {
 					y: {
 						beginAtZero: true
@@ -394,55 +392,53 @@
 
 
 		//완재품
-				const fpItemList = /*[[${fpItemList}]]*/[
-				];
-				const fpInventoryList = /*[[${fpInventoryList}]]*/[
-				];
+		const fpItemList = /*[[${fpItemList}]]*/[
+		];
+		const fpInventoryList = /*[[${fpInventoryList}]]*/[
+		];
 
-				
-				const fpInventory = fpInventoryList.map(item => item.quantity); 
-				const minReqQuantitiesfp = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
 
-				
-				//alert("fpItemList"+JSON.stringify(fpItemList));
+		const fpInventory = fpInventoryList.map(item => item.quantity);
+		const minReqQuantitiesfp = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
 
-				const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
-				const data2 = {
-					labels: labels2,
-					datasets: [
-						{
-							label: '완재품 입고량',
-							data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-							backgroundColor: 'lightblue',
-							borderColor: 'lightblue',
-							borderWidth: 1
-						},
-						{
-							label: '총 재고',
-							data: fpInventory,  // 재량 필드로 사용 (예시)
-							backgroundColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
-							borderColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
-							borderWidth: 1
-						}
-					]
-				};
+		//alert("fpItemList"+JSON.stringify(fpItemList));
 
-				const config2 = {
-					type: 'bar',
-					data: data2,
-					options: {
-						scales: {
-							y: {
-								beginAtZero: true
-							}
-						},
-						
+		const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
+		const data2 = {
+			labels: labels2,
+			datasets: [
+				{
+					label: '완재품 입고량',
+					data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					backgroundColor: 'lightblue',
+					borderColor: 'lightblue',
+					borderWidth: 1
+				},
+				{
+					label: '총 재고',
+					data: fpInventory,  // 재량 필드로 사용 (예시)
+					backgroundColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
+					borderColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
+					borderWidth: 1
+				}
+			]
+		};
+
+		const config2 = {
+			type: 'bar',
+			data: data2,
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
 					}
-				};
+				},
+			}
+		};
 
-				// Chart.js를 사용하여 차트 생성
-				const ctx2 = document.getElementById('myChart2').getContext('2d');
-				new Chart(ctx2, config2);
+		// Chart.js를 사용하여 차트 생성
+		const ctx2 = document.getElementById('myChart2').getContext('2d');
+		new Chart(ctx2, config2);
 
 		//가공품
 		const ppInventoryList = /*[[${ppInventoryList}]]*/[

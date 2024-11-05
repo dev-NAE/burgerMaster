@@ -1,6 +1,8 @@
 package com.itwillbs.entity.dashboard;
 
 
+//test용
+//엔터티 만들어지면 삭제 
 
 import java.sql.Timestamp;
 
