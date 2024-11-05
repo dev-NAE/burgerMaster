@@ -6,6 +6,7 @@
     <title>거래처 검색</title>
 
     <!-- CSS -->
+    <link rel="stylesheet" href="/css/font.css">
     <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
 
@@ -31,13 +32,9 @@
             <th class="text-center" style="width:50%;">거래처코드</th>
             <th class="text-center" style="width:50%;">업체명</th>
         </tr>
-        <tr onclick="sendResult(this)" style="cursor: pointer;">
-            <td class="text-center" data-code="data-code">1</td>
-            <td class="text-center" data-name="data-name">맛있다정육</td>
-        </tr>
-        <tr onclick="sendResult(this)" style="cursor: pointer;">
-            <td class="text-center" data-code="data-code1">2</td>
-            <td class="text-center" data-name="data-name1">최고다야채</td>
+        <tr onclick="sendResult(this)" style="cursor: pointer;" th:each="supplier : ${suppliers}">
+            <td class="text-center" th:data-code="${supplier.supplierCode}" th:text="${supplier.supplierCode}"></td>
+            <td class="text-center" th:data-name="${supplier.supplierName}" th:text="${supplier.supplierName}"></td>
         </tr>
     </table>
 </div>

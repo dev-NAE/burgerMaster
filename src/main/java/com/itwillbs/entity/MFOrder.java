@@ -20,21 +20,21 @@ import lombok.ToString;
 public class MFOrder {
 	
 	@Id
-	@Column(name = "mOrder_id", length = 20, nullable = false)
+	@Column(name = "order_id", length = 20, nullable = false)
 	private String mOrderId;
 	
-	@Column(name = "mOrder_amount", nullable = false)
+	@Column(name = "order_amount", nullable = false)
 	private int mOrderAmount;
 	
-	@Column(name = "mOrder_deadline", nullable = false)
+	@Column(name = "order_deadline", nullable = false)
 	private Timestamp mOrderDeadline;
 	
-	@Column(name = "mOrder_date", nullable = false)
+	@Column(name = "order_date", nullable = false)
 	private Timestamp mOrderDate;
 	
-	@Column(name = "mOrder_state", length = 20, nullable = false)
+	@Column(name = "order_state", length = 20, nullable = false)
 	private String mOrderState;
 	
-	@Column(name = "mOrder_item", length = 20, nullable = false)
+	@Column(name = "order_item", length = 20, nullable = false)
 	private String mOrderItem;
 }

@@ -3,6 +3,8 @@ package com.itwillbs.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.itwillbs.entity.QualityOrder;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -37,8 +39,11 @@ public class QualityController {
 	}
 
 	@GetMapping("/quality/quality_order")
-	public String quality_order() {
+	public String quality_order(QualityOrder qualityOrder) {
 		log.info("QualityController quality_order().....");
+		
+		
+		
 		return "/quality/quality_order";
 	}
 	

@@ -1,0 +1,9 @@
+.flex-div{
+	display: flex;
+	justify-content : center;
+}
+
+.form-group{
+	margin-left: 10px;
+	margin-right: 10px;
+}
