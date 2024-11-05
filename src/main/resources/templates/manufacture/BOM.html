@@ -65,20 +65,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
+					<tr th:each="List, status:${ppList}">
+						<td th:text="${List.itemCode}"></td>
+						<td th:text="${List.itemName}"></td>
+						<td></td>
 					</tr>
 				</tbody>
 			</table>

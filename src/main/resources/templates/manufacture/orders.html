@@ -70,33 +70,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
+					<tr th:each="List, status:${orderList}">
+						<td th:text="${List.orderId}"></td>
+						<td th:text="${List.orderItem}"></td>
+						<td th:text="${List.orderAmount}"></td>
+						<td th:text="${List.orderDeadline}"></td>
+						<td th:text="${List.orderDate}"></td>
+						<td th:text="${List.orderState}"></td>
 						<td><button type="button" class="btn btn-warning">전달</button></td>
 						<td><button type="button" class="btn btn-primary">완료</button></td>
 					</tr>
