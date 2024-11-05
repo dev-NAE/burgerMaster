@@ -21,20 +21,20 @@ public class InventoryService {
     private final InventoryRepository inventoryRepository;
 
     // 재고 전체 조회 (페이지네이션 지원)
-    public Page<InventoryItemDTO> getInventoryItems(Pageable pageable) {
+    public List<InventoryItemDTO> getInventoryItems() {
         log.info("getInventoryItems()");
-        return inventoryRepository.getAllInventoryItems(pageable);
+        return inventoryRepository.getAllInventoryItems();
     }
 
     // 재고 부족 품목 조회 (검색 조건 포함)
-    public Page<InventoryItemDTO> findInventoryItemsByOutOfStock(String itemCodeOrName, String itemType, Pageable pageable) {
+    public List<InventoryItemDTO> findInventoryItemsByOutOfStock(String itemCodeOrName, String itemType) {
         log.info("findInventoryItemsByOutOfStock()");
-        return inventoryRepository.findInventoryItemsByOutOfStock(itemCodeOrName, itemType, pageable);
+        return inventoryRepository.findInventoryItemsByOutOfStock(itemCodeOrName, itemType);
     }
 
     // 재고 검색 (검색 조건과 페이지네이션)
-    public Page<InventoryItemDTO> findInventoryItems(String itemCodeOrName, String itemType, Pageable pageable) {
+    public List<InventoryItemDTO> findInventoryItems(String itemCodeOrName, String itemType) {
         log.info("findInventoryItems()");
-        return inventoryRepository.findInventoryItems(itemCodeOrName, itemType, pageable);
+        return inventoryRepository.findInventoryItems(itemCodeOrName, itemType);
     }
 }

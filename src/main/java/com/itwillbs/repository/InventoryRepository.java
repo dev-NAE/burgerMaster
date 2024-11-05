@@ -33,7 +33,7 @@ public interface InventoryRepository extends JpaRepository<InventoryItem, String
      */
     @Query("SELECT new com.itwillbs.domain.inventory.InventoryItemDTO(i.itemCode, i.itemName, i.itemType, ii.quantity, ii.minReqQuantity) " +
            "FROM Item i LEFT JOIN InventoryItem ii ON i.itemCode = ii.itemCode")
-    Page<InventoryItemDTO> getAllInventoryItems(Pageable pageable);
+    List<InventoryItemDTO> getAllInventoryItems();
 
     /**
      * 재고 부족 품목만 조회 쿼리 (페이지네이션 지원)
@@ -43,10 +43,9 @@ public interface InventoryRepository extends JpaRepository<InventoryItem, String
            "WHERE ii.quantity < ii.minReqQuantity " +
            "AND (:itemCodeOrName IS NULL OR :itemCodeOrName = '' OR i.itemCode LIKE CONCAT('%', :itemCodeOrName, '%') OR i.itemName LIKE CONCAT('%', :itemCodeOrName, '%')) " +
            "AND (:itemType = '' OR i.itemType = :itemType)")
-    Page<InventoryItemDTO> findInventoryItemsByOutOfStock(
+    List<InventoryItemDTO> findInventoryItemsByOutOfStock(
             @Param("itemCodeOrName") String itemCodeOrName,
-            @Param("itemType") String itemType,
-            Pageable pageable);
+            @Param("itemType") String itemType);
 
     /**
      * 재고 검색 쿼리 (페이지네이션 지원)
@@ -57,10 +56,9 @@ public interface InventoryRepository extends JpaRepository<InventoryItem, String
            "FROM Item i LEFT JOIN InventoryItem ii ON i.itemCode = ii.itemCode " +
            "WHERE (:itemCodeOrName IS NULL OR :itemCodeOrName = '' OR i.itemCode LIKE CONCAT('%', :itemCodeOrName, '%') OR i.itemName LIKE CONCAT('%', :itemCodeOrName, '%')) " +
            "AND (:itemType = '' OR i.itemType = :itemType)")
-    Page<InventoryItemDTO> findInventoryItems(
+    List<InventoryItemDTO> findInventoryItems(
             @Param("itemCodeOrName") String itemCodeOrName,
-            @Param("itemType") String itemType,
-            Pageable pageable);
+            @Param("itemType") String itemType);
 
 	
 	

@@ -32,22 +32,22 @@ public class InventoryController {
     
     @GetMapping("/inventoryList")
     public String inventoryList(
-            @RequestParam(name = "itemCodeOrName", required = false) String itemCodeOrName,
-            @RequestParam(name = "itemType", required = false) String itemType,
-            @RequestParam(name = "findOutOfStock", defaultValue = "false") boolean findOutOfStock,
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size,
+//            @RequestParam(name = "itemCodeOrName", required = false) String itemCodeOrName,
+//            @RequestParam(name = "itemType", required = false) String itemType,
+//            @RequestParam(name = "findOutOfStock", defaultValue = "false") boolean findOutOfStock,
+//            @RequestParam(name = "page", defaultValue = "0") int page,
+//            @RequestParam(name = "size", defaultValue = "10") int size,
             Model model) {
 
         log.info("InventoryController inventoryList()");
 
         // Pageable 객체를 생성하여 페이지 정보를 설정
-        Pageable pageable = PageRequest.of(page, size);
+//       Pageable pageable = PageRequest.of(page, size);
         // 검색 조건과 페이지 정보를 사용하여 재고 조회
-//        Page<InventoryItemDTO> inventoryItemDTOs = inventoryService.findInventoryItems(itemCodeOrName, itemType, findOutOfStock, pageable);
+        List<InventoryItemDTO> inventoryItemDTOs = inventoryService.getInventoryItems();
 
         // 모델에 조회된 재고 데이터를 저장
-//        model.addAttribute("inventoryItemDTOs", inventoryItemDTOs);
+        model.addAttribute("inventoryItemDTOs", inventoryItemDTOs);
 //        model.addAttribute("currentPage", page);
 //        model.addAttribute("totalPages", inventoryItemDTOs.getTotalPages());
 //        model.addAttribute("itemCodeOrName", itemCodeOrName);
