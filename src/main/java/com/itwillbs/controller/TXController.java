@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class TXController {
     }
 
     @GetMapping("/insertOrder")
-    public String insertOrder(Model model, HttpSession session) {
+    public String insertOrder(Model model) {
         model.addAttribute("today", LocalDate.now());
 
         // 접속자 id, name 가져와서 model에 담기
@@ -78,16 +79,21 @@ public class TXController {
         return "transaction/order/findSupplier";
     }
 
-    @GetMapping("/addItems")
+    @GetMapping("/addOrderItems")
     public String addOrderItems(Model model) {
         List<Item> items = txService.getOrderItems();
         model.addAttribute("items", items);
         return "transaction/order/addItems";
     }
 
-    @ResponseBody
     @GetMapping("/orderList")
-    public ResponseEntity<List<OrderDTO>> orderList() {
+    public String getOrderList() {
+        return "transaction/order/list";
+    }
+
+    @ResponseBody
+    @GetMapping("/orderInfo")
+    public ResponseEntity<List<OrderDTO>> getOrderInfo() {
         List<OrderDTO> orders = txService.getOrderList();
         log.info("orders: " + orders);
         return ResponseEntity.ok(orders);
@@ -100,6 +106,23 @@ public class TXController {
         model.addAttribute("order", order);
         model.addAttribute("items", items);
         return "transaction/order/detail";
+    }
+
+    @ResponseBody
+    @GetMapping("/searchOrders")
+    public ResponseEntity<List<OrderDTO>> searchOrders(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String supplierName,
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
+            @RequestParam(required = false) String itemName,
+            @RequestParam(required = false) String dueDateStart,
+            @RequestParam(required = false) String dueDateEnd
+    ) {
+        log.info("TXController searchOrders()");
+        List<OrderDTO> orders = txService.searchOrders(status, supplierName, orderDateStart, orderDateEnd, itemName, dueDateStart, dueDateEnd);
+        log.info(orders.toString());
+        return ResponseEntity.ok(orders);
     }
 
 }

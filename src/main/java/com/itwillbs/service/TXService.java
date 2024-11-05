@@ -7,11 +7,15 @@ import com.itwillbs.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -40,12 +44,15 @@ public class TXService {
         BeanUtils.copyProperties(orderDTO, order);      // orderDTO -> order 필드값 복사
         order.setOrderId(orderId);                        // 발주등록번호
         order.setStatus("발주등록(저장)");                  // 발주상태
+        order.setManager(managerRepository.findById(orderDTO.getManager()).orElse(null));
+        order.setSupplier(supplierRepository.findById(orderDTO.getSupplierCode()).orElse(null));
         orderRepository.save(order);
 
         // 발주 품목정보 저장
         for (OrderItemsDTO item : orderItems) {
             OrderItems orderItem = new OrderItems();
             BeanUtils.copyProperties(item, orderItem);
+            orderItem.setItem(itemRepository.findById(item.getItemCode()).orElse(null));
             orderItem.setOrder(order);
             orderItem.setOrderItemId(orderId + item.getItemCode());
             log.info(orderItem.toString());
@@ -105,22 +112,7 @@ public class TXService {
         log.info("TXService: getOrderList");
         List<Order> allOrders = orderRepository.findAll(Sort.by(Sort.Direction.DESC, "orderId"));
 
-        return allOrders.stream().map (order -> {
-            OrderDTO orderDTO = new OrderDTO();
-            orderDTO.setOrderId(order.getOrderId());
-            orderDTO.setTotalPrice(order.getTotalPrice());
-            orderDTO.setOrderDate(order.getOrderDate());
-            orderDTO.setDueDate(order.getDueDate());
-            orderDTO.setStatus(order.getStatus());
-
-            orderDTO.setSupplierName(orderRepository.findSupplierNameByOrderId(order.getOrderId()));
-            List<String> firstItem = orderRepository.findFirstItemNameByOrder(order);
-            orderDTO.setItemName(firstItem.isEmpty() ? null : firstItem.get(0));
-            orderDTO.setItemCount(orderRepository.findOrderItemCountByOrder(order));
-
-            return orderDTO;
-        })
-        .collect(Collectors.toList());
+        return getOrderDTOS(allOrders);
 
     }
 
@@ -141,5 +133,59 @@ public class TXService {
         return itemRepository.findAll();
         // 사용중인 코드 + 판매할 수 있는 아이템 한정, 재고수량 오름차순으로 수정 필요
     }
+
+    public List<OrderDTO> searchOrders(String status, String supplierName, String orderDateStart, String orderDateEnd,
+                                       String itemName, String dueDateStart, String dueDateEnd) {
+        log.info("TXService: searchOrders");
+
+        // 날짜 자료형 String -> Timestamp 변경
+        Timestamp orderStart = convertToTimestamp(orderDateStart);
+        Timestamp orderEnd = convertToTimestamp(orderDateEnd);
+        Timestamp dueStart = convertToTimestamp(dueDateStart);
+        Timestamp dueEnd = convertToTimestamp(dueDateEnd);
+
+        String formattedStatus = (status != null && !status.trim().isEmpty()) ? status : null;
+
+        // LIKE 검색할 것들 % 붙여주기
+        String formattedSupplierName = supplierName != null && !supplierName.trim().isEmpty() ? "%" + supplierName + "%" : null;
+        String formattedItemName = itemName != null && !itemName.trim().isEmpty() ? "%" + itemName + "%" : null;
+
+        log.info("status: " + formattedStatus + " supplierName: " + formattedSupplierName + " orderDateStart: " + orderStart + " orderDateEnd: " + orderEnd + " itemName: " + formattedItemName + " dueStart: " + dueStart + " dueEnd: " + dueEnd);
+
+        List<Order> ordersByConditions = orderRepository.findOrdersByConditions
+                (formattedStatus, formattedSupplierName, orderStart, orderEnd, formattedItemName, dueStart, dueEnd);
+
+        log.info("TXService: searchOrdersByConditions" + ordersByConditions);
+
+        return getOrderDTOS(ordersByConditions);
+    }
+
+    private Timestamp convertToTimestamp(String dateStr) {
+        if (dateStr == null || dateStr.isEmpty()) {
+            return null;
+        }
+        LocalDate dateTime = LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return Timestamp.valueOf(dateTime.atStartOfDay());
+    }
+
+    private List<OrderDTO> getOrderDTOS(List<Order> ordersByConditions) {
+        return ordersByConditions.stream()
+                .map(order -> {
+                    OrderDTO orderDTO = new OrderDTO();
+                    orderDTO.setOrderId(order.getOrderId());
+                    orderDTO.setTotalPrice(order.getTotalPrice());
+                    orderDTO.setOrderDate(order.getOrderDate());
+                    orderDTO.setDueDate(order.getDueDate());
+                    orderDTO.setStatus(order.getStatus());
+                    orderDTO.setSupplierName(orderRepository.findSupplierNameByOrderId(order.getOrderId()));
+                    List<String> firstItem = orderRepository.findFirstItemNameByOrder(order);
+                    orderDTO.setItemName(firstItem.isEmpty() ? null : firstItem.get(0));
+                    orderDTO.setItemCount(orderRepository.findOrderItemCountByOrder(order));
+                    log.info("TXService: getOrderDTOS: " + orderDTO);
+                    return orderDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
 
 }
