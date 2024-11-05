@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"
-	xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 	<meta charset="UTF-8">
@@ -29,7 +27,13 @@
 						<img src="/img/sidebar/testuser.png" class="img-circle elevation-2" alt="User Image">
 					</div>
 					<div class="info">
-						<a href="#" class="d-block">Alexander Pierce</a>
+						<a href="#" class="d-block">
+							<div sec:authorize="isAuthenticated()">
+								<span sec:authentication="name"></span>님<br>
+								<a th:href="@{/logout}">로그아웃</a>
+
+							</div>
+						</a>
 					</div>
 				</div>
 
@@ -212,21 +216,54 @@
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="./index.html" class="nav-link active">
+									<a href="#" class="nav-link ">
 										<i class="far fa-circle nav-icon"></i>
-										<p>하위1</p>
+										<p>가공품목록<i class="right fas fa-angle-left"></i></p>
 									</a>
-								</li>
-								<li class="nav-item">
-									<a href="./index2" class="nav-link">
-										<i class="far fa-circle nav-icon"></i>
-										<p>하위2</p>
-									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/mf/bom" class="nav-link">
+												<p>가공품 상세 정보</p>
+											</a>
+										</li>
+
+
+
+
+									</ul>
+
 								</li>
 							</ul>
-						</li>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="#" class="nav-link ">
+										<i class="far fa-circle nav-icon"></i>
+										<p> 작업 지시 관리
+											<i class="right fas fa-angle-left"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview" id="sub-menu-1">
+										<li class="nav-item">
+											<a href="/mf/insert" class="nav-link">
+												<p>작업지시 등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/mf/orders" class="nav-link">
+												<p>작업지시 목록</p>
+											</a>
+										</li>
 
-						<!-- 품질관리 -->
+
+
+
+									</ul>
+
+								</li>
+							</ul>
+
+
+							<!-- 품질관리 -->
 						<li class="nav-item">
 							<a href="#" class="nav-link">
 								<img src="/img/sidebar/5.png" alt="Icon" class="nav-icon">

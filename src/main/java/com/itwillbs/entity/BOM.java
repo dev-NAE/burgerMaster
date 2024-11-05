@@ -27,7 +27,7 @@ public class BOM {
     private BigDecimal quantity;
 
     @Column(name = "use_yn", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'Y'")
-    private char useYN;
+    private char useYN = 'Y';
 
     @Column(name = "rm_code", length = 20, nullable = false)
     private String rmCode;
