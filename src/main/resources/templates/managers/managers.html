@@ -88,7 +88,7 @@
                   </tr>
                   </thead>
                   <tbody id="listBody">
-                  <tr th:each="manager, status:${managers}" th:id="${manager.managerId}">
+                  <tr th:each="manager, status:${managers}" th:if="${manager.managerId ne 'admin'}" th:id="${manager.managerId}">
                     <td th:text="${manager.managerId}"></td>
                     <td th:text="${manager.name}"></td>
                     <td th:text="${manager.email}"></td>
@@ -151,7 +151,7 @@
             <div class="form-floating d-flex flex-row mb-3">
               <div class="form-floating flex-fill mr-3">
                 <label for="manager_id_change_modal">관리자 ID</label>
-                <input type="text" class="form-control-plaintext" id="manager_id_change_modal" readonly>
+                <input type="text" class="form-control" id="manager_id_change_modal" readonly>
                 <span type="hidden" id="idCheckResult"></span>
               </div>
               <div class="form-floating flex-fill ">
@@ -159,11 +159,17 @@
                 <input type="text" class="form-control" id="manager_name_change_modal" placeholder="Name">
               </div>
             </div>
-
+            <div class="form-group">
+              <label for="manager_pass_create_modal">Password</label>
+              <input type="password" class="form-control" id="manager_pass_change_modal" placeholder="Enter Password">
+            </div>
+            <div  class="callout callout-info p-2">
+              <p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-) 조합으로 이루어진 8~15자까지 가능합니다.</p>
+            </div>
             <div class="form-floating d-flex flex-row mb-3">
               <div class="form-floating flex-fill mr-3">
                 <label for="manager_email_change_modal">이메일</label>
-                <input type="email" class="form-control" id="manager_email_change_modal" placeholder="Email" >
+                <input type="email" class="form-control" id="manager_email_change_modal" placeholder="Email">
               </div>
               <div class="form-floating flex-fill">
                 <label for="manager_phone_change_modal">전화번호</label>

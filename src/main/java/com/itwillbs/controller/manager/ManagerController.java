@@ -29,13 +29,14 @@ public class ManagerController {
     @GetMapping("/login")
     public String login(){
         log.info("AdminsController login()");
+        log.info(SecurityUtil.getUserId());
         return "managers/login";
     }
 
     @GetMapping("/manager/list")
     public String managerList(Model model,
                               @RequestParam(value = "page", defaultValue = "1", required = false)int page,
-                              @RequestParam(value = "size", defaultValue = "3", required = false)int size){
+                              @RequestParam(value = "size", defaultValue = "10", required = false)int size){
         log.info("AdminsController managers()");
 
         Pageable pageable = PageRequest.of(page-1, size);

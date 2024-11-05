@@ -37,12 +37,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">관리자 관리</h1>
+                        <h1 class="m-0">관리자 정보</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">관리자 관리</li>
+                            <li class="breadcrumb-item active">관리자 정보</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -58,43 +58,7 @@
                 <div class="row">
                     <div class="col-12">
 
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">관리자 목록</h3>
 
-                                <div class="card-tools row">
-                                    <div class="input-group input-group-sm" style="width: 100px;">
-                                        <a class="btn-sm btn-primary" href="#" id="createManager">관리자 생성</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body table-responsive p-0" style="height: 300px;">
-                                <table class="table table-head-fixed text-nowrap">
-                                    <thead>
-                                    <tr>
-                                        <th>관리자 ID</th>
-                                        <th>이름</th>
-                                        <th>이메일</th>
-                                        <th>전화번호</th>
-                                        <th>권한</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="listBody">
-                                    <tr th:each="manager, status:${managers}" th:id="${manager.managerId}">
-                                        <td th:text="${manager.managerId}"></td>
-                                        <td th:text="${manager.name}"></td>
-                                        <td th:text="${manager.email}"></td>
-                                        <td th:text="${manager.phone}"></td>
-                                        <td th:text="${manager.managerRole}"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                            <!-- /div managers table-->
-
-                        </div>
-                        <!-- /card -->
                     </div>
                     <!--  -->
                 </div>
