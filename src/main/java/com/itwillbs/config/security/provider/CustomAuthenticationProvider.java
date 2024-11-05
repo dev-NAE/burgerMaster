@@ -4,6 +4,7 @@ import com.itwillbs.config.security.exception.LoginException;
 import com.itwillbs.config.security.exception.LoginExceptionResult;
 import com.itwillbs.entity.Manager;
 import com.itwillbs.service.ManagerService;
+import com.itwillbs.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -25,7 +26,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    private final ManagerService managerService;
+    private final SecurityService securityService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -33,14 +34,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();
         log.info("username:{}", username);
+
         // 사용자 정보 조회
-        Manager managerInfo = managerService.getAdminByAdminId(username);
+        Manager managerInfo = securityService.getManagerByManagerId(username);
 
         // password 일치 여부 체크
         if(!bCryptPasswordEncoder.matches(password, managerInfo.getPass()))
             throw new LoginException(LoginExceptionResult.NOT_CORRECT);
+
         // 권한 리스트
-        List<String> managerRoles = Arrays.asList(managerInfo.getManagerRole().split(","));
+        String[] managerRoles = managerInfo.getManagerRole().split(",");
         ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         for(String role : managerRoles){
             grantedAuthorities.add(new SimpleGrantedAuthority(role));

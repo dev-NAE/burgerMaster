@@ -20,21 +20,37 @@ import lombok.ToString;
 public class MFOrder {
 	
 	@Id
-	@Column(name = "mOrder_id", length = 20, nullable = false)
-	private String mOrderId;
+	@Column(name = "order_id", length = 20, nullable = false)
+	private String orderId;
 	
-	@Column(name = "mOrder_amount", nullable = false)
-	private int mOrderAmount;
+	@Column(name = "order_amount", nullable = false)
+	private int orderAmount;
 	
-	@Column(name = "mOrder_deadline", nullable = false)
-	private Timestamp mOrderDeadline;
+	@Column(name = "order_deadline", nullable = false)
+	private Timestamp orderDeadline;
 	
-	@Column(name = "mOrder_date", nullable = false)
-	private Timestamp mOrderDate;
+	@Column(name = "order_date", nullable = false)
+	private Timestamp orderDate;
 	
-	@Column(name = "mOrder_state", length = 20, nullable = false)
-	private String mOrderState;
+	@Column(name = "order_state", length = 20, nullable = false)
+	private String orderState;
 	
-	@Column(name = "mOrder_item", length = 20, nullable = false)
-	private String mOrderItem;
+	@Column(name = "order_item", length = 20, nullable = false)
+	private String orderItem;
+	
+	public MFOrder(String orderId, int orderAmount, Timestamp orderDeadline, Timestamp orderDate, String orderState, String orderItem) {
+		this.orderId = orderId;
+		this.orderAmount = orderAmount;
+		this.orderDeadline = orderDeadline;
+		this.orderDate = orderDate;
+		this.orderState = orderState;
+		this.orderItem = orderItem;
+	}
+	
+//	public static MFOrder createOrder(int orderAmount, Timestamp orderDeadline, String orderItem) {
+//		
+//		MFOrder mfOrder = MFOrder(???);
+//		
+//		return mfOrder;
+//	}
 }

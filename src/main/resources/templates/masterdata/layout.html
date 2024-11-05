@@ -4,20 +4,22 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 	<title>BurgerMaster | MasterDataManagement</title>
 
-	<th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
+	<th:block th:replace="~{/fragments/basicLink :: basicLinkCssFragment}"></th:block>
 	<link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 	<link rel="stylesheet" href="/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
-	<link rel="stylesheet" href="css/font.css">
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
+	<div th:replace="~{fragments/header :: headerFragment}"></div>
+	<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
+
 	<div class="wrapper">
-		<div th:replace="fragments/header :: headerFragment"></div>
-		<div th:replace="fragments/sidebar :: sidebarFragment"></div>
-		<div th:replace="fragments/Preloader :: PreloaderFragment"></div>
+		<div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
 
 		<div class="content-wrapper">
 			<div class="content-header">
@@ -28,7 +30,7 @@
 						</div>
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<li class="breadcrumb-item"><a href="/main">Home</a></li>
 							</ol>
 						</div>
 					</div>
@@ -47,12 +49,14 @@
 				</div>
 			</section>
 		</div>
-		<div th:replace="fragments/footer :: footerFragment"></div>
+		<div th:replace="~{fragments/footer :: footerFragment}"></div>
 	</div>
-	<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
+	<th:block th:replace="~{/fragments/basicLink :: basicLinkJsFragment}"></th:block>
+	<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="/plugins/select2/js/select2.full.min.js"></script>
 	<script src="/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+	<script src="/js/masterdata/item.js"></script>
 </body>
 
 </html>

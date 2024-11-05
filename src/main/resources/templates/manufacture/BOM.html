@@ -65,24 +65,15 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
+					<tr th:each="List, status:${ppList}">
+						<td th:text="${List.itemCode}"></td>
+						<td th:text="${List.itemName}"></td>
+						<td></td>
 					</tr>
 				</tbody>
 			</table>
 			
+<!--			페이지네이션-->
 			<nav aria-label="Page navigation" style="width:100%;">
 			  <div>
 				
@@ -96,8 +87,10 @@
 			  </ul>
 			  </div>
 			  
+<!--			  검색 도구-->
 			  <div class="searching" style="float: right;">
 			  
+<!--				검색어 분류-->
 			  <div style="display: inline-block;">
 			    <select class="form-control">
 					<option th:text="가공품식별번호"></option>
