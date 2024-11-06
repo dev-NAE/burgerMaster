@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -33,18 +35,20 @@ public class ManagerController {
         return "managers/login";
     }
 
-    @GetMapping("/manager/list")
+    @GetMapping("/bgmManager/list")
     public String managerList(Model model,
                               @RequestParam(value = "page", defaultValue = "1", required = false)int page,
-                              @RequestParam(value = "size", defaultValue = "10", required = false)int size){
+                              @RequestParam(value = "size", defaultValue = "10", required = false)int size,
+                              @RequestParam(value = "search", defaultValue = "", required = false)String search){
         log.info("AdminsController managers()");
 
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<Manager> managers = managerService.getManagerList(pageable);
+        Page<Manager> managers = managerService.getManagerList(pageable,search);
 
         model.addAttribute("managers",managers);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
+        model.addAttribute("search", search);
         //전체 페이지 개수
         model.addAttribute("totalPages", managers.getTotalPages());
 

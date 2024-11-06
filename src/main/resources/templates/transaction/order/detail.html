@@ -15,6 +15,9 @@
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/dist/js/adminlte.min.js"></script>
 
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
@@ -65,85 +68,93 @@
                     <!-- Contents -->
                         <div class="container-fluid col-sm-10 my-5">
                             <div class="submit-btn-area row">
-                                <button class="btn btn-md btn-secondary ml-auto my-3 mr-2">발주서 출력</button>
+                                <button id="print-form" class="btn btn-md btn-secondary ml-auto my-3 mr-2">발주서 출력</button>
                             </div>
                             <div class="card insert-container px-3 py-3">
                                 <div class="card-body basic-info-area px-5">
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center">등록번호</label>
                                         <div class="col-sm-4">
-                                            <span>OD-1234</span>
+                                            <span id="order-id" th:text="${order.orderId}"></span>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center">처리상태</label>
                                         <div class="col-sm-4">
-                                            <span>발주등록(저장)</span>
+                                            <span id="order-status" th:text="${order.status}"></span>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center" for="order_date">등록일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" name="order_date" id="order_date" th:value="${today}" readonly>
+                                            <input class="form-control" type="date" name="order_date" id="order_date" th:value="${#dates.format(order.orderDate, 'yyyy-MM-dd')}" readonly>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="manager-code">담당자</label>
                                         <div class="input-group col-sm-4">
-                                            <input id="manager-code" class="form-control" type="text" name="manager_code" placeholder="코드" th:value="${id}" readonly>
+                                            <input id="manager-code" class="form-control" type="text" name="manager_code" placeholder="코드" th:value="${order.manager.managerId}" readonly>
                                             <div class="input-group-append">
                                                 <span id="find-manager" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
                                             </div>
-                                            <input id="manager-name" class="form-control" type="text" name="manager_name" placeholder="이름" th:value="${name}" readonly>
+                                            <input id="manager-name" class="form-control" type="text" name="manager_name" placeholder="이름" th:value="${order.manager.name}" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center" for="supplier-code">거래처</label>
                                         <div class="input-group col-sm-4">
-                                            <input id="supplier-code" class="form-control" type="text" name="supplier_code" placeholder="코드" readonly>
+                                            <input id="supplier-code" class="form-control" type="text" name="supplier_code" placeholder="코드" th:value="${order.supplier.supplierCode}" readonly>
                                             <div class="input-group-append">
                                                 <span id="find-supplier" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
                                             </div>
-                                            <input id="supplier-name" class="form-control" type="text" name="supplier_name" placeholder="상호" readonly>
+                                            <input id="supplier-name" class="form-control" type="text" name="supplier_name" placeholder="상호" th:value="${order.supplier.supplierName}" readonly>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="due_date">납기일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" id="due_date" name="due_date" readonly>
+                                            <input class="form-control" type="date" id="due_date" name="due_date" th:value="${#dates.format(order.dueDate, 'yyyy-MM-dd')}" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center" for="note">비  고</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" type="text" id="note" name="note" readonly>
+                                            <input class="form-control" type="text" id="note" name="note" th:value="${order.note}" readonly>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="input-items-area card-body">
                                     <div class="row">
-                                        <button class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-items">물품 추가</button>
+                                        <button class="btn btn-md btn-secondary ml-auto mr-2 mb-3" id="add-items">물품 추가</button>
                                     </div>
                                     <div class="item-list card-body border">
                                         <table id="item-list-table" class="table table-bordered table-hover dataTable dtr-inline">
                                             <tr class="bg-lightblue">
-                                                <th class="text-center" style="width:10%">선택삭제</th>
+                                                <th class="text-center" style="width:10%"></th>
                                                 <th class="text-center" style="width:15%;">품목코드</th>
                                                 <th class="text-center" style="width:30%;">품목명</th>
                                                 <th class="text-center" style="width:15%;">단가(원)</th>
-                                                <th class="text-center" style="width:15%;">수량(단위)</th>
+                                                <th class="text-center" style="width:15%;">수량</th>
                                                 <th class="text-center" style="width:15%;">소계(원)</th>
+                                            </tr>
+                                            <tr class="item-row" th:each="i : ${items}">
+                                                <td class="text-center"></td>
+                                                <td class="text-center"><span class="item-code" th:text="${i.item.itemCode}"></span></td>
+                                                <td class="text-center"><span class="item-name" th:text="${i.item.itemName}"></span></td>
+                                                <td class="text-right"><input class="col-sm-8 item-price" type="text" th:value="${#numbers.formatInteger(i.price, 1, 'COMMA')}" style="text-align:right;" readonly> 원</td>
+                                                <td class="text-center"><input class="col-sm-6 item-quantity" type="text" th:value="${#numbers.formatInteger(i.quantity, 1, 'COMMA')}" style="text-align:right;" readonly> 단위</td>
+                                                <td class="text-right"><span class="subtotal" th:text="${#numbers.formatInteger(i.subtotalPrice, 1, 'COMMA')}"></span> 원</td>
                                             </tr>
                                         </table>
                                         <div class="calculating-brief row my-2 py-3 px-2 bg-light">
-                                            <div class="col-6 number-of-items"><span id="total-quantity" class="ml-3">0</span>개 품목 선택</div>
-                                            <div class="col-6 text-right total-of-price">금액 합계: <span id="total-price" class="ml-1">0</span> 원</div>
+                                            <div class="col-6 number-of-items"><span id="total-quantity" class="ml-3" th:text="${items.size()}">0</span>개 품목 선택</div>
+                                            <div class="col-6 text-right total-of-price">금액 합계: <span id="total-price" class="ml-1" th:text="${#numbers.formatInteger(order.totalPrice, 1, 'COMMA')}">0</span> 원</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="submit-btn-area row">
                                 <div class="col-5 d-flex justify-content-start">
-                                    <button class="btn btn-lg btn-secondary my-3">목록으로 이동</button>
+                                    <button id="back-to-list" class="btn btn-lg btn-secondary my-3">목록으로 이동</button>
                                 </div>
-                                <div class="col-7 d-flex justify-content-end">
-                                    <button class="btn btn-lg btn-success my-3 mx-2">수정</button>
-                                    <button class="btn btn-lg btn-danger my-3 mx-2">취소</button>
-                                    <button class="gtn btn-lg btn-primary my-3 mx-2">발주완료</button>
+                                <div th:if="${order.status == '발주등록(저장)'}" class="col-7 d-flex justify-content-end">
+                                    <button id="modify-btn" class="btn btn-lg btn-success my-3 mx-2">수정</button>
+                                    <button class="btn btn-lg btn-danger my-3 mx-2" data-toggle="modal" data-target="#cancel-order">취소</button>
+                                    <button class="btn btn-lg btn-primary my-3 mx-2" data-toggle="modal" data-target="#complete-order">발주완료</button>
                                 </div>
                             </div>
                         </div>
@@ -158,6 +169,59 @@
                                 <td class="text-right"><span class="subtotal">0</span> 원</td>
                             </tr>
                         </template>
+
+
+                        <!-- Modal: 취소 -->
+                        <div class="modal fade" id="cancel-order" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalCenterTitle">발주취소</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h5>이 발주를 취소하시겠습니까?</h5>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary col-3" data-dismiss="modal">아니오</button>
+                                        <button id="cancel-yes" type="button" class="btn btn-danger col-3">예</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal: 완료 -->
+                        <div class="modal fade" id="complete-order" tabindex="-1" role="dialog" aria-labelledby="completeModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="completeModalCenterTitle">발주완료</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h5>이 발주를 완료(확정)하시겠습니까?</h5>
+                                        완료된 발주는 수정/취소가 불가능합니다.
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary col-3" data-dismiss="modal">아니오</button>
+                                        <button id="complete-yes" type="button" class="btn btn-primary col-3">예</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="loadingSpinner" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999;">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                <div class="loader spinner-border text-primary" role="status">
+                                    <span class="visually-hidden"></span>
+                                </div>
+                            </div>
+                        </div>
+
 
 
                     <!-- /.Contents -->
@@ -182,7 +246,7 @@
     <div th:replace="~{fragments/footer :: footerFragment}"></div>
 
     <!-- custom js -->
-    <script src="/js/transaction/order/insert.js"></script>
+    <script src="/js/transaction/order/detail.js"></script>
 
 </body>
 
