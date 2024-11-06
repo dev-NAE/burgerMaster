@@ -415,17 +415,12 @@ function validateField(field) {
 			break;
 
 		case 'useYN':
-			if (!value) {
-				showError(field, '사용 여부를 선택하세요.');
-				return false;
-			}
 			if (!['Y', 'N'].includes(value)) {
 				showError(field, '올바른 사용 여부 값이 아닙니다.');
 				return false;
 			}
 			break;
 	}
-
 	clearError(field);
 	return true;
 }
@@ -439,4 +434,3 @@ function clearError(field) {
     field.removeClass('is-invalid');
     $(`#validate${field.attr('id')}`).text(''); 
 }
-

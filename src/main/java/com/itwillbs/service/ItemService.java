@@ -35,21 +35,16 @@ public class ItemService {
 	public Item saveItem(Item item) {
 		validateItemCode(item);
 		validateDuplicate(item);
-		validateItemName(item);
 		return itemRepository.save(item);
 	}
 
 	@Transactional
 	public Item updateItem(Item item) {
 		validateItemCode(item);
-		validateItemName(item);
 		return itemRepository.save(item);
 	}
 
 	private void validateItemCode(Item item) {
-		if (!item.getItemCode().matches("^(RM|PP|FP)\\d{3}$")) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목코드는 RM/PP/FP로 시작하고 3자리 숫자여야 합니다.");
-		}
 		if (!item.getItemCode().startsWith(item.getItemType())) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목코드와 품목유형이 일치하지 않습니다.");
 		}
@@ -58,12 +53,6 @@ public class ItemService {
 	private void validateDuplicate(Item item) {
 		if (itemRepository.existsById(item.getItemCode())) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 존재하는 품목코드입니다.");
-		}
-	}
-
-	private void validateItemName(Item item) {
-		if (!item.getItemName().matches("^[가-힣A-Za-z0-9\\s\\-\\_]+$")) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "품목명에 허용되지 않는 문자가 포함되어 있습니다.");
 		}
 	}
 

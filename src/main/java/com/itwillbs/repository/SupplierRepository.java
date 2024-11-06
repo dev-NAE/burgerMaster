@@ -29,5 +29,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, String> {
 			@Param("includeUnused") Boolean includeUnused, 
 			Pageable pageable
 			);
-
+	
+	boolean existsByBusinessNumber(String businessNumber);
 }
