@@ -70,7 +70,7 @@ public class SecurityConfig {
         // url 접근 제한
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(urlsToBePermittedAll).permitAll()
-                .requestMatchers("/manager/**").hasRole("ADMIN")
+                .requestMatchers("/bgmManager/**").hasRole("ADMIN")
                 .requestMatchers(masterDataUrls).hasAnyRole("MASTERDATA", "ADMIN")
                 .requestMatchers(TxUrls).hasAnyRole("TRANSACTION", "ADMIN")
                 .requestMatchers("/inven/**").hasAnyRole("INVENTORY", "ADMIN")

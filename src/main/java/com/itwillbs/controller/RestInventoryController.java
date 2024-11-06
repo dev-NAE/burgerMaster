@@ -26,25 +26,25 @@ public class RestInventoryController {
     
     private final InventoryService inventoryService;
 
-    @GetMapping("/filterInventory")
-    public ResponseEntity<List<InventoryItemDTO>> filterInventory(
-            @RequestParam(name = "itemCodeOrName", required = false) String itemCodeOrName,
-            @RequestParam(name = "itemType", required = false) String itemType,
-            @RequestParam(name = "findOutOfStock", defaultValue = "false") boolean findOutOfStock){
-
-        log.info("RestInventoryController filterInventory()");
-
-
-        List<InventoryItemDTO> filteredItems;
-        if (findOutOfStock == true) {
-            filteredItems = inventoryService.findInventoryItemsByOutOfStock(itemCodeOrName, itemType);
-        } else {
-            filteredItems = inventoryService.findInventoryItems(itemCodeOrName, itemType);
-        }
-
-
-        return ResponseEntity.ok(filteredItems);
-    }
-    
+//    @GetMapping("/filterInventory")
+//    public ResponseEntity<List<InventoryItemDTO>> filterInventory(
+//            @RequestParam(name = "itemCodeOrName", required = false) String itemCodeOrName,
+//            @RequestParam(name = "itemType", required = false) String itemType,
+//            @RequestParam(name = "findOutOfStock", defaultValue = "false") boolean findOutOfStock){
+//
+//        log.info("RestInventoryController filterInventory()");
+//
+//
+//        List<InventoryItemDTO> filteredItems;
+//        if (findOutOfStock == true) {
+//            filteredItems = inventoryService.findInventoryItemsByOutOfStock(itemCodeOrName, itemType);
+//        } else {
+//            filteredItems = inventoryService.findInventoryItems(itemCodeOrName, itemType);
+//        }
+//
+//
+//        return ResponseEntity.ok(filteredItems);
+//    }
+//    
     
 }
