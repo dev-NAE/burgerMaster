@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js Conditional Bar Color</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart"></canvas>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+
+        // 데이터셋을 정의합니다.
+        const data = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+            datasets: [{
+                label: 'Monthly Sales',
+                data: [10, 20, 5, 15, 30, 25, 10],
+                backgroundColor: function(context) {
+                    // 특정 조건에 따라 막대 색을 변경합니다.
+                    const value = context.dataset.data[context.dataIndex];
+                    if (value > 20) {
+                        return 'rgba(255, 99, 132, 0.7)'; // 20 이상일 때 빨간색
+                    } else {
+                        return 'rgba(75, 192, 192, 0.7)'; // 그 외는 파란색
+                    }
+                },
+                borderColor: 'rgba(0, 0, 0, 0.1)',
+                borderWidth: 1,
+            }]
+        };
+
+        // 차트 옵션을 정의합니다.
+		
+        const options = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        // 범례의 색상을 고정하기 위해, 범례 색상과 막대 색상을 다르게 설정합니다.
+                        generateLabels: (chart) => {
+                            return chart.data.datasets.map((dataset, i) => {
+                                return {
+                                    text: dataset.label,
+                                  fillStyle: 'rgba(75, 192, 192, 0.7)', // 범례의 색상 고정
+                                    strokeStyle: dataset.borderColor,
+                                    lineWidth: dataset.borderWidth,
+                                    hidden: !chart.isDatasetVisible(i),
+                                    index: i
+                                };
+                            });
+                        }
+                    }
+                }
+            }
+        };
+		
+
+        // 차트 생성
+        new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+    </script>
+</body>
+</html>
