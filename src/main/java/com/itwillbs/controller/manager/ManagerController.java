@@ -36,15 +36,17 @@ public class ManagerController {
     @GetMapping("/manager/list")
     public String managerList(Model model,
                               @RequestParam(value = "page", defaultValue = "1", required = false)int page,
-                              @RequestParam(value = "size", defaultValue = "10", required = false)int size){
+                              @RequestParam(value = "size", defaultValue = "10", required = false)int size,
+                              @RequestParam(value = "search", defaultValue = "", required = false)String search){
         log.info("AdminsController managers()");
 
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<Manager> managers = managerService.getManagerList(pageable);
+        Page<Manager> managers = managerService.getManagerList(pageable,search);
 
         model.addAttribute("managers",managers);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
+        model.addAttribute("search", search);
         //전체 페이지 개수
         model.addAttribute("totalPages", managers.getTotalPages());
 

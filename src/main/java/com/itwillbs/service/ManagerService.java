@@ -18,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -56,10 +55,12 @@ public class ManagerService {
         return result;
     }
 
-    public Page<Manager> getManagerList(Pageable pageable) {
+    public Page<Manager> getManagerList(Pageable pageable, String search) {
         log.info("ManagerService Getting manager list");
-
-        return  managerRepository.findAll(pageable);
+        if(search.equals("") || search == null) {
+            return  managerRepository.findAll(pageable);
+        }
+        return  managerRepository.findBySearch(pageable,search);
     }
 
     public boolean checkManagerId(String managerId) {

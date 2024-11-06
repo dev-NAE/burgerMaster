@@ -4,6 +4,9 @@ import com.itwillbs.entity.Manager;
 import com.itwillbs.repository.ManagerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,7 +14,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Log
-public class SecurityService {
+public class SecurityService{
     private final ManagerRepository managerRepository;
 
     public Manager getManagerByManagerId(final String managerId) {
@@ -24,4 +27,5 @@ public class SecurityService {
         log.info("Manager not found");
         return null;
     }
+
 }
