@@ -15,14 +15,14 @@ public class ManagerRestController {
     private final ManagerService managerService;
     private final ManagerRepository managerRepository;
 
-    @PostMapping(value="/manager/create", produces = "application/text; charset=UTF-8")
+    @PostMapping(value="/bgmManager/create", produces = "application/text; charset=UTF-8")
     public String create(Manager manager) {
         log.info("ManagerRestController create()");
 
         return managerService.createManger(manager);
     }
 
-    @PostMapping(value = "/manager/check/id")
+    @PostMapping(value = "/bgmManager/check/id")
     public Boolean  checkId(String managerId) {
         log.info("ManagerRestController checkId()");
         boolean result = false;

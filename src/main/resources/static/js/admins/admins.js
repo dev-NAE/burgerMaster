@@ -6,7 +6,7 @@ $(document).ready(function(){
     $('#btn_search').click(function () {
         let search = $('#search').val();
         console.log(search);
-        window.location.href="/manager/list?search=" + search;
+        window.location.href="/bgmManager/list?search=" + search;
     })
     funcFillChangeModal();
     $("#createManager").click(function(){
@@ -139,7 +139,7 @@ function checkMangerId(){
     if(typeof managerId != "undefined" && managerId != null && managerId !== ''){
         $.ajax({
             type: "POST",
-            url : "/manager/check/id",
+            url : "/bgmManager/check/id",
             data : {
                 managerId : managerId,
             },
@@ -178,7 +178,7 @@ function createManager(){
     if(CHECK_ID && check_modal_text('create')){
         $.ajax({
             type: "POST",
-            url : "/manager/create",
+            url : "/bgmManager/create",
             data : {
                 managerId : $("#manager_id_create_modal").val().trim(),
                 pass : $("#manager_pass_create_modal").val().trim(),
@@ -230,7 +230,7 @@ function changeManager(){
 
         $.ajax({
             type: "POST",
-            url : "/manager/update",
+            url : "/bgmManager/update",
             data : {
                 managerId : $("#manager_id_change_modal").val().trim(),
                 pass : $("#manager_pass_change_modal").val().trim(),
