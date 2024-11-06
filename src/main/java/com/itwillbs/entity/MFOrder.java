@@ -21,20 +21,36 @@ public class MFOrder {
 	
 	@Id
 	@Column(name = "order_id", length = 20, nullable = false)
-	private String mOrderId;
+	private String orderId;
 	
 	@Column(name = "order_amount", nullable = false)
-	private int mOrderAmount;
+	private int orderAmount;
 	
 	@Column(name = "order_deadline", nullable = false)
-	private Timestamp mOrderDeadline;
+	private Timestamp orderDeadline;
 	
 	@Column(name = "order_date", nullable = false)
-	private Timestamp mOrderDate;
+	private Timestamp orderDate;
 	
 	@Column(name = "order_state", length = 20, nullable = false)
-	private String mOrderState;
+	private String orderState;
 	
 	@Column(name = "order_item", length = 20, nullable = false)
-	private String mOrderItem;
+	private String orderItem;
+	
+	public MFOrder(String orderId, int orderAmount, Timestamp orderDeadline, Timestamp orderDate, String orderState, String orderItem) {
+		this.orderId = orderId;
+		this.orderAmount = orderAmount;
+		this.orderDeadline = orderDeadline;
+		this.orderDate = orderDate;
+		this.orderState = orderState;
+		this.orderItem = orderItem;
+	}
+	
+//	public static MFOrder createOrder(int orderAmount, Timestamp orderDeadline, String orderItem) {
+//		
+//		MFOrder mfOrder = MFOrder(???);
+//		
+//		return mfOrder;
+//	}
 }

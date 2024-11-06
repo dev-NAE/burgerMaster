@@ -6,7 +6,7 @@ $(document).ready(function(){
     $('#btn_search').click(function () {
         let search = $('#search').val();
         console.log(search);
-        //window.location.href="/manager/list?search=" + search;
+        window.location.href="/manager/list?search=" + search;
     })
     funcFillChangeModal();
     $("#createManager").click(function(){
