@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
   <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
-  <title>AdminLTE 3 | Dashboard</title>
+  <title>Burger Master</title>
   <!-- 기본 css 링크-->
   <th:block th:replace="~{fragments/basicLink :: basicLinkCssFragment}"></th:block>
   <!-- DataTables -->
@@ -67,10 +67,12 @@
                     <a class="btn-sm btn-primary" href="#" id="createManager">관리자 생성</a>
                   </div>
                   <div class="input-group input-group-sm" style="width: 250px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
+                    <input type="text" id="search" name="search" class="form-control float-right" placeholder="Search"
+                           th:if="${search.isEmpty() || search eq ''}">
+                    <input type="text" name="search" class="form-control float-right" placeholder="Search"
+                             th:unless="${search.isEmpty() || search ne ''}" th:value="${search}">
                     <div class="input-group-append">
-                      <button type="submit" class="btn btn-default">
+                      <button type="submit" class="btn btn-default" id="btn_search">
                         <i class="fas fa-search"></i>
                       </button>
                     </div>
@@ -83,13 +85,13 @@
                   <tr>
                     <th>관리자 ID</th>
                     <th>이름</th>
-                    <th>전화번호</th>
                     <th>이메일</th>
+                    <th>전화번호</th>
                     <th>권한</th>
                   </tr>
                   </thead>
                   <tbody id="listBody">
-                  <tr th:each="manager, status:${managers}">
+                  <tr th:each="manager, status:${managers}" th:if="${manager.managerId ne 'admin'}" th:id="${manager.managerId}">
                     <td th:text="${manager.managerId}"></td>
                     <td th:text="${manager.name}"></td>
                     <td th:text="${manager.email}"></td>
@@ -112,34 +114,21 @@
         <!-- row page controllbar-->
         <div class="row">
           <div class="col-sm-12 col-md-5">
-            <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
           </div>
           <div class="col-sm-12 col-md-7">
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
               <ul class="pagination">
-                <li class="paginate_button page-item previous disabled" id="example2_previous">
-                  <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                <li th:if="${currentPage > 1}" class="paginate_button page-item previous" id="example2_previous">
+                  <a th:href="@{/manager/list(page=${currentPage - 1})}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
                 </li>
-                <li class="paginate_button page-item active">
-                  <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+                <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
+                    class="paginate_button page-item" th:classappend="${currentPage eq page} ? 'active' ">
+                  <a th:if="${search.isEmpty() || search eq ''}" th:href="@{/manager/list(page=${page})}" th:text="${page}" aria-controls="example2"  class="page-link" ></a>
+                  <a th:unless="${ search.isEmpty() || search ne ''}" th:href="@{/manager/list(page=${page},search=${search})}" th:text="${page}" aria-controls="example2"  class="page-link"></a>
                 </li>
-                <li class="paginate_button page-item ">
-                  <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-                </li>
-                <li class="paginate_button page-item ">
-                  <a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a>
-                </li>
-                <li class="paginate_button page-item ">
-                  <a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a>
-                </li>
-                <li class="paginate_button page-item ">
-                  <a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a>
-                </li>
-                <li class="paginate_button page-item ">
-                  <a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a>
-                </li>
-                <li class="paginate_button page-item next" id="example2_next">
-                  <a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+
+                <li th:if="${currentPage  < totalPages}" class="paginate_button page-item next" id="example2_next">
+                  <a th:href="@{/manager/list(page=${currentPage + 1})}" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
                 </li>
               </ul>
             </div>
@@ -165,46 +154,53 @@
             <div class="form-floating d-flex flex-row mb-3">
               <div class="form-floating flex-fill mr-3">
                 <label for="manager_id_change_modal">관리자 ID</label>
-                <input type="text" class="form-control-plaintext" id="manager_id_change_modal" readonly>
+                <input type="text" class="form-control" id="manager_id_change_modal" readonly>
                 <span type="hidden" id="idCheckResult"></span>
               </div>
               <div class="form-floating flex-fill ">
                 <label for="manager_name_change_modal">이름</label>
-                <input type="text" class="form-control-plaintext" id="manager_name_change_modal" placeholder="Name">
+                <input type="text" class="form-control" id="manager_name_change_modal" placeholder="Name">
               </div>
+            </div>
+            <div class="form-group">
+              <label for="manager_pass_create_modal">Password</label>
+              <input type="password" class="form-control" id="manager_pass_change_modal" placeholder="Enter Password">
+            </div>
+            <div  class="callout callout-info p-2">
+              <p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-) 조합으로 이루어진 8~15자까지 가능합니다.</p>
             </div>
             <div class="form-floating d-flex flex-row mb-3">
               <div class="form-floating flex-fill mr-3">
-                <label for="manager_phone_change_modal">전화번호</label>
-                <input type="tel" class="form-control-plaintext" id="manager_phone_change_modal" placeholder="Phone Number" >
+                <label for="manager_email_change_modal">이메일</label>
+                <input type="email" class="form-control" id="manager_email_change_modal" placeholder="Email">
               </div>
               <div class="form-floating flex-fill">
-                <label for="manager_email_change_modal">이메일</label>
-                <input type="email" class="form-control-plaintext" id="manager_email_change_modal" placeholder="Email" >
+                <label for="manager_phone_change_modal">전화번호</label>
+                <input type="tel" class="form-control" id="manager_phone_change_modal" placeholder="Phone Number" >
               </div>
             </div>
             <div class="form-floating flex-row">
               <label >권한 설정</label>
               <div class="row">
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_MASTERDATA">
-                  <label class="form-check-label">기준정보 관리</label>
+                  <input class="form-check-input" type="checkbox" id="masterData" name="changeRole" value="ROLE_MASTERDATA">
+                  <label class="form-check-label" for="masterData">기준정보 관리</label>
                 </div>
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_TRANSCTION">
-                  <label class="form-check-label">거래 관리</label>
+                  <input class="form-check-input" type="checkbox" id="transaction" name="changeRole" value="ROLE_TRANSACTION">
+                  <label class="form-check-label" for="transaction">거래 관리</label>
                 </div>
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_INVENTORY">
-                  <label class="form-check-label">자재/제품 관리</label>
+                  <input class="form-check-input" type="checkbox" id="inventory" name="changeRole" value="ROLE_INVENTORY">
+                  <label class="form-check-label" for="inventory">자재/제품 관리</label>
                 </div>
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_MANUFACTURE">
-                  <label class="form-check-label">생산 작업 관리</label>
+                  <input class="form-check-input" type="checkbox" id="manufacture" name="changeRole" value="ROLE_MANUFACTURE">
+                  <label class="form-check-label" for="manufacture">생산 작업 관리</label>
                 </div>
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="changeRole" value="ROLE_QUALITY">
-                  <label class="form-check-label">품질 관리</label>
+                  <input class="form-check-input" type="checkbox" id="quality" name="changeRole" value="ROLE_QUALITY">
+                  <label class="form-check-label" for="quality">품질 관리</label>
                 </div>
               </div>
             </div>
@@ -245,7 +241,7 @@
               <p>아이디는 영문, 숫자만 5~19자리까지 가능합니다.</p>
             </div>
             <div class="form-group">
-              <label for="manager_name_create_modal">Password</label>
+              <label for="manager_pass_create_modal">Password</label>
               <input type="password" class="form-control" id="manager_pass_create_modal" placeholder="Enter Password">
             </div>
             <div  class="callout callout-info p-2">
@@ -256,35 +252,35 @@
               <input type="text" class="form-control" id="manager_name_create_modal" placeholder="Enter Name">
             </div>
             <div class="form-group flex-fill">
-              <label for="manager_phone_create_modal">전화번호</label>
-              <input type="tel" class="form-control" id="manager_phone_create_modal" placeholder="Enter Phone Number">
-            </div>
-            <div class="form-group flex-fill">
               <label for="manager_email_create_modal">이메일</label>
               <input type="email" class="form-control" id="manager_email_create_modal" placeholder="Enter Email" >
+            </div>
+            <div class="form-group flex-fill">
+              <label for="manager_phone_create_modal">전화번호</label>
+              <input type="tel" class="form-control" id="manager_phone_create_modal" placeholder="Enter Phone Number">
             </div>
             <div class="form-floating flex-row">
               <label >권한 설정</label>
               <div class="row">
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_MASTERDATA">
-                  <label class="form-check-label">기준정보 관리</label>
+                  <input class="form-check-input" type="checkbox" id="masterData2" name="managerRole" value="ROLE_MASTERDATA">
+                  <label class="form-check-label" for="masterData2">기준정보 관리</label>
                 </div>
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_TRANSCTION">
-                  <label class="form-check-label">거래 관리</label>
+                  <input class="form-check-input" type="checkbox" id="transaction2" name="managerRole" value="ROLE_TRANSACTION">
+                  <label class="form-check-label" for="transaction2">거래 관리</label>
                 </div>
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_INVENTORY">
-                  <label class="form-check-label">자재/제품 관리</label>
+                  <input class="form-check-input" type="checkbox" id="inventory2" name="managerRole" value="ROLE_INVENTORY">
+                  <label class="form-check-label" for="inventory2">자재/제품 관리</label>
                 </div>
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_MANUFACTURE">
-                  <label class="form-check-label">생산 작업 관리</label>
+                  <input class="form-check-input" type="checkbox" id="manufacture2" name="managerRole" value="ROLE_MANUFACTURE">
+                  <label class="form-check-label" for="manufacture2">생산 작업 관리</label>
                 </div>
                 <div class="form-check col">
-                  <input class="form-check-input" type="checkbox" name="managerRole" value="ROLE_QUALITY">
-                  <label class="form-check-label">품질 관리</label>
+                  <input class="form-check-input" type="checkbox" id="quality2" name="managerRole" value="ROLE_QUALITY">
+                  <label class="form-check-label" for="quality2">품질 관리</label>
                 </div>
               </div>
             </div>
@@ -316,7 +312,6 @@
 <!-- 기본 js 링크 -->
 <th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
 
-</script>
 <!-- ChartJS -->
 <script src="/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->

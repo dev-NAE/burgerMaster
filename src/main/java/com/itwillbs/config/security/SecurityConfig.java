@@ -2,7 +2,9 @@ package com.itwillbs.config.security;
 
 import com.itwillbs.config.security.handler.*;
 import com.itwillbs.config.security.provider.CustomAuthenticationProvider;
+import com.itwillbs.entity.Manager;
 import com.itwillbs.service.ManagerService;
+import com.itwillbs.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,14 +12,24 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final ManagerService managerService;
+    private final SecurityService securityService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -33,8 +45,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         String[] urlsToBePermittedAll = {
                 "/",
-                "/main/**",
-                "/managers/**",
                 "/login/**",
                 "/error/**",
                 "/css/**",
@@ -43,11 +53,38 @@ public class SecurityConfig {
                 "/img/**",
                 "/plugins/**"
         };
+        String[] masterDataUrls = {
+                "/masterdata/**"
+        };
+        String[] TxUrls = {
+                "/tx/**"
+        };
+        String[] mfcUrls = {
+                "/mf/**"
+        };
+        String[] qualityUrls ={
+                "/quality/**",
+                "/defective/**"
+        };
+
         // url 접근 제한
         http.authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(urlsToBePermittedAll).permitAll()
                 .requestMatchers("/manager/**").hasRole("ADMIN")
+                .requestMatchers(masterDataUrls).hasAnyRole("MASTERDATA", "ADMIN")
+                .requestMatchers(TxUrls).hasAnyRole("TRANSACTION", "ADMIN")
+                .requestMatchers("/inven/**").hasAnyRole("INVENTORY", "ADMIN")
+                .requestMatchers(mfcUrls).hasAnyRole("MANUFACTURE", "ADMIN")
+                .requestMatchers(qualityUrls).hasAnyRole("QUALITY", "ADMIN")
                 .anyRequest().authenticated()
+        );
+        // session 정책
+        http.sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+        );
+        // 자동 로그인
+        http.rememberMe(rememberMe -> rememberMe
+                .rememberMeServices(rememberMeServices(userDetailsService(securityService)))
         );
         // 로그인 처리
 		http.formLogin(formLogin -> formLogin
@@ -57,6 +94,7 @@ public class SecurityConfig {
                 .successHandler(customLoginSuccessHandler)
                 .failureHandler(customLoginFailHandler)
         );
+
         // 로그아웃 처리
         http.logout((logout) -> logout
                 .logoutUrl("/logout")
@@ -72,7 +110,7 @@ public class SecurityConfig {
     }
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(bCryptPasswordEncoder, managerService);
+        return new CustomAuthenticationProvider(bCryptPasswordEncoder, securityService);
     }
 
     @Bean
@@ -80,6 +118,29 @@ public class SecurityConfig {
         CustomAuthenticationProvider authProvider = customAuthenticationProvider();
         return new ProviderManager(authProvider);
     }
+    @Bean
+    public UserDetailsService userDetailsService(SecurityService securityService){
+        return username -> {
+            Manager manager = securityService.getManagerByManagerId(username);
+            // 권한 리스트
+            String[] managerRoles = manager.getManagerRole().split(",");
+            ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+            for(String role : managerRoles){
+                grantedAuthorities.add(new SimpleGrantedAuthority(role));
+            }
+            return new User(manager.getManagerId(), manager.getPass(), grantedAuthorities);
+        };
+    }
+    @Bean
+    RememberMeServices rememberMeServices(UserDetailsService userDetailsService){
+        TokenBasedRememberMeServices rememberMe = new TokenBasedRememberMeServices(
+                "testKey",
+                userDetailsService,
+                TokenBasedRememberMeServices.RememberMeTokenAlgorithm.SHA256);
+        rememberMe.setParameter("remember-me");
+        rememberMe.setAlwaysRemember(true);
+        rememberMe.setTokenValiditySeconds(24*60*60);
 
-
+        return rememberMe;
+    }
 }

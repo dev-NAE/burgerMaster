@@ -59,22 +59,22 @@
 					<a th:if="${session.id}" class="nav-link">관리자 관리</a>
 				</li>
 				<!-- 알람 표시 -->
-				           <div class="nav-item dropdown">
-				               <a class="nav-link" data-toggle="dropdown" href="#">
-				                   <i class="far fa-bell"></i>
-				                   <span class="badge badge-warning navbar-badge" id="notification-badge" th:text="${notificationCount}">0</span>
-				               </a>
-				               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown">
-				                   <span class="dropdown-item dropdown-header" th:text="'알람이 ' + ${notificationCount} + '개 있습니다'">알람이 0개 있습니다</span>
-				                   <div class="dropdown-divider"></div>
-				                   <th:block th:each="notification : ${notifications}">
-				                       <a href="#" class="dropdown-item" th:text="${notification}">알림 내용</a>
-				                       <div class="dropdown-divider"></div>
-				                   </th:block>
-				                   <a href="#" class="dropdown-item dropdown-footer">알람 모두 보기</a>
-				               </div>
-				           </div>
-				       </div>
+<!--				           <div class="nav-item dropdown">-->
+<!--				               <a class="nav-link" data-toggle="dropdown" href="#">-->
+<!--				                   <i class="far fa-bell"></i>-->
+<!--				                   <span class="badge badge-warning navbar-badge" id="notification-badge" th:text="${notificationCount}">0</span>-->
+<!--				               </a>-->
+<!--				               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown">-->
+<!--				                   <span class="dropdown-item dropdown-header" th:text="'알람이 ' + ${notificationCount} + '개 있습니다'">알람이 0개 있습니다</span>-->
+<!--				                   <div class="dropdown-divider"></div>-->
+<!--				                   <th:block th:each="notification : ${notifications}">-->
+<!--				                       <a href="#" class="dropdown-item" th:text="${notification}">알림 내용</a>-->
+<!--				                       <div class="dropdown-divider"></div>-->
+<!--				                   </th:block>-->
+<!--				                   <a href="#" class="dropdown-item dropdown-footer">알람 모두 보기</a>-->
+<!--				               </div>-->
+<!--				           </div>-->
+<!--				       </div>-->
 <!-- 알람 표시 -->
 <!--           <div class="nav-item dropdown">-->
 <!--               <a class="nav-link" data-toggle="dropdown" href="#">-->
@@ -132,38 +132,8 @@
 	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 	<script src="dist/js/pages/dashboard.js"></script>
 	
-	<script>
-		function fetchNotifications() {
-		           $.ajax({
-		               url: '/notifications', // 알람 데이터를 가져오는 서버 URL
-		               method: 'GET',
-		               success: function(data) {
-		                   // 알람 데이터 처리
-		                   updateNotificationCount(data.count);
-		                   data.notifications.forEach(notification => {
-		                       $('#notification-dropdown').prepend(`<a href="#" class="dropdown-item">${notification}</a><div class="dropdown-divider"></div>`);
-		                   });
-		               },
-		               error: function(error) {
-		                   console.error("Error fetching notifications:", error);
-		               }
-		           });
-		       }
 
-		       function updateNotificationCount(count) {
-		           $('#notification-badge').text(count);
-		           $('#notification-dropdown .dropdown-header').text(`알람이 ${count}개 있습니다`);
-		       }
 
-		       // 페이지 로드 시 알람 수를 업데이트합니다.
-		       $(document).ready(function() {
-		           fetchNotifications();
-		       });
-
-		       // 주기적으로 알람을 업데이트
-		       setInterval(fetchNotifications, 60000); // 1분마다 호출
-		
-	</script>
 
 	
 

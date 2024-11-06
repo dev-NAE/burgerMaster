@@ -70,33 +70,13 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
+					<tr th:each="List, status:${orderList}">
+						<td th:text="${List.orderId}"></td>
+						<td th:text="${List.orderItem}"></td>
+						<td th:text="${List.orderAmount}"></td>
+						<td th:text="${List.orderDeadline}"></td>
+						<td th:text="${List.orderDate}"></td>
+						<td th:text="${List.orderState}"></td>
 						<td><button type="button" class="btn btn-warning">전달</button></td>
 						<td><button type="button" class="btn btn-primary">완료</button></td>
 					</tr>
@@ -106,6 +86,7 @@
 			<nav aria-label="Page navigation" style="width:100%;">
 			  <div>
 				
+<!--				페이지네이션-->
 			  <div style="display: inline-block;">
 			  <ul class="pagination">
 			    <li class="page-item"><a class="page-link" href="#">◀</a></li>
@@ -116,8 +97,10 @@
 			  </ul>
 			  </div>
 			  
+<!--			  검색 도구-->
 			  <div class="searching" style="float: right;">
 			  
+<!--				키워드 분류-->
 			  <div style="display: inline-block;">
 			    <select class="form-control">
 					<option th:text="식별번호"></option>
@@ -126,6 +109,7 @@
 				</select>
 			  </div>
 			  
+<!--			  작업 상태 분류-->
 			  <div style="display: inline-block;">
 			    <select class="form-control">
 			  	  <option th:text="작업완료"></option>

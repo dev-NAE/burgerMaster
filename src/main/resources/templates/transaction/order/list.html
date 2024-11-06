@@ -6,8 +6,14 @@
     <title>발주 등록</title>
 
     <!-- CSS -->
+    <link rel="stylesheet" href="/css/font.css">
     <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+    <!-- DataTable CSS -->
+    <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
     <!-- 스크립트 -->
     <script src="/plugins/jquery/jquery.min.js"></script>
@@ -17,6 +23,8 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
+    <!-- 공통 프리로더 -->
+    <div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
 
     <!-- 공통 헤더 불러오기 -->
     <div th:replace="~{fragments/header :: headerFragment}"></div>
@@ -25,7 +33,8 @@
     <div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
 
 
-    <div class="wrapper">
+
+<div class="wrapper">
 
         <!--   Preloader -->
         <div class="preloader flex-column justify-content-center align-items-center">
@@ -62,7 +71,7 @@
                     <!-- Contents -->
                         <div class="container-fluid col-sm-10 my-3 mx-auto">
                             <div class="card search-container mx-auto col-10">
-                                <div class="card-header bg-gray-lighter">
+                                <div class="card-header bg-gray-lighter mt-3">
                                     <h4>조건 검색</h4>
                                 </div>
                                 <div class="card-body col-11 mx-auto">
@@ -71,9 +80,9 @@
                                         <div class="col-sm-4">
                                             <select class="form-control" id="status" name="status">
                                                 <option value="">전체</option>
-                                                <option value="">발주등록(저장)</option>
-                                                <option value="">발주완료</option>
-                                                <option value="">발주취소</option>
+                                                <option value="발주등록(저장)">발주등록(저장)</option>
+                                                <option value="발주완료">발주완료</option>
+                                                <option value="발주취소">발주취소</option>
                                             </select>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="supplier-name">거래처</label>
@@ -85,7 +94,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <labal class="col-sm-2 col-form-label text-center">등록일</labal>
+                                        <label class="col-sm-2 col-form-label text-center">등록일</label>
                                         <div class="col-sm-4 d-flex">
                                             <input class="form-control" type="date" id="order_date-start" name="order_date_start"> ~
                                             <input class="form-control" type="date" id="order_date-end" name="order_date_end">
@@ -99,17 +108,34 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <labal class="col-sm-2 col-form-label text-center">납기일</labal>
+                                        <label class="col-sm-2 col-form-label text-center">납기일</label>
                                         <div class="col-sm-4 d-flex">
                                             <input class="form-control" type="date" id="due_date-start" name="due_date_start"> ~
                                             <input class="form-control" type="date" id="due_date-end" name="due_date_end">
                                         </div>
-                                        <button class="btn btn-md btn-primary ml-auto">조회</button>
+                                        <button id="search-btn" class="btn btn-md btn-primary ml-auto">조회</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="input-items-area card-body">
-                               리스트 들어갈 자리
+                            <div class="list-area card py-3 px-4">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <button class="btn btn-md btn-success ml-auto mr-2 mb-3" id="download-to-excel">.xlsx로 저장</button>
+                                    </div>
+                                    <table id="order-list" class="table table-bordered table-hover">
+                                        <thead>
+                                        <tr class="bg-gray-light">
+                                            <th>발주등록번호</th>
+                                            <th>거래처</th>
+                                            <th>거래품목</th>
+                                            <th class="text-center">합계금액(원)</th>
+                                            <th>등록일</th>
+                                            <th>납기일</th>
+                                            <th>처리상태</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
                         </div>
 
@@ -134,8 +160,23 @@
     <!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
     <div th:replace="~{fragments/footer :: footerFragment}"></div>
 
+    <!-- dataTable js -->
+    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/plugins/jszip/jszip.min.js"></script>
+    <script src="/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
     <!-- custom js -->
     <script src="/js/transaction/order/list.js"></script>
+
 
 </body>
 
