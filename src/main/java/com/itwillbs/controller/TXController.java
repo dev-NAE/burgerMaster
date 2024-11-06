@@ -7,15 +7,14 @@ import com.itwillbs.domain.transaction.OrderRequestDTO;
 import com.itwillbs.entity.*;
 import com.itwillbs.service.TXService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class TXController {
     }
 
     @GetMapping("/insertOrder")
-    public String insertOrder(Model model, HttpSession session) {
+    public String insertOrder(Model model) {
         model.addAttribute("today", LocalDate.now());
 
         // 접속자 id, name 가져와서 model에 담기
@@ -57,8 +56,13 @@ public class TXController {
         log.info("orderDTO: " + orderDTO);
         List<OrderItemsDTO> orderItems = orderRequestDTO.getItems();
         log.info("orderItems: " + orderItems);
-        txService.saveOrder(orderDTO, orderItems);
-        return "success";
+        // 담당자, 거래처 정보 DB 매치 확인
+        if (txService.checkValidation(orderDTO)) {
+            txService.saveOrder(orderDTO, orderItems);
+            return "success";
+        } else {
+            return "mismatch";
+        }
     }
 
     @GetMapping("/findManager")
@@ -75,19 +79,24 @@ public class TXController {
         return "transaction/order/findSupplier";
     }
 
-    @GetMapping("/addItems")
-    public String addItems(Model model) {
+    @GetMapping("/addOrderItems")
+    public String addOrderItems(Model model) {
         List<Item> items = txService.getOrderItems();
         model.addAttribute("items", items);
         return "transaction/order/addItems";
     }
 
     @GetMapping("/orderList")
-    public String orderList(Model model) {
+    public String getOrderList() {
+        return "transaction/order/list";
+    }
+
+    @ResponseBody
+    @GetMapping("/orderInfo")
+    public ResponseEntity<List<OrderDTO>> getOrderInfo() {
         List<OrderDTO> orders = txService.getOrderList();
         log.info("orders: " + orders);
-        model.addAttribute("orders", orders);
-        return "transaction/order/list";
+        return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/orderDetail")
@@ -98,5 +107,45 @@ public class TXController {
         model.addAttribute("items", items);
         return "transaction/order/detail";
     }
+
+    @ResponseBody
+    @GetMapping("/searchOrders")
+    public ResponseEntity<List<OrderDTO>> searchOrders(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String supplierName,
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
+            @RequestParam(required = false) String itemName,
+            @RequestParam(required = false) String dueDateStart,
+            @RequestParam(required = false) String dueDateEnd
+    ) {
+        log.info("TXController searchOrders()");
+        List<OrderDTO> orders = txService.searchOrders(status, supplierName, orderDateStart, orderDateEnd, itemName, dueDateStart, dueDateEnd);
+        log.info(orders.toString());
+        return ResponseEntity.ok(orders);
+    }
+
+    @ResponseBody
+    @PostMapping("/cancelOrder")
+    public String cancelOrder(@RequestParam String orderId) {
+        log.info("TXController cancelOrder()");
+        txService.updateOrderStatus(orderId, "발주취소");
+        return "success";
+    }
+
+    @ResponseBody
+    @PostMapping("/completeOrder")
+    public String completeOrder(@RequestParam String orderId) {
+        log.info("TXController completeOrder()");
+        txService.updateOrderStatus(orderId, "발주완료");
+        return "success";
+    }
+
+    @GetMapping("/orderForm")
+    public String orderForm() {
+        return "transaction/order/orderform";
+    }
+
+
 
 }
