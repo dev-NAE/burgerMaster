@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
 
+    <!-- DataTable CSS -->
+    <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
     <!-- 스크립트 -->
     <script src="/plugins/jquery/jquery.min.js"></script>
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -75,9 +80,9 @@
                                         <div class="col-sm-4">
                                             <select class="form-control" id="status" name="status">
                                                 <option value="">전체</option>
-                                                <option value="">발주등록(저장)</option>
-                                                <option value="">발주완료</option>
-                                                <option value="">발주취소</option>
+                                                <option value="발주등록(저장)">발주등록(저장)</option>
+                                                <option value="발주완료">발주완료</option>
+                                                <option value="발주취소">발주취소</option>
                                             </select>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="supplier-name">거래처</label>
@@ -89,7 +94,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <labal class="col-sm-2 col-form-label text-center">등록일</labal>
+                                        <label class="col-sm-2 col-form-label text-center">등록일</label>
                                         <div class="col-sm-4 d-flex">
                                             <input class="form-control" type="date" id="order_date-start" name="order_date_start"> ~
                                             <input class="form-control" type="date" id="order_date-end" name="order_date_end">
@@ -103,70 +108,34 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <labal class="col-sm-2 col-form-label text-center">납기일</labal>
+                                        <label class="col-sm-2 col-form-label text-center">납기일</label>
                                         <div class="col-sm-4 d-flex">
                                             <input class="form-control" type="date" id="due_date-start" name="due_date_start"> ~
                                             <input class="form-control" type="date" id="due_date-end" name="due_date_end">
                                         </div>
-                                        <button class="btn btn-md btn-primary ml-auto">조회</button>
+                                        <button id="search-btn" class="btn btn-md btn-primary ml-auto">조회</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="list-area card py-3 px-4">
                                 <div class="card-body">
                                     <div class="row">
-                                        <button class="btn btn-md btn-success ml-auto mr-2 mb-3" id="add-items">.xls로 저장</button>
+                                        <button class="btn btn-md btn-success ml-auto mr-2 mb-3" id="download-to-excel">.xlsx로 저장</button>
                                     </div>
-                                    <table id="example2" class="table table-bordered table-hover">
+                                    <table id="order-list" class="table table-bordered table-hover">
                                         <thead>
-                                        <tr class="text-center bg-gray-light">
+                                        <tr class="bg-gray-light">
                                             <th>발주등록번호</th>
                                             <th>거래처</th>
                                             <th>거래품목</th>
-                                            <th>합계금액(원)</th>
+                                            <th class="text-center">합계금액(원)</th>
                                             <th>등록일</th>
                                             <th>납기일</th>
                                             <th>처리상태</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <tr th:each="order : ${orders}" class="text-center" th:onclick="|location.href='@{/tx/orderDetail(orderId=${order.orderId})}'|" style="cursor:pointer;">
-                                            <td th:text="${order.orderId}" aria-sort="descending"></td>
-                                            <td th:text="${order.supplierName}"></td>
-                                            <td th:text="${order.itemName + (order.itemCount > 1 ? (' 외 ' + (order.itemCount - 1) + '건') : '')}"></td>
-                                            <td th:text="${#numbers.formatInteger(order.totalPrice, 0, 'COMMA')}" class="text-right"></td>
-                                            <td th:text="${#dates.format(order.orderDate, 'yyyy-MM-dd')}"></td>
-                                            <td th:text="${#dates.format(order.dueDate, 'yyyy-MM-dd')}"></td>
-                                            <td th:text="${order.status}"></td>
-                                        </tr>
-                                        </tbody>
                                     </table>
                                 </div>
-                                <!-- 페이지네이션 -->
-                                <div class="row mt-3">
-                                    <div class="col-sm-12 col-md-5 d-flex justify-content-start pl-4">
-                                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">총 <span th:text="${orders.size()}"></span>개 항목</div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-7 d-flex justify-content-end pr-2">
-                                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
-                                            <ul class="pagination mr-4">
-                                                <li class="paginate_button page-item previous disabled" id="example2_previous">
-                                                    <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                                                </li>
-                                                <li class="paginate_button page-item active">
-                                                    <a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a>
-                                                </li>
-                                                <li class="paginate_button page-item ">
-                                                    <a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-                                                </li>
-                                                <li class="paginate_button page-item previous disabled" id="example2_next">
-                                                    <a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Next</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /페이지네이션 -->
                             </div>
                         </div>
 
@@ -204,7 +173,6 @@
     <script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-
 
     <!-- custom js -->
     <script src="/js/transaction/order/list.js"></script>

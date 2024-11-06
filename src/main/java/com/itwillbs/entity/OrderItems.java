@@ -9,7 +9,6 @@ import lombok.ToString;
 @Table(name = "order_items")
 @Getter
 @Setter
-@ToString
 public class OrderItems {
 
     @Id
@@ -29,10 +28,9 @@ public class OrderItems {
     @Column(name = "subtotal_price")
     private int subtotalPrice;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "item_code")
-    @Column(name = "item_code")
-    private String itemCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_code")
+    private Item item;
 
 
 }
