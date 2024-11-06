@@ -101,7 +101,7 @@ $(function () {
         "ordering": true,
         "info": false,
         "autoWidth": false,
-        "responsive": true,
+        "responsive": false,
         "order": [[0, "desc"]],
         "language": {
             decimal: "",

@@ -187,5 +187,9 @@ public class TXService {
                 .collect(Collectors.toList());
     }
 
+    public void updateOrderStatus(String orderId, String status) {
+        log.info("TXService: updateOrderStatus");
+        orderRepository.updateOrderStatusById(status, orderId);
+    }
 
 }

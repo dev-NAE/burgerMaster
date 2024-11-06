@@ -125,4 +125,27 @@ public class TXController {
         return ResponseEntity.ok(orders);
     }
 
+    @ResponseBody
+    @PostMapping("/cancelOrder")
+    public String cancelOrder(@RequestParam String orderId) {
+        log.info("TXController cancelOrder()");
+        txService.updateOrderStatus(orderId, "발주취소");
+        return "success";
+    }
+
+    @ResponseBody
+    @PostMapping("/completeOrder")
+    public String completeOrder(@RequestParam String orderId) {
+        log.info("TXController completeOrder()");
+        txService.updateOrderStatus(orderId, "발주완료");
+        return "success";
+    }
+
+    @GetMapping("/orderForm")
+    public String orderForm() {
+        return "transaction/order/orderform";
+    }
+
+
+
 }
