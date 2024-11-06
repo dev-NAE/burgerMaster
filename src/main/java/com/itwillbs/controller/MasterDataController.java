@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.itwillbs.domain.masterdata.FranchiseSearchDTO;
 import com.itwillbs.domain.masterdata.ItemSearchDTO;
 import com.itwillbs.domain.masterdata.SupplierSearchDTO;
+import com.itwillbs.entity.Franchise;
 import com.itwillbs.entity.Item;
 import com.itwillbs.entity.Supplier;
 import com.itwillbs.service.BOMService;
@@ -83,7 +85,15 @@ public class MasterDataController {
 	public Page<Supplier> getSuppliers(SupplierSearchDTO searchDTO,
 			@RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size) {
-		return supplierService.searchItems(searchDTO, PageRequest.of(page, size));
+		return supplierService.searchSuppliers(searchDTO, PageRequest.of(page, size));
+	}
+
+	@GetMapping("/api/franchises")
+	@ResponseBody
+	public Page<Franchise> getFranchises(FranchiseSearchDTO searchDTO,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size) {
+		return franchiseService.searchFranchises(searchDTO, PageRequest.of(page, size));
 	}
 
 	// 상세 조회 loadItemDetail(itemCode) 200 404
@@ -103,6 +113,14 @@ public class MasterDataController {
 						String.format("거래처코드 %s를 찾을 수 없습니다.", supplierCode)));
 	}
 
+	@GetMapping("/api/franchises/{franchiseCode}")
+	@ResponseBody
+	public ResponseEntity<Franchise> getFranchise(@PathVariable(name = "franchiseCode") String franchiseCode) {
+		return franchiseService.findFranchiseByCode(franchiseCode).map(ResponseEntity::ok)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						String.format("가맹점코드 %s를 찾을 수 없습니다.", franchiseCode)));
+	}
+
 	// 저장 saveItem() 201
 	@PostMapping("/api/items")
 	@ResponseBody
@@ -114,6 +132,12 @@ public class MasterDataController {
 	@ResponseBody
 	public ResponseEntity<Supplier> saveSupplier(@RequestBody @Validated Supplier supplier) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(supplierService.saveSupplier(supplier));
+	}
+
+	@PostMapping("/api/franchises")
+	@ResponseBody
+	public ResponseEntity<Franchise> saveFranchise(@RequestBody @Validated Franchise franchise) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(franchiseService.saveFranchise(franchise));
 	}
 
 	// 수정 saveItem() 200
@@ -138,6 +162,17 @@ public class MasterDataController {
 		return ResponseEntity.ok(supplierService.updateSupplier(supplier));
 	}
 
+	@PutMapping("/api/franchises/{franchiseCode}")
+	@ResponseBody
+	public ResponseEntity<Franchise> updateFranchise(@PathVariable(name = "franchiseCode") String franchiseCode,
+			@RequestBody @Validated Franchise franchise) {
+		if (!franchiseCode.equals(franchise.getFranchiseCode())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+					"경로의 franchiseCode와 요청 본문의 franchiseCode가 일치하지 않습니다.");
+		}
+		return ResponseEntity.ok(franchiseService.updateFranchise(franchise));
+	}
+
 	// 삭제 deleteItem() 204
 	@DeleteMapping("/api/items/{itemCode}")
 	@ResponseBody
@@ -150,6 +185,13 @@ public class MasterDataController {
 	@ResponseBody
 	public ResponseEntity<Void> deleteSupplier(@PathVariable(name = "supplierCode") String supplierCode) {
 		supplierService.deleteSupplier(supplierCode);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/api/franchises/{franchiseCode}")
+	@ResponseBody
+	public ResponseEntity<Void> deleteFranchise(@PathVariable(name = "franchiseCode") String franchiseCode) {
+		franchiseService.deleteFranchise(franchiseCode);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -166,6 +208,12 @@ public class MasterDataController {
 		return supplierService.generateNextCode();
 	}
 
+	@GetMapping("/api/franchises/nextCode")
+	@ResponseBody
+	public String getNextFranchiseCode() {
+		return franchiseService.generateNextCode();
+	}
+
 //
 //	@GetMapping("/boms/{id}")
 //	public String bomDetail(@PathVariable Long id) {
@@ -175,18 +223,5 @@ public class MasterDataController {
 //	@GetMapping("/boms/select")
 //	public String selectBOM() {
 //		return "masterdata/bom-select";
-//	}
-//
-//
-//	@GetMapping("/suppliers/{id}")
-//	public String supplierDetail(@PathVariable Long id) {
-//		return "masterdata/supplier-detail";
-//	}
-//
-
-//
-//	@GetMapping("/franchises/{id}")
-//	public String franchiseDetail(@PathVariable Long id) {
-//		return "masterdata/franchise-detail";
 //	}
 }
