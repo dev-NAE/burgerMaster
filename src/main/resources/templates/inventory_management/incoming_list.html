@@ -6,9 +6,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>입고 조회</title>
 	<!-- 기본 css 링크-->
-<th:block th:replace="~{fragments/basicLink :: basicLinkCssFragment}"></th:block>
+	<th:block th:replace="~{fragments/basicLink :: basicLinkCssFragment}"></th:block>
 	<!-- Google Font: Source Sans Pro -->
-	  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 	<!-- JQVMap -->
 	<link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css" />
 	<link rel="stylesheet" href="/css/font.css" />
@@ -16,12 +17,12 @@
 
 <body class="hold-transition sidebar-mini layout-fixed">
 	<!-- 공통 로딩 불러오기 -->
-	<div th:replace="fragments/Preloader :: PreloaderFragment"></div>
-<!-- 공통 헤더 불러오기 -->
-<div th:replace="~{fragments/header :: headerFragment}"></div>
+	<div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
+	<!-- 공통 헤더 불러오기 -->
+	<div th:replace="~{fragments/header :: headerFragment}"></div>
 
-<!-- 공통 사이드바 불러오기 -->
-<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
+	<!-- 공통 사이드바 불러오기 -->
+	<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
 
 	<div class="wrapper">
 		<!--   Preloader -->
@@ -99,7 +100,7 @@
 														<div class="input-group-prepend">
 															<span class="input-group-text">
 																<i class="far fa-calendar-alt"></i>
-																
+
 															</span>
 														</div>
 														<input type="text" class="form-control float-right"
@@ -308,9 +309,9 @@
 	<!-- ./wrapper -->
 
 	<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
-<div th:replace="~{fragments/footer :: footerFragment}"></div>
+	<div th:replace="~{fragments/footer :: footerFragment}"></div>
 	<!-- 기본 js 링크 -->
-<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
+	<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
 
 	<!-- ChartJS -->
 	<script src="plugins/chart.js/Chart.min.js"></script>

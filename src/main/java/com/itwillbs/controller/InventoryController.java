@@ -107,7 +107,7 @@ public class InventoryController {
 		
 		//입고된 리스트 전체 조회
 		Page<IncomingDTO> incomingByPage = inventoryService.getIncomingLists(pageable);
-		log.info("Incoming DTOs: {}", incomingByPage.getContent());
+//		log.info("Incoming DTOs: {}", incomingByPage.getContent());
 		
 		//만약 생산번호가 있으면 
 		
