@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>BugerMaster</title>
+
+	<!-- Google Font: Source Sans Pro -->
+	<!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+	<link rel="stylesheet" href="/css/font.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+	<!-- Ionicons -->
+	<!-- icon 을 사용할 수 있는 링크-->
+	<!-- https://ionic.io/ionicons 아이콘 검색 링크-->
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- Tempusdominus Bootstrap 4  달력 관련 css-->
+	<link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+	<!-- iCheck -->
+	<link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+	<!-- JQVMap -->
+	<link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="/dist/css/adminlte.min.css">
+	<!-- overlayScrollbars -->
+	<link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+	<!-- Daterange picker -->
+	<link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
+	<!-- summernote -->
+	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+
+
+	<!-- 공통 헤더 불러오기 -->
+	<div th:replace="fragments/header :: headerFragment"></div>
+
+	<!-- 공통 사이드바 불러오기 -->
+	<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+
+	<!-- 공통 로딩 불러오기 -->
+	<div th:replace="fragments/Preloader :: PreloaderFragment"></div>
+
+
+	<div class="wrapper">
+
+
+
+
+
+
+
+
+
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">Home : Dashboard</h1>
+
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+
+							<ol class="breadcrumb float-sm-right">
+
+								<li class="breadcrumb-item"><a href="/main">Home</a></li> / Dashboard
+								<!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
+
+							</ol>
+
+						</div><!-- /.col -->
+
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+
+				</div>
+
+				<!-- Main row -->
+				<div class="row">
+
+					<!--          <section class="col-lg-5 connectedSortable">-->
+
+
+					<!--			Bar Chart-->
+					<div class="card card-success" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">원재료 입고량 . 총 재고</h3>
+							<div class="card-tools">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class="">
+
+										</div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="myChart"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+									width="375" height="250" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+
+					</div>
+					<!--			/Bar Chart-->
+
+					<!--			Bar Chart-->
+					<div class="card card-success" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">완재품 입고량 . 총 재고</h3>
+							<div class="card-tools">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class="">
+
+										</div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="myChart2"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+									width="375" height="250" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+
+					</div>
+					<!--			/Bar Chart-->
+
+
+					<!--			Bar Chart-->
+					<div class="card card-success" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">가공품 총재고</h3>
+							<div class="card-tools">
+								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
+								<!--			<i class="fas fa-minus"></i>-->
+								<!--			</button>-->
+								<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
+								<!--			<i class="fas fa-times"></i>-->
+								<!--			</button>-->
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class=""></div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="myChart3"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+									width="375" height="250" class="chartjs-render-monitor">
+							</div>
+						</div>
+
+					</div>
+					<!--			/Bar Chart-->
+
+
+
+					<div class="card card-danger" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">반품률</h3>
+							<div class="card-tools">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chartjs-size-monitor">
+								<div class="chartjs-size-monitor-expand">
+									<div class=""></div>
+								</div>
+								<div class="chartjs-size-monitor-shrink">
+									<div class=""></div>
+								</div>
+							</div>
+							<canvas id="pieChart1"
+								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+								width="375" height="250" class="chartjs-render-monitor"></canvas>
+						</div>
+
+					</div>
+
+
+
+
+
+
+
+
+					<div class="card card-danger" style="margin: 5px ;">
+						<div class="card-header">
+							<h3 class="card-title">폐기율</h3>
+							<div class="card-tools">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chartjs-size-monitor">
+								<div class="chartjs-size-monitor-expand">
+									<div class=""></div>
+								</div>
+								<div class="chartjs-size-monitor-shrink">
+									<div class=""></div>
+								</div>
+							</div>
+							<canvas id="pieChart2"
+								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
+								width="375" height="250" class="chartjs-render-monitor"></canvas>
+						</div>
+
+					</div>
+
+
+					<div class="card card-primary" style="margin: 5px;">
+						<div class="card-header">
+							<h3 class="card-title">월간 수주 현황</h3>
+							<div class="card-tools">
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="chart">
+								<div class="chartjs-size-monitor">
+									<div class="chartjs-size-monitor-expand">
+										<div class=""></div>
+									</div>
+									<div class="chartjs-size-monitor-shrink">
+										<div class=""></div>
+									</div>
+								</div>
+								<canvas id="areaChart"
+									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 636px;"
+									width="636" height="250" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+
+
+
+				<!--          </section>-->
+				<!-- right col -->
+		</div>
+		<!-- /.row (main row) -->
+	</div><!-- /.container-fluid -->
+	</section>
+	<!-- /.content -->
+	</div>
+	<!-- /.content-wrapper -->
+
+
+
+	<!-- Control Sidebar -->
+	<aside class="control-sidebar control-sidebar-dark">
+		<!-- Control sidebar content goes here -->
+	</aside>
+	<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+
+
+
+	<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+	<div th:replace="fragments/footer :: footerFragment"></div>
+
+	<!-- jQuery -->
+	<script src="plugins/jquery/jquery.min.js"></script>
+	<!-- jQuery UI 1.11.4 -->
+	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+
+	<script>
+		$.widget.bridge('uibutton', $.ui.button)
+	</script>
+	<!-- Bootstrap 4 -->
+	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- ChartJS -->
+	<script src="plugins/chart.js/Chart.min.js"></script>
+	<!-- Sparkline -->
+	<script src="plugins/sparklines/sparkline.js"></script>
+	<!-- JQVMap -->
+	<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+	<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+	<!-- jQuery Knob Chart -->
+	<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+	<!-- daterangepicker -->
+	<script src="plugins/moment/moment.min.js"></script>
+	<script src="plugins/daterangepicker/daterangepicker.js"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+	<!-- Summernote -->
+	<script src="plugins/summernote/summernote-bs4.min.js"></script>
+	<!-- overlayScrollbars -->
+	<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="dist/js/adminlte.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="dist/js/demo.js"></script>
+	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+	<script src="dist/js/pages/dashboard.js"></script>
+
+
+	<script th:inline="javascript">
+
+		// 원재료 입고
+		const rmItemList = /*[[${rmItemList}]]*/[
+		];
+
+		const rmInventoryList = /*[[${rmInventoryList}]]*/[
+		];
+		//alert(JSON.stringify(rmInventoryList));
+		//alert(JSON.stringify(rmItemList));
+
+		const rmInventory = rmInventoryList.map(item => item.quantity);  // 항목 이름
+		const minReqQuantitiesrm = rmInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
+
+
+
+		const labels = rmInventoryList.map(item => item.itemName);  // 항목 이름
+		//const invenlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
+		const data = {
+			labels: labels,
+			datasets: [
+				{
+					label: '원재료 입고량',
+					data: rmItemList.map(item => item.quantity),  // 입고량 필드로 사용 (수정필요)
+					backgroundColor: 'lightblue',
+					borderColor: 'lightblue',
+					borderWidth: 1
+
+				},
+				{
+					label: '총 재고',
+					data: rmInventory,  // 총 재고 필드로 사용
+					backgroundColor: 'lightgreen',
+					borderColor: 'lightgreen',
+					borderWidth: 1
+				}
+			]
+		};
+
+
+
+		const config = {
+			type: 'bar',
+			data: data,
+			options: {
+
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		};
+
+		// Chart.js를 사용하여 차트 생성
+		const ctx = document.getElementById('myChart').getContext('2d');
+		new Chart(ctx, config);
+
+
+
+
+
+
+		//완재품
+		const fpItemList = /*[[${fpItemList}]]*/[
+		];
+		const fpInventoryList = /*[[${fpInventoryList}]]*/[
+		];
+
+
+		const fpInventory = fpInventoryList.map(item => item.quantity);
+		const minReqQuantitiesfp = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
+
+		//alert("fpItemList"+JSON.stringify(fpItemList));
+
+		const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
+		const data2 = {
+			labels: labels2,
+			datasets: [
+				{
+					label: '완재품 입고량',
+					data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					backgroundColor: 'lightblue',
+					borderColor: 'lightblue',
+					borderWidth: 1
+				},
+				{
+					label: '총 재고',
+					data: fpInventory,  // 재량 필드로 사용 (예시)
+					backgroundColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
+					borderColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
+					borderWidth: 1
+				}
+			]
+		};
+
+		const config2 = {
+			type: 'bar',
+			data: data2,
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				},
+			}
+		};
+
+		// Chart.js를 사용하여 차트 생성
+		const ctx2 = document.getElementById('myChart2').getContext('2d');
+		new Chart(ctx2, config2);
+
+		//가공품
+		const ppInventoryList = /*[[${ppInventoryList}]]*/[
+		];
+
+
+		//alert("ppItemList:"+JSON.stringify(ppItemList));
+
+		const labels3 = ppInventoryList.map(item => item.itemName);  // 항목 이름
+		const data3 = {
+			labels: labels3,
+			datasets: [
+				{
+
+
+					label: '총 재고',
+					data: ppInventoryList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					backgroundColor: ppInventoryList.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
+					borderColor: ppInventoryList.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
+					borderWidth: 1
+				}
+			]
+		};
+
+		const config3 = {
+			type: 'bar',
+			data: data3,
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		};
+
+		// Chart.js를 사용하여 차트 생성
+		const ctx3 = document.getElementById('myChart3').getContext('2d');
+		new Chart(ctx3, config3);
+
+
+		// 반품 데이터
+		const dfItemList = /*[[${dfItemList}]]*/[];
+
+		// 데이터 확인을 위한 alert
+		//alert("dfItemList:" + JSON.stringify(dfItemList));
+
+		// 차트 컨텍스트 가져오기
+		var pieChartCanvas = $('#pieChart1').get(0).getContext('2d');
+
+		// 차트 옵션
+		var pieOptions = {
+			maintainAspectRatio: false,
+			responsive: true,
+		};
+
+		// 색상 자동 생성 함수
+		function generateRandomColors(count) {
+			const colors = [];
+			for (let i = 0; i < count; i++) {
+
+				// RGB 랜덤 색상 생성
+				const color = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(80 + Math.random() * 255)}, ${50 + Math.floor(Math.random() * 255)})`;
+				colors.push(color);
+			}
+			return colors;
+		}
+
+		// 라벨 및 데이터 설정
+		const labels4 = dfItemList.map(item => item.itemName);  // 항목 이름
+		const data4 = {
+			labels: labels4,
+			datasets: [
+				{
+					label: '총 재고',
+					data: dfItemList.map(item => item.quantity),  // 수량 필드 사용
+					backgroundColor: generateRandomColors(dfItemList.length),  // 각 항목의 색상 배열
+					//borderColor: generateRandomColors(dfItemList.length),
+					borderWidth: 0
+				}
+			]
+		};
+
+		// 차트 생성
+		new Chart(pieChartCanvas, {
+			type: 'pie',
+			data: data4,
+			options: pieOptions
+		});
+
+		//
+		// 폐기 데이터
+		const discardItemList = /*[[${discardItemList}]]*/[];
+
+		// 데이터 확인을 위한 alert
+		//alert("dfItemList:" + JSON.stringify(dfItemList));
+
+		// 차트 컨텍스트 가져오기
+		var pieChartCanvas2 = $('#pieChart2').get(0).getContext('2d');
+
+		// 차트 옵션
+		var pieOptions2 = {
+			maintainAspectRatio: false,
+			responsive: true,
+		};
+
+		// 색상 자동 생성 함수
+		function generateRandomColors2(count) {
+			const colors = [];
+			for (let i = 0; i < count; i++) {
+
+				// RGB 랜덤 색상 생성
+				const color = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(80 + Math.random() * 255)}, ${50 + Math.floor(Math.random() * 255)})`;
+				colors.push(color);
+			}
+			return colors;
+		}
+
+		// 라벨 및 데이터 설정
+		const labels5 = discardItemList.map(item => item.itemName);  // 항목 이름
+		const data5 = {
+			labels: labels5,
+			datasets: [
+				{
+					label: '총 재고',
+					data: discardItemList.map(item => item.quantity),  // 수량 필드 사용
+					backgroundColor: generateRandomColors2(discardItemList.length),  // 각 항목의 색상 배열
+					//borderColor: generateRandomColors(dfItemList.length),
+					borderWidth: 0
+				}
+			]
+		};
+
+		// 차트 생성
+		new Chart(pieChartCanvas2, {
+			type: 'pie',
+			data: data5,
+			options: pieOptions2
+		});
+
+
+		// 수주 데이터
+		const saleItemList = /*[[${saleItemList}]]*/[];
+
+		// 월별 총 수주 금액 초기화 (1월부터 12월까지)
+		const monthlyData = Array(12).fill(0); // 1월~12월
+
+		// 월별 총 수주 금액 계산
+		saleItemList.forEach(item => {
+			const month = new Date(item.dueDate).getMonth(); // 0: January, 11: December
+			monthlyData[month] += item.totalPrice; // 월별로 총 수주 금액을 더함
+		});
+
+		// 차트 데이터 설정
+		var areaChartCanvas = $('#areaChart').get(0).getContext('2d');
+		var areaChartData = {
+			labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+			datasets: [
+				{
+					label: '월별 총 수주 금액',
+					backgroundColor: 'steelblue',
+					borderColor: 'steelblue',
+					pointRadius: 3,
+					pointColor: '#3b8bba',
+					pointStrokeColor: 'rgba(60,141,188,1)',
+					pointHighlightFill: '#fff',
+					pointHighlightStroke: 'rgba(60,141,188,1)',
+					data: monthlyData // 월별 총 수주 금액 데이터 사용
+				},
+			]
+		};
+
+		// 차트 옵션 설정
+		var areaChartOptions = {
+			maintainAspectRatio: false,
+			responsive: true,
+			legend: {
+				display: true
+			},
+			scales: {
+				xAxes: [{
+					gridLines: {
+						display: false,
+					}
+				}],
+				yAxes: [{
+					gridLines: {
+						display: true,
+					}
+				}]
+			}
+		};
+
+		// 차트 생성
+		new Chart(areaChartCanvas, {
+			type: 'line',
+			data: areaChartData,
+			options: areaChartOptions
+		});
+
+
+
+	</script>
+
+
+
+
+
+</body>
+
+</html>

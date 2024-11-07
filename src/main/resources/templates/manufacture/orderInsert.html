@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>작업 지시 작성</title>
+  <!-- 기본 css 링크-->
+  <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
+  <!-- Google Font: Source Sans Pro -->
+  <!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="css/font.css">
+  
+<!--  커스텀 css-->
+  <link rel="stylesheet" href="/css/manufacture/insert.css">
+  
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+
+
+<!-- 공통 헤더 불러오기 -->
+<div th:replace="fragments/header :: headerFragment"></div>
+
+<!-- 공통 사이드바 불러오기 -->
+<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+
+
+<div class="wrapper">
+
+  <!--   Preloader -->
+  <!-- 처음 로딩 시 나오는 요소-->
+  <div th:replace="fragments/Preloader :: PreloaderFragment"></div>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">작업 지시 작성</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">작업 지시 작성</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+
+        <!-- Main row -->
+        <div class="row flex-div">
+			
+<!--			작업 지시 등록 폼-->
+		  <form>
+			<div class="card card-default auto-margin">
+				
+			  <div class="card-header">
+			  	  <h3 class="">새 작업 지시 등록</h3>
+			  </div>
+<!--			cardheader-->
+
+			  <div class="card-body">
+				<div class="row">
+					<div class="form-group">
+						<label>생산할 물품</label>
+						<select class="form-control select2 select2-hidden-accessible" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+		                    <option selected="selected" data-select2-id="3">===선택===</option>
+		                    <option data-select2-id="35">Alaska</option>
+		                    <option data-select2-id="36">California</option>
+		                    <option data-select2-id="37">Delaware</option>
+		                    <option data-select2-id="38">Tennessee</option>
+		                    <option data-select2-id="39">Texas</option>
+		                    <option data-select2-id="40">Washington</option>
+						</select>
+						<span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="2" style="width: 100%;">
+							<span class="selection">
+<!--								<span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-fmt3-container">-->
+<!--									<span class="select2-selection__rendered" id="select2-fmt3-container" role="textbox" aria-readonly="true" title="Alabama">-->
+<!--										Alabama-->
+<!--									</span>-->
+<!--									<span class="select2-selection__arrow" role="presentation">-->
+<!--										<b role="presentation"></b>-->
+<!--									</span>-->
+<!--								</span>-->
+							</span>
+							<span class="dropdown-wrapper" aria-hidden="true">
+								
+							</span>
+						</span>
+					</div>
+<!--					form-group-->
+					
+				  <div class="form-group">
+                    <label for="amount">수량</label>
+                    <input type="number" class="form-control" id="amount" placeholder="수량을 입력하십시오">
+                  </div>
+<!--				  form-group-->
+
+				  <div class="form-group">
+					<label for="deadline">데드라인</label>
+					<input class="form-control" type="date" id="deadline">
+				  </div>
+<!--				  form-group-->
+
+				</div>
+<!--				row-->
+				
+				<div class="row">
+					<div class="col">
+					  <button type="submit" class="btn btn-primary">등록</button>
+					  <button type="reset" class="btn btn-danger">취소</button>
+					</div>
+				</div>
+
+			  </div>
+<!--			  cardbody-->
+
+			</div>
+<!--			card-->
+
+		  </form>
+			
+<!--			생산에 필요한 재료 목록과 현황-->
+            <table class="table table-secondary table-striped">
+				<thead>
+					<tr>
+						<th>식별번호</th>
+						<th>가공품명</th>
+						<th>재료</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>00000000</td>
+						<td>00000000</td>
+						<td>00000000</td>
+					</tr>
+					<tr>
+						<td>00000000</td>
+						<td>00000000</td>
+						<td>00000000</td>
+					</tr>
+					<tr>
+						<td>00000000</td>
+						<td>00000000</td>
+						<td>00000000</td>
+					</tr>
+				</tbody>
+			</table>
+
+        </div>
+        <!-- /.row (main row) -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+
+  <!-- Control Sidebar -->
+  <!--  <aside class="control-sidebar control-sidebar-dark">-->
+  <!-- Control sidebar content goes here -->
+  <!--  </aside>-->
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+<div th:replace="fragments/footer :: footerFragment"></div>
+<!-- 기본 js 링크 -->
+<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
+
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<!-- jQuery 차트 라이브러리-->
+<!-- 사용법 참고 용 사이트 : https://idenrai.tistory.com/55-->
+<script src="plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="plugins/moment/moment.min.js"></script>
+<script src="plugins/daterangepicker/daterangepicker.js"></script>
+</body>
+</html>

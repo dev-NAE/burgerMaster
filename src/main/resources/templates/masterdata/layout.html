@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+	<title>BurgerMaster | MasterDataManagement</title>
+
+	<th:block th:replace="~{/fragments/basicLink :: basicLinkCssFragment}"></th:block>
+	<link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+	<link rel="stylesheet" href="/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+	<link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+	<div th:replace="~{fragments/header :: headerFragment}"></div>
+	<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
+
+	<div class="wrapper">
+		<div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
+
+		<div class="content-wrapper">
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">기준정보관리 - </h1>
+						</div>
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="/main">Home</a></li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<section class="content">
+				<div class="container-fluid">
+					<div class="row">
+						<section class="col-lg-12 connectedSortable">
+
+							<div class="card">
+								<div class="card-header">
+									<form id="searchForm" class="mb-0">
+										<div class="form-row align-items-center">
+
+											<div class="col-md-item">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">
+															<i class="fas fa-search"></i>
+														</span>
+													</div>
+													<input type="text" class="form-control" name="?Name"
+														placeholder="?">
+												</div>
+											</div>
+
+											<div class="col-md-?">
+												<div class="input-group">
+													<div class="input-group-prepend">
+														<span class="input-group-text">
+															<i class="fas fa-tags"></i>
+														</span>
+													</div>
+													<select class="form-control" name="?Type">
+														<option value="">모두</option>
+														<option value="?">?</option>
+														<option value="?">?</option>
+													</select>
+												</div>
+											</div>
+
+											<div class="col-auto">
+												<div class="icheck-primary d-inline">
+													<input type="checkbox" id="includeUnused" name="includeUnused">
+													<label for="includeUnused">미사용 포함</label>
+												</div>
+											</div>
+											<div class="col-auto">
+												<button type="submit" class="btn btn-primary">
+													<i class="fas fa-search"></i> 검색
+												</button>
+												<button type="button" class="btn btn-success"
+													onclick="openModal('register')">
+													<i class="fas fa-plus"></i> 등록
+												</button>
+											</div>
+
+										</div>
+									</form>
+								</div>
+								<div class="card-body">
+									<table id="?Table" class="table table-bordered table-striped">
+										<thead>
+											<tr>
+												<th>?</th>
+												<th>?</th>
+												<th>?</th>
+												<th class="text-center">?</th>
+											</tr>
+										</thead>
+										<tbody id="?List">
+
+										</tbody>
+									</table>
+								</div>
+								<div class="card-footer">
+									<nav aria-label="Page navigation">
+										<ul class="pagination justify-content-center mb-0" id="pagination">
+
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div th:replace="~{fragments/footer :: footerFragment}"></div>
+	</div>
+	<th:block th:replace="~{/fragments/basicLink :: basicLinkJsFragment}"></th:block>
+	<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/plugins/select2/js/select2.full.min.js"></script>
+	<script src="/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+	<script src="/js/masterdata/?.js"></script>
+</body>
+
+</html>

@@ -14,5 +14,14 @@ public class TestController {
 		return "exampleFile";
 	}
 	
+
+
+	@GetMapping("/sample")
+	public String sample() {
+		return "sample";
+	}
+	
+	
+	
 	
 }
