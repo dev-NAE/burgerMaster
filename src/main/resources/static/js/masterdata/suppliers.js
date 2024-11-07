@@ -236,11 +236,26 @@ function saveSupplier() {
 		error: function(xhr) {
 			switch (xhr.status) {
 				case 409:
-					Swal.fire({
-						icon: 'error',
-						title: '저장 실패 (409 Conflict)',
-						text: '이미 존재하는 거래처코드입니다.'
-					});
+					const errorMessage = xhr.responseJSON?.message;
+					if (errorMessage.includes('사업자번호')) {
+						Swal.fire({
+							icon: 'error',
+							title: '저장 실패 (409 Conflict)',
+							text: '이미 등록된 사업자번호입니다.'
+						});
+					} else if (errorMessage.includes('거래처코드')) {
+						Swal.fire({
+							icon: 'error',
+							title: '저장 실패 (409 Conflict)',
+							text: '이미 존재하는 거래처코드입니다.'
+						});
+					} else {
+						Swal.fire({
+							icon: 'error',
+							title: '저장 실패 (409 Conflict)',
+							text: errorMessage || '중복된 데이터가 존재합니다.'
+						});
+					}
 					break;
 				case 400:
 					if (xhr.responseJSON.errors) {
@@ -337,7 +352,7 @@ function validateField(field) {
 	switch (id) {
 		case 'supplierCode':
 			if (!value) {
-				showError(field, '거래처코드를 생성하세요.');
+				showError(field, '거래처코드를 검색하세요.');
 				return false;
 			}
 			if (!/^SUP\d{3}$/.test(value)) {
@@ -425,3 +440,22 @@ function clearError(field) {
 	field.removeClass('is-invalid');
 	$(`#validate${field.attr('id')}`).text('');
 }
+
+// - 자동추가
+$('input[name="businessNumber"]').on('input', function() {
+	let value = this.value.replace(/[^0-9]/g, '');
+	if (value.length > 10) {
+		value = value.substr(0, 10);
+	}
+
+	let formattedValue = '';
+	if (value.length > 5) {
+		formattedValue = value.substr(0, 3) + '-' + value.substr(3, 2) + '-' + value.substr(5);
+	} else if (value.length > 3) {
+		formattedValue = value.substr(0, 3) + '-' + value.substr(3);
+	} else {
+		formattedValue = value;
+	}
+
+	this.value = formattedValue;
+});

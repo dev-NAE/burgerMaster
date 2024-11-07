@@ -9,7 +9,7 @@ public class FranchiseSearchDTO {
 	private String franchiseName;
 	private String ownerName;
 	private String businessNumber;
-	private LocalDate contractStartDate;
-	private LocalDate contractEndDate;
+	private LocalDate contractDateFrom;
+	private LocalDate contractDateTo;
 	private Boolean includeUnused = false;
 }

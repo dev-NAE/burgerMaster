@@ -24,7 +24,7 @@ public class FranchiseService {
 
 	public Page<Franchise> searchFranchises(FranchiseSearchDTO searchDTO, Pageable pageable) {
 		return franchiseRepository.findBySearchConditions(searchDTO.getFranchiseName(), searchDTO.getOwnerName(),
-				searchDTO.getBusinessNumber(), searchDTO.getContractStartDate(), searchDTO.getContractEndDate(),
+				searchDTO.getBusinessNumber(), searchDTO.getContractDateFrom(), searchDTO.getContractDateTo(),
 				searchDTO.getIncludeUnused(), pageable);
 	}
 
@@ -70,9 +70,9 @@ public class FranchiseService {
 	public String generateNextCode() {
 		String maxCode = franchiseRepository.findMaxFranchiseCode();
 		if (maxCode == null) {
-			return "FRC001";
+			return "FR001";
 		}
-		int nextNumber = Integer.parseInt(maxCode.substring(3)) + 1;
-		return String.format("FRC%03d", nextNumber);
+		int nextNumber = Integer.parseInt(maxCode.substring(2)) + 1;
+		return String.format("FR%03d", nextNumber);
 	}
 }

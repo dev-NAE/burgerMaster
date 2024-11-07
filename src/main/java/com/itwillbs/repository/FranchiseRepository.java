@@ -19,21 +19,21 @@ public interface FranchiseRepository extends JpaRepository<Franchise, String> {
     String findMaxFranchiseCode();
     
     @Query("SELECT f FROM Franchise f " +
-           "WHERE (:franchiseName IS NULL OR f.franchiseName LIKE %:franchiseName%) " +
-           "AND (:ownerName IS NULL OR f.ownerName LIKE %:ownerName%) " +
-           "AND (:businessNumber IS NULL OR f.businessNumber LIKE %:businessNumber%) " +
-           "AND (:contractStartDate IS NULL OR f.contractStartDate >= :contractStartDate) " +
-           "AND (:contractEndDate IS NULL OR f.contractEndDate <= :contractEndDate) " +
-           "AND ((:includeUnused = true) OR f.useYN = 'Y')")
-    Page<Franchise> findBySearchConditions(
-        @Param("franchiseName") String franchiseName,
-        @Param("ownerName") String ownerName,
-        @Param("businessNumber") String businessNumber,
-        @Param("contractStartDate") LocalDate contractStartDate,
-        @Param("contractEndDate") LocalDate contractEndDate,
-        @Param("includeUnused") Boolean includeUnused,
-        Pageable pageable
-	);
+	       "WHERE (:franchiseName IS NULL OR f.franchiseName LIKE %:franchiseName%) " +
+	       "AND (:ownerName IS NULL OR f.ownerName LIKE %:ownerName%) " +
+	       "AND (:businessNumber IS NULL OR f.businessNumber LIKE %:businessNumber%) " +
+	       "AND (:contractDateFrom IS NULL OR f.contractStartDate >= :contractDateFrom) " +
+	       "AND (:contractDateTo IS NULL OR f.contractStartDate <= :contractDateTo) " +
+	       "AND ((:includeUnused = true) OR f.useYN = 'Y')")
+    	Page<Franchise> findBySearchConditions(
+    	    @Param("franchiseName") String franchiseName,
+    	    @Param("ownerName") String ownerName,
+    	    @Param("businessNumber") String businessNumber,
+    	    @Param("contractDateFrom") LocalDate contractDateFrom,
+    	    @Param("contractDateTo") LocalDate contractDateTo,
+    	    @Param("includeUnused") Boolean includeUnused,
+    	    Pageable pageable
+    	);
 
 	boolean existsByBusinessNumber(String businessNumber);
 }

@@ -28,7 +28,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0">기준정보관리 - 가맹점</h1>
+							<h1 class="m-0">기준정보관리 - BOM(자재 명세서)</h1>
 						</div>
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
@@ -46,53 +46,27 @@
 							<div class="card">
 								<div class="card-header">
 									<form id="searchForm" class="mb-0">
-
 										<div class="form-row align-items-center">
-											<div class="col-md-2">
+											<div class="col-md-3">
 												<div class="input-group">
 													<div class="input-group-prepend">
 														<span class="input-group-text">
-															<i class="fas fa-building"></i>
+															<i class="fas fa-cube"></i>
 														</span>
 													</div>
-													<input type="text" class="form-control" name="franchiseName"
-														placeholder="가맹점명">
+													<input type="text" class="form-control" name="ppName"
+														placeholder="가공품명">
 												</div>
 											</div>
-											<div class="col-md-2">
+											<div class="col-md-3">
 												<div class="input-group">
 													<div class="input-group-prepend">
 														<span class="input-group-text">
-															<i class="fas fa-user"></i>
+															<i class="fas fa-cube"></i>
 														</span>
 													</div>
-													<input type="text" class="form-control" name="ownerName"
-														placeholder="점주명">
-												</div>
-											</div>
-											<div class="col-md-2">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text">
-															<i class="fas fa-id-card"></i>
-														</span>
-													</div>
-													<input type="text" class="form-control" name="businessNumber"
-														placeholder="사업자번호">
-												</div>
-											</div>
-											<div class="col-md-4">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text">
-															<i class="fas fa-calendar"></i>
-														</span>
-													</div>
-													<input type="date" class="form-control" name="contractDateFrom">
-													<div class="input-group-prepend input-group-append">
-														<span class="input-group-text">~</span>
-													</div>
-													<input type="date" class="form-control" name="contractDateTo">
+													<input type="text" class="form-control" name="rmName"
+														placeholder="원재료명">
 												</div>
 											</div>
 											<div class="col-auto">
@@ -114,21 +88,18 @@
 									</form>
 								</div>
 								<div class="card-body">
-									<table id="franchiseTable" class="table table-bordered table-striped">
+									<table id="bomTable" class="table table-bordered table-striped">
 										<thead>
 											<tr>
-												<th>가맹점코드</th>
-												<th>가맹점명</th>
-												<th>점주명</th>
-												<th>사업자번호</th>
-												<th>이메일</th>
-												<th>주소</th>
-												<th>계약시작일</th>
-												<th>계약종료일</th>
+												<th>가공품코드</th>
+												<th>가공품명</th>
+												<th>원재료코드</th>
+												<th>원재료명</th>
+												<th>수량</th>
 												<th class="text-center">사용여부</th>
 											</tr>
 										</thead>
-										<tbody id="franchiseList">
+										<tbody id="bomList">
 										</tbody>
 									</table>
 								</div>
@@ -145,11 +116,11 @@
 			</section>
 		</div>
 
-		<div class="modal fade" id="franchiseModal">
+		<div class="modal fade" id="bomModal">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header bg-primary">
-						<h5 class="modal-title text-white" id="modalTitle">가맹점</h5>
+						<h5 class="modal-title text-white" id="modalTitle">BOM</h5>
 						<button type="button" class="close text-white" data-dismiss="modal">
 							<span aria-hidden="true">&times;</span>
 						</button>
@@ -157,120 +128,58 @@
 					<div class="modal-body">
 						<div id="viewSection">
 						</div>
-						<form id="franchiseForm">
+						<form id="bomForm">
+							<input type="hidden" id="bomId" name="bomId">
 
 							<div class="form-group">
-								<label for="franchiseCode">가맹점코드</label>
+								<label for="ppCode">가공품</label>
 								<div class="input-group">
 									<div class="input-group-prepend">
 										<span class="input-group-text">
-											<i class="fas fa-barcode"></i>
+											<i class="fas fa-cube"></i>
 										</span>
 									</div>
-									<input type="text" class="form-control" id="franchiseCode" name="franchiseCode"
-										readonly>
-									<div class="invalid-feedback" id="validatefranchiseCode"></div>
-								</div>
-								<div class="input-group-append" id="searchCodeBtnGroup">
-									<button class="btn btn-outline-primary" type="button" id="searchCodeBtn">
-										<i class="fas fa-search"></i> 검색
-									</button>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="franchiseName">가맹점명</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-building"></i>
-										</span>
+									<input type="text" class="form-control" id="ppCode" name="ppCode" readonly required>
+									<div class="input-group-append">
+										<button class="btn btn-outline-primary" type="button"
+											onclick="openItemSearch('PP')">
+											<i class="fas fa-search"></i>
+										</button>
 									</div>
-									<input type="text" class="form-control" id="franchiseName" name="franchiseName"
-										required>
-									<div class="invalid-feedback" id="validatefranchiseName"></div>
+									<div class="invalid-feedback" id="validateppCode"></div>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label for="ownerName">점주명</label>
+								<label for="rmCode">원재료</label>
 								<div class="input-group">
 									<div class="input-group-prepend">
 										<span class="input-group-text">
-											<i class="fas fa-user"></i>
+											<i class="fas fa-cube"></i>
 										</span>
 									</div>
-									<input type="text" class="form-control" id="ownerName" name="ownerName" required>
-									<div class="invalid-feedback" id="validateownerName"></div>
+									<input type="text" class="form-control" id="rmCode" name="rmCode" readonly required>
+									<div class="input-group-append">
+										<button class="btn btn-outline-primary" type="button"
+											onclick="openItemSearch('RM')">
+											<i class="fas fa-search"></i>
+										</button>
+									</div>
+									<div class="invalid-feedback" id="validatermCode"></div>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label for="businessNumber">사업자번호</label>
+								<label for="quantity">수량</label>
 								<div class="input-group">
 									<div class="input-group-prepend">
 										<span class="input-group-text">
-											<i class="fas fa-id-card"></i>
+											<i class="fas fa-balance-scale"></i>
 										</span>
 									</div>
-									<input type="text" class="form-control" id="businessNumber" name="businessNumber"
-										pattern="\d{3}-\d{2}-\d{5}" placeholder="000-00-00000" required>
-									<div class="invalid-feedback" id="validatebusinessNumber"></div>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="email">이메일</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-envelope"></i>
-										</span>
-									</div>
-									<input type="email" class="form-control" id="email" name="email"
-										placeholder="example@email.com">
-									<div class="invalid-feedback" id="validateemail"></div>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="address">주소</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-map-marker-alt"></i>
-										</span>
-									</div>
-									<input type="text" class="form-control" id="address" name="address">
-									<div class="invalid-feedback" id="validateaddress"></div>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="contractStartDate">계약시작일</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-calendar"></i>
-										</span>
-									</div>
-									<input type="date" class="form-control" id="contractStartDate"
-										name="contractStartDate" required>
-									<div class="invalid-feedback" id="validatecontractStartDate"></div>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="contractEndDate">계약종료일</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-calendar"></i>
-										</span>
-									</div>
-									<input type="date" class="form-control" id="contractEndDate" name="contractEndDate"
-										required>
-									<div class="invalid-feedback" id="validatecontractEndDate"></div>
+									<input type="number" class="form-control" id="quantity" name="quantity" step="0.001"
+										min="0.001" required>
+									<div class="invalid-feedback" id="validatequantity"></div>
 								</div>
 							</div>
 
@@ -308,16 +217,45 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="modal fade" id="itemSearchModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-primary">
+						<h5 class="modal-title text-white" id="itemSearchModalTitle">품목 검색</h5>
+						<button type="button" class="close text-white" data-dismiss="modal">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="text" class="form-control" id="itemSearchKeyword" placeholder="품목명 검색">
+						</div>
+						<table class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>품목코드</th>
+									<th>품목명</th>
+								</tr>
+							</thead>
+							<tbody id="itemSearchList">
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div th:replace="~{fragments/footer :: footerFragment}"></div>
 	</div>
-
 
 	<th:block th:replace="~{/fragments/basicLink :: basicLinkJsFragment}"></th:block>
 	<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="/plugins/select2/js/select2.full.min.js"></script>
 	<script src="/plugins/sweetalert2/sweetalert2.all.min.js"></script>
-	<script src="/js/masterdata/franchises.js"></script>
+	<script src="/js/masterdata/boms.js"></script>
 </body>
 
 </html>

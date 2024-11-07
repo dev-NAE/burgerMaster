@@ -1,5 +1,6 @@
 package com.itwillbs.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.itwillbs.domain.masterdata.ItemDTO;
 import com.itwillbs.domain.masterdata.ItemSearchDTO;
 import com.itwillbs.entity.Item;
 import com.itwillbs.repository.ItemRepository;
@@ -68,6 +70,10 @@ public class ItemService {
 		}
 		int nextNumber = Integer.parseInt(maxCode.substring(2)) + 1;
 		return String.format("%s%03d", itemType, nextNumber);
+	}
+    
+    public List<ItemDTO> searchItemsForModal(String itemType, String itemName, String useYN) {
+		return itemRepository.findItemsForModal(itemType, itemName, useYN);
 	}
 	
 }

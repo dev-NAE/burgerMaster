@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.itwillbs.domain.masterdata.ItemDTO;
 import com.itwillbs.entity.Item;
 
 @Repository
@@ -33,4 +34,18 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 	@Query("SELECT i FROM Item i " + 
 				"WHERE i.itemType = 'PP'")
 	List<Item> findByItemType();
+
+    @Query("SELECT new com.itwillbs.domain.masterdata.ItemDTO(" +
+           "i.itemCode, i.itemName, i.itemType, i.useYN) " +
+           "FROM Item i " +
+           "WHERE i.itemType = :itemType " +
+           "AND (:itemName IS NULL OR i.itemName LIKE %:itemName%) " +
+           "AND i.useYN = :useYN " +
+           "ORDER BY i.itemCode")
+    List<ItemDTO> findItemsForModal(
+        @Param("itemType") String itemType,
+        @Param("itemName") String itemName,
+        @Param("useYN") String useYN
+    );
+	
 }
