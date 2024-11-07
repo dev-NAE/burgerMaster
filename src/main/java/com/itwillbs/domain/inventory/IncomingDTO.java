@@ -1,6 +1,7 @@
 package com.itwillbs.domain.inventory;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,8 +23,11 @@ public class IncomingDTO {
 	private String productionId;
 	private String qualityOrderId;
 	
+	private String incomingItemDisplay; //보여줄 품목 1개
+	private Integer otherCount; //품목 외 갯수 ex)패티 외 2건
+	private Integer totalAmount; //총 품목 수량
+	
 	//입고 조회하는 생성자
-
 	public IncomingDTO(String incomingId, Timestamp incomingStartDate, Timestamp incomingEndDate, String managerId,
 			String managerName, String status, String productionId, String qualityOrderId) {
 		super();

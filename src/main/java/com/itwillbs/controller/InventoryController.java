@@ -39,7 +39,7 @@ public class InventoryController {
 
 //    재고 조회
 	@GetMapping("/inventoryList")
-	public String inventoryList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+	public String inventoryList(Model model, @PageableDefault(size = 8) Pageable pageable) {
 		log.info("InventoryController inventoryList()");
 
 		// 페이징 처리하여 재고 중 10개의 데이터만 저장
@@ -65,7 +65,7 @@ public class InventoryController {
 			@RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
 			@RequestParam(name = "itemType", defaultValue = "") String itemType,
 			@RequestParam(name = "findOutOfStock", defaultValue = "N") String findOutOfStock,
-			@PageableDefault(size = 10) Pageable pageable) {
+			@PageableDefault(size = 8) Pageable pageable) {
 
 		log.info("InventoryController inventoryListSearch()");
 
@@ -101,7 +101,7 @@ public class InventoryController {
 
 	// 입고 조회
 	@GetMapping("/incomingList")
-	public String incomingList(Model model, @PageableDefault(size = 3) Pageable pageable) {
+	public String incomingList(Model model, @PageableDefault(size = 8) Pageable pageable) {
 		log.info("InventroyController incomingList()");
 
 		
