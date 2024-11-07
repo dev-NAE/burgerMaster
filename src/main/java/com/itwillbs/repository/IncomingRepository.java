@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.itwillbs.domain.inventory.InventoryItemDTO;
+import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.entity.Incoming;
 
 
@@ -18,9 +18,10 @@ public interface IncomingRepository extends JpaRepository<Incoming, String>{
     /**
      * 입고 전체 조회
      */
-//    @Query("SELECT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, m.managerId, m.name, ic.status, ic.qualityOrderId) " +
-//    		"FROM Incoming ic LEFT JOIN fetch Manager")
-//	Page<InventoryItemDTO> getAllIncomingLists(Pageable pageable);
+    @Query("SELECT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, ic.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) " +
+    		"FROM Incoming ic LEFT JOIN fetch Manager m ON ic.managerId = m.managerId " +
+    		"ORDER BY ic.incomingId DESC")
+	Page<IncomingDTO> getAllIncomingLists(Pageable pageable);
 	
 	
 }
