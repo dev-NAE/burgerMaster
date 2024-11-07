@@ -17,7 +17,7 @@ import lombok.ToString;
  * 입고 품목 테이블
  */
 @Entity
-@Table(name = "incoming")
+@Table(name = "incoming_items")
 @Getter
 @Setter
 @ToString
