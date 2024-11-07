@@ -42,11 +42,6 @@ public class QualityOrder {
 	@Column(name = "manager" , length = 20 ,nullable = false)
 	private String manager;
 	
-	@Column(name = "quantity" , nullable = false)
-	private int quantity;
-	
-	@Column(name = "item_code" , nullable = false)
-	private int item_code;
-	
+
 
 }

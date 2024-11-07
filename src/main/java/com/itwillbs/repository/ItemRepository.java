@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.itwillbs.domain.manufacture.MFRmDTO;
 import com.itwillbs.entity.Item;
 
 @Repository
@@ -33,4 +34,10 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 	@Query("SELECT i FROM Item i " + 
 				"WHERE i.itemType = 'PP'")
 	List<Item> findByItemType();
+
+	@Query("SELECT new com.itwillbs.domain.manufacture.MFRmDTO(i.itemName, b.quantity) " 
+				+ "FROM BOM b JOIN Item i ON b.rmCode = i.itemCode " 
+				+ "WHERE b.ppCode = :itemCode")
+	List<MFRmDTO> findRmList(@Param("itemCode") String itemCode);
+	
 }

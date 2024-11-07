@@ -65,10 +65,10 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="List, status:${ppList}">
+					<tr th:each="List, status:${bomList}">
 						<td th:text="${List.itemCode}"></td>
 						<td th:text="${List.itemName}"></td>
-						<td></td>
+						<td th:text="${List.rmList}"></td>
 					</tr>
 				</tbody>
 			</table>
