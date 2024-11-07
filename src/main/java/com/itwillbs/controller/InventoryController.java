@@ -14,14 +14,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.service.InventoryService;
 
+
+/**
+ * 입고, 출고, 재고 관리하는 컨트롤러 
+ */
 @Controller
 @RequestMapping("/inven")
-@Log
+@Slf4j
 @RequiredArgsConstructor
 public class InventoryController {
 
@@ -40,34 +47,14 @@ public class InventoryController {
 
 		// 모델에 조회된 재고 데이터를 저장
 		model.addAttribute("inventoryItemDTOs", inventoryItemByPage.getContent());
-		model.addAttribute("pageSize", pageable.getPageSize());
 
 		// 검색 조건의 기본값 설정
 		model.addAttribute("itemCodeOrName", "");
 		model.addAttribute("itemType", "");
 		model.addAttribute("findOutOfStock", "N");
 
-	    // 페이지네이션 범위 계산
-	    int currentPage = inventoryItemByPage.getNumber() + 1; // 현재 페이지 (1부터 시작)
-	    int totalPages = inventoryItemByPage.getTotalPages(); // 총 페이지 수
-
-	    int startPage, endPage;
-
-	    if (currentPage == 1) {
-	        startPage = currentPage;
-	        endPage = Math.min(totalPages, currentPage + 1);
-	    } else if (currentPage == totalPages) {
-	        startPage = Math.max(1, currentPage - 1);
-	        endPage = currentPage;
-	    } else {
-	        startPage = currentPage - 1;
-	        endPage = currentPage + 1;
-	    }
-	    
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("totalPages", totalPages);
-	    model.addAttribute("startPage", startPage);
-	    model.addAttribute("endPage", endPage);
+		//페이징 처리하고 model에 저장
+		applyPagination(inventoryItemByPage, model);
 		
 		return VIEW_PATH + "inventory_list";
 	}
@@ -93,33 +80,12 @@ public class InventoryController {
 		}
 
 		model.addAttribute("inventoryItemDTOs", inventoryItemByPage.getContent());
-		model.addAttribute("pageSize", pageable.getPageSize());
 		model.addAttribute("itemCodeOrName", itemCodeOrName);
 		model.addAttribute("itemType", itemType);
 		model.addAttribute("findOutOfStock", findOutOfStock);
 
-	    // 페이지네이션 범위 계산
-	    int currentPage = inventoryItemByPage.getNumber() + 1; // 현재 페이지 (1부터 시작)
-	    int totalPages = inventoryItemByPage.getTotalPages(); // 총 페이지 수
-
-	    int startPage, endPage;
-
-	    // 현재페이지가 1일때, 끝 페이지 일때, 중간에 있을때로 구분
-	    if (currentPage == 1) {
-	        startPage = currentPage;
-	        endPage = Math.min(totalPages, currentPage + 1);
-	    } else if (currentPage == totalPages) {
-	        startPage = Math.max(1, currentPage - 1);
-	        endPage = currentPage;
-	    } else {
-	        startPage = currentPage - 1;
-	        endPage = currentPage + 1;
-	    }
-	    
-		model.addAttribute("currentPage", currentPage);
-		model.addAttribute("totalPages", totalPages);
-	    model.addAttribute("startPage", startPage);
-	    model.addAttribute("endPage", endPage);
+		//페이징 처리하고 model에 저장
+		applyPagination(inventoryItemByPage, model);
 
 
 		return VIEW_PATH + "inventory_list";
@@ -135,23 +101,33 @@ public class InventoryController {
 
 	// 입고 조회
 	@GetMapping("/incomingList")
-	public String incomingList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+	public String incomingList(Model model, @PageableDefault(size = 3) Pageable pageable) {
 		log.info("InventroyController incomingList()");
 
 		
-		//입고된 리스트 조회
-//		Page<InventoryItemDTO> incomingByPage = inventoryService.getIncomingLists(pageable);
+		//입고된 리스트 전체 조회
+		Page<IncomingDTO> incomingByPage = inventoryService.getIncomingLists(pageable);
+		log.info("Incoming DTOs: {}", incomingByPage.getContent());
+		
+		//만약 생산번호가 있으면 
 		
 		
 		//model에 저장
-//		model.getAttribute()
+		model.addAttribute("incomingDTOs", incomingByPage);
 		
 		
-		//페이징 처리
-		
+		//페이징 처리하고 model에 저장
+		applyPagination(incomingByPage, model);
 		
 		
 		return VIEW_PATH + "incoming_list";
+	}
+	
+	// 입고 조회 검색
+	@GetMapping("/incomingListSearch")
+	public String incomingListSearch() {
+		
+		return VIEW_PATH + "inventory_list";
 	}
 
 	// 출고 등록
@@ -170,4 +146,47 @@ public class InventoryController {
 		return VIEW_PATH + "outgoing_list";
 	}
 
+	
+	
+	
+	//페이지네이션 구현 메서드
+	private void applyPagination(Page<?> page, Model model) {
+		
+		//불러온 데이터가 없으면 예외처리
+	    if (page == null || !page.hasContent()) {
+	        
+	        model.addAttribute("currentPage", 1);
+	        model.addAttribute("totalPages", 1);
+	        model.addAttribute("startPage", 1);
+	        model.addAttribute("endPage", 1);
+	        return;
+	    }
+	    
+		int currentPage = page.getNumber() + 1; // 현재 페이지 (1부터 시작)
+		int totalPages = page.getTotalPages(); // 총 페이지 수
+		int startPage, endPage;
+		
+	    // 현재페이지가 1일때, 끝 페이지 일때, 중간에 있을때로 구분
+		// 만약 총 페이지 수가 8이고 현재페이지가 1이면 1,2로 표시하고
+		//							        5이면 4,5,6으로 표시하고 
+		//	                                8이면 7,8로 표시
+	    if (currentPage == 1) {
+	        startPage = currentPage;
+	        endPage = Math.min(totalPages, currentPage + 1);
+	    } else if (currentPage == totalPages) {
+	        startPage = Math.max(1, currentPage - 1);
+	        endPage = currentPage;
+	    } else {
+	        startPage = currentPage - 1;
+	        endPage = currentPage + 1;	
+	    }
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("totalPages", totalPages);
+	    model.addAttribute("startPage", startPage);
+	    model.addAttribute("endPage", endPage);
+		return;
+	}
+	
+	
+	
 }

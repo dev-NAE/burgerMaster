@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
+import com.itwillbs.repository.IncomingRepository;
 import com.itwillbs.repository.InventoryRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -19,14 +21,15 @@ import lombok.extern.java.Log;
 @Log
 public class InventoryService {
     private final InventoryRepository inventoryRepository;
-
+    private final IncomingRepository incomingRepository;
+    
     // 재고 전체 조회 (페이지네이션 지원)
     public Page<InventoryItemDTO> getInventoryItems(Pageable pageable) {
         log.info("getInventoryItems()");
         return inventoryRepository.getAllInventoryItems(pageable);
     }
 
-    // 재고 부족 품목 조회 (검색 조건 포함)
+    // 재고 부족 품목만 조회 (검색 조건 포함)
     public Page<InventoryItemDTO> findInventoryItemsByOutOfStock(String itemCodeOrName, String itemType, Pageable pageable) {
         log.info("findInventoryItemsByOutOfStock()");
         return inventoryRepository.findInventoryItemsByOutOfStock(itemCodeOrName, itemType, pageable);
@@ -39,9 +42,9 @@ public class InventoryService {
     }
 
     // 입고 전체 조회
-//	public Page<InventoryItemDTO> getIncomingLists(Pageable pageable) {
-//		log.info("getIncomingLists()");
-//		
-////		return inventoryRepository.getAllIncomingLists(pageable);
-//    }
+	public Page<IncomingDTO> getIncomingLists(Pageable pageable) {
+		log.info("getIncomingLists()");
+		
+		return incomingRepository.getAllIncomingLists(pageable);
+    }
 }
