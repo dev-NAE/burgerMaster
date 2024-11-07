@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.List;
 @Table(name = "orders")
 @Getter
 @Setter
-@ToString
 public class Order {
 
     @Id
@@ -31,6 +31,7 @@ public class Order {
     @Column(name = "due_date")
     private Timestamp dueDate;
 
+    @CreationTimestamp
     @Column(name = "real_date")
     private Timestamp realDate;
 
@@ -40,15 +41,13 @@ public class Order {
     @Column(name = "note")
     private String note;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "manager") manager 엔티티를 변수 타입으로 사용하셔야 할 것 같습니다.
-    @Column(name = "manager")
-    private String manager;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager")
+    private Manager manager;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "supplier_code")
-    @Column(name = "supplier_code")
-    private String supplierCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_code")
+    private Supplier supplier;
 
     // OrderItems와의 관계 설정
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
