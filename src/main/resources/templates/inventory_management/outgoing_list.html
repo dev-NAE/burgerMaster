@@ -158,48 +158,48 @@
 													th:text="${currentPage}"></span> 페이지
 											</div>
 										</div>
-										<div class="col-4">
-											<div class="dataTables_paginate paging_simple_numbers d-flex align-items-center justify-content-end h-100"
-												id="example2_paginate">
-												<ul class="pagination">
-												    <!-- "이전" 링크 -->
-												    <li th:classappend="${currentPage == 1} ? 'disabled' : ''"
-												        class="paginate_button page-item previous">
-												        <a th:href="@{/inven/inventoryListSearch(
-												            itemCodeOrName=${itemCodeOrName},
-												            itemType=${itemType},
-												            findOutOfStock=${findOutOfStock},
-												            page=${currentPage - 2},
-												            size=${pageSize}
-												        )}" class="page-link">이전</a>
-												    </li>
+<!--										<div class="col-4">-->
+<!--											<div class="dataTables_paginate paging_simple_numbers d-flex align-items-center justify-content-end h-100"-->
+<!--												id="example2_paginate">-->
+<!--												<ul class="pagination">-->
+<!--												     "이전" 링크 -->
+<!--												    <li th:classappend="${currentPage == 1} ? 'disabled' : ''"-->
+<!--												        class="paginate_button page-item previous">-->
+<!--												        <a th:href="@{/inven/inventoryListSearch(-->
+<!--												            itemCodeOrName=${itemCodeOrName},-->
+<!--												            itemType=${itemType},-->
+<!--												            findOutOfStock=${findOutOfStock},-->
+<!--												            page=${currentPage - 2},-->
+<!--												            size=${pageSize}-->
+<!--												        )}" class="page-link">이전</a>-->
+<!--												    </li>-->
 
-												    <!-- 페이지 번호 링크 -->
-												    <li th:each="i : ${#numbers.sequence(startPage, endPage)}"
-												        th:classappend="${i == currentPage} ? 'active' : ''"
-												        class="paginate_button page-item">
-												        <a th:href="@{/inven/inventoryListSearch(
-												            itemCodeOrName=${itemCodeOrName},
-												            itemType=${itemType},
-												            findOutOfStock=${findOutOfStock},
-												            page=${i - 1},
-												            size=${pageSize}
-												        )}" class="page-link" th:text="${i}"></a>
-												    </li>
+<!--												     페이지 번호 링크 -->
+<!--												    <li th:each="i : ${#numbers.sequence(startPage, endPage)}"-->
+<!--												        th:classappend="${i == currentPage} ? 'active' : ''"-->
+<!--												        class="paginate_button page-item">-->
+<!--												        <a th:href="@{/inven/inventoryListSearch(-->
+<!--												            itemCodeOrName=${itemCodeOrName},-->
+<!--												            itemType=${itemType},-->
+<!--												            findOutOfStock=${findOutOfStock},-->
+<!--												            page=${i - 1},-->
+<!--												            size=${pageSize}-->
+<!--												        )}" class="page-link" th:text="${i}"></a>-->
+<!--												    </li>-->
 
-												    <!-- "다음" 링크 -->
-												    <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
-												        class="paginate_button page-item next">
-												        <a th:href="@{/inven/inventoryListSearch(
-												            itemCodeOrName=${itemCodeOrName},
-												            itemType=${itemType},
-												            findOutOfStock=${findOutOfStock},
-												            page=${currentPage},
-												            size=${pageSize}
-												        )}" class="page-link">다음</a>
-												    </li>
-												</ul>
-											</div>
+<!--												     "다음" 링크 -->
+<!--												    <li th:classappend="${currentPage == totalPages} ? 'disabled' : ''"-->
+<!--												        class="paginate_button page-item next">-->
+<!--												        <a th:href="@{/inven/inventoryListSearch(-->
+<!--												            itemCodeOrName=${itemCodeOrName},-->
+<!--												            itemType=${itemType},-->
+<!--												            findOutOfStock=${findOutOfStock},-->
+<!--												            page=${currentPage},-->
+<!--												            size=${pageSize}-->
+<!--												        )}" class="page-link">다음</a>-->
+<!--												    </li>-->
+<!--												</ul>-->
+<!--											</div>-->
 										</div>
 									</div>
 								</div>

@@ -52,7 +52,6 @@ public interface InventoryRepository extends JpaRepository<InventoryItem, String
             @Param("itemType") String itemType,
             Pageable pageable);
 
-//    @Query("SELECT ")
-//	Page<InventoryItemDTO> getAllIncomingLists(Pageable pageable);
+
 }
 
