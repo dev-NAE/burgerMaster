@@ -5,6 +5,7 @@
     <title>발주서 출력</title>
 
     <style>
+        /* 따로 뺄거임~~~ */
 
         body {
             transform: scale(0.6); /* 60% 크기로 축소 */
@@ -12,7 +13,6 @@
             width: 167%; /* 축소 후 가로가 줄어드는 것을 보정 */
         }
 
-        /* General container and alignment */
         #form-wrapper {
             width: 90%;
             height: auto;
@@ -43,7 +43,6 @@
             margin: 20px 0 0 20px;
         }
 
-        /* Table formatting */
         #our-info, #item-table {
             width: 100%;
             border-collapse: collapse;
@@ -74,7 +73,6 @@
             text-align: center;
         }
 
-        /* Top and middle section formatting */
         #top {
             display: flex;
             justify-content: space-between;
@@ -103,20 +101,17 @@
         }
 
 
-            /* Bottom section */
         #bottom #info-area {
             margin: 20px 15px 0 0;
             font-weight: bold;
             text-align: right;
         }
 
-        /* Footer styling */
         #footer {
             text-align: center;
             margin-top: 30px;
         }
 
-        /* Button styling */
         #btn-area {
             text-align: center;
             margin: 30px auto;
@@ -128,12 +123,17 @@
             cursor: pointer;
         }
 
+        @media print {
+            #btn-area {
+                display:none;
+            }
+        }
 
     </style>
 </head>
 <body>
     <div id="btn-area">
-        <button>출력하기</button>
+        <button onclick="printForm()">출력하기</button>
     </div>
 
     <div id="form-wrapper">
@@ -232,9 +232,22 @@
     </div>
 
 <script>
+
     window.onresize = function() {
         window.resizeTo(700, 900);
     };
+
+    function printForm(){
+        window.print();
+        return false;
+    }
+
+    function setPrintData(printData) {
+        $('#supplier-code').val(supplierCode);
+        $('#supplier-name').val(supplierName);
+    }
+
+
 </script>
 
 </body>

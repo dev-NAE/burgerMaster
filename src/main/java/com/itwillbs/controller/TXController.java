@@ -146,6 +146,23 @@ public class TXController {
         return "transaction/order/orderform";
     }
 
+    @ResponseBody
+    @PostMapping("/updateOrder")
+    public String updateOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+        log.info("Controller updateOrder()");
+        OrderDTO orderDTO = orderRequestDTO.getOrder();
+        log.info("orderDTO: " + orderDTO);
+        List<OrderItemsDTO> orderItems = orderRequestDTO.getItems();
+        log.info("orderItems: " + orderItems);
+        // 담당자, 거래처 정보 DB 매치 확인
+        if (txService.checkValidation(orderDTO)) {
+            txService.updateOrder(orderDTO, orderItems);
+            return "success";
+        } else {
+            return "mismatch";
+        }
+    }
+
 
 
 }

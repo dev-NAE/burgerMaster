@@ -72,13 +72,20 @@ $('#add-items').on('click', function(event) {
 });
 
 // 팝업에서 선택한 물품 목록에 입력
-function setItemInfo(itemCode, itemName) {
+function setItemInfo(itemCode, itemName, itemPrice, itemQuantity, subTotal) {
     let $newItemRow = $($('#add-item-template').html());
     $newItemRow.find('.item-code').text(itemCode);
     $newItemRow.find('.item-name').text(itemName);
+    $newItemRow.find('.item-price').val(itemPrice == null ? 0 : itemPrice);
+    $newItemRow.find('.item-quantity').val(itemQuantity == null ? 0 : itemQuantity);
 
-    $('#item-list-table').append($newItemRow);
+    let subtotal = parseInt(subTotal == null ? 0 : subTotal);
+    $newItemRow.find('.subtotal').val(subtotal);
+    $newItemRow.find('.subtotal-view').text(subtotal.toLocaleString());
+
+    $('#item-list-table tbody').append($newItemRow);
     refreshQuantity();
+    refreshTotalPrice();
     checkInputs();
 }
 

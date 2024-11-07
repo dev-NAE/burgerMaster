@@ -10,5 +10,6 @@ public interface OrderItemsRepository extends JpaRepository<OrderItems, String> 
 
     List<OrderItems> findByOrder(Order order);
 
+    void deleteByOrder(Order order);
 
 }
