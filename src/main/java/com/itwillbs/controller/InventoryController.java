@@ -1,5 +1,6 @@
 package com.itwillbs.controller;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.itwillbs.domain.inventory.IncomingDTO;
+
+import com.itwillbs.domain.inventory.InvenSearchDTO;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.service.InventoryService;
 
@@ -39,7 +43,7 @@ public class InventoryController {
 
 //    재고 조회
 	@GetMapping("/inventoryList")
-	public String inventoryList(Model model, @PageableDefault(size = 10) Pageable pageable) {
+	public String inventoryList(Model model, @PageableDefault(size = 8) Pageable pageable) {
 		log.info("InventoryController inventoryList()");
 
 		// 페이징 처리하여 재고 중 10개의 데이터만 저장
@@ -65,7 +69,7 @@ public class InventoryController {
 			@RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
 			@RequestParam(name = "itemType", defaultValue = "") String itemType,
 			@RequestParam(name = "findOutOfStock", defaultValue = "N") String findOutOfStock,
-			@PageableDefault(size = 10) Pageable pageable) {
+			@PageableDefault(size = 8) Pageable pageable) {
 
 		log.info("InventoryController inventoryListSearch()");
 
@@ -76,7 +80,7 @@ public class InventoryController {
 		if (isFindOutOfStock == true) {
 			inventoryItemByPage = inventoryService.findInventoryItemsByOutOfStock(itemCodeOrName, itemType, pageable);
 		} else {
-			inventoryItemByPage = inventoryService.findInventoryItems(itemCodeOrName, itemType, pageable);
+			inventoryItemByPage = inventoryService.findInventoryItemsBySearch(itemCodeOrName, itemType, pageable);
 		}
 
 		model.addAttribute("inventoryItemDTOs", inventoryItemByPage.getContent());
@@ -101,13 +105,13 @@ public class InventoryController {
 
 	// 입고 조회
 	@GetMapping("/incomingList")
-	public String incomingList(Model model, @PageableDefault(size = 3) Pageable pageable) {
+	public String incomingList(Model model, @PageableDefault(size = 8) Pageable pageable) {
 		log.info("InventroyController incomingList()");
 
 		
 		//입고된 리스트 전체 조회
 		Page<IncomingDTO> incomingByPage = inventoryService.getIncomingLists(pageable);
-		log.info("Incoming DTOs: {}", incomingByPage.getContent());
+//		log.info("Incoming DTOs: {}", incomingByPage.getContent());
 		
 		//만약 생산번호가 있으면 
 		
@@ -125,8 +129,31 @@ public class InventoryController {
 	
 	// 입고 조회 검색
 	@GetMapping("/incomingListSearch")
-	public String incomingListSearch() {
+	public String incomingListSearch(
+	        @ModelAttribute InvenSearchDTO searchDTO,
+	        @PageableDefault(size = 8) Pageable pageable,
+	        Model model) {
 		
+
+		log.info("InventoryController incomingListSearch()");
+
+//		Page<IncomingDTO> incomingByPage = inventoryService.findIncomingBySearch(searchDTO, pageable);
+
+		
+
+
+
+		
+//		model.addAttribute("itemCodeOrName", itemCodeOrName);
+
+
+		//페이징 처리하고 model에 저장
+//		applyPagination(incomingByPage, model);
+
+		
+		
+		
+
 		return VIEW_PATH + "inventory_list";
 	}
 
