@@ -22,12 +22,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.itwillbs.domain.masterdata.BOMDetailDTO;
 import com.itwillbs.domain.masterdata.BOMListDTO;
+import com.itwillbs.domain.masterdata.BOMSaveDTO;
 import com.itwillbs.domain.masterdata.BOMSearchDTO;
 import com.itwillbs.domain.masterdata.FranchiseSearchDTO;
 import com.itwillbs.domain.masterdata.ItemDTO;
 import com.itwillbs.domain.masterdata.ItemSearchDTO;
 import com.itwillbs.domain.masterdata.SupplierSearchDTO;
-import com.itwillbs.entity.BOM;
 import com.itwillbs.entity.Franchise;
 import com.itwillbs.entity.Item;
 import com.itwillbs.entity.Supplier;
@@ -36,8 +36,13 @@ import com.itwillbs.service.FranchiseService;
 import com.itwillbs.service.ItemService;
 import com.itwillbs.service.SupplierService;
 
+import lombok.extern.java.Log;
+
+
+
 @Controller
 @RequestMapping("/masterdata")
+@Log
 public class MasterDataController {
 
 	private final ItemService itemService;
@@ -128,7 +133,7 @@ public class MasterDataController {
 				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
 						String.format("가맹점코드 %s를 찾을 수 없습니다.", franchiseCode)));
 	}
-
+	
 	// 저장 saveItem() 201
 	@PostMapping("/api/items")
 	@ResponseBody
@@ -222,7 +227,7 @@ public class MasterDataController {
 		return franchiseService.generateNextCode();
 	}
 
-	// 품목 검색 API 코드 목록 조회 bom.js loadItems(type, keyword = '')
+	// 품목코드 목록 조회 bom.js loadItems(type, keyword = '')
 	@GetMapping("/api/items/search")
 	@ResponseBody
 	public ResponseEntity<List<ItemDTO>> searchItems(@RequestParam(name = "itemType", required = true) String itemType,
@@ -232,71 +237,46 @@ public class MasterDataController {
 		}
 		return ResponseEntity.ok(itemService.searchItemsForModal(itemType, itemName, useYN));
 	}
-
-	// BOM 목록 조회
+	
+	
 	@GetMapping("/api/boms")
 	@ResponseBody
 	public Page<BOMListDTO> getBOMs(BOMSearchDTO searchDTO, @RequestParam(name = "page", defaultValue = "0") int page,
 			@RequestParam(name = "size", defaultValue = "10") int size) {
+		log.info("bomlistCont");
 		return bomService.getAllBOMs(searchDTO, PageRequest.of(page, size));
 	}
-
-	// BOM 상세 조회
+	
 	@GetMapping("/api/boms/{bomId}")
 	@ResponseBody
 	public ResponseEntity<BOMDetailDTO> getBOM(@PathVariable(name = "bomId") Long bomId) {
+		log.info("bomdeatilCont");
 		return bomService.getBOMDetail(bomId).map(ResponseEntity::ok).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("BOM ID %d를 찾을 수 없습니다.", bomId)));
 	}
-
-	// BOM 저장
+	
 	@PostMapping("/api/boms")
 	@ResponseBody
-	public ResponseEntity<BOMDetailDTO> saveBOM(@RequestBody @Validated BOM bom) {
-		validateBOMTypes(bom);
-		return ResponseEntity.status(HttpStatus.CREATED).body(bomService.saveBOM(bom));
+	public ResponseEntity<BOMDetailDTO> saveBOM(@RequestBody @Validated BOMSaveDTO saveDTO) {
+		log.info("saveBOM");
+	    return ResponseEntity.status(HttpStatus.CREATED)
+	        .body(bomService.saveBOM(saveDTO));
 	}
 
-	// BOM 수정
 	@PutMapping("/api/boms/{bomId}")
 	@ResponseBody
-	public ResponseEntity<BOMDetailDTO> updateBOM(@PathVariable(name = "bomId") Long bomId, @RequestBody @Validated BOM bom) {
-		if (!bomId.equals(bom.getBomId())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "경로의 bomId와 요청 본문의 bomId가 일치하지 않습니다.");
-		}
-		validateBOMTypes(bom);
-		return ResponseEntity.ok(bomService.updateBOM(bom));
+	public ResponseEntity<BOMDetailDTO> updateBOM(
+	        @PathVariable Long bomId,
+	        @RequestBody @Validated BOMSaveDTO saveDTO) {
+		log.info("updateBOM");
+	    return ResponseEntity.ok(bomService.updateBOM(bomId, saveDTO));
 	}
-
-	// BOM 삭제
+	
 	@DeleteMapping("/api/boms/{bomId}")
 	@ResponseBody
 	public ResponseEntity<Void> deleteBOM(@PathVariable(name = "bomId") Long bomId) {
 		bomService.deleteBOM(bomId);
 		return ResponseEntity.noContent().build();
-	}
-
-	// BOM 품목 타입 검증
-	private void validateBOMTypes(BOM bom) {
-		// 가공품 검증
-		Item pp = itemService.findItemByCode(bom.getPpCode())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-						String.format("가공품코드 %s를 찾을 수 없습니다.", bom.getPpCode())));
-
-		if (!"PP".equals(pp.getItemType())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-					String.format("품목코드 %s는 가공품이 아닙니다.", bom.getPpCode()));
-		}
-
-		// 원재료 검증
-		Item rm = itemService.findItemByCode(bom.getRmCode())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-						String.format("원재료코드 %s를 찾을 수 없습니다.", bom.getRmCode())));
-
-		if (!"RM".equals(rm.getItemType())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-					String.format("품목코드 %s는 원재료가 아닙니다.", bom.getRmCode()));
-		}
 	}
 
 }

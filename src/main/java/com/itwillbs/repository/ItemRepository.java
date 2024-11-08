@@ -21,31 +21,31 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 	String findMaxItemCodeByItemType(@Param("itemType") String itemType);
 
 	@Query("SELECT i FROM Item i " +
-		       "WHERE (:itemName IS NULL OR i.itemName LIKE %:itemName%) " +
-		       "AND (:itemType IS NULL OR i.itemType = :itemType) " +
-		       "AND ((:includeUnused = true) OR i.useYN = 'Y')")
+	       "WHERE (:itemName IS NULL OR i.itemName LIKE %:itemName%) " +
+	       "AND (:itemType IS NULL OR i.itemType = :itemType) " +
+	       "AND ((:includeUnused = true) OR i.useYN = 'Y')")
 	Page<Item> findBySearchConditions(
 	    @Param("itemName") String itemName, 
 	    @Param("itemType") String itemType,
 	    @Param("includeUnused") Boolean includeUnused, 
 	    Pageable pageable
 	);
+	
+	@Query("SELECT new com.itwillbs.domain.masterdata.ItemDTO(i.itemCode, i.itemName, i.itemType, i.useYN) " +
+		       "FROM Item i " +
+		       "WHERE i.itemType = :itemType " +
+		       "AND (:itemName IS NULL OR i.itemName LIKE %:itemName%) " +
+		       "AND i.useYN = :useYN")
+	List<ItemDTO> findItemsForModal(
+	    @Param("itemType") String itemType, 
+	    @Param("itemName") String itemName, 
+	    @Param("useYN") String useYN
+	);
 
 	@Query("SELECT i FROM Item i " + 
 				"WHERE i.itemType = 'PP'")
 	List<Item> findByItemType();
-
-    @Query("SELECT new com.itwillbs.domain.masterdata.ItemDTO(" +
-           "i.itemCode, i.itemName, i.itemType, i.useYN) " +
-           "FROM Item i " +
-           "WHERE i.itemType = :itemType " +
-           "AND (:itemName IS NULL OR i.itemName LIKE %:itemName%) " +
-           "AND i.useYN = :useYN " +
-           "ORDER BY i.itemCode")
-    List<ItemDTO> findItemsForModal(
-        @Param("itemType") String itemType,
-        @Param("itemName") String itemName,
-        @Param("useYN") String useYN
-    );
+	
+    
 	
 }

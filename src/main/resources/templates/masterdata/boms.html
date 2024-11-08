@@ -129,75 +129,71 @@
 						<div id="viewSection">
 						</div>
 						<form id="bomForm">
-							<input type="hidden" id="bomId" name="bomId">
+						    <input type="hidden" id="bomId" name="bomId">
+						    
+						    <div class="form-group">
+						        <label for="processedProduct">가공품</label>
+						        <div class="input-group">
+						            <div class="input-group-prepend">
+						                <span class="input-group-text">
+						                    <i class="fas fa-cube"></i>
+						                </span>
+						            </div>
+						            <input type="hidden" id="processedProduct.itemCode" name="processedProduct.itemCode">
+						            <input type="text" class="form-control" id="ppCode" readonly>
+						            <div class="input-group-append">
+						                <button class="btn btn-outline-primary" type="button" onclick="openItemSearch('PP')">
+						                    <i class="fas fa-search"></i>
+						                </button>
+						            </div>
+						        </div>
+						    </div>
 
-							<div class="form-group">
-								<label for="ppCode">가공품</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-cube"></i>
-										</span>
-									</div>
-									<input type="text" class="form-control" id="ppCode" name="ppCode" readonly required>
-									<div class="input-group-append">
-										<button class="btn btn-outline-primary" type="button"
-											onclick="openItemSearch('PP')">
-											<i class="fas fa-search"></i>
-										</button>
-									</div>
-									<div class="invalid-feedback" id="validateppCode"></div>
-								</div>
-							</div>
+						    <div class="form-group">
+						        <label for="rawMaterial">원재료</label>
+						        <div class="input-group">
+						            <div class="input-group-prepend">
+						                <span class="input-group-text">
+						                    <i class="fas fa-cube"></i>
+						                </span>
+						            </div>
+						            <input type="hidden" id="rawMaterial.itemCode" name="rawMaterial.itemCode">
+						            <input type="text" class="form-control" id="rmCode" readonly>
+						            <div class="input-group-append">
+						                <button class="btn btn-outline-primary" type="button" onclick="openItemSearch('RM')">
+						                    <i class="fas fa-search"></i>
+						                </button>
+						            </div>
+						        </div>
+						    </div>
 
-							<div class="form-group">
-								<label for="rmCode">원재료</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-cube"></i>
-										</span>
-									</div>
-									<input type="text" class="form-control" id="rmCode" name="rmCode" readonly required>
-									<div class="input-group-append">
-										<button class="btn btn-outline-primary" type="button"
-											onclick="openItemSearch('RM')">
-											<i class="fas fa-search"></i>
-										</button>
-									</div>
-									<div class="invalid-feedback" id="validatermCode"></div>
-								</div>
-							</div>
+						    <div class="form-group">
+						        <label for="quantity">수량</label>
+						        <div class="input-group">
+						            <div class="input-group-prepend">
+						                <span class="input-group-text">
+						                    <i class="fas fa-balance-scale"></i>
+						                </span>
+						            </div>
+						            <input type="number" class="form-control" id="quantity" name="quantity" 
+						                   step="0.001" min="0.001" required>
+						        </div>
+						    </div>
 
-							<div class="form-group">
-								<label for="quantity">수량</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-balance-scale"></i>
-										</span>
-									</div>
-									<input type="number" class="form-control" id="quantity" name="quantity" step="0.001"
-										min="0.001" required>
-									<div class="invalid-feedback" id="validatequantity"></div>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="useYN">사용 여부</label>
-								<div class="input-group">
-									<div class="input-group-prepend">
-										<span class="input-group-text">
-											<i class="fas fa-toggle-on"></i>
-										</span>
-									</div>
-									<select class="form-control" id="useYN" name="useYN" required>
-										<option value="Y">사용</option>
-										<option value="N">미사용</option>
-									</select>
-									<div class="invalid-feedback" id="validateuseYN"></div>
-								</div>
-							</div>
+						    <div class="form-group">
+						        <label for="useYN">사용 여부</label>
+						        <div class="input-group">
+						            <div class="input-group-prepend">
+						                <span class="input-group-text">
+						                    <i class="fas fa-toggle-on"></i>
+						                </span>
+						            </div>
+						            <select class="form-control" id="useYN" name="useYN" required>
+						                <option value="Y">사용</option>
+						                <option value="N">미사용</option>
+						            </select>
+						        </div>
+						    </div>
 						</form>
 					</div>
 					<div class="modal-footer">

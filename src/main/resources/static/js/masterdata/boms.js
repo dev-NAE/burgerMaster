@@ -186,48 +186,68 @@ function fillForm(bom) {
 }
 
 function getBOMDetailHtml(bom) {
-	return `
-        <table class="table">
-            <tr><th>가공품코드</th><td>${bom.processedProduct.itemCode}</td></tr>
-            <tr><th>가공품명</th><td>${bom.processedProduct.itemName}</td></tr>
-            <tr><th>원재료코드</th><td>${bom.rawMaterial.itemCode}</td></tr>
-            <tr><th>원재료명</th><td>${bom.rawMaterial.itemName}</td></tr>
-            <tr><th>수량</th><td>${bom.quantity}</td></tr>
-            <tr><th>사용여부</th><td>${bom.useYN === 'Y' ? '사용' : '미사용'}</td></tr>
-        </table>
+    return ` 
+    <table class="table"> 
+        <tr><th>가공품코드</th><td>${bom.ppCode}</td></tr> 
+        <tr><th>가공품명</th><td>${bom.ppName}</td></tr> 
+        <tr><th>원재료코드</th><td>${bom.rmCode}</td></tr> 
+        <tr><th>원재료명</th><td>${bom.rmName}</td></tr> 
+        <tr><th>수량</th><td>${bom.quantity}</td></tr> 
+        <tr><th>사용여부</th><td>${bom.useYN === 'Y' ? '사용' : '미사용'}</td></tr> 
+    </table> 
     `;
 }
 
 function saveBOM() {
-	const formData = $('#bomForm').serializeArray();
-	const jsonData = {};
-	formData.forEach(item => {
-		jsonData[item.name] = item.value.trim() || null;
-	});
+    const jsonData = {
+        ppCode: $('#ppCode').val(), 
+        rmCode: $('#rmCode').val(), 
+        quantity: $('#quantity').val(), 
+        useYN: $('#useYN').val() 
+    };
 
-	const isEdit = $('#bomForm').data('mode') === 'edit';
-	const bomId = $('#bomId').val();
+    const isEdit = $('#bomForm').data('mode') === 'edit';
+    const bomId = $('#bomId').val();
 
-	$.ajax({
-		url: isEdit ? `/masterdata/api/boms/${bomId}` : '/masterdata/api/boms',
-		type: isEdit ? 'PUT' : 'POST',
-		contentType: 'application/json',
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader(header, token);
-		},
-		data: JSON.stringify(jsonData),
-		success: function() {
-			Swal.fire({
-				icon: 'success',
-				title: isEdit ? '수정 완료' : '저장 완료',
-				text: isEdit ? '성공적으로 수정되었습니다.' : '성공적으로 저장되었습니다.'
-			}).then(() => {
-				$('#bomModal').modal('hide');
-				loadBOMs();
-			});
-		},
-		error: handleError
-	});
+    $.ajax({
+        url: isEdit ? `/masterdata/api/boms/${bomId}` : '/masterdata/api/boms',
+        type: isEdit ? 'PUT' : 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(jsonData),
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success: function() {
+            Swal.fire({
+                icon: 'success', 
+                title: isEdit ? '수정 완료' : '저장 완료', 
+                text: isEdit ? '성공적으로 수정되었습니다.' : '성공적으로 저장되었습니다.'
+            }).then(() => {
+                $('#bomModal').modal('hide');
+                loadBOMs();
+            });
+        },
+        error: handleError
+    });
+}
+
+function selectItem(type, itemCode, itemName) {
+	if (type === 'PP') {
+		$('#processedProduct\\.itemCode').val(itemCode);
+		$('#ppName').val(itemName);
+	} else {
+		$('#rawMaterial\\.itemCode').val(itemCode);
+		$('#rmName').val(itemName);
+	}
+	$('#itemSearchModal').modal('hide');
+}
+
+function fillForm(bom) {
+	$('#bomId').val(bom.bomId);
+	$('#ppCode').val(bom.ppCode);
+	$('#rmCode').val(bom.rmCode);
+	$('#quantity').val(bom.quantity);
+	$('#useYN').val(bom.useYN);
 }
 
 function handleError(xhr) {
