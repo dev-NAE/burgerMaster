@@ -1,6 +1,8 @@
 package com.itwillbs.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -35,8 +37,9 @@ public class InventoryItem {
     // Item과 일대일 관계 설정
 	//삭제 x 겹치면 삭제o 소연
     @OneToOne
+    @JsonIgnore
     @JoinColumn(name = "item_code")  // Item의 item_code를 참조하는 외래 키 설정
     private Item item;
-	
+//	
 	
 }
