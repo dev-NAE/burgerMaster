@@ -73,6 +73,17 @@ $('#add-items').on('click', function(event) {
 
 // 팝업에서 선택한 물품 목록에 입력
 function setItemInfo(itemCode, itemName, itemPrice, itemQuantity, subTotal) {
+
+    // 기등록 아이템인지 중복검사
+    let existingItemCodes = $('#item-list-table .item-code').map(function() {
+        return $(this).text();
+    }).get();
+
+    if (existingItemCodes.includes(itemCode)) {
+        alert("이미 추가된 품목입니다.");
+        return;
+    }
+
     let $newItemRow = $($('#add-item-template').html());
     $newItemRow.find('.item-code').text(itemCode);
     $newItemRow.find('.item-name').text(itemName);

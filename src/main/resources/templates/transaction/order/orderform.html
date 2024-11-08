@@ -19,11 +19,11 @@
             <div id="top">
                 <div id="top-left">
                     <div id="order-id-area">발주등록번호: <span id="order-id"></span></div>
-                    <div id="data-area">
+                    <div id="date-area">
                         발주일: <span id="order-date"></span><br>
                         납기일: <span id="due-date"></span></div>
-                    <div id="supplier-area"><h3 style="text-align:center;"><span id="supplier"></span> 귀하</h3></div>
-                    <p style="text-align:right;">아래와 같이 발주합니다.</p>
+                    <div id="supplier-area"><h3><span id="supplier"></span>&nbsp;&nbsp; 귀하</h3></div>
+                    <p style="text-align:center;">아래와 같이 발주합니다.</p>
                 </div>
                 <div id="top-right">
                     <table id="our-info">
@@ -88,43 +88,7 @@
         </div>
     </div>
 
-<script>
-
-    window.onresize = function() {
-        window.resizeTo(700, 900);
-    };
-
-    function printForm(){
-        window.print();
-        return false;
-    }
-
-    $(document).ready(function () {
-        $(window).on('message', function(event) {
-            const printData = event.originalEvent.data;
-            const tableBody = $('#item-table tbody');
-
-            $('#order-id').text(printData.orderId);
-            $('#order-date').text(printData.orderDate);
-            $('#due-date').text(printData.dueDate);
-            $('#supplier').text(printData.supplierName);
-            $('#total-price').text(parseInt(printData.totalPrice).toLocaleString()).css('font-weight', 'bold');
-            $('#manager-name').text(printData.managerName);
-
-            printData.tableRows.forEach((row, index) => {
-                const rowNum = index + 1;
-                const newRow = $('<tr>');
-                newRow.append($('<td>', {text: rowNum}));
-                newRow.append($('<td>', {text: row.itemName}));
-                newRow.append($('<td>', {text: (parseInt(row.itemPrice).toLocaleString() + ' 원')}).css('text-align', 'right'));
-                newRow.append($('<td>', {text: parseInt(row.itemQuantity).toLocaleString()}).css('text-align', 'right'));
-                newRow.append($('<td>', {text: (parseInt(row.subtotal).toLocaleString() + ' 원')}).css('text-align', 'right'));
-                tableBody.append(newRow);
-            });
-        });
-    });
-
-</script>
+    <script src="/js/transaction/order/printform.js"></script>
 
 </body>
 </html>

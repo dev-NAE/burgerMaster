@@ -2,6 +2,7 @@ package com.itwillbs.service;
 
 import com.itwillbs.domain.transaction.OrderDTO;
 import com.itwillbs.domain.transaction.OrderItemsDTO;
+import com.itwillbs.domain.transaction.TxItemsDTO;
 import com.itwillbs.entity.*;
 import com.itwillbs.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -91,6 +92,7 @@ public class TXService {
         return newOrderId;
     }
 
+    // 접속한 매니저 불러오기 용도
     public String getManagerName(String managerId) {
         Optional<Manager> manager = managerRepository.findById(managerId);
         if (manager.isPresent()) {
@@ -100,16 +102,26 @@ public class TXService {
         }
     }
 
-    public List<Manager> getAllManagers() {
-        return managerRepository.findAll();
+    // 매니저 설정을 위한 검색 용도
+    public List<Manager> findManagers(String managerName) {
+        if (managerName != null) {
+            managerName = "%" + managerName + "%";
+        }
+        return managerRepository.findManagerOnTX(managerName);
     }
 
-    public List<Supplier> getAllSuppliers() {
-        return supplierRepository.findAll();
+    public List<Supplier> findSuppliers(String supplierName) {
+        if (supplierName != null) {
+            supplierName = "%" + supplierName + "%";
+        }
+        return supplierRepository.findSupplierOnTX(supplierName);
     }
 
-    public List<Item> getOrderItems() {
-        return itemRepository.findAll();
+    public List<TxItemsDTO> getTXItems(String itemName, List<String> itemTypes) {
+        if (itemName != null) {
+            itemName = "%" + itemName + "%";
+        }
+        return itemRepository.findItemsOnTX(itemName, itemTypes);
         // 사용중인 코드 + 구매할 수 있는 아이템 한정, 재고수량 오름차순으로 수정 필요
     }
 

@@ -1,6 +1,3 @@
-. {
-    height: auto;
-}
 
 body {
     transform: scale(0.6);
@@ -11,7 +8,6 @@ body {
 
 #form-wrapper {
     width: 90%;
-    height: auto;
     margin: 0 auto;
     padding: 25px;
     font-family: Arial, sans-serif;
@@ -32,7 +28,7 @@ body {
 }
 
 #order-id-area {
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 #top-left {
@@ -53,20 +49,26 @@ body {
     background-color: #ddd;
 }
 
-#our-info td, #item-table td {
+#our-info td {
     text-align: center;
     font-size: 0.8em;
     border: 1px solid #000;
 }
 
 #item-table td {
-    padding: 8px;
+    text-align: center;
+    padding: 10px 8px;
+    font-size: 1.2em;
+    border: 1px solid #000;
 }
 
 #item-table th {
     background-color: #f0f0f0;
+    padding: 10px 8px;
     font-weight: bold;
+    font-size: 1.2em;
     text-align: center;
+    border: 1px solid #000;
 }
 
 #top {
@@ -92,7 +94,7 @@ body {
     margin: 20px 0 10px 0;
     text-align: center;
     border: 1px solid #000;
-    font-size: 1.2em;
+    font-size: 1.5em;
     padding: 10px 0;
 }
 
@@ -115,11 +117,22 @@ body {
 
 #btn-area button {
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 1.5em;
     cursor: pointer;
 }
 
+button {
+    width: 160px;
+    height: 70px;
+}
+
 @media print {
+
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
     #btn-area {
         display:none;
     }

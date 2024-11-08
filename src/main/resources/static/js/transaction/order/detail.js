@@ -28,7 +28,7 @@ $(document).ready(function() {
         // 출력페이지 팝업
         const printPopup =
             window.open('/tx/orderForm', 'popupWindow',
-            `width=700, height=900, top=100, left=500, resizable=no`);
+            `width=700, height=700, top=100, left=500, resizable=no`);
 
         // 출력페이지로 데이터 전송
         $(printPopup).on('load', function() {

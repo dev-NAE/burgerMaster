@@ -4,6 +4,7 @@ import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.domain.transaction.OrderDTO;
 import com.itwillbs.domain.transaction.OrderItemsDTO;
 import com.itwillbs.domain.transaction.OrderRequestDTO;
+import com.itwillbs.domain.transaction.TxItemsDTO;
 import com.itwillbs.entity.*;
 import com.itwillbs.service.TXService;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -66,22 +68,33 @@ public class TXController {
     }
 
     @GetMapping("/findManager")
-    public String findManager(Model model) {
-        List<Manager> managers = txService.getAllManagers();
+    public String findManager(@RequestParam(required = false) String query, Model model) {
+        if (query == null || query.isEmpty()) {
+            query = null;
+        }
+        List<Manager> managers = txService.findManagers(query);
         model.addAttribute("managers", managers);
         return "transaction/order/findManager";
     }
 
     @GetMapping("/findSupplier")
-    public String findSupplier(Model model) {
-        List<Supplier> suppliers = txService.getAllSuppliers();
+    public String findSupplier(@RequestParam(required = false) String query, Model model) {
+        if (query == null || query.isEmpty()) {
+            query = null;
+        }
+        List<Supplier> suppliers = txService.findSuppliers(query);
         model.addAttribute("suppliers", suppliers);
         return "transaction/order/findSupplier";
     }
 
     @GetMapping("/addOrderItems")
-    public String addOrderItems(Model model) {
-        List<Item> items = txService.getOrderItems();
+    public String addOrderItems(@RequestParam(required = false) String query, Model model) {
+        if (query == null || query.isEmpty()) {
+            query = null;
+        }
+        List<String> orderableCode = Arrays.asList("FP", "RM");
+        List<TxItemsDTO> items = txService.getTXItems(query, orderableCode);
+        log.info("items: " + items);
         model.addAttribute("items", items);
         return "transaction/order/addItems";
     }
