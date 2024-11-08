@@ -1,8 +1,6 @@
 package com.itwillbs.service;
 
-import com.itwillbs.domain.transaction.OrderDTO;
-import com.itwillbs.domain.transaction.OrderItemsDTO;
-import com.itwillbs.domain.transaction.TxItemsDTO;
+import com.itwillbs.domain.transaction.*;
 import com.itwillbs.entity.*;
 import com.itwillbs.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,7 +31,9 @@ public class TXService {
     private final ManagerRepository managerRepository;
     private final SupplierRepository supplierRepository;
     private final ItemRepository itemRepository;
-    private final InventoryRepository inventoryRepository;
+    private final SaleRepository saleRepository;
+    private final SaleItemsRepository saleItemsRepository;
+    private final FranchiseRepository franchiseRepository;
 
     @Transactional
     public void saveOrder(OrderDTO orderDTO, List<OrderItemsDTO> orderItems) {
@@ -229,5 +229,67 @@ public class TXService {
         saveOrderItems(orderItems, orderId, order);
     }
 
+    @Transactional
+    public void saveSale(SaleDTO saleDTO, List<SaleItemsDTO> saleItems) {
+        log.info("TXService: saveSale");
+        // 수주번호 생성
+        String saleId = generateNextSaleId();
 
+        // 수주 정보 저장
+        Sale sale = new Sale();
+        BeanUtils.copyProperties(saleDTO, sale);      // saleDTO -> sale 필드값 복사
+        sale.setSaleId(saleId);                        // 수주등록번호
+        sale.setStatus("수주등록(저장)");                  // 수주상태
+        sale.setRealDate(new Timestamp(System.currentTimeMillis()));
+        sale.setManager(managerRepository.findById(saleDTO.getManager()).orElse(null));
+        sale.setFranchise(franchiseRepository.findById(saleDTO.getFranchiseCode()).orElse(null));
+        saleRepository.save(sale);
+
+        // 발주 품목정보 저장
+        saveSaleItems(saleItems, saleId, sale);
+    }
+
+    public String generateNextSaleId() {
+        String maxSaleId = saleRepository.findMaxSaleId();
+
+        String newSaleId = null;
+
+        if (maxSaleId == null) {
+            newSaleId = "SL0001";
+        } else {
+            int numberPart = Integer.parseInt(maxSaleId.substring(2));
+            newSaleId = String.format("SL%04d", numberPart + 1);
+        }
+        log.info("TXService: generateNextOrderId + newOrderId = " + newSaleId);
+
+        return newSaleId;
+    }
+
+    private void saveSaleItems(List<SaleItemsDTO> saleItems, String saleId, Sale sale) {
+        for (SaleItemsDTO item : saleItems) {
+            SaleItems saleItem = new SaleItems();
+            BeanUtils.copyProperties(item, saleItem);
+            saleItem.setItem(itemRepository.findById(item.getItemCode()).orElse(null));
+            saleItem.setSale(sale);
+            saleItem.setSaleItemId(saleId + item.getItemCode());
+            log.info(saleItem.toString());
+            saleItemsRepository.save(saleItem);
+        }
+    }
+
+    public List<Franchise> findFranchises(String franchiseName) {
+        if (franchiseName != null) {
+            franchiseName = "%" + franchiseName + "%";
+        }
+        return franchiseRepository.findFranchiseOnTX(franchiseName);
+    }
+
+    public boolean checkSaleValidation(SaleDTO saleDTO) {
+        String managerId = saleDTO.getManager();
+        String franchiseCode = saleDTO.getFranchiseCode();
+        Optional<Manager> manager = managerRepository.findById(managerId);
+        Optional<Franchise> franchise = franchiseRepository.findById(franchiseCode);
+        // 입력한 매니저아이디, 거래처코드가 DB에 존재하는 값인지 검증
+        return manager.isPresent() && franchise.isPresent();
+    }
 }
