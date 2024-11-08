@@ -63,7 +63,12 @@ public class MFController {
 	}
 	
 	@GetMapping("/insert")
-	public String insert() {
+	public String insert(Model model) {
+		log.info("MFController insert()");
+		
+		List<Item> ppList = mfService.getPPList();
+		
+		model.addAttribute("ppList", ppList);
 		
 		return "/manufacture/orderInsert";
 	}
