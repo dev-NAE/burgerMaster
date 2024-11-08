@@ -74,7 +74,7 @@
 												    <label>품목코드/품목명</label>
 												    <input type="text" class="form-control" id="itemCodeOrName"
 												        name="itemCodeOrName" placeholder="품목코드 또는 품목명을 입력하세요"
-												        th:value="${invenSearchDTO.itemCodeOrName}" />
+												        th:value="${itemCodeOrName}" autocomplete = "off" />
 												</div>
 											</div>
 
@@ -83,28 +83,23 @@
 												<div class="form-group">
 												    <label>입고 사유</label>
 												    <select class="form-control" id="reasonOfIncoming" name="reasonOfIncoming">
-												        <option value="" th:selected="${invenSearchDTO.reasonOfIncoming == null or invenSearchDTO.reasonOfIncoming == ''}">전체</option>
-												        <option value="검품완료" th:selected="${invenSearchDTO.reasonOfIncoming == '검품완료'}">검품완료</option>
-												        <option value="생산완료" th:selected="${invenSearchDTO.reasonOfIncoming == '생산완료'}">생산완료</option>
+												        <option value="" th:selected="${reasonOfIncoming == null or reasonOfIncoming == ''}">전체</option>
+												        <option value="검품완료" th:selected="${reasonOfIncoming == '검품완료'}">검품완료</option>
+												        <option value="생산완료" th:selected="${reasonOfIncoming == '생산완료'}">생산완료</option>
 												    </select>
 												</div>
 											</div>
-											<div class="col-sm-6 col-md-4">
-												<!--검색 3) 입고 등록일자-->
+											<div class="col-sm-8 col-md-6">
+												<!-- 검색 3) 입고 등록일자 -->
 												<div class="form-group">
-													<label>입고 등록일자</label>
-
-													<div class="input-group">
-														<div class="input-group-prepend">
-															<span class="input-group-text">
-																<i class="far fa-calendar-alt"></i>
-
-															</span>
-														</div>
-														<input type="text" class="form-control float-right"
-															id="reservation">
-													</div>
-													<!-- /.input group -->
+												    <label class="mx-2">등록일</label>
+												    <div class="col-10 d-flex">
+												        <input class="form-control" type="date" id="incomingStartDate_start" name="incomingStartDate_start"
+												               th:value="${incomingStartDate_start}">
+												        <span class="m-2"> ~ </span>
+												        <input class="form-control" type="date" id="incomingStartDate_end" name="incomingStartDate_end"
+												               th:value="${incomingStartDate_end}">
+												    </div>
 												</div>
 											</div>
 
@@ -130,7 +125,7 @@
 													<label>생산/검품 번호</label>
 													<input type="text" class="form-control" id="prodOrQualId"
 														name="prodOrQualId" placeholder="생산or검품 번호를 입력하세요"
-														th:value="${prodOrQualId}" />
+														th:value="${prodOrQualId}" autocomplete = "off"/>
 												</div>
 											</div>
 											<div class="col-sm-6 col-md-2">
@@ -140,9 +135,9 @@
 													<select class="form-control" id="status" name="status">
 														<option value="" th:selected="${status == ''}">전체
 														</option>
-														<option value="입고 진행중" th:selected="${status == '검품완료'}">입고 진행중
+														<option value="입고 진행중" th:selected="${status == '입고 진행중'}">입고 진행중
 														</option>
-														<option value="입고 완료" th:selected="${status == '생산완료'}">입고 완료
+														<option value="입고 완료" th:selected="${status == '입고 완료'}">입고 완료
 														</option>
 													</select>
 												</div>
@@ -154,13 +149,13 @@
 													<label>담당자</label>
 													<input type="text" class="form-control" id="managerCodeOrName"
 														name="managerCodeOrName" placeholder="담당자 코드 또는 이름을 입력해주세요"
-														th:value="${managerCodeOrName}" />
+														th:value="${managerCodeOrName}" autocomplete = "off" />
 												</div>
 											</div>
 
 											<div class="col-sm-4 col-md-1 ml-auto">
 												<label>&nbsp;</label>
-												<button type="submit" class="btn btn-block btn-primary">검색</button>
+												<button type="submit" class="btn btn-block btn-primary" id="search_button">검색</button>
 											</div>
 
 										</div>
@@ -193,10 +188,10 @@
 
 										<tr th:each="incoming : ${incomingDTOs}">
 											<td th:text="${incoming.incomingId}"></td>
-											<td th:text="${#dates.format(incoming.incomingStartDate, 'yyyy-MM-dd')}">
+											<td th:text="${#dates.format(incoming.incomingStartDate, 'yyyy-MM-dd HH:mm')}">
 											</td>
 											<td
-												th:text="${incoming.incomingEndDate != null ? #dates.format(incoming.incomingEndDate, 'yyyy-MM-dd') : ''}">
+												th:text="${incoming.incomingEndDate != null ? #dates.format(incoming.incomingEndDate, 'yyyy-MM-dd HH:mm') : ''}">
 											</td>
 
 											<td th:if="${incoming.otherCount == 0}"
@@ -244,7 +239,8 @@
 														<a th:href="@{/inven/incomingListSearch(
 																	            itemCodeOrName=${itemCodeOrName},
 																				reasonOfIncoming=${reasonOfIncoming},
-																	            incomingStartDate=${incomingStartDate},	
+																				incomingStartDate_start=${incomingStartDate_start},	
+																				incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
 																				prodOrQualId=${prodOrQualId},
 																				status=${status},
@@ -260,7 +256,8 @@
 														<a th:href="@{/inven/incomingListSearch(
 																	            itemCodeOrName=${itemCodeOrName},
 																				reasonOfIncoming=${reasonOfIncoming},
-																	            incomingStartDate=${incomingStartDate},	
+																				incomingStartDate_start=${incomingStartDate_start},	
+																				incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
 																				prodOrQualId=${prodOrQualId},
 																				status=${status},
@@ -275,7 +272,8 @@
 														<a th:href="@{/inven/incomingListSearch(
 																	            itemCodeOrName=${itemCodeOrName},
 																				reasonOfIncoming=${reasonOfIncoming},
-																	            incomingStartDate=${incomingStartDate},	
+																	            incomingStartDate_start=${incomingStartDate_start},	
+																	            incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
 																				prodOrQualId=${prodOrQualId},
 																				status=${status},
@@ -330,8 +328,25 @@
 	<!-- daterangepicker -->
 	<!--	<script src="plugins/moment/moment.min.js"></script>-->
 	<!--	<script src="plugins/daterangepicker/daterangepicker.js"></script>-->
-
-
+<!--<script>-->
+<!--	$(document).ready(function() {-->
+<!--	    // 조회 버튼 클릭 이벤트-->
+<!--	    $('#search_button').on('click', function() {-->
+<!--	        // 각 필드의 값을 가져옵니다.-->
+<!--	        let itemCodeOrName = $('#itemCodeOrName').val();-->
+<!--	        let reasonOfIncoming = $('#reasonOfIncoming').val();-->
+<!--	        let incomingStartDate_start = $('#incomingStartDate_start').val();-->
+<!--	        let incomingStartDate_end = $('#incomingStartDate_end').val();-->
+<!--	        let incomingId = $('#incomingId').val();-->
+<!--	        let prodOrQualId = $('#prodOrQualId').val();-->
+<!--	        let status = $('#status').val();-->
+<!--	        let managerCodeOrName = $('#managerCodeOrName').val();-->
+			
+<!--			console.log("안녕하세요");-->
+<!--	        console.log(itemCodeOrName, reasonOfIncoming, incomingStartDate_start, incomingStartDate_end, incomingId, prodOrQualId, status, managerCodeOrName);-->
+<!--			});-->
+<!--	});-->
+<!--</script>-->
 
 </body>
 

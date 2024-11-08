@@ -1,6 +1,7 @@
 package com.itwillbs.service;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.IncomingItemsDTO;
 
-import com.itwillbs.domain.inventory.InvenSearchDTO;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.repository.IncomingItemsRepository;
 import com.itwillbs.repository.IncomingRepository;
@@ -46,12 +46,12 @@ public class InventoryService {
 		return inventoryRepository.findInventoryItems(itemCodeOrName, itemType, pageable);
 	}
 
-	// 입고 전체 조회
+	// 입고 페이지 진입시 조회
 	public Page<IncomingDTO> getIncomingLists(Pageable pageable) {
 		log.info("getIncomingLists()");
 
-		// 입고 데이터 저장
-		Page<IncomingDTO> incomingByPage = incomingRepository.getAllIncomingLists(pageable);
+		//페이지 사이즈에 맞는 입고 테이블 데이터 조회
+		Page<IncomingDTO> incomingByPage = incomingRepository.getIncomingLists(pageable);
 
 		// 각 입고데이터마다 품목의 이름과 갯수를 구하기 위한 반복문
 		incomingByPage.forEach(dto -> {
@@ -72,29 +72,47 @@ public class InventoryService {
 		return incomingByPage;
 	}
 
-	// 입고 검색 (검색 조건과 페이지네이션)
-//	public Page<IncomingDTO> findIncomingBySearch(InvenSearchDTO searchDTO, Pageable pageable) {
-//		log.info("findIncomingBySearch()");
-//
-//		Page<IncomingDTO> incomingByPage = incomingRepository.getAllIncomingLists(pageable);
-//		
-//		// 각 입고데이터마다 품목의 이름과 갯수를 구하기 위한 반복문
-//		incomingByPage.forEach(dto -> {
-//
-//			String incomingId = dto.getIncomingId();
-//
-//			// incoming_items테이블에서 품목의 이름과 갯수를 구한다.
-//			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId);
-//
-//			// 품목중 첫번째 품목의 이름을 저장
-//			dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
-//
-//			// 품목 갯수 - 1을 저장
-//			dto.setOtherCount(itemNames.size() - 1);
-//
-//		});
-//		
-//		return incomingByPage;
-//	}
+	// 입고 목록 검색 (검색 조건과 페이지네이션)
+	public Page<IncomingDTO> findIncomingBySearch(
+	        String itemCodeOrName,
+	        String reasonOfIncoming,
+	        Timestamp incomingStartDate_start,
+	        Timestamp incomingStartDate_end,
+	        String incomingId,
+	        String prodOrQualId,
+	        String status,
+	        String managerCodeOrName,
+	        Pageable pageable) {
+	    log.info("findIncomingBySearch()");
+
+	    // 서비스 로직 수행
+	    Page<IncomingDTO> incomingByPage = incomingRepository.findIncomingLists(
+	            reasonOfIncoming,
+	            incomingStartDate_start,
+	            incomingStartDate_end,
+	            incomingId,
+	            prodOrQualId,
+	            status,
+	            managerCodeOrName,
+	            pageable);
+		
+		// 각 입고데이터마다 품목의 이름과 갯수를 구하기 위한 반복문
+		incomingByPage.forEach(dto -> {
+
+			String incomingId2 = dto.getIncomingId();
+
+			// incoming_items테이블에서 품목의 이름과 갯수를 구한다.
+			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId2);
+
+			// 품목중 첫번째 품목의 이름을 저장
+			dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+
+			// 품목 갯수 - 1을 저장
+			dto.setOtherCount(itemNames.size() - 1);
+
+		});
+		
+		return incomingByPage;
+	}
 
 }
