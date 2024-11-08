@@ -39,7 +39,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">발주 등록</h1>
+                            <h1 class="m-0">수주 등록</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -63,7 +63,7 @@
                         <div class="container-fluid col-sm-10 my-5">
                             <div class="card insert-container px-3 py-3">
 
-                                <form id="order-form">
+                                <form id="sale-form">
                                 <div class="card-body basic-info-area px-5">
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center" for="order_date">등록일</label>
@@ -80,13 +80,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label text-center" for="supplier-code">거래처</label>
+                                        <label class="col-sm-2 col-form-label text-center" for="franchise-code">가맹점</label>
                                         <div class="input-group col-sm-4">
-                                            <input id="supplier-code" class="form-control" type="text" name="supplier_code" placeholder="코드" required>
+                                            <input id="franchise-code" class="form-control" type="text" name="franchise-code" placeholder="코드" required>
                                             <div class="input-group-append">
-                                                <span id="find-supplier" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
+                                                <span id="find-franchise" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
                                             </div>
-                                            <input id="supplier-name" class="form-control" type="text" name="supplier_name" placeholder="상호" required>
+                                            <input id="franchise-name" class="form-control" type="text" name="franchise_name" placeholder="가맹점명" required>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="due_date">납기일</label>
                                         <div class="col-sm-4">
@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="input-items-area card-body">
                                     <div class="row">
-                                        <button type="button" class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-items">물품 추가</button>
+                                        <button type="button" class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-sale-items">물품 추가</button>
                                     </div>
                                     <div class="item-list card-body border">
                                         <table id="item-list-table" class="table table-bordered table-hover dataTable dtr-inline">
@@ -130,7 +130,7 @@
                                     </div>
                                 </div>
                                 <div class="submit-btn-area row">
-                                    <button id="order-submit-btn" type="button" class="btn btn-lg btn-primary ml-auto my-3">발주 등록</button>
+                                    <button id="sale-submit-btn" type="button" class="btn btn-lg btn-primary ml-auto my-3">수주 등록</button>
                                 </div>
                                 </form>
 
@@ -183,7 +183,7 @@
     <div th:replace="~{fragments/footer :: footerFragment}"></div>
 
     <!-- custom js -->
-    <script src="/js/transaction/order/insert.js"></script>
+    <script src="/js/transaction/sale/insert.js"></script>
 
 </body>
 
