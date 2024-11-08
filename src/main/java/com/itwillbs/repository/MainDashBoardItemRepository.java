@@ -28,7 +28,7 @@ public interface MainDashBoardItemRepository extends JpaRepository<Item, String>
 	    List<DefectiveDTO> findByStatus(@Param("status") String status);
 	 
 	 //입고량
-	 @Query("SELECT new com.itwillbs.domain.dashboard.IncomingItemDTO(c.quantity, i.itemName) " +
+	 @Query("SELECT new com.itwillbs.domain.dashboard.IncomingItemDTO(c.quantity, i.itemName, i.itemCode,c.incomingItemId) " +
 		       "FROM IncommingItemDash c JOIN Item i ON i.itemCode = c.itemCode.itemCode " +  
 		       "WHERE i.itemType = :itemType")
 	    List<IncomingItemDTO> findByItemType(@Param("itemType") String itemType);

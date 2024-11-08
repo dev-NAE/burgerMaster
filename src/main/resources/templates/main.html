@@ -430,10 +430,13 @@
 			const xlsrmlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
 			const rmQuantities = rmItemList.map(item => item.quantity); // 원재료 입고량
 			const totalrmInventory = rmInventoryList.map(item => item.quantity); // 총 재고량
-
+			const rmItemCode = rmItemList.map(item => item.itemCode);
+			const rmIncommingItemCode = rmItemList.map(item => item.incomingItemId);
 			// 데이터를 JSON 형식으로 정리
 			const excelData1 = xlsrmlabels.map((label, index) => ({
+				'#':rmItemCode[index],
 				'항목 이름': label,
+				'입고 #' : rmIncommingItemCode[index],
 				'원재료 입고량': rmQuantities[index],
 				'총 재고량': totalrmInventory[index]
 			}));
@@ -512,11 +515,15 @@
 			const xlsfplabels = fpInventoryList.map(item => item.itemName);  // 항목 이름
 			const fpQuantities = fpItemList.map(item => item.quantity); // 원재료 입고량
 			const totalfpInventory = fpInventoryList.map(item => item.quantity); // 총 재고량
+			const fpItemCode = fpItemList.map(item => item.quantity); 
+			const fpIncommingCode = fpItemList.map(item => item.incomingItemId); 
 
 			// 데이터를 JSON 형식으로 정리
 			const excelData2 = xlsfplabels.map((label, index) => ({
+				'#':fpItemCode[index],
 				'항목 이름': label,
-				'원재료 입고량': fpQuantities[index],
+				'입고 #' : fpIncommingCode[index],
+				'완재품 입고량': fpQuantities[index],
 				'총 재고량': totalfpInventory[index]
 			}));
 
@@ -585,11 +592,15 @@
 			const xlspplabels = ppInventoryList.map(item => item.itemName);  // 항목 이름
 			const ppQuantities = ppItemList.map(item => item.quantity); // 원재료 입고량
 			const totalppInventory = ppInventoryList.map(item => item.quantity); // 총 재고량
+			const ppItemCode = ppItemList.map(item => item.itemCode); // 총 재고량
+			const ppcommingItemCode = ppItemList.map(item => item.incomingItemId); // 총 재고량
 
 			// 데이터를 JSON 형식으로 정리
 			const excelData3 = xlspplabels.map((label, index) => ({
+				'#':ppItemCode[index],
 				'항목 이름': label,
-				'원재료 입고량': ppQuantities[index],
+				'입고 #':ppcommingItemCode[index],
+				'가공품 입고량': ppQuantities[index],
 				'총 재고량': totalppInventory[index]
 			}));
 
@@ -678,7 +689,14 @@
 			XLSX.writeFile(workbook4, '판품 품목명, 갯수.xlsx');
 		});
 
-		//수정필요 최종 반품데이터 갯수 모니터
+		//수정필요 최종 반품데이터 갯수 모니터 코드 추가해얗ㅁ
+		
+		
+		
+		
+		
+		
+		
 
 		//
 		// 폐기 데이터
@@ -753,7 +771,7 @@
 			XLSX.writeFile(workbook5, '폐기 품목명, 갯수.xlsx');
 		});
 
-		//마찬가지 모니터하기
+		//마찬가지 모니터하기, 코드 추가해얗ㅁ
 
 
 
@@ -820,13 +838,13 @@
 		// 엑셀 저장 함수
 		document.getElementById('xls6').addEventListener('click', () => {
 			// 차트 데이터 가져오기
-			const xlssllabels = saleItemList.map(item => item.itemName);  // 항목 이름
-			const slQuantities = saleItemList.map(item => item.due_date); 
-			const totalslInventory = saleItemList.map(item => item.total_price); 
+			const xlssllabels = saleItemList.map(item => item.saleId);  // 항목 이름
+			const slQuantities = saleItemList.map(item => item.dueDate); 
+			const totalslInventory = saleItemList.map(item => item.totalPrice); 
 
 			// 데이터를 JSON 형식으로 정리
 			const excelData6 = xlssllabels.map((label, index) => ({
-				'항목 이름': label,
+				'#': label,
 				'날짜': slQuantities[index],
 				'금액': totalslInventory[index]
 			}));
