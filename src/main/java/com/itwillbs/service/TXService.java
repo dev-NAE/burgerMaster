@@ -2,8 +2,10 @@ package com.itwillbs.service;
 
 import com.itwillbs.domain.transaction.OrderDTO;
 import com.itwillbs.domain.transaction.OrderItemsDTO;
+import com.itwillbs.domain.transaction.TxItemsDTO;
 import com.itwillbs.entity.*;
 import com.itwillbs.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -44,11 +46,16 @@ public class TXService {
         BeanUtils.copyProperties(orderDTO, order);      // orderDTO -> order 필드값 복사
         order.setOrderId(orderId);                        // 발주등록번호
         order.setStatus("발주등록(저장)");                  // 발주상태
+        order.setRealDate(new Timestamp(System.currentTimeMillis()));
         order.setManager(managerRepository.findById(orderDTO.getManager()).orElse(null));
         order.setSupplier(supplierRepository.findById(orderDTO.getSupplierCode()).orElse(null));
         orderRepository.save(order);
 
         // 발주 품목정보 저장
+        saveOrderItems(orderItems, orderId, order);
+    }
+
+    private void saveOrderItems(List<OrderItemsDTO> orderItems, String orderId, Order order) {
         for (OrderItemsDTO item : orderItems) {
             OrderItems orderItem = new OrderItems();
             BeanUtils.copyProperties(item, orderItem);
@@ -85,6 +92,7 @@ public class TXService {
         return newOrderId;
     }
 
+    // 접속한 매니저 불러오기 용도
     public String getManagerName(String managerId) {
         Optional<Manager> manager = managerRepository.findById(managerId);
         if (manager.isPresent()) {
@@ -94,16 +102,26 @@ public class TXService {
         }
     }
 
-    public List<Manager> getAllManagers() {
-        return managerRepository.findAll();
+    // 매니저 설정을 위한 검색 용도
+    public List<Manager> findManagers(String managerName) {
+        if (managerName != null) {
+            managerName = "%" + managerName + "%";
+        }
+        return managerRepository.findManagerOnTX(managerName);
     }
 
-    public List<Supplier> getAllSuppliers() {
-        return supplierRepository.findAll();
+    public List<Supplier> findSuppliers(String supplierName) {
+        if (supplierName != null) {
+            supplierName = "%" + supplierName + "%";
+        }
+        return supplierRepository.findSupplierOnTX(supplierName);
     }
 
-    public List<Item> getOrderItems() {
-        return itemRepository.findAll();
+    public List<TxItemsDTO> getTXItems(String itemName, List<String> itemTypes) {
+        if (itemName != null) {
+            itemName = "%" + itemName + "%";
+        }
+        return itemRepository.findItemsOnTX(itemName, itemTypes);
         // 사용중인 코드 + 구매할 수 있는 아이템 한정, 재고수량 오름차순으로 수정 필요
     }
 
@@ -191,5 +209,25 @@ public class TXService {
         log.info("TXService: updateOrderStatus");
         orderRepository.updateOrderStatusById(status, orderId);
     }
+
+    @Transactional
+    public void updateOrder(OrderDTO orderDTO, List<OrderItemsDTO> orderItems) {
+        log.info("TXService: updateOrder");
+
+        String orderId = orderDTO.getOrderId();
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new EntityNotFoundException("해당 발주 없음"));
+
+        // 발주 정보 업데이트
+        BeanUtils.copyProperties(orderDTO, order,  "orderId", "status");  // id, 상태 제외 DTO 값 복사
+        order.setRealDate(new Timestamp(System.currentTimeMillis()));   // 수정 시점으로 실제등록일 변경
+        order.setManager(managerRepository.findById(orderDTO.getManager()).orElse(null));
+        order.setSupplier(supplierRepository.findById(orderDTO.getSupplierCode()).orElse(null));
+        orderRepository.save(order);
+
+        // 발주 품목정보 새로 저장
+        orderItemsRepository.deleteByOrder(order);
+        saveOrderItems(orderItems, orderId, order);
+    }
+
 
 }
