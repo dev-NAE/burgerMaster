@@ -140,37 +140,24 @@
                   </thead>
                   <tbody>
                   
+                  <tr class="even" th:each="item : ${qualityList}">
+                  	<td class="dtr-control sorting_1" tabindex="0" th:text="${item.quality_order_id}"></td>
+                  	<td th:text="${item.}"></td>
+                  	<td th:text="${}"></td>
+                  	<td th:text="${}"></td>
+                  	<td th:text="${}"></td>
+                  </tr>
+                  
+                  
+                  
                   <tr class="even">
                     <td class="dtr-control sorting_1" tabindex="0">QA_SM_0001</td>
                     <td>패티</td>
                     <td>김철수</td>
                     <td>2024-10-22</td>
 					<td>검품 완료</td>
-                  </tr><tr class="odd">
-                    <td class="dtr-control sorting_1" tabindex="0">QA_SM_0001</td>
-                    <td>패티</td>
-                    <td>김철수</td>
-                    <td>2024-10-22</td>
-					<td>검품 완료</td>
-                  </tr><tr class="even">
-                    <td class="dtr-control sorting_1" tabindex="0">QA_SM_0001</td>
-                    <td>패티</td>
-                    <td>김철수</td>
-                    <td>2024-10-22</td>
-					<td>검품 완료</td>
-                  </tr><tr class="odd">
-                    <td class="dtr-control sorting_1" tabindex="0">QA_SM_0001</td>
-                    <td>패티</td>
-                    <td>김철수</td>
-                    <td>2024-10-22</td>
-					<td>검품 완료</td>
-                  </tr><tr class="even">
-                    <td class="dtr-control sorting_1" tabindex="0">QA_SM_0001</td>
-                    <td>패티</td>
-                    <td>김철수</td>
-                    <td>2024-10-22</td>
-					<td>검품 완료</td>
-                  </tr></tbody>
+                  </tr>
+                  </tbody>
                   <tfoot>
               
                  </tfoot>
