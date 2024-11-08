@@ -3,133 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>발주서 출력</title>
-
-    <style>
-        /* 따로 뺄거임~~~ */
-
-        body {
-            transform: scale(0.6); /* 60% 크기로 축소 */
-            transform-origin: top left; /* 좌상단 기준으로 축소 */
-            width: 167%; /* 축소 후 가로가 줄어드는 것을 보정 */
-        }
-
-        #form-wrapper {
-            width: 90%;
-            height: auto;
-            margin: 0 auto;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            border: 1px solid #000;
-            line-height: 1.6;
-        }
-
-        #header h1 {
-            text-align: center;
-            margin: 30px 0;
-            font-weight: bold;
-        }
-
-        #footer {
-            margin: 30px 0;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        #order-id-area {
-            margin: 20px 0;
-        }
-
-        #top-left {
-            margin: 20px 0 0 20px;
-        }
-
-        #our-info, #item-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        #our-info th, #item-table th {
-            font-weight: bold;
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: center;
-            background-color: #ddd;
-        }
-
-        #our-info td, #item-table td {
-            text-align: center;
-            font-size: 0.8em;
-            border: 1px solid #000;
-        }
-
-        #item-table td {
-            padding: 8px;
-        }
-
-        #item-table th {
-            background-color: #f0f0f0;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        #top {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-
-        #top-left {
-            width: 45%;
-        }
-
-        #top-right {
-            width: 50%;
-        }
-
-        #date-area {
-            margin: 8px 0;
-            font-weight: bold;
-        }
-
-        #total-price-area {
-            margin: 20px 0 10px 0;
-            text-align: center;
-            border: 1px solid #000;
-            font-size: 1.2em;
-            padding: 10px 0;
-        }
-
-
-        #bottom #info-area {
-            margin: 20px 15px 0 0;
-            font-weight: bold;
-            text-align: right;
-        }
-
-        #footer {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        #btn-area {
-            text-align: center;
-            margin: 30px auto;
-        }
-
-        #btn-area button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        @media print {
-            #btn-area {
-                display:none;
-            }
-        }
-
-    </style>
+    <link rel="stylesheet" href="/css/transaction/formstyle.css">
+    <script src="/plugins/jquery/jquery.min.js"></script>
 </head>
 <body>
     <div id="btn-area">
@@ -143,9 +18,11 @@
         <div id="content">
             <div id="top">
                 <div id="top-left">
-                    <div id="order-id-area">발주번호: OD0000</div>
-                    <div id="date-area">발주일: 2024-11-06<br>납기일: 2024-11-12</div>
-                    <div id="supplier-area"><h3 style="text-align:center;">소고기천국 귀하</h3></div>
+                    <div id="order-id-area">발주등록번호: <span id="order-id"></span></div>
+                    <div id="data-area">
+                        발주일: <span id="order-date"></span><br>
+                        납기일: <span id="due-date"></span></div>
+                    <div id="supplier-area"><h3 style="text-align:center;"><span id="supplier"></span> 귀하</h3></div>
                     <p style="text-align:right;">아래와 같이 발주합니다.</p>
                 </div>
                 <div id="top-right">
@@ -181,7 +58,7 @@
                 </div>
             </div>
             <div id="middle">
-                <div id="total-price-area">발주금액: 금000,000원</div>
+                <div id="total-price-area">발주금액 합계: 금<span id="total-price"></span>원</div>
                 <div id="items-area">
                     <table id="item-table">
                         <thead>
@@ -194,34 +71,14 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                              <td>1</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                          </tr>
-                          <tr>
-                              <td>2</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                          </tr>
-                          <tr>
-                              <td>3</td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                              <td></td>
-                          </tr>
+
                         </tbody>
                     </table>
                 </div>
             </div>
             <div id="bottom">
                 <div id="info-area">
-                    <div id="manager-info">담당자: 박구매</div>
+                    <div id="manager-info">담당자: <span id="manager-name">박구매</span></div>
                 </div>
             </div>
         </div>
@@ -242,11 +99,30 @@
         return false;
     }
 
-    function setPrintData(printData) {
-        $('#supplier-code').val(supplierCode);
-        $('#supplier-name').val(supplierName);
-    }
+    $(document).ready(function () {
+        $(window).on('message', function(event) {
+            const printData = event.originalEvent.data;
+            const tableBody = $('#item-table tbody');
 
+            $('#order-id').text(printData.orderId);
+            $('#order-date').text(printData.orderDate);
+            $('#due-date').text(printData.dueDate);
+            $('#supplier').text(printData.supplierName);
+            $('#total-price').text(parseInt(printData.totalPrice).toLocaleString()).css('font-weight', 'bold');
+            $('#manager-name').text(printData.managerName);
+
+            printData.tableRows.forEach((row, index) => {
+                const rowNum = index + 1;
+                const newRow = $('<tr>');
+                newRow.append($('<td>', {text: rowNum}));
+                newRow.append($('<td>', {text: row.itemName}));
+                newRow.append($('<td>', {text: (parseInt(row.itemPrice).toLocaleString() + ' 원')}).css('text-align', 'right'));
+                newRow.append($('<td>', {text: parseInt(row.itemQuantity).toLocaleString()}).css('text-align', 'right'));
+                newRow.append($('<td>', {text: (parseInt(row.subtotal).toLocaleString() + ' 원')}).css('text-align', 'right'));
+                tableBody.append(newRow);
+            });
+        });
+    });
 
 </script>
 

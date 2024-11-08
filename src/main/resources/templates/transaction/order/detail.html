@@ -67,8 +67,8 @@
 
                     <!-- Contents -->
                         <div class="container-fluid col-sm-10 my-5">
-                            <div class="submit-btn-area row">
-                                <button id="print-form" class="btn btn-md btn-secondary ml-auto my-3 mr-2">발주서 출력</button>
+                            <div class="submit-btn-area row" th:if="${order.status != '발주취소'}">
+                                <button id="print-form" class="btn btn-md btn-info ml-auto my-3 mr-2">발주서 출력</button>
                             </div>
                             <div class="card insert-container px-3 py-3">
                                 <div class="card-body basic-info-area px-5">
@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="input-items-area card-body">
                                     <div class="row">
-                                        <button class="btn btn-md btn-secondary ml-auto mr-2 mb-3" id="add-items">물품 추가</button>
+                                        <button class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-items" style="display:none;">물품 추가</button>
                                     </div>
                                     <div class="item-list card-body border">
                                         <table id="item-list-table" class="table table-bordered table-hover dataTable dtr-inline">
@@ -147,10 +147,10 @@
                                         <div class="calculating-brief row my-2 py-3 px-2 bg-light">
                                             <div class="col-6 number-of-items">
                                                 <span id="total-quantity-view" class="ml-3" th:text="${items.size()}">0</span>개 품목 선택
-                                                <input id="total-quantity" type="hidden" value="0">
+                                                <input id="total-quantity" type="hidden" value="0" th:value="${items.size()}">
                                             </div>
                                             <div class="col-6 text-right total-of-price">금액 합계: <span id="total-price-view" class="ml-1" th:text="${#numbers.formatInteger(order.totalPrice, 1, 'COMMA')}">0</span> 원
-                                                <input id="total-price" type="hidden">
+                                                <input id="total-price" type="hidden" th:value="${order.totalPrice}">
                                             </div>
                                         </div>
                                     </div>
@@ -158,7 +158,7 @@
                             </div>
                             <div class="submit-btn-area row">
                                 <div class="col-5 d-flex justify-content-start">
-                                    <button id="back-to-list" class="btn btn-lg btn-secondary my-3">목록으로 이동</button>
+                                    <button id="back-to-list" class="btn btn-lg btn-info my-3">목록으로 이동</button>
                                 </div>
                                 <div id="btn-group" th:if="${order.status == '발주등록(저장)'}" class="col-7 d-flex justify-content-end">
                                     <button id="edit-btn" class="btn btn-lg btn-success my-3 mx-2">수정</button>
