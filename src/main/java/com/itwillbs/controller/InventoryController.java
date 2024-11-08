@@ -153,10 +153,11 @@ public class InventoryController {
 		log.info("status = " + status);
 		log.info("managerCodeOrName = " + managerCodeOrName);
 		
-	    Timestamp incomingStartDate_start = null;
+	    Timestamp incomingStartDate_start = null; 
 	    Timestamp incomingStartDate_end = null;
 	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+	    //문자열로 가져온 등록일검색 날짜는 DB에서 조회할때 TimeStamp 타입으로 변환해야 한다
 	    try {
 	        // 시작 날짜 처리
 	        if (incomingStartDate_startStr != null && !incomingStartDate_startStr.isEmpty()) {
