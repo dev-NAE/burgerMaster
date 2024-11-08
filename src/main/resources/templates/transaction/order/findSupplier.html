@@ -18,14 +18,16 @@
 </head>
 <body>
 <h3 class="text-center my-5">거래처 검색</h3>
-<div class="input-group col-8 my-5 mx-auto text-center">
-  <input type="search" class="form-control form-control-large" placeholder="업체명으로 검색">
-  <div class="input-group-append">
-    <button type="submit" class="btn btn-default">
-      <i class="fa fa-search"></i>
-    </button>
-  </div>
-</div>
+<form th:action="@{/tx/findSupplier}" method="get">
+    <div class="input-group col-8 my-5 mx-auto text-center">
+      <input type="search" name="query" class="form-control form-control-large" placeholder="업체명으로 검색">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-default">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </div>
+</form>
 <div class="item-list card-body col-10 mx-auto">
     <table class="table table-bordered table-hover dataTable dtr-inline">
         <tr class="bg-lightblue">
