@@ -2,6 +2,8 @@ package com.itwillbs.repository;
 
 import java.util.List;
 
+import com.itwillbs.domain.transaction.TxItemsDTO;
+import com.itwillbs.entity.Manager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -39,5 +41,15 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 				+ "FROM BOM b JOIN Item i ON b.rmCode = i.itemCode " 
 				+ "WHERE b.ppCode = :itemCode")
 	List<MFRmDTO> findRmList(@Param("itemCode") String itemCode);
-	
+
+	// 이은지 작성: 거래 품목 가져오기 (+ 이름 검색 포함)
+	@Query("SELECT new com.itwillbs.domain.transaction.TxItemsDTO" +
+			"(i.itemCode, i.itemName, i.itemType, COALESCE(ii.quantity, 0), COALESCE(ii.minReqQuantity, 0)) " +
+			"FROM Item i LEFT JOIN i.inventoryItem ii WHERE " +
+			"(:itemName IS NULL OR i.itemName LIKE :itemName) AND " +
+			"i.useYN = 'Y' AND i.itemType IN :itemTypes " +
+			"ORDER BY ii.quantity")
+	List<TxItemsDTO> findItemsOnTX(@Param("itemName") String itemName,
+								   @Param("itemTypes") List<String> itemTypes);
+
 }
