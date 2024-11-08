@@ -64,8 +64,8 @@
 				</a>
 				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown" >
 					<span class="dropdown-item dropdown-header" id="notiHeader">알람이 0개 있습니다</span>
-					<div class="dropdown-divider"  ></div>
-					<div id="noticontent" ></div>
+					<div class="dropdown-divider"   ></div>
+					<div id="noticontent" style="font-size: 10px;"></div>
 					<a href="#" class="dropdown-item dropdown-footer">확인</a>
 				</div>
 			</div>
@@ -930,7 +930,7 @@
 
 		                    filteredNotifications.forEach(function (item) {
 		                        const listItem = $('<a href="#" class="dropdown-item"></a>')
-		                            .text(item.itemName + ' 재고 수량이 ' + item.quantity + ' 개 입니다. 재주문이 필요합니다.');
+		                            .text(`${item.itemName} 재고 수량이 ${item.quantity} 개 입니다. 재주문이 필요합니다.`);
 		                        contentElement.append(listItem);
 		                        contentElement.append('<div class="dropdown-divider"></div>');
 		                    });
