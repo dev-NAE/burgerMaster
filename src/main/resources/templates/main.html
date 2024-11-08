@@ -68,7 +68,7 @@
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0">Home : Dashboard</h1>
+							<h1 class="m-0" >Home : Dashboard</h1>
 
 						</div><!-- /.col -->
 						<div class="col-sm-6">
@@ -201,7 +201,7 @@
 
 					<div class="card card-danger" style="margin: 5px;">
 						<div class="card-header">
-							<h3 class="card-title">반품량</h3>
+							<h3 class="card-title">반품 품목</h3>
 							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 								<button class="btn btn-light" id="xls4">.xls로 저장</button>
 							</div>
@@ -233,7 +233,7 @@
 
 					<div class="card card-danger" style="margin: 5px ;">
 						<div class="card-header">
-							<h3 class="card-title">폐기량</h3>
+							<h3 class="card-title">폐기 품목</h3>
 							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 								<button class="btn btn-light" id="xls5">.xls로 저장</button>
 							</div>
@@ -435,7 +435,7 @@
 			// 데이터를 JSON 형식으로 정리
 			const excelData1 = xlsrmlabels.map((label, index) => ({
 				'#':rmItemCode[index],
-				'항목 이름': label,
+				'품목 이름': label,
 				'입고 #' : rmIncommingItemCode[index],
 				'원재료 입고량': rmQuantities[index],
 				'총 재고량': totalrmInventory[index]
@@ -515,13 +515,13 @@
 			const xlsfplabels = fpInventoryList.map(item => item.itemName);  // 항목 이름
 			const fpQuantities = fpItemList.map(item => item.quantity); // 원재료 입고량
 			const totalfpInventory = fpInventoryList.map(item => item.quantity); // 총 재고량
-			const fpItemCode = fpItemList.map(item => item.quantity); 
+			const fpItemCode = fpItemList.map(item => item.itemCode); 
 			const fpIncommingCode = fpItemList.map(item => item.incomingItemId); 
 
 			// 데이터를 JSON 형식으로 정리
 			const excelData2 = xlsfplabels.map((label, index) => ({
 				'#':fpItemCode[index],
-				'항목 이름': label,
+				'품목 이름': label,
 				'입고 #' : fpIncommingCode[index],
 				'완재품 입고량': fpQuantities[index],
 				'총 재고량': totalfpInventory[index]
@@ -598,7 +598,7 @@
 			// 데이터를 JSON 형식으로 정리
 			const excelData3 = xlspplabels.map((label, index) => ({
 				'#':ppItemCode[index],
-				'항목 이름': label,
+				'품목 이름': label,
 				'입고 #':ppcommingItemCode[index],
 				'가공품 입고량': ppQuantities[index],
 				'총 재고량': totalppInventory[index]
@@ -672,10 +672,14 @@
 			const xlsdflabels = dfItemList.map(item => item.itemName);  // 항목 이름
 			const dfQuantities = dfItemList.map(item => item.quantity); // 원재료 입고량
 			const totaldfInventory = dfItemList.map(item => item.quantity); // 총 재고량
+			const dfCodeItem = dfItemList.map(item => item.defectiveId); // 총 재고량
+			const dfItemCode = dfItemList.map(item => item.itemCode); // 총 재고량
 
 			// 데이터를 JSON 형식으로 정리
 			const excelData4 = xlsdflabels.map((label, index) => ({
-				'항목 이름': label,
+				'#':dfItemCode[index],
+				'반품#':dfCodeItem[index],
+				'품목 이름': label,
 				'반품량': dfQuantities[index],
 				//'총 재고량': totaldfInventory[index]
 			}));
@@ -686,7 +690,7 @@
 			XLSX.utils.book_append_sheet(workbook4, worksheet4, '반품 데이터');
 
 			// 엑셀 파일로 다운로드
-			XLSX.writeFile(workbook4, '판품 품목명, 갯수.xlsx');
+			XLSX.writeFile(workbook4, '반품 품목명, 갯수.xlsx');
 		});
 
 		//수정필요 최종 반품데이터 갯수 모니터 코드 추가해얗ㅁ
@@ -754,9 +758,13 @@
 			const xlsdslabels = discardItemList.map(item => item.itemName);  // 항목 이름
 			const dsQuantities = discardItemList.map(item => item.quantity); // 원재료 입고량
 			const totaldsInventory = discardItemList.map(item => item.quantity); // 총 재고량
+			const dsItemCode = discardItemList.map(item => item.defectiveId); // 총 재고량
+			const discardItemCode = discardItemList.map(item => item.itemCode); // 총 재고량
 
 			// 데이터를 JSON 형식으로 정리
 			const excelData5 = xlsdslabels.map((label, index) => ({
+				'#':discardItemCode[index],
+				'반품 #':dsItemCode[index],
 				'항목 이름': label,
 				'폐기량': dsQuantities[index],
 				//'총 재고량': totaldsInventory[index]
