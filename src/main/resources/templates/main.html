@@ -53,20 +53,20 @@
 		</ul>
 
 		<!-- Right navbar links -->
-		<ul class="navbar-nav ml-auto">
+		<ul class="navbar-nav ml-auto" >
 			<!-- Notifications Dropdown Menu -->
 
 			<!-- 알람 표시 -->
 			<div class="nav-item dropdown" id="notiClick">
-				<a class="nav-link" data-toggle="dropdown" id="Noti" href="#">
-					<i class="far fa-bell"></i>
-					<span class="badge badge-warning navbar-badge" id="notificationCount">0</span>
+				<a class="nav-link" data-toggle="dropdown" id="Noti" href="#" >
+					<i class="far fa-bell" ></i>
+					<span class="badge badge-warning navbar-badge" id="notificationCount"  >0</span>
 				</a>
-				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown">
+				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown" >
 					<span class="dropdown-item dropdown-header" id="notiHeader">알람이 0개 있습니다</span>
-					<div class="dropdown-divider"></div>
-					<div id="noticontent"></div>
-					<a href="#" class="dropdown-item dropdown-footer">알람 모두 보기</a>
+					<div class="dropdown-divider"  ></div>
+					<div id="noticontent" ></div>
+					<a href="#" class="dropdown-item dropdown-footer">확인</a>
 				</div>
 			</div>
 		</ul>
@@ -903,15 +903,10 @@
 
 
 		$(function () {
-		    $('#notiClick').click(function () {
 		        $.ajax({
 		            url: "/noticontent",
 		            dataType: "json",
 		            success: function (notifiList) {
-		                // 각 리스트의 최소 요구 수량
-		                const notfmReqQuantities = fpInventoryList.map(item => item.minReqQuantity);
-		                const notrminReqQuantities = rmInventoryList.map(item => item.minReqQuantity);
-		                const notppinReqQuantities = ppInventoryList.map(item => item.minReqQuantity);
 
 		                // 필터링된 알림 목록을 담을 리스트
 		                const filteredNotifications = [];
@@ -935,7 +930,7 @@
 
 		                    filteredNotifications.forEach(function (item) {
 		                        const listItem = $('<a href="#" class="dropdown-item"></a>')
-		                            .text(item.itemName + ' 재고 수량이 ' + item.quantity + ' 이하입니다.');
+		                            .text(item.itemName + ' 재고 수량이 ' + item.quantity + ' 개 입니다. 재주문이 필요합니다.');
 		                        contentElement.append(listItem);
 		                        contentElement.append('<div class="dropdown-divider"></div>');
 		                    });
@@ -945,7 +940,6 @@
 						}
 		          
 		        });
-		    });
 		});
 
 
