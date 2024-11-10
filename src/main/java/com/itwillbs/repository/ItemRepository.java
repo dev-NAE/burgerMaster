@@ -51,15 +51,15 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 				"WHERE i.itemType = 'PP'")
 	List<Item> findByItemType();
 
-	@Query("SELECT new com.itwillbs.domain.manufacture.MFRmDTO(i.itemName, b.quantity) " 
-				+ "FROM BOM b JOIN Item i ON b.rmCode = i.itemCode " 
-				+ "WHERE b.ppCode = :itemCode")
+	@Query("SELECT new com.itwillbs.domain.manufacture.MFRmDTO(i.itemName, b.quantity) "
+				+ "FROM BOM b JOIN Item i ON b.rawMaterial.itemCode = i.itemCode "
+				+ "WHERE b.processedProduct.itemCode = :itemCode")
 	List<MFRmDTO> findRmList(@Param("itemCode") String itemCode);
-	
-	@Query("SELECT new com.itwillbs.domain.manufacture.MFRmListDTO(i.itemCode, i.itemName, b.quantity, ii.quantity) " 
-			+ "FROM Item i JOIN BOM b ON i.itemCode = b.rmCode " 
+
+	@Query("SELECT new com.itwillbs.domain.manufacture.MFRmListDTO(i.itemCode, i.itemName, b.quantity, ii.quantity) "
+			+ "FROM Item i JOIN BOM b ON i.itemCode = b.rawMaterial.itemCode "
 			+ "JOIN InventoryItem ii ON i.itemCode = ii.itemCode "
-			+ "WHERE b.ppCode = (SELECT i2.itemCode FROM Item i2 where i2.itemName = :itemName)")
+			+ "WHERE b.processedProduct.itemCode = (SELECT i2.itemCode FROM Item i2 where i2.itemName = :itemName)")
 	List<MFRmListDTO> findRM(@Param("itemName") String itemName);
 
 
@@ -72,6 +72,6 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 			"ORDER BY ii.quantity")
 	List<TxItemsDTO> findItemsOnTX(@Param("itemName") String itemName,
 								   @Param("itemTypes") List<String> itemTypes);
-	
-	
+
+
 }
