@@ -3,13 +3,17 @@ package com.itwillbs.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.itwillbs.domain.manufacture.MFBomDTO;
 import com.itwillbs.domain.manufacture.MFOrderDTO;
+import com.itwillbs.domain.manufacture.MFRmListDTO;
 import com.itwillbs.entity.Item;
 import com.itwillbs.entity.MFOrder;
 import com.itwillbs.service.MFService;
@@ -72,4 +76,18 @@ public class MFController {
 		
 		return "/manufacture/orderInsert";
 	}
+	
+	@ResponseBody
+	@GetMapping("/getRM")
+	public ResponseEntity<List<MFRmListDTO>> getRM(@RequestParam(name = "itemName") String itemName){
+		log.info("MFController getRM()");
+		
+		List<MFRmListDTO> rmList = mfService.getRM(itemName);
+		log.info(rmList.toString());
+		
+		return ResponseEntity.ok(rmList);
+		
+	}
+	
+	
 }
