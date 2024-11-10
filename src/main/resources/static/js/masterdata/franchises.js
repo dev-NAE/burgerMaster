@@ -2,7 +2,7 @@ const token = $("meta[name='_csrf']").attr("content");
 const header = $("meta[name='_csrf_header']").attr("content");
 
 $(document).ready(function() {
-	loadSuppliers();
+	loadFranchises();
 	setupEventHandlers();
 });
 
@@ -10,25 +10,25 @@ function setupEventHandlers() {
 	$('#searchForm').on('submit', e => {
 		e.preventDefault();
 		currentPage = 0;
-		loadSuppliers();
+		loadFranchises();
 	});
 
-	$('#searchCodeBtn').on('click', updateSupplierCode);
+	$('#searchCodeBtn').on('click', updateFranchiseCode);
 	$('#editBtn').click(switchToEditMode);
-	$('#deleteBtn').click(deleteSupplier);
+	$('#deleteBtn').click(deleteFranchise);
 
-	$('#supplierForm input').on('input blur', function() {
+	$('#franchiseForm input').on('input blur', function() {
 		validateField($(this));
 	});
 
-	$('#supplierForm select').on('change', function() {
+	$('#franchiseForm select').on('change', function() {
 		validateField($(this));
 	});
 
 	$('#saveBtn').click(function() {
 		let isValid = true;
 
-		$('#supplierForm input, #supplierForm select').each(function() {
+		$('#franchiseForm input, #franchiseForm select').each(function() {
 			if (!validateField($(this))) {
 				isValid = false;
 			}
@@ -42,12 +42,11 @@ function setupEventHandlers() {
 			});
 			return;
 		}
-
-		saveSupplier();
+		saveFranchise();
 	});
 }
 
-function loadSuppliers() {
+function loadFranchises() {
 	const searchParams = new URLSearchParams({
 		page: currentPage,
 		size: PAGE_SIZE
@@ -62,9 +61,9 @@ function loadSuppliers() {
 
 	searchParams.append('includeUnused', $('#includeUnused').is(':checked'));
 
-	$.get('/masterdata/api/suppliers?' + searchParams.toString())
+	$.get('/masterdata/api/franchises?' + searchParams.toString())
 		.done(response => {
-			displaySuppliers(response.content);
+			displayFranchises(response.content);
 			displayPagination(response);
 		})
 		.fail(() => {
@@ -76,27 +75,29 @@ function loadSuppliers() {
 		});
 }
 
-function displaySuppliers(suppliers) {
-	const tbody = $('#supplierList');
+function displayFranchises(franchises) {
+	const tbody = $('#franchiseList');
 	tbody.empty();
 
-	if (!suppliers || suppliers.length === 0) {
-		tbody.html('<tr><td colspan="7" class="text-center">검색 결과가 없습니다.</td></tr>');
+	if (!franchises || franchises.length === 0) {
+		tbody.html('<tr><td colspan="9" class="text-center">검색 결과가 없습니다.</td></tr>');
 		return;
 	}
 
-	suppliers.forEach(supplier => {
+	franchises.forEach(franchise => {
 		tbody.append(`
-            <tr onclick="openModal('detail', '${supplier.supplierCode}')">
-                <td>${supplier.supplierCode}</td>
-                <td>${supplier.supplierName}</td>
-                <td>${supplier.businessNumber}</td>
-                <td>${supplier.contactPerson}</td>
-                <td>${supplier.email || ''}</td>
-                <td>${supplier.address}</td>
+            <tr onclick="openModal('detail', '${franchise.franchiseCode}')">
+                <td>${franchise.franchiseCode}</td>
+                <td>${franchise.franchiseName}</td>
+                <td>${franchise.ownerName}</td>
+                <td>${franchise.businessNumber}</td>
+                <td>${franchise.email || ''}</td>
+                <td>${franchise.address}</td>
+                <td>${franchise.contractStartDate}</td>
+                <td>${franchise.contractEndDate || ''}</td>
                 <td class="text-center">
-                    <span class="badge ${supplier.useYN === 'Y' ? 'badge-success' : 'badge-danger'}">
-                        ${supplier.useYN === 'Y' ? '사용' : '미사용'}
+                    <span class="badge ${franchise.useYN === 'Y' ? 'badge-success' : 'badge-danger'}">
+                        ${franchise.useYN === 'Y' ? '사용' : '미사용'}
                     </span>
                 </td>
             </tr>
@@ -143,13 +144,13 @@ function changePage(page) {
 		return;
 	}
 	currentPage = page;
-	loadSuppliers();
+	loadFranchises();
 }
 
-function openModal(mode, supplierCode = null) {
-	const modal = $('#supplierModal');
+function openModal(mode, franchiseCode = null) {
+	const modal = $('#franchiseModal');
 	const viewSection = $('#viewSection');
-	const form = $('#supplierForm');
+	const form = $('#franchiseForm');
 
 	form[0].reset();
 	$('#saveBtn, #editBtn, #deleteBtn').hide();
@@ -160,63 +161,67 @@ function openModal(mode, supplierCode = null) {
 	$('.invalid-feedback').text('');
 
 	if (mode === 'register') {
-		$('#modalTitle').text('거래처 등록');
-		$('#supplierForm').data('mode', 'register');
+		$('#modalTitle').text('가맹점 등록');
+		$('#franchiseForm').data('mode', 'register');
 		form.show();
 		$('#saveBtn').show();
 		$('#searchCodeBtnGroup').show();
-	} else if (mode === 'detail' && supplierCode) {
-		$('#modalTitle').text('거래처 상세');
-		loadSupplierDetail(supplierCode);
+	} else if (mode === 'detail' && franchiseCode) {
+		$('#modalTitle').text('가맹점 상세');
+		loadFranchiseDetail(franchiseCode);
 	}
 	modal.modal('show');
 }
 
-function loadSupplierDetail(supplierCode) {
-	$.get('/masterdata/api/suppliers/' + supplierCode)
-		.done(supplier => {
-			$('#viewSection').html(getSupplierDetailHtml(supplier)).show();
-			fillForm(supplier);
+function loadFranchiseDetail(franchiseCode) {
+	$.get('/masterdata/api/franchises/' + franchiseCode)
+		.done(franchise => {
+			$('#viewSection').html(getFranchiseDetailHtml(franchise)).show();
+			fillForm(franchise);
 			$('#editBtn, #deleteBtn').show();
 		});
 }
 
-function fillForm(supplier) {
-	$('#supplierCode').val(supplier.supplierCode);
-	$('#supplierName').val(supplier.supplierName);
-	$('#businessNumber').val(supplier.businessNumber);
-	$('#contactPerson').val(supplier.contactPerson);
-	$('#email').val(supplier.email);
-	$('#address').val(supplier.address);
-	$('#useYN').val(supplier.useYN);
+function fillForm(franchise) {
+	$('#franchiseCode').val(franchise.franchiseCode);
+	$('#franchiseName').val(franchise.franchiseName);
+	$('#ownerName').val(franchise.ownerName);
+	$('#businessNumber').val(franchise.businessNumber);
+	$('#email').val(franchise.email);
+	$('#address').val(franchise.address);
+	$('#contractStartDate').val(franchise.contractStartDate);
+	$('#contractEndDate').val(franchise.contractEndDate);
+	$('#useYN').val(franchise.useYN);
 }
 
-function getSupplierDetailHtml(supplier) {
+function getFranchiseDetailHtml(franchise) {
 	return `
         <table class="table">
-            <tr><th>거래처코드</th><td>${supplier.supplierCode}</td></tr>
-            <tr><th>거래처명</th><td>${supplier.supplierName}</td></tr>
-            <tr><th>사업자번호</th><td>${supplier.businessNumber}</td></tr>
-            <tr><th>담당자명</th><td>${supplier.contactPerson}</td></tr>
-            <tr><th>이메일</th><td>${supplier.email || '-'}</td></tr>
-            <tr><th>주소</th><td>${supplier.address}</td></tr>
-            <tr><th>사용여부</th><td>${supplier.useYN === 'Y' ? '사용' : '미사용'}</td></tr>
+            <tr><th>가맹점코드</th><td>${franchise.franchiseCode}</td></tr>
+            <tr><th>가맹점명</th><td>${franchise.franchiseName}</td></tr>
+            <tr><th>점주명</th><td>${franchise.ownerName}</td></tr>
+            <tr><th>사업자번호</th><td>${franchise.businessNumber}</td></tr>
+            <tr><th>이메일</th><td>${franchise.email || '-'}</td></tr>
+            <tr><th>주소</th><td>${franchise.address}</td></tr>
+            <tr><th>계약시작일</th><td>${franchise.contractStartDate}</td></tr>
+            <tr><th>계약종료일</th><td>${franchise.contractEndDate || '-'}</td></tr>
+            <tr><th>사용여부</th><td>${franchise.useYN === 'Y' ? '사용' : '미사용'}</td></tr>
         </table>
     `;
 }
 
-function saveSupplier() {
-	const formData = $('#supplierForm').serializeArray();
+function saveFranchise() {
+	const formData = $('#franchiseForm').serializeArray();
 	const jsonData = {};
 	formData.forEach(item => {
 		jsonData[item.name] = item.value;
 	});
 
-	const isEdit = $('#supplierForm').data('mode') === 'edit';
-	const supplierCode = $('#supplierCode').val();
+	const isEdit = $('#franchiseForm').data('mode') === 'edit';
+	const franchiseCode = $('#franchiseCode').val();
 
 	$.ajax({
-		url: isEdit ? `/masterdata/api/suppliers/${supplierCode}` : '/masterdata/api/suppliers',
+		url: isEdit ? `/masterdata/api/franchises/${franchiseCode}` : '/masterdata/api/franchises',
 		type: isEdit ? 'PUT' : 'POST',
 		contentType: 'application/json',
 		beforeSend: function(xhr) {
@@ -229,8 +234,8 @@ function saveSupplier() {
 				title: isEdit ? '수정 완료' : '저장 완료',
 				text: isEdit ? '성공적으로 수정되었습니다.' : '성공적으로 저장되었습니다.'
 			}).then(() => {
-				$('#supplierModal').modal('hide');
-				loadSuppliers();
+				$('#franchiseModal').modal('hide');
+				loadFranchises();
 			});
 		},
 		error: function(xhr) {
@@ -243,11 +248,11 @@ function saveSupplier() {
 							title: '저장 실패 (409 Conflict)',
 							text: '이미 등록된 사업자번호입니다.'
 						});
-					} else if (errorMessage.includes('거래처코드')) {
+					} else if (errorMessage.includes('가맹점코드')) {
 						Swal.fire({
 							icon: 'error',
 							title: '저장 실패 (409 Conflict)',
-							text: '이미 존재하는 거래처코드입니다.'
+							text: '이미 존재하는 가맹점코드입니다.'
 						});
 					} else {
 						Swal.fire({
@@ -289,16 +294,16 @@ function saveSupplier() {
 
 function switchToEditMode() {
 	$('#viewSection').hide();
-	$('#supplierForm').show();
+	$('#franchiseForm').show();
 	$('#editBtn').hide();
 	$('#saveBtn').show();
 
-	$('#supplierForm').data('mode', 'edit');
-	$('#supplierCode').prop('readonly', true);
+	$('#franchiseForm').data('mode', 'edit');
+	$('#franchiseCode').prop('readonly', true);
 	$('#searchCodeBtnGroup').hide();
 }
 
-function deleteSupplier() {
+function deleteFranchise() {
 	Swal.fire({
 		title: '삭제 확인',
 		text: '정말 삭제하시겠습니까?',
@@ -311,14 +316,14 @@ function deleteSupplier() {
 	}).then((result) => {
 		if (result.isConfirmed) {
 			$.ajax({
-				url: '/masterdata/api/suppliers/' + $('#supplierCode').val(),
+				url: '/masterdata/api/franchises/' + $('#franchiseCode').val(),
 				type: 'DELETE',
 				beforeSend: function(xhr) {
 					xhr.setRequestHeader(header, token);
 				},
 				success: () => {
-					$('#supplierModal').modal('hide');
-					loadSuppliers();
+					$('#franchiseModal').modal('hide');
+					loadFranchises();
 					Swal.fire({
 						icon: 'success',
 						title: '삭제 완료',
@@ -337,11 +342,11 @@ function deleteSupplier() {
 	});
 }
 
-function updateSupplierCode() {
-	$.get('/masterdata/api/suppliers/nextCode')
+function updateFranchiseCode() {
+	$.get('/masterdata/api/franchises/nextCode')
 		.done(code => {
-			$('#supplierCode').val(code);
-			validateField($('#supplierCode'));
+			$('#franchiseCode').val(code);
+			validateField($('#franchiseCode'));
 		});
 }
 
@@ -350,24 +355,39 @@ function validateField(field) {
 	const value = field.val();
 
 	switch (id) {
-		case 'supplierCode':
+		case 'franchiseCode':
 			if (!value) {
-				showError(field, '거래처코드를 검색하세요.');
+				showError(field, '가맹점코드를 검색하세요.');
 				return false;
 			}
-			if (!/^SUP\d{3}$/.test(value)) {
-				showError(field, '거래처코드 형식이 올바르지 않습니다.');
+			if (!/^FR\d{3}$/.test(value)) {
+				showError(field, '가맹점코드 형식이 올바르지 않습니다.');
 				return false;
 			}
 			break;
 
-		case 'supplierName':
+		case 'franchiseName':
 			if (!value) {
-				showError(field, '거래처명을 입력하세요.');
+				showError(field, '가맹점명을 입력하세요.');
 				return false;
 			}
 			if (value.length < 2 || value.length > 100) {
-				showError(field, '거래처명은 2~100자 사이여야 합니다.');
+				showError(field, '가맹점명은 2~100자 사이여야 합니다.');
+				return false;
+			}
+			break;
+
+		case 'ownerName':
+			if (!value) {
+				showError(field, '점주명을 입력하세요.');
+				return false;
+			}
+			if (value.length > 50) {
+				showError(field, '점주명은 50자 이하여야 합니다.');
+				return false;
+			}
+			if (!/^[가-힣A-Za-z\s]+$/.test(value)) {
+				showError(field, '점주명에 허용되지 않는 문자가 포함되어 있습니다.');
 				return false;
 			}
 			break;
@@ -379,21 +399,6 @@ function validateField(field) {
 			}
 			if (!/^\d{3}-\d{2}-\d{5}$/.test(value)) {
 				showError(field, '사업자번호 형식이 올바르지 않습니다.');
-				return false;
-			}
-			break;
-
-		case 'contactPerson':
-			if (!value) {
-				showError(field, '담당자명을 입력하세요.');
-				return false;
-			}
-			if (value.length > 50) {
-				showError(field, '담당자명은 50자 이하여야 합니다.');
-				return false;
-			}
-			if (!/^[가-힣A-Za-z\s]+$/.test(value)) {
-				showError(field, '담당자명에 허용되지 않는 문자가 포함되어 있습니다.');
 				return false;
 			}
 			break;
@@ -416,6 +421,20 @@ function validateField(field) {
 			}
 			if (value.length > 200) {
 				showError(field, '주소는 200자 이하여야 합니다.');
+				return false;
+			}
+			break;
+
+		case 'contractStartDate':
+			if (!value) {
+				showError(field, '계약시작일을 입력하세요.');
+				return false;
+			}
+			break;
+
+		case 'contractEndDate':
+			if (value && new Date(value) < new Date($('#contractStartDate').val())) {
+				showError(field, '계약종료일은 계약시작일 이후여야 합니다.');
 				return false;
 			}
 			break;
