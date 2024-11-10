@@ -1,6 +1,7 @@
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 
+//수량 최대 자릿수
 $('input[type=number][maxlength]').on('input', function(ev) {
     var $this = $(this);
     var maxlength = $this.attr('maxlength');
@@ -40,13 +41,19 @@ function change(itemName){
 	getRM();
 }
 
-//가공품과 수량 입력값 변화 감지
-function getRM() {
+//재료표 리셋
+function reset(){
 	const tbody = document.getElementById('rm');
-	
+		
 	while(tbody.rows.length>0){
 		tbody.deleteRow(0);
 	}
+}
+
+//가공품과 수량 입력값 변화 감지
+function getRM() {
+	
+	reset();
 	
 	let item = $('#item').val();
 	let amount = $('#amount').val();
@@ -76,4 +83,42 @@ function getRM() {
 			alert("데이터 가져오기 중 오류 발생. 다시 시도해 주세요.");
 		}		
 	});
-};
+}
+
+//입력값이 모두 입력되면 제출 버튼 활성화
+function inputCheck() {
+	if(($("#item").val()=='')||($("#amount").val()=='')||($("#deadline").val()=='')){
+		$('#submit-btn').attr("disabled", true);
+	} else {
+		$('#submit-btn').attr("disabled", false);
+	}
+}
+
+$(function(){
+	$('#item').on('input', function(){
+		inputCheck();
+	})
+	$('#amount').on('input', function(){
+		inputCheck();
+	})
+	$('#deadline').on('input', function(){
+		inputCheck();
+	})
+})
+
+//리셋 버튼 함수
+$("button[type='reset']").click(function () {
+	$('#submit-btn').attr("disabled", true);
+	reset();
+});
+
+//모달 활성화
+$(document).ready(function() {
+    $('#submit-btn').click(function() {
+        $('#confirmationModal').modal('show');
+    });
+	
+    $('#confirmSubmitBtn').click(function() {
+        $('#input-form').unbind('submit').submit(); // 폼 제출
+    });
+});

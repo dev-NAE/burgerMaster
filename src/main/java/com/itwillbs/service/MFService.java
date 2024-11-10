@@ -54,7 +54,7 @@ public class MFService {
 				if(j==rmList.size()-1) {
 					break;
 				}
-				sb.append(", ");
+				sb.append(" / ");
 			}
 			
 			list.get(i).setRmList(sb.toString());
