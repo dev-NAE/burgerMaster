@@ -22,13 +22,13 @@ public interface MainDashBoardItemRepository extends JpaRepository<Item, String>
 	
 
 	//반품 폐기
-	 @Query("SELECT new com.itwillbs.domain.dashboard.DefectiveDTO(d.quantity, i.itemName, d.status,d.note) " +
+	 @Query("SELECT new com.itwillbs.domain.dashboard.DefectiveDTO(d.quantity, i.itemName, d.status,d.note,d.defectiveId,i.itemCode) " +
 		       "FROM DefectiveDash d JOIN Item i ON i.itemCode = d.itemCode.itemCode " +  
 		       "WHERE d.status = :status")
 	    List<DefectiveDTO> findByStatus(@Param("status") String status);
 	 
 	 //입고량
-	 @Query("SELECT new com.itwillbs.domain.dashboard.IncomingItemDTO(c.quantity, i.itemName) " +
+	 @Query("SELECT new com.itwillbs.domain.dashboard.IncomingItemDTO(c.quantity, i.itemName, i.itemCode,c.incomingItemId) " +
 		       "FROM IncommingItemDash c JOIN Item i ON i.itemCode = c.itemCode.itemCode " +  
 		       "WHERE i.itemType = :itemType")
 	    List<IncomingItemDTO> findByItemType(@Param("itemType") String itemType);

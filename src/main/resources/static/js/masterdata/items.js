@@ -367,6 +367,22 @@ function validateField(field) {
 	const value = field.val();
 
 	switch (id) {
+		case 'itemCode':
+			if (!value) {
+				showError(field, '품목코드를 검색하세요.');
+				return false;
+			}
+			if (!/^(RM|PP|FP)\d{3}$/.test(value)) {
+				showError(field, '품목코드 형식이 올바르지 않습니다.');
+				return false;
+			}
+			const itemType = $('#itemType').val();
+			if (itemType && !value.startsWith(itemType)) {
+				showError(field, '품목코드와 품목유형이 일치하지 않습니다.');
+				return false;
+			}
+			break;
+
 		case 'itemName':
 			if (!value) {
 				showError(field, '품목명을 입력하세요.');
@@ -398,22 +414,6 @@ function validateField(field) {
 			}
 			break;
 
-		case 'itemCode':
-			if (!value) {
-				showError(field, '품목코드를 생성하세요.');
-				return false;
-			}
-			if (!/^(RM|PP|FP)\d{3}$/.test(value)) {
-				showError(field, '품목코드 형식이 올바르지 않습니다.');
-				return false;
-			}
-			const itemType = $('#itemType').val();
-			if (itemType && !value.startsWith(itemType)) {
-				showError(field, '품목코드와 품목유형이 일치하지 않습니다.');
-				return false;
-			}
-			break;
-
 		case 'useYN':
 			if (!['Y', 'N'].includes(value)) {
 				showError(field, '올바른 사용 여부 값이 아닙니다.');
@@ -426,11 +426,11 @@ function validateField(field) {
 }
 
 function showError(field, message) {
-    field.addClass('is-invalid');
-    $(`#validate${field.attr('id')}`).text(message); 
+	field.addClass('is-invalid');
+	$(`#validate${field.attr('id')}`).text(message);
 }
 
 function clearError(field) {
-    field.removeClass('is-invalid');
-    $(`#validate${field.attr('id')}`).text(''); 
+	field.removeClass('is-invalid');
+	$(`#validate${field.attr('id')}`).text('');
 }
