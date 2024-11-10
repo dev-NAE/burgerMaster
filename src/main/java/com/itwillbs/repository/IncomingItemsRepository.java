@@ -13,7 +13,9 @@ import com.itwillbs.entity.IncomingItems;
 @Repository
 public interface IncomingItemsRepository extends JpaRepository<IncomingItems, String> {
 
-	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemName) " +
+	
+	//하나의 입고코드에 해당되는 품목들 조회
+	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName) " +
 			"FROM IncomingItems ii left join fetch Item i ON ii.itemCode = i.itemCode " +
 			"WHERE incomingId = :incomingId")
 	List<IncomingItemsDTO> findIncomingItemsListById(@Param("incomingId") String incomingId);

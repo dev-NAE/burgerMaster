@@ -17,11 +17,15 @@ public class IncomingItemsDTO {
 	
 	private String itemName; //품목 이름 한개만
 	private Integer otherCount; //품목 외 갯수 ex)패티 외 2건
-
-	public IncomingItemsDTO(String itemName) {
-		super();
+	
+	public IncomingItemsDTO(String itemCode, String itemName) {
+//		super();
+		this.itemCode = itemCode;
 		this.itemName = itemName;
 	}
+
+
+	
 	
 	
 }

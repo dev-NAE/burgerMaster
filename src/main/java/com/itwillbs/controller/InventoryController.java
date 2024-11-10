@@ -108,7 +108,7 @@ public class InventoryController {
 	public String incomingList(Model model, @PageableDefault(size = 8) Pageable pageable) {
 		log.info("InventroyController incomingList()");
 
-		// 입고된 리스트 전체 조회
+		// 입고된 리스트 1페이지 조회
 		Page<IncomingDTO> incomingByPage = inventoryService.getIncomingLists(pageable);
 //		log.info("Incoming DTOs: {}", incomingByPage.getContent());
 
@@ -131,7 +131,8 @@ public class InventoryController {
 
 		return VIEW_PATH + "incoming_list";
 	}
-
+	
+	// 입고 조회 검색어 포함
 	@GetMapping("/incomingListSearch")
 	public String incomingListSearch(Model model, @PageableDefault(size = 8) Pageable pageable,
 	        @RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
@@ -172,18 +173,16 @@ public class InventoryController {
 	        }
 	    } catch (IllegalArgumentException e) {
 	        log.error("날짜 변환 오류: " + e.getMessage());
-	        // 예외 처리: 사용자에게 에러 메시지 전달하거나 기본값 설정
-	        // 예를 들어, 에러 메시지를 모델에 추가
+	        //에러시 에러메세지를 model에 추가
 	        model.addAttribute("errorMessage", "날짜 형식이 올바르지 않습니다. yyyy-MM-dd 형식을 사용하세요.");
-	        // 검색 결과를 빈 상태로 반환하거나, 전체 데이터를 보여줄 수 있습니다.
-	        // 여기서는 빈 결과를 반환합니다.
-	        model.addAttribute("incomingDTOs", new ArrayList<>());
+	        
+	        
 	        return VIEW_PATH + "incoming_list";
 	    }
 	
-	    log.info("sdf" + incomingStartDate_start);
+	    
 		
-		
+	    // 입고된 리스트 검색어 포함 조회
 		Page<IncomingDTO> incomingByPage = inventoryService.findIncomingBySearch(
 																	            itemCodeOrName,
 																	            reasonOfIncoming,
@@ -195,6 +194,7 @@ public class InventoryController {
 																	            managerCodeOrName,
 																	            pageable);
 
+		// 프론트에서 테이블 데이터 조회시 incomingDTOs.[etc...]로 찾아야함
 	    model.addAttribute("incomingDTOs", incomingByPage);
 
 
@@ -210,13 +210,16 @@ public class InventoryController {
 	    model.addAttribute("managerCodeOrName", managerCodeOrName);
 		
 		
+	   
+	    
+	    
 		// 페이징 처리하고 model에 저장
 		applyPagination(incomingByPage, model);
 
 		return VIEW_PATH + "incoming_list";
 	}
 
-	// 출고 등록
+	// 출고 등록 
 	@GetMapping("/outgoingInsert")
 	public String outgoingInsert() {
 		log.info("InventroyController outgoingInsert()");

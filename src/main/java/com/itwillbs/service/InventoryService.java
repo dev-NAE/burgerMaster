@@ -71,48 +71,94 @@ public class InventoryService {
 
 		return incomingByPage;
 	}
+	// 입고 목록 검색 (검색 조건과 페이지네이션 포함)
+    public Page<IncomingDTO> findIncomingBySearch(
+            String itemCodeOrName,
+            String reasonOfIncoming,
+            Timestamp incomingStartDate_start,
+            Timestamp incomingStartDate_end,
+            String incomingId,
+            String prodOrQualId,
+            String status,
+            String managerCodeOrName,
+            Pageable pageable) {
+        log.info("findIncomingBySearch()");
 
-	// 입고 목록 검색 (검색 조건과 페이지네이션)
-	public Page<IncomingDTO> findIncomingBySearch(
-	        String itemCodeOrName,
-	        String reasonOfIncoming,
-	        Timestamp incomingStartDate_start,
-	        Timestamp incomingStartDate_end,
-	        String incomingId,
-	        String prodOrQualId,
-	        String status,
-	        String managerCodeOrName,
-	        Pageable pageable) {
-	    log.info("findIncomingBySearch()");
+        // 리포지토리 호출 시 itemCodeOrName 포함
+        Page<IncomingDTO> incomingByPage = incomingRepository.findIncomingLists(
+                reasonOfIncoming,
+                incomingStartDate_start,
+                incomingStartDate_end,
+                incomingId,
+                prodOrQualId,
+                status,
+                managerCodeOrName,
+                itemCodeOrName,
+                pageable);
 
-	    // 서비스 로직 수행
-	    Page<IncomingDTO> incomingByPage = incomingRepository.findIncomingLists(
-	            reasonOfIncoming,
-	            incomingStartDate_start,
-	            incomingStartDate_end,
-	            incomingId,
-	            prodOrQualId,
-	            status,
-	            managerCodeOrName,
-	            pageable);
-		
-		// 각 입고데이터마다 품목의 이름과 갯수를 구하기 위한 반복문
-		incomingByPage.forEach(dto -> {
+        // 각 입고 데이터마다 품목의 이름과 갯수를 구하기 위한 반복문
+        incomingByPage.forEach(dto -> {
 
-			String incomingId2 = dto.getIncomingId();
+            String incomingId2 = dto.getIncomingId();
 
-			// incoming_items테이블에서 품목의 이름과 갯수를 구한다.
-			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId2);
+            // incoming_items 테이블에서 품목코드와 품목이름을 구함
+            List<IncomingItemsDTO> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId2);
 
-			// 품목중 첫번째 품목의 이름을 저장
-			dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+            if (!itemNames.isEmpty()) {
+                // 첫 번째 품목의 이름을 설정
+                dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+                // 나머지 품목 갯수 설정
+                dto.setOtherCount(itemNames.size() - 1);
+            } else {
+                dto.setIncomingItemDisplay("N/A");
+                dto.setOtherCount(0);
+            }
+        });
 
-			// 품목 갯수 - 1을 저장
-			dto.setOtherCount(itemNames.size() - 1);
-
-		});
-		
-		return incomingByPage;
-	}
+        return incomingByPage;
+    }
+    
+//	// 입고 목록 검색 (검색 조건과 페이지네이션)
+//	public Page<IncomingDTO> findIncomingBySearch(
+//	        String itemCodeOrName,
+//	        String reasonOfIncoming,
+//	        Timestamp incomingStartDate_start,
+//	        Timestamp incomingStartDate_end,
+//	        String incomingId,
+//	        String prodOrQualId,
+//	        String status,
+//	        String managerCodeOrName,
+//	        Pageable pageable) {
+//	    log.info("findIncomingBySearch()");
+//
+//	    // 서비스 로직 수행
+//	    Page<IncomingDTO> incomingByPage = incomingRepository.findIncomingLists(
+//	            reasonOfIncoming,
+//	            incomingStartDate_start,
+//	            incomingStartDate_end,
+//	            incomingId,
+//	            prodOrQualId,
+//	            status,
+//	            managerCodeOrName,
+//	            pageable);
+//		
+//		// 각 입고데이터마다 품목의 이름과 갯수를 구하기 위한 반복문
+//		incomingByPage.forEach(dto -> {
+//
+//			String incomingId2 = dto.getIncomingId();
+//
+//			// incoming_items테이블에서 품목코드와 품목이름을 구한다.
+//			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId2);
+//
+//			// 품목중 첫번째 품목의 이름을 저장
+//			dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+//
+//			// 품목 갯수 - 1을 저장
+//			dto.setOtherCount(itemNames.size() - 1);
+//
+//		});
+//		
+//		return incomingByPage;
+//	}
 
 }
