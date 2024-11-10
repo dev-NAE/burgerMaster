@@ -14,7 +14,7 @@
   
 <!--  커스텀 css-->
   <link rel="stylesheet" href="/css/manufacture/insert.css">
-  
+ 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
@@ -72,36 +72,19 @@
 				<div class="row">
 					<div class="form-group">
 						<label>생산할 물품</label>
-						<select class="form-control select2 select2-hidden-accessible" style="width: 100%;" data-select2-id="1" tabindex="-1" aria-hidden="true">
-		                    <option selected="selected" data-select2-id="3">===선택===</option>
-		                    <option data-select2-id="35">Alaska</option>
-		                    <option data-select2-id="36">California</option>
-		                    <option data-select2-id="37">Delaware</option>
-		                    <option data-select2-id="38">Tennessee</option>
-		                    <option data-select2-id="39">Texas</option>
-		                    <option data-select2-id="40">Washington</option>
-						</select>
-						<span class="select2 select2-container select2-container--default select2-container--below" dir="ltr" data-select2-id="2" style="width: 100%;">
-							<span class="selection">
-<!--								<span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-fmt3-container">-->
-<!--									<span class="select2-selection__rendered" id="select2-fmt3-container" role="textbox" aria-readonly="true" title="Alabama">-->
-<!--										Alabama-->
-<!--									</span>-->
-<!--									<span class="select2-selection__arrow" role="presentation">-->
-<!--										<b role="presentation"></b>-->
-<!--									</span>-->
-<!--								</span>-->
-							</span>
-							<span class="dropdown-wrapper" aria-hidden="true">
-								
-							</span>
-						</span>
+						  <input type="text" id="item" class="form-control item-button" onclick="myFunction()" placeholder="물품 선택" readonly>					  
+						  <div id="myDropdown" class="dropdown-content" th:each="List, status:${ppList}">
+							<input type="text" id="search" class="form-control" placeholder="검색" onkeyup="filterFunction()">
+							<ul class="pp-list">
+							  <li class="options" th:each="List, status:${ppList}" th:text="${List.itemName}" onclick="change(innerText)" value="${List.itemCode}"></li>
+							</ul>
+						  </div>
 					</div>
 <!--					form-group-->
 					
 				  <div class="form-group">
                     <label for="amount">수량</label>
-                    <input type="number" class="form-control" id="amount" placeholder="수량을 입력하십시오">
+                    <input type="number" class="form-control" id="amount" placeholder="(최대 수량 : 9999)" min="1" max="10000" maxlength="4" style="width: 200px;" onblur="getRM()">
                   </div>
 <!--				  form-group-->
 
@@ -116,7 +99,7 @@
 				
 				<div class="row">
 					<div class="col">
-					  <button type="submit" class="btn btn-primary">등록</button>
+					  <button type="button" class="btn btn-primary">등록</button>
 					  <button type="reset" class="btn btn-danger">취소</button>
 					</div>
 				</div>
@@ -134,12 +117,14 @@
 				<thead>
 					<tr>
 						<th>식별번호</th>
-						<th>가공품명</th>
-						<th>재료</th>
+						<th>원재료명</th>
+						<th>필요량</th>
+						<th>현재 재고량</th>
 					</tr>
 				</thead>
-				<tbody>
+				<tbody id="rm">
 					<tr>
+						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
@@ -148,8 +133,16 @@
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
+						<td>00000000</td>
 					</tr>
 					<tr>
+						<td>00000000</td>
+						<td>00000000</td>
+						<td>00000000</td>
+						<td>00000000</td>
+					</tr>
+					<tr>
+						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
 						<td>00000000</td>
@@ -180,6 +173,8 @@
 <!-- 기본 js 링크 -->
 <th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
 
+<script src="/js/manufacture/insert.js"></script>
+
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
@@ -194,5 +189,6 @@
 <!-- daterangepicker -->
 <script src="plugins/moment/moment.min.js"></script>
 <script src="plugins/daterangepicker/daterangepicker.js"></script>
+
 </body>
 </html>
