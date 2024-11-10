@@ -17,8 +17,8 @@ public interface SaleItemsRepository extends JpaRepository<SaleItems, String> {
 
     @Query("SELECT new com.itwillbs.domain.transaction.SaleItemsDTO" +
             "(si.item.itemCode, si.item.itemName, si.price, si.quantity, si.subtotalPrice) " +
-            "FROM SaleItems si WHERE si.sale = :sale")
-    List<SaleItemsDTO> findBySale2(@Param("sale") Sale sale);
+            "FROM SaleItems si WHERE si.sale.saleId = :saleId")
+    List<SaleItemsDTO> findBySale2(@Param("saleId") String saleId);
 
     void deleteBySale(Sale sale);
 

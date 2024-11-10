@@ -300,20 +300,67 @@ public class TXController {
         return "transaction/shipment/insert";
     }
 
-//    @ResponseBody
-//    @PostMapping("/saveShip")
-//    public String saveShip(@RequestBody SaleDTO saleDTO) {
-//        // 불러온 sale 정보 + 등록번호 따서 상태 저장
-//        txService.saveShip(saleDTO);
-//        return "success";
-//        }
-//    }
-//
+    @ResponseBody
+    @PostMapping("/completeShip")
+    public String saveShip(ShipmentDTO shipmentDTO) {
+        txService.completeShip(shipmentDTO);
+        return "success";
+    }
+
     @GetMapping("/findToShip")
     public String findToShip(Model model) {
         List<SaleDTO> sales = txService.findToShip();
         model.addAttribute("toShip", sales);
         return "transaction/shipment/findToShip";
     }
+
+    // 출하정보 조회 수주물품정보
+    @ResponseBody
+    @GetMapping("/getSaleItems")
+    public ResponseEntity<List<SaleItemsDTO>> getSaleItems(String saleId) {
+        List<SaleItemsDTO> saleItems = txService.getSaleItems(saleId);
+        return ResponseEntity.ok(saleItems);
+    }
+
+    @GetMapping("/shipList")
+    public String getShipList() {
+        return "transaction/shipment/list";
+    }
+
+    @ResponseBody
+    @GetMapping("/shipInfo")
+    public ResponseEntity<List<ShipmentDTO>> getShipInfo() {
+        List<ShipmentDTO> ships = txService.getShipList();
+        log.info("ships: " + ships);
+        return ResponseEntity.ok(ships);
+    }
+
+//    @GetMapping("/saleDetail")
+//    public String saleDetail(@RequestParam String saleId, Model model) {
+//        Sale sale = txService.getSaleById(saleId);
+//        List<SaleItems> items = txService.getSaledItems(sale);
+//        model.addAttribute("sale", sale);
+//        model.addAttribute("items", items);
+//        return "transaction/sale/detail";
+//    }
+//
+//    @ResponseBody
+//    @GetMapping("/searchSales")
+//    public ResponseEntity<List<SaleDTO>> searchSales(
+//            @RequestParam(required = false) String status,
+//            @RequestParam(required = false) String franchiseName,
+//            @RequestParam(required = false) String orderDateStart,
+//            @RequestParam(required = false) String orderDateEnd,
+//            @RequestParam(required = false) String itemName,
+//            @RequestParam(required = false) String dueDateStart,
+//            @RequestParam(required = false) String dueDateEnd
+//    ) {
+//        log.info("TXController searchSales()");
+//        List<SaleDTO> sales = txService.searchSales(status, franchiseName, orderDateStart, orderDateEnd, itemName, dueDateStart, dueDateEnd);
+//        log.info(sales.toString());
+//        return ResponseEntity.ok(sales);
+//    }
+
+
 
 }

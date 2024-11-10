@@ -79,9 +79,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label text-center" for="order_date">등록일</label>
+                                        <label class="col-sm-2 col-form-label text-center" for="ship_date">등록일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" name="order_date" id="order_date" readonly required>
+                                            <input class="form-control" type="date" name="ship_date" id="ship_date" required>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="manager-code">담당자</label>
                                         <div class="input-group col-sm-4">
@@ -140,7 +140,7 @@
                                     </div>
                                 </div>
                                 <div class="submit-btn-area row">
-                                    <button id="ship-submit-btn" type="button" class="btn btn-lg btn-primary ml-auto my-3">출하 등록</button>
+                                    <button id="ship-submit-btn" type="button" class="btn btn-lg btn-primary ml-auto my-3" data-toggle="modal" data-target="#complete-ship">출하 등록</button>
                                 </div>
                                 </form>
 
@@ -149,19 +149,27 @@
 
                     </div>
 
-        <template id="add-item-template">
-            <tr class="item-row">
-                <td class="text-center"><button class="btn btn-danger btn-sm delete-this-row">X</button></td>
-                <td class="text-center"><span class="item-code"></span></td>
-                <td class="text-center"><span class="item-name"></span></td>
-                <td class="text-right"><input class="col-sm-8 item-price" type="text" value="0" style="text-align:right;"> 원</td>
-                <td class="text-center"><input class="col-sm-6 item-quantity" type="text" value="0" style="text-align:right;"> 단위</td>
-                <td class="text-right">
-                    <span class="subtotal-view">0</span> 원
-                    <input class="subtotal" type="hidden">
-                </td>
-            </tr>
-        </template>
+                    <!-- Modal: 완료 -->
+                    <div class="modal fade" id="complete-ship" tabindex="-1" role="dialog" aria-labelledby="completeModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="completeModalCenterTitle">출하 등록</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <h5>출하를 등록 하시겠습니까?</h5>
+                                    출하는 등록과 동시에 검품 요청이 전달되며<br>이후, 입력 내용 수정이 불가합니다.
+                                </div>
+                                <div class="modal-footer justify-content-center">
+                                    <button type="button" class="btn btn-secondary col-3" data-dismiss="modal">아니오</button>
+                                    <button id="complete-yes" type="button" class="btn btn-primary col-3">예</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
         <div id="loadingSpinner" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999;">
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
