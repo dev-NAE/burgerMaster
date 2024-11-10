@@ -14,4 +14,17 @@ public class SaleItemsDTO {
     private int price;
     private int quantity;
     private int subtotalPrice;
+
+    private String itemName;
+
+    public SaleItemsDTO(String itemCode, String itemName, int price, int quantity, int subtotalPrice) {
+        this.itemCode = itemCode;
+        this.price = price;
+        this.quantity = quantity;
+        this.subtotalPrice = subtotalPrice;
+        this.itemName = itemName;
+    }
+
+    public SaleItemsDTO() {}
+
 }
