@@ -10,11 +10,14 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.entity.Incoming;
+
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface IncomingRepository extends JpaRepository<Incoming, String> {
@@ -51,8 +54,6 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 //			@Param("managerCodeOrName") String managerCodeOrName,
 //			Pageable pageable);
 
-
-
 	/**
 	 * 입고 페이지 진입할 때 입고테이블 조회(페이징 처리)
 	 */
@@ -83,7 +84,9 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 			@Param("prodOrQualId") String prodOrQualId, @Param("status") String status,
 			@Param("managerCodeOrName") String managerCodeOrName, @Param("itemCodeOrName") String itemCodeOrName,
 			Pageable pageable);
-	
-	
-	
+
+	@Transactional
+	@Modifying
+	@Query("UPDATE Incoming ic SET ic.status = '입고 완료', ic.incomingEndDate = :incomingEndDate WHERE ic.incomingId = :incomingId AND ic.status = '입고 진행중'")
+	int updateIncomingStatus(@Param("incomingId") String incomingId, @Param("incomingEndDate") Timestamp incomingEndDate);
 }

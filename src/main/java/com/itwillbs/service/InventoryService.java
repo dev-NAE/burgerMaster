@@ -19,6 +19,8 @@ import com.itwillbs.repository.IncomingItemsRepository;
 import com.itwillbs.repository.IncomingRepository;
 import com.itwillbs.repository.InventoryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -126,6 +128,16 @@ public class InventoryService {
 		
 		
 		return incomingItemsRepository.findByIncomingItems(incomingId);
+	}
+
+	// 입고 상세 정보 모달창에서 입고 상태 업데이트
+	@Transactional
+	public void updateIncomingStatus(String incomingId) {
+	    Timestamp currentTime = Timestamp.valueOf(LocalDateTime.now());
+	    int updatedRows = incomingRepository.updateIncomingStatus(incomingId, currentTime);
+	    if (updatedRows == 0) {
+	        throw new EntityNotFoundException("해당 입고 ID가 존재하지 않습니다: " + incomingId);
+	    }
 	}
     
 //	// 입고 목록 검색 (검색 조건과 페이지네이션)

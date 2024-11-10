@@ -4,30 +4,37 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.IncomingItemsDTO;
+import com.itwillbs.domain.inventory.InvenResponseMessage;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.entity.Incoming;
 import com.itwillbs.entity.IncomingItems;
 import com.itwillbs.repository.IncomingRepository;
 import com.itwillbs.service.InventoryService;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/restInven")
-@Log
+@Slf4j
 @RequiredArgsConstructor
 public class RestInventoryController {
     
@@ -87,4 +94,24 @@ public class RestInventoryController {
     }
     
     
+    @PostMapping("/updateIncomingStatus")
+    public ResponseEntity<InvenResponseMessage> updateIncomingStatus(@RequestParam("incomingId") String incomingId) {
+    	log.info("RestInventoryController.updateIncomingStatus()");
+    	
+    	//업데이트 실행, 성공or에러시 적절한 메세지를 프론트로 넘김
+        try {
+            inventoryService.updateIncomingStatus(incomingId);
+            InvenResponseMessage response = new InvenResponseMessage(true, "입고 완료되었습니다.");
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException e) {
+        	InvenResponseMessage response = new InvenResponseMessage(false, "해당 입고 ID의 입고 상태를 업데이트할 수 없습니다.");
+        	//400에러
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (Exception e) {
+        	InvenResponseMessage response = new InvenResponseMessage(false, "서버 오류가 발생했습니다.");
+        	//500에러
+        	return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
 }
