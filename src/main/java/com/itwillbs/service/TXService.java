@@ -34,6 +34,7 @@ public class TXService {
     private final SaleRepository saleRepository;
     private final SaleItemsRepository saleItemsRepository;
     private final FranchiseRepository franchiseRepository;
+    private final ShipmentRepository shipmentRepository;
 
     @Transactional
     public void saveOrder(OrderDTO orderDTO, List<OrderItemsDTO> orderItems) {
@@ -380,4 +381,20 @@ public class TXService {
         saveSaleItems(saleItems, saleId, sale);
     }
 
+    public List<SaleDTO> findToShip() {
+        List<SaleDTO> allQualified = saleRepository.findAllQualified();
+        allQualified.forEach(sale -> {
+                Sale thisSale = saleRepository.findById(sale.getSaleId()).orElse(null);
+                if (thisSale != null) {
+                    sale.setItemCount(saleRepository.findSaleItemCountBySale(thisSale));
+                    List<String> itemNames = saleRepository.findFirstItemNameBySale(thisSale);
+                    if (!itemNames.isEmpty()) {
+                        sale.setItemName(saleRepository.findFirstItemNameBySale(thisSale).get(0));
+                    }
+                    sale.setSaleItems(saleItemsRepository.findBySale2(thisSale));
+                }
+            });
+        log.info(allQualified.toString());
+        return allQualified;
+    }
 }

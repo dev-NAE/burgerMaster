@@ -45,8 +45,12 @@ public class Sale {
     @JoinColumn(name = "franchise_code")
     private Franchise franchise;
 
-    // SaleItems와의 관계 설정
+    // 주문당 품목조회를 위한 SaleItems와의 관계 설정
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
     private List<SaleItems> saleItems = new ArrayList<>();
+
+    // 출하처리를 위한 QualitySale과의 관계 설정
+    @OneToOne(mappedBy = "sale")
+    private QualitySale qualitySale;
 
 }

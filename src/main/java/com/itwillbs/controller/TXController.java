@@ -294,7 +294,26 @@ public class TXController {
         }
     }
 
+    @GetMapping("/insertShip")
+    public String insertShip() {
+        // '등록대상' 버튼으로 값 가져오기 전까지는 빈 화면
+        return "transaction/shipment/insert";
+    }
 
-
+//    @ResponseBody
+//    @PostMapping("/saveShip")
+//    public String saveShip(@RequestBody SaleDTO saleDTO) {
+//        // 불러온 sale 정보 + 등록번호 따서 상태 저장
+//        txService.saveShip(saleDTO);
+//        return "success";
+//        }
+//    }
+//
+    @GetMapping("/findToShip")
+    public String findToShip(Model model) {
+        List<SaleDTO> sales = txService.findToShip();
+        model.addAttribute("toShip", sales);
+        return "transaction/shipment/findToShip";
+    }
 
 }
