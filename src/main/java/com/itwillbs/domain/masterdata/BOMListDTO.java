@@ -1,9 +1,12 @@
 package com.itwillbs.domain.masterdata;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
 @Data
+@NoArgsConstructor
 public class BOMListDTO {
     private Long bomId;
     private String ppCode;

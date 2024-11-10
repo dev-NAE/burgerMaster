@@ -63,8 +63,6 @@ public class BOMService {
         Item processedProduct = findItemByCode(saveDTO.getPpCode(), "PP");
         Item rawMaterial = findItemByCode(saveDTO.getRmCode(), "RM");
 
-        validateUniqueBOM(processedProduct, rawMaterial);
-
         bom.setProcessedProduct(processedProduct);
         bom.setRawMaterial(rawMaterial);
         bom.setQuantity(saveDTO.getQuantity());

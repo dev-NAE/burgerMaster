@@ -152,6 +152,8 @@ function openModal(mode, bomId = null) {
 	$('#saveBtn, #editBtn, #deleteBtn').hide();
 	viewSection.hide();
 	form.hide();
+	
+	$('#ppSearchBtn, #rmSearchBtn').show();
 
 	$('.is-invalid').removeClass('is-invalid');
 	$('.invalid-feedback').text('');
@@ -168,6 +170,26 @@ function openModal(mode, bomId = null) {
 	modal.modal('show');
 }
 
+function selectItem(type, itemCode, itemName) {
+    if (type === 'PP') {
+        $('#ppCode').val(itemCode);
+    } else {
+        $('#rmCode').val(itemCode);
+    }
+    $('#itemSearchModal').modal('hide');
+}
+
+function selectItem(type, itemCode, itemName) {
+    if (type === 'PP') {
+        $('#ppCode').val(itemCode);
+        $('#processedProduct\\.itemCode').val(itemCode);
+    } else {
+        $('#rmCode').val(itemCode);
+        $('#rawMaterial\\.itemCode').val(itemCode);
+    }
+    $('#itemSearchModal').modal('hide');
+}
+
 function loadBOMDetail(bomId) {
 	$.get('/masterdata/api/boms/' + bomId)
 		.done(bom => {
@@ -178,22 +200,22 @@ function loadBOMDetail(bomId) {
 }
 
 function fillForm(bom) {
-	$('#bomId').val(bom.bomId);
-	$('#ppCode').val(bom.processedProduct.itemCode);
-	$('#rmCode').val(bom.rawMaterial.itemCode);
-	$('#quantity').val(bom.quantity);
-	$('#useYN').val(bom.useYN);
+    $('#bomId').val(bom.bomId);
+    $('#ppCode').val(bom.processedProduct.itemCode);
+    $('#rmCode').val(bom.rawMaterial.itemCode);
+    $('#quantity').val(bom.quantity);
+    $('#useYN').val(bom.useYN);
 }
 
 function getBOMDetailHtml(bom) {
     return ` 
-    <table class="table"> 
-        <tr><th>가공품코드</th><td>${bom.ppCode}</td></tr> 
-        <tr><th>가공품명</th><td>${bom.ppName}</td></tr> 
-        <tr><th>원재료코드</th><td>${bom.rmCode}</td></tr> 
-        <tr><th>원재료명</th><td>${bom.rmName}</td></tr> 
-        <tr><th>수량</th><td>${bom.quantity}</td></tr> 
-        <tr><th>사용여부</th><td>${bom.useYN === 'Y' ? '사용' : '미사용'}</td></tr> 
+	<table class="table"> 
+	    <tr><th>가공품코드</th><td>${bom.processedProduct.itemCode}</td></tr> 
+	    <tr><th>가공품명</th><td>${bom.processedProduct.itemName}</td></tr> 
+	    <tr><th>원재료코드</th><td>${bom.rawMaterial.itemCode}</td></tr> 
+	    <tr><th>원재료명</th><td>${bom.rawMaterial.itemName}</td></tr> 
+	    <tr><th>수량</th><td>${bom.quantity}</td></tr> 
+	    <tr><th>사용여부</th><td>${bom.useYN === 'Y' ? '사용' : '미사용'}</td></tr> 
     </table> 
     `;
 }
@@ -288,12 +310,13 @@ function handleError(xhr) {
 }
 
 function switchToEditMode() {
-	$('#viewSection').hide();
-	$('#bomForm').show();
-	$('#editBtn').hide();
-	$('#saveBtn').show();
+    $('#viewSection').hide();
+    $('#bomForm').show();
+    $('#editBtn').hide();
+    $('#saveBtn').show();
+    $('#bomForm').data('mode', 'edit');
 
-	$('#bomForm').data('mode', 'edit');
+    $('#ppSearchBtn, #rmSearchBtn').hide();
 }
 
 function deleteBOM() {

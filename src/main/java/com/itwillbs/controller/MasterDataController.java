@@ -266,7 +266,7 @@ public class MasterDataController {
 	@PutMapping("/api/boms/{bomId}")
 	@ResponseBody
 	public ResponseEntity<BOMDetailDTO> updateBOM(
-	        @PathVariable Long bomId,
+	        @PathVariable("bomId") Long bomId,
 	        @RequestBody @Validated BOMSaveDTO saveDTO) {
 		log.info("updateBOM");
 	    return ResponseEntity.ok(bomService.updateBOM(bomId, saveDTO));
