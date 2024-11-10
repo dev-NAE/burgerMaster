@@ -14,7 +14,7 @@ function openPopupAtMousePosition(event, url, width, height) {
 
 // 물품 검색 팝업
 $('#find-item').on('click', function(event) {
-    openPopupAtMousePosition(event, '/tx/addOrderItems', 800, 600)
+    openPopupAtMousePosition(event, '/tx/addSaleItems', 800, 600)
 });
 
 // 팝업에서 선택한 물품 폼에 입력
@@ -23,13 +23,13 @@ function setItemInfo(itemCode, itemName) {
 }
 
 // 거래처 검색 팝업
-$('#find-supplier').on('click', function(event) {
-    openPopupAtMousePosition(event, '/tx/findSupplier', 600, 600)
+$('#find-franchise').on('click', function(event) {
+    openPopupAtMousePosition(event, '/tx/findFranchise', 600, 600)
 });
 
 // 팝업에서 선택한 거래처 폼에 입력
-function setSupplier(supplierCode, supplierName) {
-    $('#supplier-name').val(supplierName);
+function setFranchise(franchiseCode, franchiseName) {
+    $('#franchise-name').val(franchiseName);
 }
 
 
@@ -40,21 +40,19 @@ $(document).ready(function() {
     $('#search-btn').on('click', function() {
         // 각 필드의 값을 가져옵니다.
         let status = $('#status').val();
-        let supplierName = $('#supplier-name').val();
+        let franchiseName = $('#franchise-name').val();
         let orderDateStart = $('#order_date-start').val();
         let orderDateEnd = $('#order_date-end').val();
         let itemName = $('#item-name').val();
         let dueDateStart = $('#due_date-start').val();
         let dueDateEnd = $('#due_date-end').val();
 
-        console.log(status, supplierName, orderDateStart, orderDateEnd, itemName, dueDateStart, dueDateEnd)
-
         $.ajax({
-            url: "/tx/searchOrders",
+            url: "/tx/searchSales",
             type: "GET",
             data: {
                 status: status,
-                supplierName: supplierName,
+                franchiseName: franchiseName,
                 orderDateStart: orderDateStart,
                 orderDateEnd: orderDateEnd,
                 itemName: itemName,
@@ -63,7 +61,7 @@ $(document).ready(function() {
             },
             dataType: "json",
             success: function(response) {
-                $('#order-list').DataTable().clear().rows.add(response).draw();
+                $('#sale-list').DataTable().clear().rows.add(response).draw();
             },
             error: function(xhr, status, error) {
                 console.error("검색 오류:", error);
@@ -86,9 +84,9 @@ let formatDate = (date) => {
 
 // 데이터테이블 커스텀
 $(function () {
-    const dataTable = $('#order-list').DataTable({
+    const dataTable = $('#sale-list').DataTable({
         ajax: {
-            url: "/tx/orderInfo",
+            url: "/tx/saleInfo",
             type: "GET",
             dataType: "json",
             contentType: "application/json",
@@ -116,8 +114,8 @@ $(function () {
             }
         },
         "columns": [
-            { data: "orderId", className: "text-center" },
-            { data: "supplierName", className: "text-center" },
+            { data: "saleId", className: "text-center" },
+            { data: "franchiseName", className: "text-center" },
             { data: "itemName", className: "text-center",
                 render: function(data, type, row) {
                     return row.itemCount > 1 ? `${data} 외 ${row.itemCount - 1}건` : data;
@@ -140,7 +138,7 @@ $(function () {
             },
             { data: "status", className: "text-center",
                 render: function(data, type, row) {
-                    let color = data === '발주완료' ? 'blue' : data === '발주취소' ? 'red' : 'black';
+                    let color = data === '수주완료' ? 'blue' : data === '수주취소' ? 'red' : 'black';
                     return `<span style="color:${color}">${data}</span>`;
                 }
             }
@@ -151,15 +149,15 @@ $(function () {
             $('.dataTables_paginate').css('margin-top', '20px');
 
             // 상태별 행 색상 다르게
-            if (data.status === '발주완료') {
+            if (data.status === '수주완료') {
                 $(row).css('background-color', 'rgba(198, 239, 255, 0.5)');
-            } else if (data.status === '발주취소') {
+            } else if (data.status === '수주취소') {
                 $(row).css('background-color', 'rgba(248, 222, 222, 0.5)');
             }
 
             // 행 누르면 상세페이지로 이동하게
             $(row).on('click', function() {
-                window.location.href = `/tx/orderDetail?orderId=${data.orderId}`;
+                window.location.href = `/tx/saleDetail?saleId=${data.saleId}`;
             });
 
             $(row).css('cursor', 'pointer');
@@ -168,7 +166,7 @@ $(function () {
         buttons: [
             {
                 extend: 'excelHtml5',
-                title: '발주 현황(' + getCurrentDateTime() + ')',
+                title: '수주 조회(' + getCurrentDateTime() + ')',
                 text: '.xlsx로 저장'
             }
         ]

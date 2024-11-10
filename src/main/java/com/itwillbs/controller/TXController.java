@@ -222,77 +222,77 @@ public class TXController {
         return "transaction/sale/list";
     }
 
-//    @ResponseBody
-//    @GetMapping("/saleInfo")
-//    public ResponseEntity<List<SaleDTO>> getSaleInfo() {
-//        List<SaleDTO> sales = txService.getSaleList();
-//        log.info("sales: " + sales);
-//        return ResponseEntity.ok(sales);
-//    }
+    @ResponseBody
+    @GetMapping("/saleInfo")
+    public ResponseEntity<List<SaleDTO>> getSaleInfo() {
+        List<SaleDTO> sales = txService.getSaleList();
+        log.info("sales: " + sales);
+        return ResponseEntity.ok(sales);
+    }
 
-//    @GetMapping("/orderDetail")
-//    public String orderDetail(@RequestParam String orderId, Model model) {
-//        Order order = txService.getOrderById(orderId);
-//        List<OrderItems> items = txService.getOrderedItems(order);
-//        model.addAttribute("order", order);
-//        model.addAttribute("items", items);
-//        return "transaction/order/detail";
-//    }
-//
-//    @ResponseBody
-//    @GetMapping("/searchOrders")
-//    public ResponseEntity<List<OrderDTO>> searchOrders(
-//            @RequestParam(required = false) String status,
-//            @RequestParam(required = false) String supplierName,
-//            @RequestParam(required = false) String orderDateStart,
-//            @RequestParam(required = false) String orderDateEnd,
-//            @RequestParam(required = false) String itemName,
-//            @RequestParam(required = false) String dueDateStart,
-//            @RequestParam(required = false) String dueDateEnd
-//    ) {
-//        log.info("TXController searchOrders()");
-//        List<OrderDTO> orders = txService.searchOrders(status, supplierName, orderDateStart, orderDateEnd, itemName, dueDateStart, dueDateEnd);
-//        log.info(orders.toString());
-//        return ResponseEntity.ok(orders);
-//    }
-//
-//    @ResponseBody
-//    @PostMapping("/cancelOrder")
-//    public String cancelOrder(@RequestParam String orderId) {
-//        log.info("TXController cancelOrder()");
-//        txService.updateOrderStatus(orderId, "발주취소");
-//        return "success";
-//    }
-//
-//    @ResponseBody
-//    @PostMapping("/completeOrder")
-//    public String completeOrder(@RequestParam String orderId) {
-//        log.info("TXController completeOrder()");
-//        txService.updateOrderStatus(orderId, "발주완료");
-//        return "success";
-//    }
-//
-//    @GetMapping("/orderForm")
-//    public String orderForm() {
-//        return "transaction/order/orderform";
-//    }
-//
-//    @ResponseBody
-//    @PostMapping("/updateOrder")
-//    public String updateOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
-//        log.info("Controller updateOrder()");
-//        OrderDTO orderDTO = orderRequestDTO.getOrder();
-//        log.info("orderDTO: " + orderDTO);
-//        List<OrderItemsDTO> orderItems = orderRequestDTO.getItems();
-//        log.info("orderItems: " + orderItems);
-//        // 담당자, 거래처 정보 DB 매치 확인
-//        if (txService.checkValidation(orderDTO)) {
-//            txService.updateOrder(orderDTO, orderItems);
-//            return "success";
-//        } else {
-//            return "mismatch";
-//        }
-//    }
+    @GetMapping("/saleDetail")
+    public String saleDetail(@RequestParam String saleId, Model model) {
+        Sale sale = txService.getSaleById(saleId);
+        List<SaleItems> items = txService.getSaledItems(sale);
+        model.addAttribute("sale", sale);
+        model.addAttribute("items", items);
+        return "transaction/sale/detail";
+    }
+
+    @ResponseBody
+    @GetMapping("/searchSales")
+    public ResponseEntity<List<SaleDTO>> searchSales(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String franchiseName,
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
+            @RequestParam(required = false) String itemName,
+            @RequestParam(required = false) String dueDateStart,
+            @RequestParam(required = false) String dueDateEnd
+    ) {
+        log.info("TXController searchSales()");
+        List<SaleDTO> sales = txService.searchSales(status, franchiseName, orderDateStart, orderDateEnd, itemName, dueDateStart, dueDateEnd);
+        log.info(sales.toString());
+        return ResponseEntity.ok(sales);
+    }
+
+    @ResponseBody
+    @PostMapping("/cancelSale")
+    public String cancelSale(@RequestParam String saleId) {
+        log.info("TXController cancelSale()");
+        txService.updateSaleStatus(saleId, "수주취소");
+        return "success";
+    }
+
+    @ResponseBody
+    @PostMapping("/completeSale")
+    public String completeSale(@RequestParam String saleId) {
+        log.info("TXController completeSale()");
+        txService.updateSaleStatus(saleId, "수주완료");
+        return "success";
+    }
+
+    @GetMapping("/saleForm")
+    public String saleForm() {
+        return "transaction/sale/saleform";
+    }
+
+    @ResponseBody
+    @PostMapping("/updateSale")
+    public String updateSale(@RequestBody SaleRequestDTO saleRequestDTO) {
+        log.info("Controller updateSale()");
+        SaleDTO saleDTO = saleRequestDTO.getSale();
+        log.info("saleDTO: " + saleDTO);
+        List<SaleItemsDTO> saleItems = saleRequestDTO.getItems();
+        log.info("saleItems: " + saleItems);
+        // 담당자, 거래처 정보 DB 매치 확인
+        if (txService.checkSaleValidation(saleDTO)) {
+            txService.updateSale(saleDTO, saleItems);
+            return "success";
+        } else {
+            return "mismatch";
+        }
+    }
 
 
 
