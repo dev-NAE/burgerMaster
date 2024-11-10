@@ -19,6 +19,7 @@ function openPopupAtMousePosition(event, url, width, height) {
 let $form = $('#order-form');
 let $submitButton = $('#order-submit-btn');
 
+// 입력값 기본검증
 function checkInputs() {
     let allChecked = true;
     let totalQuantity = $('#total-quantity').val();
@@ -30,7 +31,6 @@ function checkInputs() {
     });
     $submitButton.prop('disabled', !allChecked);
 }
-
 
 // 담당자 검색 팝업
 $('#find-manager').on('click', function(event) {
@@ -54,19 +54,49 @@ function setSupplier(supplierCode, supplierName) {
     $('#supplier-name').val(supplierName);
 }
 
+// 발주일, 납기일 검증
+$('#order_date, #due_date').on('change', function() {
+    let orderDate = new Date($('#order_date').val());
+    let dueDate = new Date($('#due_date').val());
+
+    // 발주날짜가 납기날짜보다 이후일 경우 알림 및 초기화
+    if (orderDate && dueDate && orderDate > dueDate) {
+        alert('납기일이 발주일보다 빠를 수는 없습니다');
+        $(this).val('');
+    }
+});
+
 // 물품 추가 팝업
 $('#add-items').on('click', function(event) {
-    openPopupAtMousePosition(event, '/tx/addItems', 800, 600)
+    openPopupAtMousePosition(event, '/tx/addOrderItems', 800, 600)
 });
 
 // 팝업에서 선택한 물품 목록에 입력
-function setItemInfo(itemCode, itemName) {
+function setItemInfo(itemCode, itemName, itemPrice, itemQuantity, subTotal) {
+
+    // 기등록 아이템인지 중복검사
+    let existingItemCodes = $('#item-list-table .item-code').map(function() {
+        return $(this).text();
+    }).get();
+
+    if (existingItemCodes.includes(itemCode)) {
+        alert("이미 추가된 품목입니다.");
+        return;
+    }
+
     let $newItemRow = $($('#add-item-template').html());
     $newItemRow.find('.item-code').text(itemCode);
     $newItemRow.find('.item-name').text(itemName);
+    $newItemRow.find('.item-price').val(itemPrice == null ? 0 : itemPrice);
+    $newItemRow.find('.item-quantity').val(itemQuantity == null ? 0 : itemQuantity);
 
-    $('#item-list-table').append($newItemRow);
+    let subtotal = parseInt(subTotal == null ? 0 : subTotal);
+    $newItemRow.find('.subtotal').val(subtotal);
+    $newItemRow.find('.subtotal-view').text(subtotal.toLocaleString());
+
+    $('#item-list-table tbody').append($newItemRow);
     refreshQuantity();
+    refreshTotalPrice();
     checkInputs();
 }
 
@@ -134,7 +164,8 @@ $(document).ready(function() {
     $submitButton.on('click', function(event) {
         event.preventDefault();
 
-        // 유효성 검사 + 메시지
+        // 중복클릭 방지용 로더(스피너) 작동
+        $('#loadingSpinner').show();
 
         // 주문정보 수집 = OrderDTO 형태
         var order = {
@@ -170,28 +201,28 @@ $(document).ready(function() {
             url: '/tx/saveOrder',
             method: 'POST',
             contentType: 'application/json',
-            dataType: 'json',
+            dataType: 'text',
             beforeSend : function(xhr){
                 xhr.setRequestHeader(header, token);
             },
             data: JSON.stringify(orderRequest),
             success: function(response) {
                 if (response === "success") {
+                    $('#loadingSpinner').hide();
                     alert('발주가 등록되었습니다.');
                     window.location.href = '/tx/orderList';
+                } else if (response === "mismatch") {
+                    $('#loadingSpinner').hide();
+                    alert('입력한 내용이 데이터베이스와 일치하지 않습니다')
                 }
             },
             error: function(error) {
+                $('#loadingSpinner').hide();
                 console.log('Error: :', error)
                 alert('발주 등록처리 중 오류가 발생했습니다.')
             }
         });
 
-
-
     })
 
-
 });
-
-// + 등록버튼 연타에 따른 중복등록 방지 (로더 넣기)

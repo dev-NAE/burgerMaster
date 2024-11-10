@@ -1,0 +1,139 @@
+
+body {
+    transform: scale(0.6);
+    transform-origin: top left;
+    width: 167%;
+    overflow-x: hidden;
+}
+
+#form-wrapper {
+    width: 90%;
+    margin: 0 auto;
+    padding: 25px;
+    font-family: Arial, sans-serif;
+    border: 1px solid #000;
+    line-height: 1.6;
+}
+
+#header h1 {
+    text-align: center;
+    margin: 30px 0;
+    font-weight: bold;
+}
+
+#footer {
+    margin: 30px 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+#order-id-area {
+    margin: 10px 0;
+}
+
+#top-left {
+    margin: 20px 0 0 20px;
+}
+
+#our-info, #item-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#our-info th, #item-table th {
+    font-weight: bold;
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: center;
+    background-color: #ddd;
+}
+
+#our-info td {
+    text-align: center;
+    font-size: 0.8em;
+    border: 1px solid #000;
+}
+
+#item-table td {
+    text-align: center;
+    padding: 10px 8px;
+    font-size: 1.2em;
+    border: 1px solid #000;
+}
+
+#item-table th {
+    background-color: #f0f0f0;
+    padding: 10px 8px;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+    border: 1px solid #000;
+}
+
+#top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#top-left {
+    width: 45%;
+}
+
+#top-right {
+    width: 50%;
+}
+
+#date-area {
+    margin: 8px 0;
+    font-weight: bold;
+}
+
+#total-price-area {
+    margin: 20px 0 10px 0;
+    text-align: center;
+    border: 1px solid #000;
+    font-size: 1.5em;
+    padding: 10px 0;
+}
+
+
+#bottom #info-area {
+    margin: 20px 15px 0 0;
+    font-weight: bold;
+    text-align: right;
+}
+
+#footer {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#btn-area {
+    text-align: center;
+    margin: 30px auto;
+}
+
+#btn-area button {
+    padding: 10px 20px;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+
+button {
+    width: 160px;
+    height: 70px;
+}
+
+@media print {
+
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    #btn-area {
+        display:none;
+    }
+}

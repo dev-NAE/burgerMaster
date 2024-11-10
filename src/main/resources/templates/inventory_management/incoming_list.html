@@ -1,124 +1,335 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>입고 조회</title>
-  <!-- 기본 css 링크-->
-  <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
-  <!-- Google Font: Source Sans Pro -->
-  <!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
-  <link rel="stylesheet" href="css/font.css">
-
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>입고 조회</title>
+	<!-- 기본 css 링크-->
+	<th:block th:replace="~{fragments/basicLink :: basicLinkCssFragment}"></th:block>
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<!-- JQVMap -->
+	<link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css" />
+	<link rel="stylesheet" href="/css/font.css" />
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
+	<!-- 공통 로딩 불러오기 -->
+	<div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
+	<!-- 공통 헤더 불러오기 -->
+	<div th:replace="~{fragments/header :: headerFragment}"></div>
 
-<!-- 공통 로딩 불러오기 -->
-<div th:replace="fragments/Preloader :: PreloaderFragment"></div>
-<!-- 공통 헤더 불러오기 -->
-<div th:replace="fragments/header :: headerFragment"></div>
+	<!-- 공통 사이드바 불러오기 -->
+	<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
 
-<!-- 공통 사이드바 불러오기 -->
-<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+	<div class="wrapper">
+		<!--   Preloader -->
+		<!-- 처음 로딩 시 나오는 요소-->
+		<div class="preloader flex-column justify-content-center align-items-center">
+			<img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60" />
+		</div>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">입고 조회</h1>
+						</div>
+						<!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
+							</ol>
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<!-- Main row -->
+					<div class="row">
+						<section class="col-lg-10 connectedSortable">
+							<div class="card-body">
+								<!--검색 구역 시작-->
+								<form th:action="@{/inven/incomingListSearch}" method="get">
+									<div class="card card-primary p-3">
+										<div class="row">
+
+											<div class="col-sm-8 col-md-3">
+
+												<!--검색 1) 품목코드/품목명-->
+												<div class="form-group">
+													<label>품목코드/품목명</label>
+													<input type="text" class="form-control" id="itemCodeOrName"
+														name="itemCodeOrName" placeholder="품목코드 또는 품목명을 입력하세요"
+														th:value="${itemCodeOrName}" />
+												</div>
+											</div>
+
+											<div class="col-sm-6 col-md-3">
+												<!--검색 2) 품목 유형-->
+												<div class="form-group">
+													<label>입고 사유</label>
+													<select class="form-control" id="itemTypeSelect" name="itemType">
+														<option value="" th:selected="${itemType == ''}">전체</option>
+														<option value="RM" th:selected="${itemType == 'RM'}">검품완료
+														</option>
+														<option value="PP" th:selected="${itemType == 'PP'}">생산완료
+														</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-sm-6 col-md-4">
+												<!--검색 2) 품목 유형-->
+												<div class="form-group">
+													<label>입고 등록일자</label>
+
+													<div class="input-group">
+														<div class="input-group-prepend">
+															<span class="input-group-text">
+																<i class="far fa-calendar-alt"></i>
+
+															</span>
+														</div>
+														<input type="text" class="form-control float-right"
+															id="reservation">
+													</div>
+													<!-- /.input group -->
+												</div>
+											</div>
 
 
-<div class="wrapper">
-
-  <!--   Preloader -->
-  <!-- 처음 로딩 시 나오는 요소-->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
+										</div>
 
 
+										<div class="row">
+											<div class="col-sm-8 col-md-3">
+
+												<!--검색 1) 품목코드/품목명-->
+												<div class="form-group">
+													<label>입고번호</label>
+													<input type="text" class="form-control" id="itemCodeOrName"
+														name="itemCodeOrName" placeholder="입고번호를 입력하세요"
+														th:value="${itemCodeOrName}" autocomplete="off" />
+												</div>
+											</div>
+
+											<div class="col-sm-6 col-md-3">
+												<!--검색 2) 품목 유형-->
+												<div class="form-group">
+													<label>생산/검품 번호</label>
+													<input type="text" class="form-control" id="itemCodeOrName"
+														name="itemCodeOrName" placeholder="생산or검품 번호를 입력하세요"
+														th:value="${itemCodeOrName}" />
+												</div>
+											</div>
+											<div class="col-sm-6 col-md-2">
+												<!--검색 2) 품목 유형-->
+												<div class="form-group">
+													<label>진행상황</label>
+													<select class="form-control" id="itemTypeSelect" name="itemType">
+
+													</select>
+												</div>
+											</div>
+											<div class="col-sm-8 col-md-3">
+
+												<!--검색 1) 품목코드/품목명-->
+												<div class="form-group">
+													<label>담당자</label>
+													<input type="text" class="form-control" id="itemCodeOrName"
+														name="itemCodeOrName" placeholder="담당자 코드 또는 이름을 입력해주세요"
+														th:value="${itemCodeOrName}" />
+												</div>
+											</div>
+
+											<div class="col-sm-4 col-md-1 ml-auto">
+												<label>&nbsp;</label>
+												<button type="submit" class="btn btn-block btn-primary">검색</button>
+											</div>
+
+										</div>
+									</div>
+								</form>
+								<!--검색 종료-->
+
+								<!-- 테이블 -->
+								<table id="example2" class="table table-bordered table-hover dataTable dtr-inline">
+									<thead>
+										<tr>
+											<th>입고 번호</th>
+											<th>입고 등록일자</th>
+											<th>입고 완료일자</th>
+
+											<th>품목명</th>
+
+											<th>담당자</th>
+											<th>생산/검품 번호</th>
+											<th>입고 사유</th>
+											<th>진행상황</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="inventoryTableBody">
+										<!--										데이터가 없을 경우 검색 결과 없음 출력-->
+										<tr th:if="${#lists.isEmpty(incomingDTOs)}">
+											<td colspan="5" class="text-center">검색 결과가 없습니다.</td>
+										</tr>
+
+										<tr th:each="incoming : ${incomingDTOs}">
+											<td th:text="${incoming.incomingId}"></td>
+											<td th:text="${#dates.format(incoming.incomingStartDate, 'yyyy-MM-dd')}">
+											</td>
+											<td
+												th:text="${incoming.incomingEndDate != null ? #dates.format(incoming.incomingEndDate, 'yyyy-MM-dd') : ''}">
+											</td>
+
+											<td th:if="${incoming.otherCount == 0}"
+												th:text="${incoming.incomingItemDisplay}"></td>
+											<td th:unless="${incoming.otherCount == 0}"
+												th:text="${incoming.incomingItemDisplay + ' 외 ' + incoming.otherCount + '건'}">
+											</td>
+
+											<!--										    <td th:text="${incoming.quantity}"></td>-->
+
+											<td th:text="${incoming.managerName}"></td>
+											<td
+												th:text="${incoming.productionId != null ? incoming.productionId : incoming.qualityOrderId}">
+											</td>
+											<td th:text="${incoming.productionId != null ? '생산 완료' : '검품 완료'}"></td>
+
+											<td th:text="${incoming.status}"></td>
+											<td>
+												<button type="button"
+													class="btn btn-block btn-secondary btn-xs">상세</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12 col-md-11">
+									<div class="row">
+
+										<div class="col-8">
+											<div class="dataTables_info" id="example2_info" role="status"
+												aria-live="polite">
+												총 <span th:text="${totalPages}"></span> 페이지 중 <span
+													th:text="${currentPage}"></span> 페이지
+											</div>
+										</div>
+										<div class="col-4">
+											<div class="dataTables_paginate paging_simple_numbers d-flex align-items-center justify-content-end h-100"
+												id="example2_paginate">
+												<ul class="pagination">
+													<!-- "이전" 링크 -->
+													<li th:classappend="${currentPage == 1} ? 'disabled' : ''"
+														class="paginate_button page-item previous">
+														<a th:href="@{/inven/incomingListSearch(
+																	            itemCodeOrName=${itemCodeOrName},
+																				reasonOfIncoming=${reasonOfIncoming},
+																	            incomingStartDate=${incomingStartDate},	
+																				incomingId=${incomingId},
+																				prodOrQualId=${prodOrQualId},
+																				status=${status},
+																				manager=${manager},														            
+																	            page=${currentPage - 2}
+																	        )}" class="page-link">이전</a>
+													</li>
+
+													<!-- 페이지 번호 링크 -->
+													<li th:each="i : ${#numbers.sequence(startPage, endPage)}"
+														th:classappend="${i == currentPage} ? 'active' : ''"
+														class="paginate_button page-item">
+														<a th:href="@{/inven/incomingListSearch(
+																	            itemCodeOrName=${itemCodeOrName},
+																				reasonOfIncoming=${reasonOfIncoming},
+																	            incomingStartDate=${incomingStartDate},	
+																				incomingId=${incomingId},
+																				prodOrQualId=${prodOrQualId},
+																				status=${status},
+																				manager=${manager},		
+																	            page=${i - 1}
+																	        )}" class="page-link" th:text="${i}"></a>
+													</li>
+
+													<!-- "다음" 링크 -->
+													<li th:classappend="${currentPage == totalPages} ? 'disabled' : ''"
+														class="paginate_button page-item next">
+														<a th:href="@{/inven/incomingListSearch(
+																	            itemCodeOrName=${itemCodeOrName},
+																				reasonOfIncoming=${reasonOfIncoming},
+																	            incomingStartDate=${incomingStartDate},	
+																				incomingId=${incomingId},
+																				prodOrQualId=${prodOrQualId},
+																				status=${status},
+																				manager=${manager},		
+																	            page=${currentPage}
+																	        )}" class="page-link">다음</a>
+													</li>
+												</ul>
+											</div>
+										</div>
 
 
 
+									</div>
+								</div>
+							</div>
+
+						</section>
+					</div>
+					<!-- /.row (main row) -->
+				</div>
+				<!-- /.container-fluid -->
+			</section>
+			<!-- /.Main-content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<!-- Control Sidebar -->
+		<!--  <aside class="control-sidebar control-sidebar-dark">-->
+		<!-- Control sidebar content goes here -->
+		<!--  </aside>-->
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+	<div th:replace="~{fragments/footer :: footerFragment}"></div>
+	<!-- 기본 js 링크 -->
+	<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
+
+	<!-- ChartJS -->
+	<script src="plugins/chart.js/Chart.min.js"></script>
+	<!-- Sparkline -->
+	<!-- jQuery 차트 라이브러리-->
+	<!-- 사용법 참고 용 사이트 : https://idenrai.tistory.com/55-->
+	<script src="plugins/sparklines/sparkline.js"></script>
+	<!-- JQVMap -->
+	<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+	<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+	<!-- jQuery Knob Chart -->
+	<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+	<!-- daterangepicker -->
+	<script src="plugins/moment/moment.min.js"></script>
+	<script src="plugins/daterangepicker/daterangepicker.js"></script>
 
 
 
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">입고 조회</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-
-        <!-- Main row -->
-        <div class="row">
-
-          <section class="col-lg-12 connectedSortable">
-
-            이 사이에 코드 작성
-
-
-
-
-
-
-
-
-
-
-
-          </section>
-
-        </div>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-
-
-  <!-- Control Sidebar -->
-  <!--  <aside class="control-sidebar control-sidebar-dark">-->
-  <!-- Control sidebar content goes here -->
-  <!--  </aside>-->
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
-<div th:replace="fragments/footer :: footerFragment"></div>
-<!-- 기본 js 링크 -->
-<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
-
-<!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<!-- jQuery 차트 라이브러리-->
-<!-- 사용법 참고 용 사이트 : https://idenrai.tistory.com/55-->
-<script src="plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="plugins/moment/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
 </body>
+
 </html>

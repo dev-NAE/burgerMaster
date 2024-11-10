@@ -14,7 +14,9 @@ import java.util.Optional;
 
 @Repository
 public interface BOMRepository extends JpaRepository<BOM, Long> {
-    @Query("SELECT new com.itwillbs.domain.masterdata.BOMListDTO(" +
+    
+	//손강수
+	@Query("SELECT new com.itwillbs.domain.masterdata.BOMListDTO(" +
            "b.bomId, " +
            "p.itemCode, p.itemName, " +
            "r.itemCode, r.itemName, " +

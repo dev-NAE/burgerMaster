@@ -29,13 +29,49 @@
 	<link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
 	<!-- summernote -->
 	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
+
+	<link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+	<link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
 
 
 	<!-- 공통 헤더 불러오기 -->
-	<div th:replace="fragments/header :: headerFragment"></div>
+	<!--	<div th:replace="fragments/header :: headerFragment"></div>-->
+	<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+		<!-- Left navbar links -->
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+			</li>
+			<li class="nav-item d-none d-sm-inline-block">
+				<a href="/main" class="nav-link">Home</a>
+			</li>
+		</ul>
+
+		<!-- Right navbar links -->
+		<ul class="navbar-nav ml-auto" >
+			<!-- Notifications Dropdown Menu -->
+
+			<!-- 알람 표시 -->
+			<div class="nav-item dropdown" id="notiClick">
+				<a class="nav-link" data-toggle="dropdown" id="Noti" href="#" >
+					<i class="far fa-bell" ></i>
+					<span class="badge badge-warning navbar-badge" id="notificationCount"  >0</span>
+				</a>
+				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown" >
+					<span class="dropdown-item dropdown-header" id="notiHeader">알람이 0개 있습니다</span>
+					<div class="dropdown-divider"   ></div>
+					<div id="noticontent" style="font-size: 10px;"></div>
+					<a href="#" class="dropdown-item dropdown-footer">확인</a>
+				</div>
+			</div>
+		</ul>
+	</nav>
+
 
 	<!-- 공통 사이드바 불러오기 -->
 	<div th:replace="fragments/sidebar :: sidebarFragment"></div>
@@ -64,6 +100,8 @@
 					<div class="row mb-2">
 						<div class="col-sm-6">
 							<h1 class="m-0">Home : Dashboard</h1>
+
+
 
 						</div><!-- /.col -->
 						<div class="col-sm-6">
@@ -98,6 +136,9 @@
 					<div class="card card-success" style="margin: 5px;">
 						<div class="card-header">
 							<h3 class="card-title">원재료 입고량 . 총 재고</h3>
+							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+								<button class="btn btn-light" id="xls1">.xls로 저장</button>
+							</div>
 							<div class="card-tools">
 							</div>
 						</div>
@@ -126,6 +167,9 @@
 					<div class="card card-success" style="margin: 5px;">
 						<div class="card-header">
 							<h3 class="card-title">완재품 입고량 . 총 재고</h3>
+							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+								<button class="btn btn-light" id="xls2">.xls로 저장</button>
+							</div>
 							<div class="card-tools">
 							</div>
 						</div>
@@ -155,6 +199,9 @@
 					<div class="card card-success" style="margin: 5px;">
 						<div class="card-header">
 							<h3 class="card-title">가공품 총재고</h3>
+							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+								<button class="btn btn-light" id="xls3">.xls로 저장</button>
+							</div>
 							<div class="card-tools">
 								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
 								<!--			<i class="fas fa-minus"></i>-->
@@ -187,7 +234,10 @@
 
 					<div class="card card-danger" style="margin: 5px;">
 						<div class="card-header">
-							<h3 class="card-title">반품률</h3>
+							<h3 class="card-title">반품 품목</h3>
+							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+								<button class="btn btn-light" id="xls4">.xls로 저장</button>
+							</div>
 							<div class="card-tools">
 							</div>
 						</div>
@@ -216,7 +266,10 @@
 
 					<div class="card card-danger" style="margin: 5px ;">
 						<div class="card-header">
-							<h3 class="card-title">폐기율</h3>
+							<h3 class="card-title">폐기 품목</h3>
+							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+								<button class="btn btn-light" id="xls5">.xls로 저장</button>
+							</div>
 							<div class="card-tools">
 							</div>
 						</div>
@@ -240,6 +293,9 @@
 					<div class="card card-primary" style="margin: 5px;">
 						<div class="card-header">
 							<h3 class="card-title">월간 수주 현황</h3>
+							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+								<button class="btn btn-light" id="xls6">.xls로 저장</button>
+							</div>
 							<div class="card-tools">
 							</div>
 						</div>
@@ -326,6 +382,19 @@
 	<script src="dist/js/demo.js"></script>
 	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 	<script src="dist/js/pages/dashboard.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
+	<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<script src="/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+	<script src="/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+	<script src="/plugins/jszip/jszip.min.js"></script>
+	<script src="/plugins/pdfmake/pdfmake.min.js"></script>
+	<script src="/plugins/pdfmake/vfs_fonts.js"></script>
+	<script src="/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+	<script src="/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+	<script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
 
 	<script th:inline="javascript">
@@ -340,7 +409,7 @@
 		//alert(JSON.stringify(rmItemList));
 
 		const rmInventory = rmInventoryList.map(item => item.quantity);  // 항목 이름
-		const minReqQuantitiesrm = rmInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
+		//const minReqQuantitiesrm = rmInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
 
 
 
@@ -388,6 +457,32 @@
 
 
 
+		// 엑셀 저장 함수
+		document.getElementById('xls1').addEventListener('click', () => {
+			// 차트 데이터 가져오기
+			const xlsrmlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
+			const rmQuantities = rmItemList.map(item => item.quantity); // 원재료 입고량
+			const totalrmInventory = rmInventoryList.map(item => item.quantity); // 총 재고량
+			const rmItemCode = rmItemList.map(item => item.itemCode);
+			const rmIncommingItemCode = rmItemList.map(item => item.incomingItemId);
+			// 데이터를 JSON 형식으로 정리
+			const excelData1 = xlsrmlabels.map((label, index) => ({
+				'#': rmItemCode[index],
+				'품목 이름': label,
+				'입고 #': rmIncommingItemCode[index],
+				'원재료 입고량': rmQuantities[index],
+				'총 재고량': totalrmInventory[index]
+			}));
+
+			// JSON 데이터를 엑셀 시트로 변환
+			const worksheet1 = XLSX.utils.json_to_sheet(excelData1);
+			const workbook1 = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(workbook1, worksheet1, '원재료 데이터');
+
+			// 엑셀 파일로 다운로드
+			XLSX.writeFile(workbook1, '원재료 품목명, 입고량, 총재고.xlsx');
+		});
+
 
 
 
@@ -399,7 +494,7 @@
 
 
 		const fpInventory = fpInventoryList.map(item => item.quantity);
-		const minReqQuantitiesfp = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
+		//const minReqQuantitiesfp = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
 
 		//alert("fpItemList"+JSON.stringify(fpItemList));
 
@@ -417,8 +512,8 @@
 				{
 					label: '총 재고',
 					data: fpInventory,  // 재량 필드로 사용 (예시)
-					backgroundColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
-					borderColor: fpInventory.map((quantity, index) => quantity <= minReqQuantitiesfp[index] ? 'red' : 'lightgreen'),
+					backgroundColor: 'lightgreen',
+					borderColor: 'lightgreen',
 					borderWidth: 1
 				}
 			]
@@ -433,6 +528,12 @@
 						beginAtZero: true
 					}
 				},
+
+
+
+
+
+
 			}
 		};
 
@@ -440,9 +541,42 @@
 		const ctx2 = document.getElementById('myChart2').getContext('2d');
 		new Chart(ctx2, config2);
 
+
+		// 엑셀 저장 함수
+		document.getElementById('xls2').addEventListener('click', () => {
+			// 차트 데이터 가져오기
+			const xlsfplabels = fpInventoryList.map(item => item.itemName);  // 항목 이름
+			const fpQuantities = fpItemList.map(item => item.quantity); // 원재료 입고량
+			const totalfpInventory = fpInventoryList.map(item => item.quantity); // 총 재고량
+			const fpItemCode = fpItemList.map(item => item.itemCode);
+			const fpIncommingCode = fpItemList.map(item => item.incomingItemId);
+
+			// 데이터를 JSON 형식으로 정리
+			const excelData2 = xlsfplabels.map((label, index) => ({
+				'#': fpItemCode[index],
+				'품목 이름': label,
+				'입고 #': fpIncommingCode[index],
+				'완재품 입고량': fpQuantities[index],
+				'총 재고량': totalfpInventory[index]
+			}));
+
+			// JSON 데이터를 엑셀 시트로 변환
+			const worksheet2 = XLSX.utils.json_to_sheet(excelData2);
+			const workbook2 = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(workbook2, worksheet2, '완재품 데이터');
+
+			// 엑셀 파일로 다운로드
+			XLSX.writeFile(workbook2, '완재품 품목명, 입고량, 총재고.xlsx');
+		});
+
+
 		//가공품
+
+		const ppItemList = /*[[${ppItemList}]]*/[
+		];
 		const ppInventoryList = /*[[${ppInventoryList}]]*/[
 		];
+
 
 
 		//alert("ppItemList:"+JSON.stringify(ppItemList));
@@ -450,16 +584,22 @@
 		const labels3 = ppInventoryList.map(item => item.itemName);  // 항목 이름
 		const data3 = {
 			labels: labels3,
-			datasets: [
-				{
+			datasets: [{
+				label: '가공품 입고량',
+				data: ppItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+				backgroundColor: 'lightblue',
+				borderColor: 'lightblue',
+				borderWidth: 1
+			},
+			{
 
 
-					label: '총 재고',
-					data: ppInventoryList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-					backgroundColor: ppInventoryList.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
-					borderColor: ppInventoryList.map(quantity => quantity <= 5 ? 'red' : 'lightgreen'),
-					borderWidth: 1
-				}
+				label: '총 재고',
+				data: ppInventoryList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+				backgroundColor: 'lightgreen',
+				borderColor: 'lightgreen',
+				borderWidth: 1
+			}
 			]
 		};
 
@@ -478,6 +618,33 @@
 		// Chart.js를 사용하여 차트 생성
 		const ctx3 = document.getElementById('myChart3').getContext('2d');
 		new Chart(ctx3, config3);
+
+		// 엑셀 저장 함수
+		document.getElementById('xls3').addEventListener('click', () => {
+			// 차트 데이터 가져오기
+			const xlspplabels = ppInventoryList.map(item => item.itemName);  // 항목 이름
+			const ppQuantities = ppItemList.map(item => item.quantity); // 원재료 입고량
+			const totalppInventory = ppInventoryList.map(item => item.quantity); // 총 재고량
+			const ppItemCode = ppItemList.map(item => item.itemCode); // 총 재고량
+			const ppcommingItemCode = ppItemList.map(item => item.incomingItemId); // 총 재고량
+
+			// 데이터를 JSON 형식으로 정리
+			const excelData3 = xlspplabels.map((label, index) => ({
+				'#': ppItemCode[index],
+				'품목 이름': label,
+				'입고 #': ppcommingItemCode[index],
+				'가공품 입고량': ppQuantities[index],
+				'총 재고량': totalppInventory[index]
+			}));
+
+			// JSON 데이터를 엑셀 시트로 변환
+			const worksheet3 = XLSX.utils.json_to_sheet(excelData3);
+			const workbook3 = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(workbook3, worksheet3, '가공품 데이터');
+
+			// 엑셀 파일로 다운로드
+			XLSX.writeFile(workbook3, '가공품 품목명, 입고량, 총재고.xlsx');
+		});
 
 
 		// 반품 데이터
@@ -507,6 +674,9 @@
 			return colors;
 		}
 
+
+
+
 		// 라벨 및 데이터 설정
 		const labels4 = dfItemList.map(item => item.itemName);  // 항목 이름
 		const data4 = {
@@ -528,6 +698,42 @@
 			data: data4,
 			options: pieOptions
 		});
+
+		// 엑셀 저장 함수
+		document.getElementById('xls4').addEventListener('click', () => {
+			// 차트 데이터 가져오기
+			const xlsdflabels = dfItemList.map(item => item.itemName);  // 항목 이름
+			const dfQuantities = dfItemList.map(item => item.quantity); // 원재료 입고량
+			const totaldfInventory = dfItemList.map(item => item.quantity); // 총 재고량
+			const dfCodeItem = dfItemList.map(item => item.defectiveId); // 총 재고량
+			const dfItemCode = dfItemList.map(item => item.itemCode); // 총 재고량
+
+			// 데이터를 JSON 형식으로 정리
+			const excelData4 = xlsdflabels.map((label, index) => ({
+				'#': dfItemCode[index],
+				'반품#': dfCodeItem[index],
+				'품목 이름': label,
+				'반품량': dfQuantities[index],
+				//'총 재고량': totaldfInventory[index]
+			}));
+
+			// JSON 데이터를 엑셀 시트로 변환
+			const worksheet4 = XLSX.utils.json_to_sheet(excelData4);
+			const workbook4 = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(workbook4, worksheet4, '반품 데이터');
+
+			// 엑셀 파일로 다운로드
+			XLSX.writeFile(workbook4, '반품 품목명, 갯수.xlsx');
+		});
+
+		//수정필요 최종 반품데이터 갯수 모니터 코드 추가해얗ㅁ
+
+
+
+
+
+
+
 
 		//
 		// 폐기 데이터
@@ -578,6 +784,36 @@
 			data: data5,
 			options: pieOptions2
 		});
+
+		// 엑셀 저장 함수
+		document.getElementById('xls5').addEventListener('click', () => {
+			// 차트 데이터 가져오기
+			const xlsdslabels = discardItemList.map(item => item.itemName);  // 항목 이름
+			const dsQuantities = discardItemList.map(item => item.quantity); // 원재료 입고량
+			const totaldsInventory = discardItemList.map(item => item.quantity); // 총 재고량
+			const dsItemCode = discardItemList.map(item => item.defectiveId); // 총 재고량
+			const discardItemCode = discardItemList.map(item => item.itemCode); // 총 재고량
+
+			// 데이터를 JSON 형식으로 정리
+			const excelData5 = xlsdslabels.map((label, index) => ({
+				'#': discardItemCode[index],
+				'반품 #': dsItemCode[index],
+				'항목 이름': label,
+				'폐기량': dsQuantities[index],
+				//'총 재고량': totaldsInventory[index]
+			}));
+
+			// JSON 데이터를 엑셀 시트로 변환
+			const worksheet5 = XLSX.utils.json_to_sheet(excelData5);
+			const workbook5 = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(workbook5, worksheet5, '폐기 데이터');
+
+			// 엑셀 파일로 다운로드
+			XLSX.writeFile(workbook5, '폐기 품목명, 갯수.xlsx');
+		});
+
+		//마찬가지 모니터하기, 코드 추가해얗ㅁ
+
 
 
 		// 수주 데이터
@@ -639,6 +875,72 @@
 			options: areaChartOptions
 		});
 
+
+		// 엑셀 저장 함수
+		document.getElementById('xls6').addEventListener('click', () => {
+			// 차트 데이터 가져오기
+			const xlssllabels = saleItemList.map(item => item.saleId);  // 항목 이름
+			const slQuantities = saleItemList.map(item => item.dueDate);
+			const totalslInventory = saleItemList.map(item => item.totalPrice);
+
+			// 데이터를 JSON 형식으로 정리
+			const excelData6 = xlssllabels.map((label, index) => ({
+				'#': label,
+				'날짜': slQuantities[index],
+				'금액': totalslInventory[index]
+			}));
+
+			// JSON 데이터를 엑셀 시트로 변환
+			const worksheet6 = XLSX.utils.json_to_sheet(excelData6);
+			const workbook6 = XLSX.utils.book_new();
+			XLSX.utils.book_append_sheet(workbook6, worksheet6, '수주 데이터');
+
+			// 엑셀 파일로 다운로드
+			XLSX.writeFile(workbook6, '월간 수주.xlsx');
+		});
+
+
+
+
+		$(function () {
+		        $.ajax({
+		            url: "/noticontent",
+		            dataType: "json",
+		            success: function (notifiList) {
+
+		                // 필터링된 알림 목록을 담을 리스트
+		                const filteredNotifications = [];
+
+		                // `notifiList`의 각 항목을 반복하면서 `minReqQuantity` 조건을 비교
+		                notifiList.forEach(function (item, index) {
+		                    // 예: 해당 항목의 `quantity`가 `minReqQuantity` 이하인 경우에만 추가
+		                    if (item.quantity <= item.minReqQuantity) {
+		                        filteredNotifications.push(item);
+		                    }
+		                });
+
+		                // 알림 개수 및 헤더 표시
+		                if (filteredNotifications.length > 0) {
+		                    $('#notificationCount').text(filteredNotifications.length);
+		                    $('#notiHeader').text('알람이 ' + filteredNotifications.length + '개 있습니다');
+
+		                    // 알림 내용을 리스트로 출력
+		                    const contentElement = $('#noticontent');
+		                    contentElement.empty();  // 기존 알림 초기화
+
+		                    filteredNotifications.forEach(function (item) {
+		                        const listItem = $('<a href="#" class="dropdown-item"></a>')
+		                            .text(`${item.itemName} 재고 수량이 ${item.quantity} 개 입니다. 재주문이 필요합니다.`);
+		                        contentElement.append(listItem);
+		                        contentElement.append('<div class="dropdown-divider"></div>');
+		                    });
+		                } else {
+		                    $('#noticontent').html('<span class="dropdown-item">새로운 알림이 없습니다</span>');
+		                }
+						}
+		          
+		        });
+		});
 
 
 	</script>
