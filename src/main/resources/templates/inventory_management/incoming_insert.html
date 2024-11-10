@@ -26,88 +26,182 @@
 
 
 
-<div class="wrapper">
+	<div class="wrapper">
+
+
+
+		<!--   Preloader -->
+		<!-- 처음 로딩 시 나오는 요소-->
+		<!--  <div class="preloader flex-column justify-content-center align-items-center">-->
+		<!--    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">-->
+		<!--  </div>-->
+
+
+
+
+
+
+
+
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">입고 등록</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+
+					<!-- Main row -->
+					<div class="row">
+
+						<section class="col-lg-5 connectedSortable">
+
+
+
+
+
+							<div class="card card-info">
+
+								<!-- /.card-header -->
+								<!-- form start -->
+
+								<div class="card-body">
+									<form class="form-horizontal" th:action="@{/inven/incomingInsert}" method="post">
+										<div class="form-group row">
+											<label for="inputEmail3" class="col-sm-4 col-form-label text-center">
+												입고 대상</label>
+											<div class="input-group col-6">
+												<input id="IncomingInsertCode" class="form-control" type="text"
+													name="IncomingInsertCode" placeholder="번호" required="">
+												<div class="input-group-append">
+													<span id="findIncomingInsertList" class="input-group-text"
+														style="cursor:pointer;"><i class="fas fa-search"></i></span>
+												</div>
+												<input id="reasonOfIncoming" class="form-control" type="text"
+													name="reasonOfIncoming" placeholder="입고사유" required="">
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputPassword3" class="col-4 col-form-label text-center">
+												입고 등록일</label>
+											<div class="col-6">
+												<input type="password" class="form-control" id="inputPassword3"
+													placeholder="오늘날짜고정" disabled>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputPassword3"
+												class="col-4 col-form-label text-center">담당자</label>
+											<div class="col-6">
+												<input type="password" class="form-control" id="inputPassword3"
+													placeholder="담당자 불러오기">
+											</div>
+										</div>
+
+									</form>
+									<!-- /.입고 등록할 정보 -->
+
+									<!--선택한 입고할 목록의 품목테이블-->
+									
+										<table id="example2"
+											class="table table-bordered table-hover dataTable dtr-inline">
+											<thead>
+												<tr>
+													<th>품목 코드</th>
+													<th>품목명</th>
+													<th>품목유형</th>
+													<th>수량</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>sdf</td>
+													<td>sdf</td>
+													<td>sdf</td>
+													<td>sdf</td>
+												</tr>
+												<!--											<tr th:each="incomingitems : ${incomingitemsDTO}">-->
+												<!--												<td th:text="${incomingItems.itemCode"></td>-->
+												<!--												<td th:text="${incomingItems.itemName"></td>-->
+												<!--												<td th:text="${incomingItems.itemType"></td>-->
+												<!--												<td th:text="${incomingItems.quantity"></td>-->
+												<!--											</tr>-->
+
+												<!--데이터가 없을 경우 검색 결과 없음 출력-->
+												<!--											<tr th:if="${#lists.isEmpty(incomingDTOs.content)}">-->
+												<!--												<td colspan="9" class="text-center">검색 결과가 없습니다.</td>-->
+												<!--											</tr>-->
+
+
+											</tbody>
+										</table>
+									
+								</div>
+
+								<div class="card-footer">
+									<button type="submit" class="btn btn-primary float-right">입고 등록</button>
+
+								</div>
+								<!-- /.card-footer -->
+
+							</div>
+
+
+
+
+
+
+
+
+						</section>
+
+					</div>
+					<!-- /.row (main row) -->
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+
+
+		<!-- Control Sidebar -->
+		<!--  <aside class="control-sidebar control-sidebar-dark">-->
+		<!-- Control sidebar content goes here -->
+		<!--  </aside>-->
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
 
 	
+	<script>
+		//입고 대상 검색 클릭시 입하 검품완료 또는 생산 완료된 리스트가 나오는 모달창 생성		
+		
+		
+	</script>
 	
-  <!--   Preloader -->
-  <!-- 처음 로딩 시 나오는 요소-->
-<!--  <div class="preloader flex-column justify-content-center align-items-center">-->
-<!--    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">-->
-<!--  </div>-->
-
-
-
-
-
-
-
-
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">페이지이름</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-
-        <!-- Main row -->
-        <div class="row">
-
-          <section class="col-lg-5 connectedSortable">
-
-            이 사이에 코드 작성
-
-
-
-
-
-
-
-
-
-
-
-          </section>
-
-        </div>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-
-
-  <!-- Control Sidebar -->
-  <!--  <aside class="control-sidebar control-sidebar-dark">-->
-  <!-- Control sidebar content goes here -->
-  <!--  </aside>-->
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
-<div th:replace="~{fragments/footer :: footerFragment}"></div>
-<!-- 기본 js 링크 -->
-<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
+	
+	<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+	<div th:replace="~{fragments/footer :: footerFragment}"></div>
+	<!-- 기본 js 링크 -->
+	<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
 </body>
+
 </html>
