@@ -3,6 +3,7 @@ package com.itwillbs.service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,8 @@ import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.IncomingItemsDTO;
 
 import com.itwillbs.domain.inventory.InventoryItemDTO;
+import com.itwillbs.entity.Incoming;
+import com.itwillbs.entity.IncomingItems;
 import com.itwillbs.repository.IncomingItemsRepository;
 import com.itwillbs.repository.IncomingRepository;
 import com.itwillbs.repository.InventoryRepository;
@@ -97,6 +100,7 @@ public class InventoryService {
                 pageable);
 
         // 각 입고 데이터마다 품목의 이름과 갯수를 구하기 위한 반복문
+        // ※최적화 생각해야함
         incomingByPage.forEach(dto -> {
 
             String incomingId2 = dto.getIncomingId();
@@ -117,6 +121,12 @@ public class InventoryService {
 
         return incomingByPage;
     }
+
+	public List<IncomingItemsDTO> getIncomingItems(String incomingId) {
+		
+		
+		return incomingItemsRepository.findByIncomingItems(incomingId);
+	}
     
 //	// 입고 목록 검색 (검색 조건과 페이지네이션)
 //	public Page<IncomingDTO> findIncomingBySearch(

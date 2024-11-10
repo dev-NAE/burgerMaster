@@ -198,6 +198,7 @@ public class InventoryController {
 	    model.addAttribute("incomingDTOs", incomingByPage);
 
 
+
 		
 		// 검색 조건의 기본값 설정
 	    model.addAttribute("itemCodeOrName", itemCodeOrName);

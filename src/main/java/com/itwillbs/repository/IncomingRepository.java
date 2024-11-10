@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,6 +51,8 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 //			@Param("managerCodeOrName") String managerCodeOrName,
 //			Pageable pageable);
 
+
+
 	/**
 	 * 입고 페이지 진입할 때 입고테이블 조회(페이징 처리)
 	 */
@@ -59,7 +62,7 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	Page<IncomingDTO> getIncomingLists(Pageable pageable);
 
 	/**
-	 * 입고 검색 조회 (itemCodeOrName 포함)
+	 * 입고 검색 조회
 	 */
 	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, ic.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) "
 			+ "FROM Incoming ic " + "LEFT JOIN ic.manager m " + "LEFT JOIN ic.incomingItems ii "
@@ -80,5 +83,7 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 			@Param("prodOrQualId") String prodOrQualId, @Param("status") String status,
 			@Param("managerCodeOrName") String managerCodeOrName, @Param("itemCodeOrName") String itemCodeOrName,
 			Pageable pageable);
-
+	
+	
+	
 }
