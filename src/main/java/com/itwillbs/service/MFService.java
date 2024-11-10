@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.itwillbs.domain.manufacture.MFBomDTO;
 import com.itwillbs.domain.manufacture.MFOrderDTO;
 import com.itwillbs.domain.manufacture.MFRmDTO;
+import com.itwillbs.domain.manufacture.MFRmListDTO;
 import com.itwillbs.entity.Item;
 import com.itwillbs.entity.MFOrder;
 import com.itwillbs.repository.ItemRepository;
@@ -60,6 +61,12 @@ public class MFService {
 		}
 		
 		return list;
+	}
+	
+	public List<MFRmListDTO> getRM(String itemName){
+		log.info("MFService getRM()");
+		
+		return itemRepostiory.findRM(itemName);
 	}
 	
 }
