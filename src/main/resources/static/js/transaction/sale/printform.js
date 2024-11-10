@@ -13,10 +13,10 @@ $(document).ready(function () {
         const printData = event.originalEvent.data;
         const tableBody = $('#item-table tbody');
 
-        $('#order-id').text(printData.orderId);
+        $('#sale-id').text(printData.saleId);
         $('#order-date').text(printData.orderDate);
         $('#due-date').text(printData.dueDate);
-        $('#supplier').text(printData.supplierName).css('font-size', '1.5em');
+        $('#franchise').text(printData.franchiseName).css('font-size', '1.5em');
         $('#total-price').text(parseInt(printData.totalPrice).toLocaleString()).css('font-weight', 'bold');
         $('#manager-name').text(printData.managerName);
 

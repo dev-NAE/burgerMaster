@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>발주 상세조회</title>
+    <title>수주 상세조회</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="/css/font.css">
@@ -32,12 +32,6 @@
 
 
     <div class="wrapper">
-
-        <!--   Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-        </div>
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -45,7 +39,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">발주 상세조회</h1>
+                            <h1 class="m-0">수주 상세조회</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -67,59 +61,59 @@
 
                     <!-- Contents -->
                         <div class="container-fluid col-sm-10 my-5">
-                            <div class="submit-btn-area row" th:if="${order.status != '발주취소'}">
-                                <button id="print-form" class="btn btn-md btn-info ml-auto my-3 mr-2">발주서 출력</button>
+                            <div class="submit-btn-area row" th:if="${sale.status != '수주취소'}">
+                                <button id="print-form" class="btn btn-md btn-info ml-auto my-3 mr-2">수주서 출력</button>
                             </div>
                             <div class="card insert-container px-3 py-3">
                                 <div class="card-body basic-info-area px-5">
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center">등록번호</label>
                                         <div class="col-sm-4">
-                                            <span id="order-id" th:text="${order.orderId}"></span>
+                                            <span id="sale-id" th:text="${sale.saleId}"></span>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center">처리상태</label>
                                         <div class="col-sm-4">
-                                            <span id="order-status" th:text="${order.status}"></span>
+                                            <span id="sale-status" th:text="${sale.status}"></span>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center" for="order_date">등록일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" name="order_date" id="order_date" th:value="${#dates.format(order.orderDate, 'yyyy-MM-dd')}" readonly>
+                                            <input class="form-control" type="date" name="order_date" id="order_date" th:value="${#dates.format(sale.orderDate, 'yyyy-MM-dd')}" readonly>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="manager-code">담당자</label>
                                         <div class="input-group col-sm-4">
-                                            <input id="manager-code" class="form-control" type="text" name="manager_code" placeholder="코드" th:value="${order.manager.managerId}" readonly>
+                                            <input id="manager-code" class="form-control" type="text" name="manager_code" placeholder="코드" th:value="${sale.manager.managerId}" readonly>
                                             <div class="input-group-append">
                                                 <span id="find-manager" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
                                             </div>
-                                            <input id="manager-name" class="form-control" type="text" name="manager_name" placeholder="이름" th:value="${order.manager.name}" readonly>
+                                            <input id="manager-name" class="form-control" type="text" name="manager_name" placeholder="이름" th:value="${sale.manager.name}" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label text-center" for="supplier-code">거래처</label>
+                                        <label class="col-sm-2 col-form-label text-center" for="franchise-code">거래처</label>
                                         <div class="input-group col-sm-4">
-                                            <input id="supplier-code" class="form-control" type="text" name="supplier_code" placeholder="코드" th:value="${order.supplier.supplierCode}" readonly>
+                                            <input id="franchise-code" class="form-control" type="text" name="franchise_code" placeholder="코드" th:value="${sale.franchise.franchiseCode}" readonly>
                                             <div class="input-group-append">
-                                                <span id="find-supplier" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
+                                                <span id="find-franchise" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
                                             </div>
-                                            <input id="supplier-name" class="form-control" type="text" name="supplier_name" placeholder="상호" th:value="${order.supplier.supplierName}" readonly>
+                                            <input id="franchise-name" class="form-control" type="text" name="franchise_name" placeholder="상호" th:value="${sale.franchise.franchiseName}" readonly>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="due_date">납기일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" id="due_date" name="due_date" th:value="${#dates.format(order.dueDate, 'yyyy-MM-dd')}" readonly>
+                                            <input class="form-control" type="date" id="due_date" name="due_date" th:value="${#dates.format(sale.dueDate, 'yyyy-MM-dd')}" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center" for="note">비  고</label>
                                         <div class="col-sm-10">
-                                            <input class="form-control" type="text" id="note" name="note" th:value="${order.note}" readonly>
+                                            <input class="form-control" type="text" id="note" name="note" th:value="${sale.note}" readonly>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="input-items-area card-body">
                                     <div class="row">
-                                        <button class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-items" style="display:none;">물품 추가</button>
+                                        <button class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-sale-items" style="display:none;">물품 추가</button>
                                     </div>
                                     <div class="item-list card-body border">
                                         <table id="item-list-table" class="table table-bordered table-hover dataTable dtr-inline">
@@ -149,8 +143,8 @@
                                                 <span id="total-quantity-view" class="ml-3" th:text="${items.size()}">0</span>개 품목 선택
                                                 <input id="total-quantity" type="hidden" value="0" th:value="${items.size()}">
                                             </div>
-                                            <div class="col-6 text-right total-of-price">금액 합계: <span id="total-price-view" class="ml-1" th:text="${#numbers.formatInteger(order.totalPrice, 1, 'COMMA')}">0</span> 원
-                                                <input id="total-price" type="hidden" th:value="${order.totalPrice}">
+                                            <div class="col-6 text-right total-of-price">금액 합계: <span id="total-price-view" class="ml-1" th:text="${#numbers.formatInteger(sale.totalPrice, 1, 'COMMA')}">0</span> 원
+                                                <input id="total-price" type="hidden" th:value="${sale.totalPrice}">
                                             </div>
                                         </div>
                                     </div>
@@ -160,10 +154,10 @@
                                 <div class="col-5 d-flex justify-content-start">
                                     <button id="back-to-list" class="btn btn-lg btn-info my-3">목록으로 이동</button>
                                 </div>
-                                <div id="btn-group" th:if="${order.status == '발주등록(저장)'}" class="col-7 d-flex justify-content-end">
+                                <div id="btn-group" th:if="${sale.status == '수주등록(저장)'}" class="col-7 d-flex justify-content-end">
                                     <button id="edit-btn" class="btn btn-lg btn-success my-3 mx-2">수정</button>
-                                    <button id="cancel-btn" class="btn btn-lg btn-danger my-3 mx-2" data-toggle="modal" data-target="#cancel-order">취소</button>
-                                    <button id="complete-btn" class="btn btn-lg btn-primary my-3 mx-2" data-toggle="modal" data-target="#complete-order">발주완료</button>
+                                    <button id="cancel-btn" class="btn btn-lg btn-danger my-3 mx-2" data-toggle="modal" data-target="#cancel-sale">취소</button>
+                                    <button id="complete-btn" class="btn btn-lg btn-primary my-3 mx-2" data-toggle="modal" data-target="#complete-sale">수주완료</button>
                                 </div>
                             </div>
                         </div>
@@ -184,17 +178,17 @@
 
 
                         <!-- Modal: 취소 -->
-                        <div class="modal fade" id="cancel-order" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal fade" id="cancel-sale" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalCenterTitle">발주취소</h5>
+                                        <h5 class="modal-title" id="exampleModalCenterTitle">수주취소</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body text-center">
-                                        <h5>이 발주를 취소하시겠습니까?</h5>
+                                        <h5>이 수주를 취소하시겠습니까?</h5>
                                     </div>
                                     <div class="modal-footer justify-content-center">
                                         <button type="button" class="btn btn-secondary col-3" data-dismiss="modal">아니오</button>
@@ -205,18 +199,18 @@
                         </div>
 
                         <!-- Modal: 완료 -->
-                        <div class="modal fade" id="complete-order" tabindex="-1" role="dialog" aria-labelledby="completeModalCenterTitle" aria-hidden="true">
+                        <div class="modal fade" id="complete-sale" tabindex="-1" role="dialog" aria-labelledby="completeModalCenterTitle" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="completeModalCenterTitle">발주완료</h5>
+                                        <h5 class="modal-title" id="completeModalCenterTitle">수주완료</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body text-center">
-                                        <h5>이 발주를 완료(확정)하시겠습니까?</h5>
-                                        완료된 발주는 수정/취소가 불가능합니다.
+                                        <h5>이 수주를 완료(확정)하시겠습니까?</h5>
+                                        완료된 수주는 수정/취소가 불가능합니다.
                                     </div>
                                     <div class="modal-footer justify-content-center">
                                         <button type="button" class="btn btn-secondary col-3" data-dismiss="modal">아니오</button>
@@ -258,7 +252,7 @@
     <div th:replace="~{fragments/footer :: footerFragment}"></div>
 
     <!-- custom js -->
-    <script src="/js/transaction/order/detail.js"></script>
+    <script src="/js/transaction/sale/detail.js"></script>
 
 </body>
 
