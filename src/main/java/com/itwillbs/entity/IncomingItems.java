@@ -6,7 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +20,7 @@ import lombok.ToString;
  * 입고 품목 테이블
  */
 @Entity
-@Table(name = "incoming")
+@Table(name = "incoming_items")
 @Getter
 @Setter
 @ToString
@@ -37,4 +40,13 @@ public class IncomingItems {
 	@Column(name = "quantity")
 	private int quantity;
 	
+    // Many-to-One 관계 설정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "incoming_id", insertable = false, updatable = false)
+    private Incoming incoming;
+    
+    // Many-to-One 관계 설정 (Item 엔티티와 연결)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_code", insertable = false, updatable = false)
+    private Item item;
 }

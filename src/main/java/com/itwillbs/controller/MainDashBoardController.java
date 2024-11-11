@@ -52,9 +52,9 @@ public class MainDashBoardController {
 			
 			
 			//가공품 입고 
-//			List<IncomingItemDTO>ppItemList=mainDashBoardService.getItemIncomming("PP");
-//			System.out.println("MainDashBoardController ppItemList:"+ppItemList);
-//			model.addAttribute("ppItemList", ppItemList);
+			List<IncomingItemDTO>ppItemList=mainDashBoardService.getItemIncomming("PP");
+			System.out.println("MainDashBoardController ppItemList:"+ppItemList);
+			model.addAttribute("ppItemList", ppItemList);
 			
 			//가공품 재고
 			List<InventoryItemDTO>ppInventoryList=mainDashBoardService.getItemInventory("PP");
@@ -89,6 +89,7 @@ public class MainDashBoardController {
 		
 		return "redirect:/login";
 	}
+	
 	
 
 	

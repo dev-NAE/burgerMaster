@@ -79,11 +79,15 @@
 				
 			  <div style="display: inline-block;">
 			  <ul class="pagination">
-			    <li class="page-item"><a class="page-link" href="#">◀</a></li>
-			    <li class="page-item"><a class="page-link" href="#">1</a></li>
-			    <li class="page-item"><a class="page-link" href="#">2</a></li>
-			    <li class="page-item"><a class="page-link" href="#">3</a></li>
-			    <li class="page-item"><a class="page-link" href="#">▶</a></li>
+			    <li class="page-item"><a class="page-link" th:href="@{/mf/bom(page=${currentPage-1})}"
+					 th:if="${currentPage > 1}">◀</a></li>
+				<li class="page-item"><a class="page-link" th:unless="${currentPage > 1}">◀</a></li>
+				  <span th:each="page:${#numbers.sequence(startPage,endPage)}">
+			    	<li class="page-item"><a class="page-link" th:href="@{/mf/bom(page=${page})}" th:text="${page}"></a></li>
+				  </span>
+			    <li class="page-item"><a class="page-link" th:href="@{/mf/bom(page=${currentPage+1})}"
+					th:if="${currentPage < totalPages}">▶</a></li>
+				<li class="page-item"><a class="page-link" th:unless="${currentPage < totalPages}">▶</a></li>
 			  </ul>
 			  </div>
 			  

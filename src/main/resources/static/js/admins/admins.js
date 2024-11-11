@@ -9,6 +9,18 @@ $(document).ready(function(){
         window.location.href="/bgmManager/list?search=" + search;
     })
     funcFillChangeModal();
+    document.getElementById('change-pass-switch').switchButton('on');
+    $('#change-pass-switch').change(function() {
+        let passInput = $('#manager_pass_change_modal');
+        if($(this).prop('checked')){
+            passInput.removeClass('is-invalid');
+            passInput.attr("disabled", "true");
+            passInput.val("");
+        }else{
+            passInput.removeAttr("disabled");
+            passInput.removeClass('is-invalid');
+        }
+    })
     $("#createManager").click(function(){
         $("#createModal").modal();
 
@@ -22,8 +34,13 @@ $(document).ready(function(){
 // 수정 모달 정보 전달
 function funcFillChangeModal(){
     $(".content tr").click(function(){
+
         $("#managerChangeModal").modal();
         $("#manager_id_change_modal").val($(this).children('td:eq(0)').text());
+        let passInput = $('#manager_pass_change_modal');
+        passInput.val("");
+        document.getElementById('change-pass-switch').switchButton('on');
+        passInput.attr("disabled", "true");
         $("#manager_name_change_modal").val($(this).children('td:eq(1)').text());
         $("#manager_email_change_modal").val($(this).children('td:eq(2)').text());
         $("#manager_phone_change_modal").val($(this).children('td:eq(3)').text());
@@ -113,11 +130,13 @@ function check_modal_text(action){
         id.focus();
         return false;
     }
-    if(!passRegexp.test(pass.val())){
-        console.log(pass.val());
-        pass.addClass('is-invalid');
-        pass.focus();
-        return false;
+    if(!(action==='change' && !$(this).prop('checked'))){
+        if(!passRegexp.test(pass.val())){
+            console.log(pass.val());
+            pass.addClass('is-invalid');
+            pass.focus();
+            return false;
+        }
     }
     if(!phoneRegexp.test(phone.val())){
         console.log(phone.val());

@@ -34,14 +34,14 @@ public class ManagerRestController {
         return result;
     }
 
-    @PostMapping(value = "/manager/update")
+    @PostMapping(value = "/bgmManager/update")
     public String update(Manager manager) {
         log.info("ManagerRestController update()");
         String json = managerService.updateManager(manager);
 
         return json;
     }
-    @PostMapping(value = "/manager/delete")
+    @PostMapping(value = "/bgmManager/delete")
     public String delete(Manager manager) {
         log.info("ManagerRestController delete()");
         String json = null;
