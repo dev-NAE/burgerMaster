@@ -60,7 +60,7 @@
         <div class="row flex-div">
 			
 <!--			작업 지시 등록 폼-->
-		  <form>
+		  <form id="input-form" th:action="@{/mf/submit}" method="post">
 			<div class="card card-default auto-margin">
 				
 			  <div class="card-header">
@@ -72,11 +72,12 @@
 				<div class="row">
 					<div class="form-group">
 						<label>생산할 물품</label>
-						  <input type="text" id="item" class="form-control item-button" onclick="myFunction()" placeholder="물품 선택" readonly>					  
-						  <div id="myDropdown" class="dropdown-content" th:each="List, status:${ppList}">
+						  <input type="text" id="item" class="form-control item-button" onclick="myFunction()" placeholder="물품 선택" readonly>
+						  <input type="hidden" id="itemCode" name="itemCode">
+						  <div id="myDropdown" class="dropdown-content">
 							<input type="text" id="search" class="form-control" placeholder="검색" onkeyup="filterFunction()">
 							<ul class="pp-list">
-							  <li class="options" th:each="List, status:${ppList}" th:text="${List.itemName}" onclick="change(innerText)" value="${List.itemCode}"></li>
+							  <li class="options" th:each="List, status:${ppList}" th:id="${List.itemCode}" th:text="${List.itemName}" onclick="change(innerText, this.id)" value="${List.itemCode}"></li>
 							</ul>
 						  </div>
 					</div>
@@ -84,13 +85,13 @@
 					
 				  <div class="form-group">
                     <label for="amount">수량</label>
-                    <input type="number" class="form-control" id="amount" placeholder="(최대 수량 : 9999)" min="1" max="10000" maxlength="4" style="width: 200px;" onblur="getRM()">
+                    <input type="number" class="form-control" id="amount" name="amount" placeholder="(최대 수량 : 9999)" min="1" max="10000" maxlength="4" style="width: 200px;" onblur="getRM()">
                   </div>
 <!--				  form-group-->
 
 				  <div class="form-group">
 					<label for="deadline">데드라인</label>
-					<input class="form-control" type="date" id="deadline">
+					<input class="form-control" type="date" id="deadline" name="deadline">
 				  </div>
 <!--				  form-group-->
 
@@ -99,8 +100,10 @@
 				
 				<div class="row">
 					<div class="col">
-					  <button type="button" class="btn btn-primary">등록</button>
+					  <div style="float: right;">
+					  <button type="button" id="submit-btn" class="btn btn-primary" disabled>등록</button>
 					  <button type="reset" class="btn btn-danger">취소</button>
+					  </div>
 					</div>
 				</div>
 
@@ -123,30 +126,7 @@
 					</tr>
 				</thead>
 				<tbody id="rm">
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-					</tr>
-					<tr>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-						<td>00000000</td>
-					</tr>
+					
 				</tbody>
 			</table>
 
@@ -157,6 +137,25 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+  
+<!--  모달-->
+  <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h6 class="modal-title" id="confirmationModalLabel">작업 지시를 등록하시겠습니까?</h6>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                  <button type="button" class="btn btn-primary" id="confirmSubmitBtn">확인</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
 
 
 
