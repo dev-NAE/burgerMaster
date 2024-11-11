@@ -77,8 +77,18 @@
 						<td th:text="${List.orderDeadline}"></td>
 						<td th:text="${List.orderDate}"></td>
 						<td th:text="${List.orderState}"></td>
-						<td><button type="button" class="btn btn-warning">전달</button></td>
-						<td><button type="button" class="btn btn-primary">완료</button></td>
+						<td th:if="${List.orderState=='작업 전달 전'}">
+							<button type="button" th:id="${List.orderId}" class="btn btn-warning transmit">전달</button>
+						</td>
+						<td th:unless="${List.orderState=='작업 전달 전'}">
+							<button type="button" class="btn btn-secondary transmit" disabled>전달</button>
+						</td>
+						<td th:if="${List.orderState=='작업 완료'}">
+							<button type="button" th:id="${List.orderId}" class="btn btn-primary complete">완료</button>
+						</td>
+						<td th:unless="${List.orderState=='작업 완료'}">
+							<button type="button" class="btn btn-secondary complete" disabled>완료</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -141,7 +151,23 @@
   </div>
   <!-- /.content-wrapper -->
 
-
+  <!--  모달-->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="confirmationModalLabel"></h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitBtn">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
   <!-- Control Sidebar -->
   <!--  <aside class="control-sidebar control-sidebar-dark">-->
@@ -155,6 +181,8 @@
 <div th:replace="fragments/footer :: footerFragment"></div>
 <!-- 기본 js 링크 -->
 <th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
+
+<script src="/js/manufacture/orders.js"></script>
 
 <!-- ChartJS -->
 <script src="plugins/chart.js/Chart.min.js"></script>
