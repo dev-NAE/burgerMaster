@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.itwillbs.domain.inventory.IncomingDTO;
+import com.itwillbs.domain.inventory.IncomingInsertDTO;
 import com.itwillbs.domain.inventory.IncomingItemsDTO;
 
 import com.itwillbs.domain.inventory.InventoryItemDTO;
@@ -116,7 +117,7 @@ public class InventoryService {
                 // 나머지 품목 갯수 설정
                 dto.setOtherCount(itemNames.size() - 1);
             } else {
-                dto.setIncomingItemDisplay("N/A");
+                dto.setIncomingItemDisplay("");
                 dto.setOtherCount(0);
             }
         });
@@ -138,6 +139,44 @@ public class InventoryService {
 	    if (updatedRows == 0) {
 	        throw new EntityNotFoundException("해당 입고 ID가 존재하지 않습니다: " + incomingId);
 	    }
+	}
+
+	public List<IncomingInsertDTO> findIncomingInsertList() {
+		
+		
+    	// 생산 완료가되었지만 아직 입고 등록이 안된 생산데이터 저장
+		List<IncomingInsertDTO> incomingInsertDTOProd = incomingRepository.findAllEndOfProduction();
+    	
+		// 각 생산완료된 데이터행마다 품목의 이름과 갯수를 구하기 위한 반복문
+		// 생산코드 하나에 품목 하나만 있으므로 구현하지 않음. 필요시 구현
+		
+		
+    	// 입하 검품완료가되었지만 아직 입고 등록이 안된 검품데이터 저장
+		List<IncomingInsertDTO> incomingInsertDTOQual = incomingRepository.findAllEndOfQuality();
+		
+        // 각 검품완료된 데이터행마다 품목의 이름과 갯수를 구하기 위한 반복문
+        // ※최적화 생각해야함
+		incomingInsertDTOQual.forEach(dto -> {
+
+            String QualitySaleId = dto.getIncomingInsertCode();
+
+            // 	quality_sale_items테이블에서 품목코드와 품목이름을 구함
+//            List<IncomingItemsDTO> itemNames = incomingItemsRepository.findQualitySaleItemsById(QualitySaleId);
+//
+//            if (!itemNames.isEmpty()) {
+//                // 첫 번째 품목의 이름을 설정
+//                dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+//                // 나머지 품목 갯수 설정
+//                dto.setOtherCount(itemNames.size() - 1);
+//            } else {
+//                dto.setIncomingItemDisplay("");
+//                dto.setOtherCount(0);
+//            }
+        });
+   
+		incomingInsertDTOProd.addAll(incomingInsertDTOQual);
+		
+		return null;
 	}
     
 //	// 입고 목록 검색 (검색 조건과 페이지네이션)
