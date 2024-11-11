@@ -18,7 +18,7 @@ public class MFRmDTO {
 	
 	@Override
 	public String toString() {
-		return itemName+" "+itemAmount.toString();
+		return itemName+"×"+itemAmount.toString();
 	}
 	
 }
