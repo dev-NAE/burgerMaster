@@ -22,9 +22,8 @@ let $submitButton = $('#ship-submit-btn');
 // 입력값 기본검증
 function checkInputs() {
     let allChecked = true;
-    let totalQuantity = $('#total-quantity').val();
     $form.find('input[required]').each(function () {
-        if (!this.value || !this.checkValidity() || parseInt(totalQuantity) === 0) {
+        if (!this.value) {
             allChecked = false;
             return false;
         }
@@ -41,6 +40,7 @@ $('#find-manager').on('click', function(event) {
 function setManager(managerCode, managerName) {
     $('#manager-code').val(managerCode);
     $('#manager-name').val(managerName);
+    checkInputs();
 }
 
 // 출하등록건 검색 팝업
@@ -50,19 +50,18 @@ $('#find-to-ship').on('click', function(event) {
 });
 
 // 팝업에서 선택한 출하등록건 폼에 정보 입력
-function setToShip(saleId, items, quality, franchiseCode, franchiseName, orderDate, dueDate,
+function setToShip(saleId, items, quality, franchiseCode, franchiseName, dueDate,
                    saleItems, totalPrice, quantity) {
+    $('#sale-id').val(saleId);
     $('#shipment-view').val(saleId + ': ' + items);
-    $('#order_date').val(orderDate);
     $('#franchise-code').val(franchiseCode);
     $('#franchise-name').val(franchiseName);
     $('#due_date').val(dueDate);
-    $('#total-price-view').text(totalPrice);
+    $('#total-price-view').text(parseInt(totalPrice).toLocaleString());
     $('#total-quantity-view').text(quantity);
 
     const tbody = $('#item-list-tbody');
     tbody.empty();
-    console.log(saleItems);
 
     saleItems.forEach(row => {
         const newRow = $('<tr>', {class: 'item-row'});
@@ -71,96 +70,61 @@ function setToShip(saleId, items, quality, franchiseCode, franchiseName, orderDa
         newRow.append($('<td>', {class: 'text-center'})
             .append($('<span>', {class: 'item-name', text: row.itemName})));
         newRow.append($('<td>', {class: 'text-right'})
-            .append($('<span>', {class: 'item-price', text: row.price})).append(' 원'));
+            .append($('<span>', {class: 'item-price', text: (parseInt(row.price).toLocaleString())})).append(' 원'));
         newRow.append($('<td>', {class: 'text-center'})
-            .append($('<span>', {class: 'item-quantity', text: row.quantity})).append(' 단위'));
+            .append($('<span>', {class: 'item-quantity', text: row.quantity})));
         newRow.append($('<td>', {class: 'text-right'})
             .append($('<span>', {class: 'subtotal',
                 text: (parseInt(row.subtotalPrice).toLocaleString() + ' 원') })));
-
-
         tbody.append(newRow);
     });
-
+    checkInputs();
 }
 
-
-/*
-// 수주등록 버튼: 필수항목이 비어있으면 비활성화, 모두 채워지면 활성화
+// 출하등록 버튼: 필수항목이 비어있으면 비활성화, 모두 채워지면 활성화
 $(document).ready(function() {
 
-    // 폼에 이벤트 위임 (품목 추가시 작동하도록)
     $form.on('input', 'input[required]', checkInputs);
-
     // 페이지 로드 시 적용
     checkInputs();
 
-    // 버튼을 누르면
-    $submitButton.on('click', function(event) {
-        event.preventDefault();
+    $('#complete-yes').on('click', function () {
 
         // 중복클릭 방지용 로더(스피너) 작동
         $('#loadingSpinner').show();
 
-        // 주문정보 수집 = OrderDTO 형태
-        var sale = {
-            totalPrice: parseInt($('#total-price').val()),
-            orderDate: $('#order_date').val(),
-            dueDate: $('#due_date').val(),
+        var shipment = {
+            saleId: $('#sale-id').val(),
+            shipDate: $('#ship_date').val() + ' 00:00:00',
             note: $('#note').val(),
-            manager: $('#manager-code').val(),
-            franchiseCode: $('#franchise-code').val()
+            manager: $('#manager-code').val()
         };
 
-        // 주문품목정보 수집 = OrderItemsDTO 형태
-        var items = [];
-        $('#item-list-table .item-row').each(function() {
-            var $item = $(this);
-            var item = {
-                itemCode: $item.find('.item-code').text(),
-                price: parseInt($item.find('.item-price').val()),
-                subtotalPrice: parseInt($item.find('.subtotal').val()),
-                quantity: parseInt($item.find('.item-quantity').val())
-            }
-            items.push(item);
-        });
-
-        // 데이터 통합 = OrderRequestDTO 형태
-        var saleRequest = {
-            sale: sale,
-            items: items
-        }
-
-        // 등록처리를 위한 전송
         $.ajax({
-            url: '/tx/saveSale',
+            url: '/tx/saveShip',
             method: 'POST',
-            contentType: 'application/json',
-            dataType: 'text',
-            beforeSend : function(xhr){
+            data: shipment,
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader(header, token);
             },
-            data: JSON.stringify(saleRequest),
-            success: function(response) {
+            success: function (response) {
                 if (response === "success") {
                     $('#loadingSpinner').hide();
-                    alert('수주가 등록되었습니다.');
-                    window.location.href = '/tx/saleList';
-                } else if (response === "mismatch") {
+                    $('#complete-ship').modal('hide');
+                    alert('출하 등록이 완료되었습니다.');
+                    window.location.href = '/tx/shipList';
+                } else {
                     $('#loadingSpinner').hide();
-                    alert('입력한 내용이 데이터베이스와 일치하지 않습니다')
+                    $('#complete-ship').modal('hide');
+                    alert('출하 등록에 실패했습니다.')
                 }
             },
-            error: function(error) {
+            error: function (error) {
                 $('#loadingSpinner').hide();
+                $('#complete-ship').modal('hide');
                 console.log('Error: :', error)
-                alert('수주 등록처리 중 오류가 발생했습니다.')
+                alert('출하 등록처리 중 오류가 발생했습니다.')
             }
         });
-
-    })
-
-
-
+    });
 });
- */
