@@ -20,7 +20,10 @@ public class ShipmentDTO {
     private String manager;
     private String saleId;
 
-    // 리스트 출력용
+    // 출하검품 완료상태 : 리스트, 상세화면에서 사용
+    private String qsStatus;
+
+    // 출하 시 연관 수주정보 출력용
     private String franchiseName;
     private String itemName;
     private int itemCount;

@@ -381,7 +381,7 @@ public class TXService {
     }
 
     public List<SaleDTO> findToShip() {
-        List<SaleDTO> allQualified = saleRepository.findAllQualified();
+        List<SaleDTO> allQualified = shipmentRepository.findAllQualified();
         allQualified.forEach(sale -> {
                 Sale thisSale = saleRepository.findById(sale.getSaleId()).orElse(null);
                 if (thisSale != null) {
@@ -470,15 +470,37 @@ public class TXService {
                     shipmentDTO.setShipmentId(ship.getShipmentId());
                     shipmentDTO.setShipDate(ship.getShipDate());
                     shipmentDTO.setDueDate(ship.getSale().getDueDate());
-                    shipmentDTO.setStatus(ship.getStatus());
+
+                    String status = ship.getStatus();
+                    String qsStatus = shipmentRepository.checkShipmentQualified(ship.getShipmentId());
+                    if (status.equals("출하등록(검품요청)") && qsStatus.equals("검품완료")) {
+                        shipmentDTO.setStatus("검품완료");
+                    } else {
+                        shipmentDTO.setStatus(status);
+                        shipmentDTO.setQsStatus(qsStatus);
+                    }
+
                     shipmentDTO.setFranchiseName(saleRepository.findFranchiseNameBySaleId(ship.getSale().getSaleId()));
+                    shipmentDTO.setTotalPrice(ship.getSale().getTotalPrice());
                     List<String> firstItem = saleRepository.findFirstItemNameBySale(ship.getSale());
                     shipmentDTO.setItemName(firstItem.isEmpty() ? null : firstItem.get(0));
                     shipmentDTO.setItemCount(saleRepository.findSaleItemCountBySale(ship.getSale()));
+
+
                     log.info("TXService: shipmentDTO: " + shipmentDTO);
                     return shipmentDTO;
                 })
                 .collect(Collectors.toList());
     }
+
+    public Shipment getShipmentById(String shipmentId) {
+        Optional<Shipment> shipment = shipmentRepository.findById(shipmentId);
+        if (shipment.isPresent()) {
+            return shipment.get();
+        } else {
+            throw new NoSuchElementException(shipment + "에 해당하는 출하 없음");
+        }
+    }
+
 
 }

@@ -28,6 +28,9 @@
             <th class="text-center" style="width:15%;">출고검품</th>
             <th class="text-center" style="width:20%;">납기일</th>
         </tr>
+        <tr th:if="${toShip.size} eq 0">
+            <td colspan="5" class="text-center">현재 출하 등록 가능한 주문이 없습니다</td>
+        </tr>
         <tr onclick="sendResult(this)" style="cursor: pointer;" th:each="item : ${toShip}">
             <td class="text-center" th:data-sale-id="${item.saleId}" th:text="${item.saleId}"></td>
 

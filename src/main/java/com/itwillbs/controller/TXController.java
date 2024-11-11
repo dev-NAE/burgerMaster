@@ -335,31 +335,31 @@ public class TXController {
         return ResponseEntity.ok(ships);
     }
 
-//    @GetMapping("/saleDetail")
-//    public String saleDetail(@RequestParam String saleId, Model model) {
-//        Sale sale = txService.getSaleById(saleId);
-//        List<SaleItems> items = txService.getSaledItems(sale);
-//        model.addAttribute("sale", sale);
-//        model.addAttribute("items", items);
-//        return "transaction/sale/detail";
-//    }
-//
-//    @ResponseBody
-//    @GetMapping("/searchSales")
-//    public ResponseEntity<List<SaleDTO>> searchSales(
-//            @RequestParam(required = false) String status,
-//            @RequestParam(required = false) String franchiseName,
-//            @RequestParam(required = false) String orderDateStart,
-//            @RequestParam(required = false) String orderDateEnd,
-//            @RequestParam(required = false) String itemName,
-//            @RequestParam(required = false) String dueDateStart,
-//            @RequestParam(required = false) String dueDateEnd
-//    ) {
-//        log.info("TXController searchSales()");
-//        List<SaleDTO> sales = txService.searchSales(status, franchiseName, orderDateStart, orderDateEnd, itemName, dueDateStart, dueDateEnd);
-//        log.info(sales.toString());
-//        return ResponseEntity.ok(sales);
-//    }
+    @GetMapping("/shipDetail")
+    public String shipDetail(@RequestParam String shipmentId, Model model) {
+        Shipment shipment = txService.getShipmentById(shipmentId);
+        List<SaleItems> items = txService.getSaledItems(shipment.getSale());
+        model.addAttribute("shipment", shipment);
+        model.addAttribute("items", items);
+        return "transaction/sale/detail";
+    }
+
+    @ResponseBody
+    @GetMapping("/searchShips")
+    public ResponseEntity<List<ShipmentDTO>> searchShips(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String franchiseName,
+            @RequestParam(required = false) String shipDateStart,
+            @RequestParam(required = false) String shipDateEnd,
+            @RequestParam(required = false) String itemName,
+            @RequestParam(required = false) String dueDateStart,
+            @RequestParam(required = false) String dueDateEnd
+    ) {
+        log.info("TXController searchSales()");
+        List<ShipmentDTO> shipment = txService.searchShips(status, franchiseName, shipDateStart, shipDateEnd, itemName, dueDateStart, dueDateEnd);
+        log.info(shipment.toString());
+        return ResponseEntity.ok(shipment);
+    }
 
 
 
