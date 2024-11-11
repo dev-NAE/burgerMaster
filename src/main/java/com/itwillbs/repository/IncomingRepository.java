@@ -20,7 +20,7 @@ public interface IncomingRepository extends JpaRepository<Incoming, String>{
      */
     @Query("SELECT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, ic.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) " +
     		"FROM Incoming ic LEFT JOIN fetch Manager m ON ic.managerId = m.managerId " +
-    		"ORDER BY ic.incomingId ASC")
+    		"ORDER BY ic.incomingId DESC")
 	Page<IncomingDTO> getAllIncomingLists(Pageable pageable);
 	
 	
