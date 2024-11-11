@@ -1,8 +1,6 @@
 package com.itwillbs.service;
 
-import com.itwillbs.domain.transaction.OrderDTO;
-import com.itwillbs.domain.transaction.OrderItemsDTO;
-import com.itwillbs.domain.transaction.TxItemsDTO;
+import com.itwillbs.domain.transaction.*;
 import com.itwillbs.entity.*;
 import com.itwillbs.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,7 +31,10 @@ public class TXService {
     private final ManagerRepository managerRepository;
     private final SupplierRepository supplierRepository;
     private final ItemRepository itemRepository;
-    private final InventoryRepository inventoryRepository;
+    private final SaleRepository saleRepository;
+    private final SaleItemsRepository saleItemsRepository;
+    private final FranchiseRepository franchiseRepository;
+    private final ShipmentRepository shipmentRepository;
 
     @Transactional
     public void saveOrder(OrderDTO orderDTO, List<OrderItemsDTO> orderItems) {
@@ -147,11 +148,6 @@ public class TXService {
         return orderItemsRepository.findByOrder(order);
     }
 
-    public List<Item> getSaleItems() {
-        return itemRepository.findAll();
-        // 사용중인 코드 + 판매할 수 있는 아이템 한정, 재고수량 오름차순으로 수정 필요
-    }
-
     public List<OrderDTO> searchOrders(String status, String supplierName, String orderDateStart, String orderDateEnd,
                                        String itemName, String dueDateStart, String dueDateEnd) {
         log.info("TXService: searchOrders");
@@ -229,5 +225,176 @@ public class TXService {
         saveOrderItems(orderItems, orderId, order);
     }
 
+    @Transactional
+    public void saveSale(SaleDTO saleDTO, List<SaleItemsDTO> saleItems) {
+        log.info("TXService: saveSale");
+        // 수주번호 생성
+        String saleId = generateNextSaleId();
 
+        // 수주 정보 저장
+        Sale sale = new Sale();
+        BeanUtils.copyProperties(saleDTO, sale);      // saleDTO -> sale 필드값 복사
+        sale.setSaleId(saleId);                        // 수주등록번호
+        sale.setStatus("수주등록(저장)");                  // 수주상태
+        sale.setRealDate(new Timestamp(System.currentTimeMillis()));
+        sale.setManager(managerRepository.findById(saleDTO.getManager()).orElse(null));
+        sale.setFranchise(franchiseRepository.findById(saleDTO.getFranchiseCode()).orElse(null));
+        saleRepository.save(sale);
+
+        // 발주 품목정보 저장
+        saveSaleItems(saleItems, saleId, sale);
+    }
+
+    public String generateNextSaleId() {
+        String maxSaleId = saleRepository.findMaxSaleId();
+
+        String newSaleId = null;
+
+        if (maxSaleId == null) {
+            newSaleId = "SL0001";
+        } else {
+            int numberPart = Integer.parseInt(maxSaleId.substring(2));
+            newSaleId = String.format("SL%04d", numberPart + 1);
+        }
+        log.info("TXService: generateNextOrderId + newOrderId = " + newSaleId);
+
+        return newSaleId;
+    }
+
+    private void saveSaleItems(List<SaleItemsDTO> saleItems, String saleId, Sale sale) {
+        for (SaleItemsDTO item : saleItems) {
+            SaleItems saleItem = new SaleItems();
+            BeanUtils.copyProperties(item, saleItem);
+            saleItem.setItem(itemRepository.findById(item.getItemCode()).orElse(null));
+            saleItem.setSale(sale);
+            saleItem.setSaleItemId(saleId + item.getItemCode());
+            log.info(saleItem.toString());
+            saleItemsRepository.save(saleItem);
+        }
+    }
+
+    public List<Franchise> findFranchises(String franchiseName) {
+        if (franchiseName != null) {
+            franchiseName = "%" + franchiseName + "%";
+        }
+        return franchiseRepository.findFranchiseOnTX(franchiseName);
+    }
+
+    public boolean checkSaleValidation(SaleDTO saleDTO) {
+        String managerId = saleDTO.getManager();
+        String franchiseCode = saleDTO.getFranchiseCode();
+        Optional<Manager> manager = managerRepository.findById(managerId);
+        Optional<Franchise> franchise = franchiseRepository.findById(franchiseCode);
+        // 입력한 매니저아이디, 가맹점코드가 DB에 존재하는 값인지 검증
+        return manager.isPresent() && franchise.isPresent();
+    }
+
+    public List<SaleDTO> getSaleList() {
+
+        log.info("TXService: getOrderList");
+        List<Sale> allSales = saleRepository.findAll(Sort.by(Sort.Direction.DESC, "saleId"));
+
+        return getSaleDTOS(allSales);
+
+    }
+
+    public Sale getSaleById(String saleId) {
+        Optional<Sale> sale = saleRepository.findById(saleId);
+        if (sale.isPresent()) {
+            return sale.get();
+        } else {
+            throw new NoSuchElementException(saleId + "에 해당하는 수주 없음");
+        }
+    }
+
+    public List<SaleItems> getSaledItems(Sale sale) {
+        return saleItemsRepository.findBySale(sale);
+    }
+
+
+    public List<SaleDTO> searchSales(String status, String franchiseName, String orderDateStart, String orderDateEnd,
+                                       String itemName, String dueDateStart, String dueDateEnd) {
+        log.info("TXService: searchSales");
+
+        // 날짜 자료형 String -> Timestamp 변경
+        Timestamp orderStart = convertToTimestamp(orderDateStart);
+        Timestamp orderEnd = convertToTimestamp(orderDateEnd);
+        Timestamp dueStart = convertToTimestamp(dueDateStart);
+        Timestamp dueEnd = convertToTimestamp(dueDateEnd);
+
+        String formattedStatus = (status != null && !status.trim().isEmpty()) ? status : null;
+
+        // LIKE 검색할 것들 % 붙여주기
+        String formattedFranchiseName = franchiseName != null && !franchiseName.trim().isEmpty() ? "%" + franchiseName + "%" : null;
+        String formattedItemName = itemName != null && !itemName.trim().isEmpty() ? "%" + itemName + "%" : null;
+
+        log.info("status: " + formattedStatus + " supplierName: " + formattedFranchiseName + " orderDateStart: " + orderStart + " orderDateEnd: " + orderEnd + " itemName: " + formattedItemName + " dueStart: " + dueStart + " dueEnd: " + dueEnd);
+
+        List<Sale> salesByConditions = saleRepository.findSalesByConditions
+                (formattedStatus, formattedFranchiseName, orderStart, orderEnd, formattedItemName, dueStart, dueEnd);
+
+        log.info("TXService: searchSalesByConditions" + salesByConditions);
+
+        return getSaleDTOS(salesByConditions);
+    }
+
+    private List<SaleDTO> getSaleDTOS(List<Sale> salesByConditions) {
+        return salesByConditions.stream()
+                .map(sale -> {
+                    SaleDTO saleDTO = new SaleDTO();
+                    saleDTO.setSaleId(sale.getSaleId());
+                    saleDTO.setTotalPrice(sale.getTotalPrice());
+                    saleDTO.setOrderDate(sale.getOrderDate());
+                    saleDTO.setDueDate(sale.getDueDate());
+                    saleDTO.setStatus(sale.getStatus());
+                    saleDTO.setFranchiseName(saleRepository.findFranchiseNameBySaleId(sale.getSaleId()));
+                    List<String> firstItem = saleRepository.findFirstItemNameBySale(sale);
+                    saleDTO.setItemName(firstItem.isEmpty() ? null : firstItem.get(0));
+                    saleDTO.setItemCount(saleRepository.findSaleItemCountBySale(sale));
+                    log.info("TXService: getSaleDTOS: " + saleDTO);
+                    return saleDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public void updateSaleStatus(String saleId, String status) {
+        log.info("TXService: updateSaleStatus");
+        saleRepository.updateSaleStatusById(status, saleId);
+    }
+
+    @Transactional
+    public void updateSale(SaleDTO saleDTO, List<SaleItemsDTO> saleItems) {
+        log.info("TXService: updateSale");
+
+        String saleId = saleDTO.getSaleId();
+        Sale sale = saleRepository.findById(saleId).orElseThrow(() -> new EntityNotFoundException("해당 수주 없음"));
+
+        // 발주 정보 업데이트
+        BeanUtils.copyProperties(saleDTO, sale,  "saleId", "status");  // id, 상태 제외 DTO 값 복사
+        sale.setRealDate(new Timestamp(System.currentTimeMillis()));   // 수정 시점으로 실제등록일 변경
+        sale.setManager(managerRepository.findById(saleDTO.getManager()).orElse(null));
+        sale.setFranchise(franchiseRepository.findById(saleDTO.getFranchiseCode()).orElse(null));
+        saleRepository.save(sale);
+
+        // 발주 품목정보 새로 저장
+        saleItemsRepository.deleteBySale(sale);
+        saveSaleItems(saleItems, saleId, sale);
+    }
+
+    public List<SaleDTO> findToShip() {
+        List<SaleDTO> allQualified = saleRepository.findAllQualified();
+        allQualified.forEach(sale -> {
+                Sale thisSale = saleRepository.findById(sale.getSaleId()).orElse(null);
+                if (thisSale != null) {
+                    sale.setItemCount(saleRepository.findSaleItemCountBySale(thisSale));
+                    List<String> itemNames = saleRepository.findFirstItemNameBySale(thisSale);
+                    if (!itemNames.isEmpty()) {
+                        sale.setItemName(saleRepository.findFirstItemNameBySale(thisSale).get(0));
+                    }
+                    sale.setSaleItems(saleItemsRepository.findBySale2(thisSale));
+                }
+            });
+        log.info(allQualified.toString());
+        return allQualified;
+    }
 }

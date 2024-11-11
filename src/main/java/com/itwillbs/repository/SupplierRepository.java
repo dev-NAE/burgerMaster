@@ -1,6 +1,5 @@
 package com.itwillbs.repository;
 
-import com.itwillbs.entity.Manager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +14,7 @@ import java.util.List;
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, String> {
 
+	//손강수
 	@Query("SELECT MAX(s.supplierCode)" + 
 			"FROM Supplier s ")
 	String findMaxSupplierCode();
