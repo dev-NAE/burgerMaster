@@ -156,9 +156,8 @@ function refreshTotalPrice() {
 }
 
 
-// 발주등록 버튼: 필수항목이 비어있으면 비활성화, 모두 채워지면 활성화
+// 수주등록 버튼: 필수항목이 비어있으면 비활성화, 모두 채워지면 활성화
 $(document).ready(function() {
-
 
     // 폼에 이벤트 위임 (품목 추가시 작동하도록)
     $form.on('input', 'input[required]', checkInputs);
@@ -174,7 +173,7 @@ $(document).ready(function() {
         $('#loadingSpinner').show();
 
         // 주문정보 수집 = OrderDTO 형태
-        var order = {
+        var sale = {
             totalPrice: parseInt($('#total-price').val()),
             orderDate: $('#order_date').val(),
             dueDate: $('#due_date').val(),
@@ -197,8 +196,8 @@ $(document).ready(function() {
         });
 
         // 데이터 통합 = OrderRequestDTO 형태
-        var orderRequest = {
-            order: order,
+        var saleRequest = {
+            sale: sale,
             items: items
         }
 
@@ -211,12 +210,12 @@ $(document).ready(function() {
             beforeSend : function(xhr){
                 xhr.setRequestHeader(header, token);
             },
-            data: JSON.stringify(orderRequest),
+            data: JSON.stringify(saleRequest),
             success: function(response) {
                 if (response === "success") {
                     $('#loadingSpinner').hide();
                     alert('수주가 등록되었습니다.');
-                    window.location.href = '/tx/orderList';
+                    window.location.href = '/tx/saleList';
                 } else if (response === "mismatch") {
                     $('#loadingSpinner').hide();
                     alert('입력한 내용이 데이터베이스와 일치하지 않습니다')

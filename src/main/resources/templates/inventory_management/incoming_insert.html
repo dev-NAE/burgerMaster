@@ -1,124 +1,307 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>입고 등록</title>
-  <!-- 기본 css 링크-->
-  <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
-  <!-- Google Font: Source Sans Pro -->
-  <!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
-  <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
-  <link rel="stylesheet" href="css/font.css">
-
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>입고 등록</title>
+	<!-- 기본 css 링크-->
+	<th:block th:replace="~{fragments/basicLink :: basicLinkCssFragment}"></th:block>
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+	<!-- JQVMap -->
+	<link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css" />
+	<link rel="stylesheet" href="/css/font.css" />
 </head>
+
 <body class="hold-transition sidebar-mini layout-fixed">
+	<!-- 공통 로딩 불러오기 -->
+	<div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
+	<!-- 공통 헤더 불러오기 -->
+	<div th:replace="~{fragments/header :: headerFragment}"></div>
 
-<!-- 공통 로딩 불러오기 -->
-<div th:replace="fragments/Preloader :: PreloaderFragment"></div>
-<!-- 공통 헤더 불러오기 -->
-<div th:replace="fragments/header :: headerFragment"></div>
+	<!-- 공통 사이드바 불러오기 -->
+	<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
 
-<!-- 공통 사이드바 불러오기 -->
-<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+	<div class="wrapper">
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Content Header (Page header) -->
+			<div class="content-header">
+				<div class="container-fluid">
+					<div class="row mb-2">
+						<div class="col-sm-6">
+							<h1 class="m-0">입고 등록</h1>
+						</div><!-- /.col -->
+						<div class="col-sm-6">
+							<ol class="breadcrumb float-sm-right">
+								<li class="breadcrumb-item"><a href="#">Home</a></li>
+								<!-- <li class="breadcrumb-item active">Dashboard v1</li> -->
+							</ol>
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div>
+			<!-- /.content-header -->
+
+			<!-- Main content -->
+			<section class="content">
+				<div class="container-fluid">
+					<!-- Main row -->
+					<div class="row">
+						<section class="col-lg-10 connectedSortable">
+							<div class="card card-info">
+								<!-- /.card-header -->
+								<!-- form start -->
+								<div class="card-body">
+									<form class="form-horizontal" th:action="@{/inven/incomingInsert}" method="post">
+										<div class="form-group row">
+											<label for="IncomingInsertCode" class="col-sm-4 col-form-label text-center">
+												입고 대상</label>
+											<div class="input-group col-6">
+												<input id="IncomingInsertCode" class="form-control" type="text"
+													name="IncomingInsertCode" placeholder="번호" required>
+												<div class="input-group-append">
+													<span id="findIncomingInsertList" class="input-group-text"
+														style="cursor:pointer;"><i class="fas fa-search"></i></span>
+												</div>
+												<input id="reasonOfIncoming" class="form-control" type="text"
+													name="reasonOfIncoming" placeholder="입고사유" required>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="inputIncomingStartDate"
+												class="col-4 col-form-label text-center">입고 등록일</label>
+											<div class="col-6">
+												<input type="text" class="form-control" id="inputIncomingStartDate"
+													name="incomingStartDate" placeholder="입고 등록일은 자동 설정됩니다." disabled>
+											</div>
+										</div>
+										<div class="form-group row">
+											<label for="managerName"
+												class="col-4 col-form-label text-center">담당자</label>
+											<div class="input-group col-6">
+												<input type="text" class="form-control" id="managerName"
+													name="managerName" placeholder="담당자 불러오기" required>
+												<div class="input-group-append">
+													<span id="findManagerButton" class="input-group-text"
+														style="cursor:pointer;">
+														<i class="fas fa-search"></i>
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<!-- 입고 등록할 정보 -->
+										<!-- 선택한 입고할 목록의 품목테이블 -->
+										<table id="example2"
+											class="table table-bordered table-hover dataTable dtr-inline">
+											<thead>
+												<tr>
+													<th>품목 코드</th>
+													<th>품목명</th>
+													<th>품목유형</th>
+													<th>수량</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>sdf</td>
+													<td>sdf</td>
+													<td>sdf</td>
+													<td>sdf</td>
+												</tr>
+												<!-- 데이터가 없을 경우 검색 결과 없음 출력 -->
+												<tr th:if="${#lists.isEmpty(incomingitemsDTO)}">
+													<td colspan="4" class="text-center">검색 결과가 없습니다.</td>
+												</tr>
+											</tbody>
+										</table>
+									</form>
+									<!-- /.입고 등록할 정보 -->
+								</div>
+
+								<div class="card-footer">
+									<button type="submit" class="btn btn-primary float-right">입고 등록</button>
+								</div>
+								<!-- /.card-footer -->
+							</div>
+						</section>
+					</div>
+					<!-- /.row (main row) -->
+				</div><!-- /.container-fluid -->
+			</section>
+			<!-- /.content -->
+		</div>
+		<!-- /.content-wrapper -->
+
+		<!-- Control Sidebar -->
+		<!-- <aside class="control-sidebar control-sidebar-dark">-->
+		<!-- Control sidebar content goes here -->
+		<!-- </aside>-->
+		<!-- /.control-sidebar -->
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+	<div th:replace="~{fragments/footer :: footerFragment}"></div>
+	<!-- 기본 js 링크 -->
+	<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
+	
+	<!-- 입고 등록 목록 모달 -->
+	<div class="modal fade" id="InsertListModal" tabindex="-1" role="dialog" aria-labelledby="InsertListModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="InsertListModalLabel">입고 등록 목록</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 입고 항목 데이터 테이블 -->
+					<table class="table table-bordered table-hover dataTable dtr-inline">
+						<thead>
+							<tr>
+								<th>생산/검품 코드</th>
+								<th>입고 사유</th>
+								<th>생산/검품 완료 날짜</th>
+								<th>품목명</th>
+								<th>총 수량</th>
+							</tr>
+						</thead>
+						<tbody id="modalIncomingInsertList">
+							<!-- AJAX로 가져온 데이터가 여기에 삽입됩니다. -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			// CSRF 토큰 설정 (Spring Security)
+			var csrfToken = $('meta[name="_csrf"]').attr('content');
+			var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+			// AJAX 요청 시 CSRF 토큰을 헤더에 추가
+			$.ajaxSetup({
+				beforeSend: function (xhr) {
+					if (csrfToken && csrfHeader) {
+						xhr.setRequestHeader(csrfHeader, csrfToken);
+					}
+				}
+			});
+
+			// 입고 대상 검색 클릭 시 입고 등록 목록 모달창 생성		
+			$('#findIncomingInsertList').on('click', function () {
+				// AJAX를 통해 입고 등록 대상 목록 가져오기
+				$.ajax({
+					url: '/restInven/incomingInsertList',
+					type: 'GET',
+					dataType: 'json',
+					success: function (data) {
+						if (data.length > 0) {
+							var incomingInsertListHtml = '';
+							data.forEach(function (list) { // forEach로 수정
+								incomingInsertListHtml += '<tr>';
+								incomingInsertListHtml += '<td>' + list.prodOrQualId + '</td>';
+								incomingInsertListHtml += '<td>' + list.reasonOfIncoming + '</td>';
+								incomingInsertListHtml += '<td>' + list.prodOrQualDate + '</td>';
+								incomingInsertListHtml += '<td>' + list.itemName + '</td>';
+								incomingInsertListHtml += '<td>' + list.totalAmountOfitems + '</td>';
+								incomingInsertListHtml += '</tr>'; // 닫는 태그 추가
+							});
+							$('#modalIncomingInsertList').html(incomingInsertListHtml);
+						} else {
+							$('#modalIncomingInsertList').html('<tr><td colspan="5" class="text-center">입고 등록할 대상이 없습니다.</td></tr>');
+						}
+
+						// 모달 표시
+						$('#InsertListModal').modal('show'); // 올바른 선택자 사용
+					},
+					error: function (xhr, status, error) {
+						console.error('입고등록할 목록을 가져오는 중 오류 발생:', error);
+						$('#modalIncomingInsertList').html('<tr><td colspan="5" class="text-center text-danger">입고 품목 정보를 가져오는 데 실패했습니다.</td></tr>');
+					}
+				});
+			});
+
+			// 담당자 찾기 버튼 클릭 이벤트 (선택 사항)
+			$('#findManagerButton').on('click', function () {
+				// AJAX를 통해 담당자 목록 가져오기
+				$.ajax({
+					url: '/restInven/findManagerList',
+					type: 'GET',
+					dataType: 'json',
+					success: function (data) {
+						if (data.length > 0) {
+							var managerListHtml = '';
+							data.forEach(function (manager) {
+								managerListHtml += '<tr>';
+								managerListHtml += '<td>' + manager.managerId + '</td>';
+								managerListHtml += '<td>' + manager.name + '</td>';
+								managerListHtml += '<td><button type="button" class="btn btn-sm btn-primary select-manager" data-manager-name="' + manager.name + '">선택</button></td>';
+								managerListHtml += '</tr>';
+							});
+							$('#modalManagerList tbody').html(managerListHtml);
+						} else {
+							$('#modalManagerList tbody').html('<tr><td colspan="3" class="text-center">담당자가 없습니다.</td></tr>');
+						}
+
+						// 모달 표시
+						$('#ManagerListModal').modal('show');
+					},
+					error: function (xhr, status, error) {
+						console.error('담당자 목록을 가져오는 중 오류 발생:', error);
+						alert('담당자 목록을 가져오는 데 실패했습니다.');
+					}
+				});
+			});
+
+			// 담당자 선택 버튼 클릭 이벤트 (선택 사항)
+			$(document).on('click', '.select-manager', function () {
+				var selectedManager = $(this).data('manager-name');
+				$('#managerName').val(selectedManager);
+				$('#ManagerListModal').modal('hide');
+			});
+		});
+	</script>
+
+	<!-- 담당자 목록 모달 (선택 사항) -->
+	<div class="modal fade" id="ManagerListModal" tabindex="-1" role="dialog" aria-labelledby="ManagerListModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="ManagerListModalLabel">담당자 목록</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 담당자 목록 데이터 테이블 -->
+					<table class="table table-bordered table-hover dataTable dtr-inline">
+						<thead>
+							<tr>
+								<th>담당자 ID</th>
+								<th>이름</th>
+								<th>선택</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- AJAX로 가져온 데이터가 여기에 삽입됩니다. -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
-<div class="wrapper">
-
-  <!--   Preloader -->
-  <!-- 처음 로딩 시 나오는 요소-->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
-
-
-
-
-
-
-
-
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">페이지이름</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
-
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-
-        <!-- Main row -->
-        <div class="row">
-
-          <section class="col-lg-5 connectedSortable">
-
-            이 사이에 코드 작성
-
-
-
-
-
-
-
-
-
-
-
-          </section>
-
-        </div>
-        <!-- /.row (main row) -->
-      </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-
-
-  <!-- Control Sidebar -->
-  <!--  <aside class="control-sidebar control-sidebar-dark">-->
-  <!-- Control sidebar content goes here -->
-  <!--  </aside>-->
-  <!-- /.control-sidebar -->
-</div>
-<!-- ./wrapper -->
-
-<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
-<div th:replace="fragments/footer :: footerFragment"></div>
-<!-- 기본 js 링크 -->
-<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
-
-<!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<!-- jQuery 차트 라이브러리-->
-<!-- 사용법 참고 용 사이트 : https://idenrai.tistory.com/55-->
-<script src="plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="plugins/moment/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
 </body>
+
 </html>

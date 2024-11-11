@@ -34,6 +34,7 @@ public class TXService {
     private final SaleRepository saleRepository;
     private final SaleItemsRepository saleItemsRepository;
     private final FranchiseRepository franchiseRepository;
+    private final ShipmentRepository shipmentRepository;
 
     @Transactional
     public void saveOrder(OrderDTO orderDTO, List<OrderItemsDTO> orderItems) {
@@ -145,11 +146,6 @@ public class TXService {
 
     public List<OrderItems> getOrderedItems(Order order) {
         return orderItemsRepository.findByOrder(order);
-    }
-
-    public List<Item> getSaleItems() {
-        return itemRepository.findAll();
-        // 사용중인 코드 + 판매할 수 있는 아이템 한정, 재고수량 오름차순으로 수정 필요
     }
 
     public List<OrderDTO> searchOrders(String status, String supplierName, String orderDateStart, String orderDateEnd,
@@ -289,7 +285,228 @@ public class TXService {
         String franchiseCode = saleDTO.getFranchiseCode();
         Optional<Manager> manager = managerRepository.findById(managerId);
         Optional<Franchise> franchise = franchiseRepository.findById(franchiseCode);
-        // 입력한 매니저아이디, 거래처코드가 DB에 존재하는 값인지 검증
+        // 입력한 매니저아이디, 가맹점코드가 DB에 존재하는 값인지 검증
         return manager.isPresent() && franchise.isPresent();
+    }
+
+    public List<SaleDTO> getSaleList() {
+
+        log.info("TXService: getOrderList");
+        List<Sale> allSales = saleRepository.findAll(Sort.by(Sort.Direction.DESC, "saleId"));
+
+        return getSaleDTOS(allSales);
+
+    }
+
+    public Sale getSaleById(String saleId) {
+        Optional<Sale> sale = saleRepository.findById(saleId);
+        if (sale.isPresent()) {
+            return sale.get();
+        } else {
+            throw new NoSuchElementException(saleId + "에 해당하는 수주 없음");
+        }
+    }
+
+    public List<SaleItems> getSaledItems(Sale sale) {
+        return saleItemsRepository.findBySale(sale);
+    }
+
+    public List<SaleDTO> searchSales(String status, String franchiseName, String orderDateStart, String orderDateEnd,
+                                       String itemName, String dueDateStart, String dueDateEnd) {
+        log.info("TXService: searchSales");
+
+        // 날짜 자료형 String -> Timestamp 변경
+        Timestamp orderStart = convertToTimestamp(orderDateStart);
+        Timestamp orderEnd = convertToTimestamp(orderDateEnd);
+        Timestamp dueStart = convertToTimestamp(dueDateStart);
+        Timestamp dueEnd = convertToTimestamp(dueDateEnd);
+
+        String formattedStatus = (status != null && !status.trim().isEmpty()) ? status : null;
+
+        // LIKE 검색할 것들 % 붙여주기
+        String formattedFranchiseName = franchiseName != null && !franchiseName.trim().isEmpty() ? "%" + franchiseName + "%" : null;
+        String formattedItemName = itemName != null && !itemName.trim().isEmpty() ? "%" + itemName + "%" : null;
+
+        log.info("status: " + formattedStatus + " supplierName: " + formattedFranchiseName + " orderDateStart: " + orderStart + " orderDateEnd: " + orderEnd + " itemName: " + formattedItemName + " dueStart: " + dueStart + " dueEnd: " + dueEnd);
+
+        List<Sale> salesByConditions = saleRepository.findSalesByConditions
+                (formattedStatus, formattedFranchiseName, orderStart, orderEnd, formattedItemName, dueStart, dueEnd);
+
+        log.info("TXService: searchSalesByConditions" + salesByConditions);
+
+        return getSaleDTOS(salesByConditions);
+    }
+
+    private List<SaleDTO> getSaleDTOS(List<Sale> salesByConditions) {
+        return salesByConditions.stream()
+                .map(sale -> {
+                    SaleDTO saleDTO = new SaleDTO();
+                    saleDTO.setSaleId(sale.getSaleId());
+                    saleDTO.setTotalPrice(sale.getTotalPrice());
+                    saleDTO.setOrderDate(sale.getOrderDate());
+                    saleDTO.setDueDate(sale.getDueDate());
+                    saleDTO.setStatus(sale.getStatus());
+                    saleDTO.setFranchiseName(saleRepository.findFranchiseNameBySaleId(sale.getSaleId()));
+                    List<String> firstItem = saleRepository.findFirstItemNameBySale(sale);
+                    saleDTO.setItemName(firstItem.isEmpty() ? null : firstItem.get(0));
+                    saleDTO.setItemCount(saleRepository.findSaleItemCountBySale(sale));
+                    log.info("TXService: getSaleDTOS: " + saleDTO);
+                    return saleDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public void updateSaleStatus(String saleId, String status) {
+        log.info("TXService: updateSaleStatus");
+        saleRepository.updateSaleStatusById(status, saleId);
+    }
+
+    @Transactional
+    public void updateSale(SaleDTO saleDTO, List<SaleItemsDTO> saleItems) {
+        log.info("TXService: updateSale");
+
+        String saleId = saleDTO.getSaleId();
+        Sale sale = saleRepository.findById(saleId).orElseThrow(() -> new EntityNotFoundException("해당 수주 없음"));
+
+        // 발주 정보 업데이트
+        BeanUtils.copyProperties(saleDTO, sale,  "saleId", "status");  // id, 상태 제외 DTO 값 복사
+        sale.setRealDate(new Timestamp(System.currentTimeMillis()));   // 수정 시점으로 실제등록일 변경
+        sale.setManager(managerRepository.findById(saleDTO.getManager()).orElse(null));
+        sale.setFranchise(franchiseRepository.findById(saleDTO.getFranchiseCode()).orElse(null));
+        saleRepository.save(sale);
+
+        // 발주 품목정보 새로 저장
+        saleItemsRepository.deleteBySale(sale);
+        saveSaleItems(saleItems, saleId, sale);
+    }
+
+    public List<SaleDTO> findToShip() {
+        List<SaleDTO> allQualified = shipmentRepository.findAllQualified();
+        allQualified.forEach(sale -> {
+                Sale thisSale = saleRepository.findById(sale.getSaleId()).orElse(null);
+                if (thisSale != null) {
+                    sale.setItemCount(saleRepository.findSaleItemCountBySale(thisSale));
+                    List<String> itemNames = saleRepository.findFirstItemNameBySale(thisSale);
+                    if (!itemNames.isEmpty()) {
+                        sale.setItemName(saleRepository.findFirstItemNameBySale(thisSale).get(0));
+                    }
+                }
+            });
+        log.info(allQualified.toString());
+        return allQualified;
+    }
+
+    public List<SaleItemsDTO> getSaleItems(String saleId) {
+        return saleItemsRepository.findBySale2(saleId);
+    }
+
+    public void saveShip(ShipmentDTO shipmentDTO) {
+        log.info("TXService: completeShip");
+        // 출하번호 생성
+        String shipmentId = generateNextShipId();
+
+        // 출하 정보 저장
+        Shipment shipment = new Shipment();
+        BeanUtils.copyProperties(shipmentDTO, shipment);
+        log.info(shipmentDTO.toString());
+        shipment.setShipmentId(shipmentId);
+        shipment.setStatus("출하등록(검품요청)");
+        shipment.setRealDate(new Timestamp(System.currentTimeMillis()));
+        shipment.setManager(managerRepository.findById(shipmentDTO.getManager()).orElse(null));
+        shipment.setSale(saleRepository.findById(shipmentDTO.getSaleId()).orElse(null));
+        log.info(shipment.toString());
+        shipmentRepository.save(shipment);
+    }
+
+    public String generateNextShipId() {
+        String maxShipId = shipmentRepository.findMaxShipmentId();
+
+        String newShipId = null;
+
+        if (maxShipId == null) {
+            newShipId = "SM0001";
+        } else {
+            int numberPart = Integer.parseInt(maxShipId.substring(2));
+            newShipId = String.format("SM%04d", numberPart + 1);
+        }
+        return newShipId;
+    }
+
+    public List<ShipmentDTO> getShipList() {
+        List<Shipment> allShips = shipmentRepository.findAll(Sort.by(Sort.Direction.DESC, "shipmentId"));
+        return getShipmentDTOS(allShips);
+    }
+
+    public List<ShipmentDTO> searchShips(String status, String franchiseName, String shipDateStart, String shipDateEnd,
+                                       String itemName, String dueDateStart, String dueDateEnd) {
+        log.info("TXService: searchShips");
+
+        // 날짜 자료형 String -> Timestamp 변경
+        Timestamp shipStart = convertToTimestamp(shipDateStart);
+        Timestamp shipEnd = convertToTimestamp(shipDateEnd);
+        Timestamp dueStart = convertToTimestamp(dueDateStart);
+        Timestamp dueEnd = convertToTimestamp(dueDateEnd);
+
+        String formattedStatus = (status != null && !status.trim().isEmpty()) ? status : null;
+
+        // LIKE 검색할 것들 % 붙여주기
+        String formattedFranchiseName = franchiseName != null && !franchiseName.trim().isEmpty() ? "%" + franchiseName + "%" : null;
+        String formattedItemName = itemName != null && !itemName.trim().isEmpty() ? "%" + itemName + "%" : null;
+
+        log.info("status: " + formattedStatus + " supplierName: " + formattedFranchiseName + " shipStart: " + shipStart + " shipEnd: " + shipEnd + " itemName: " + formattedItemName + " dueStart: " + dueStart + " dueEnd: " + dueEnd);
+
+        List<Shipment> shipmentsByConditions = shipmentRepository.findShipmentByConditions
+                (formattedStatus, formattedFranchiseName, shipStart, shipEnd, formattedItemName, dueStart, dueEnd);
+
+        log.info("TXService: shipmentsByConditions" + shipmentsByConditions);
+
+        return getShipmentDTOS(shipmentsByConditions);
+    }
+
+    private List<ShipmentDTO> getShipmentDTOS(List<Shipment> shipmentByConditions) {
+        return shipmentByConditions.stream()
+                .map(ship -> {
+                    ShipmentDTO shipmentDTO = new ShipmentDTO();
+                    shipmentDTO.setShipmentId(ship.getShipmentId());
+                    shipmentDTO.setShipDate(ship.getShipDate());
+                    shipmentDTO.setDueDate(ship.getSale().getDueDate());
+
+                    String status = ship.getStatus();
+                    String qsStatus = shipmentRepository.checkShipmentQualified(ship.getShipmentId());
+                    if (status.equals("출하등록(검품요청)") && qsStatus.equals("검품완료")) {
+                        shipmentDTO.setStatus("출하등록(검품완료)");
+                        shipmentDTO.setQsStatus(qsStatus);
+                    } else {
+                        shipmentDTO.setStatus(status);
+                        shipmentDTO.setQsStatus(qsStatus);
+                    }
+
+                    shipmentDTO.setFranchiseName(saleRepository.findFranchiseNameBySaleId(ship.getSale().getSaleId()));
+                    shipmentDTO.setTotalPrice(ship.getSale().getTotalPrice());
+                    List<String> firstItem = saleRepository.findFirstItemNameBySale(ship.getSale());
+                    shipmentDTO.setItemName(firstItem.isEmpty() ? null : firstItem.get(0));
+                    shipmentDTO.setItemCount(saleRepository.findSaleItemCountBySale(ship.getSale()));
+
+
+                    log.info("TXService: shipmentDTO: " + shipmentDTO);
+                    return shipmentDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public ShipmentDTO getShipmentDTOById(String shipmentId) {
+        return shipmentRepository.getShipmentDTOById(shipmentId);
+    }
+
+    public ShipmentDTO syncByShipmentId(String shipmentId) {
+        ShipmentDTO shipmentDTO = shipmentRepository.syncByShipmentId(shipmentId);
+        if (shipmentDTO.getStatus().equals("출하등록(검품요청)") && shipmentDTO.getQsStatus().equals("검품완료")) {
+            shipmentDTO.setStatus("출하등록(검품완료)");
+        }
+        return shipmentDTO;
+    }
+
+    public void updateShipStatus(String shipmentId, String status) {
+        shipmentRepository.updateShipStatusById(shipmentId, status);
     }
 }

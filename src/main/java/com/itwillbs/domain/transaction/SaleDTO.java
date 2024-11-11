@@ -1,10 +1,15 @@
 package com.itwillbs.domain.transaction;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.itwillbs.entity.Franchise;
+import com.itwillbs.entity.SaleItems;
+import com.itwillbs.repository.SaleRepository;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,5 +30,24 @@ public class SaleDTO {
     private String franchiseName;
     private String itemName;
     private int itemCount;
+
+    // 출하처리를 위한 검품 및 출고정보
+    private String qualityStatus;
+    private String outGoingId;
+    private List<SaleItemsDTO> saleItems;
+
+    public SaleDTO() {}
+
+    public SaleDTO(String saleId, int totalPrice, Timestamp orderDate,
+                   Timestamp dueDate, Franchise franchise, String qualityStatus) {
+        this.saleId = saleId;
+        this.totalPrice = totalPrice;
+        this.orderDate = orderDate;
+        this.dueDate = dueDate;
+        this.franchiseCode = franchise.getFranchiseCode();
+        this.franchiseName = franchise.getFranchiseName();
+        this.qualityStatus = qualityStatus;
+    }
+
 
 }

@@ -42,6 +42,7 @@ public class ManagerController {
                               @RequestParam(value = "search", defaultValue = "", required = false)String search){
         log.info("AdminsController managers()");
 
+
         Pageable pageable = PageRequest.of(page-1, size);
         Page<Manager> managers = managerService.getManagerList(pageable,search);
 

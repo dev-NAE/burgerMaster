@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>출하등록 가능한 주문 선택</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+    <!-- 스크립트 -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/dist/js/adminlte.min.js"></script>
+
+</head>
+<body>
+<h3 class="text-center my-5">출하등록 가능한 주문 선택</h3>
+
+<div class="item-list card-body col-12 mx-auto">
+    <table class="table table-bordered table-hover dataTable dtr-inline">
+        <tr class="bg-lightblue">
+            <th class="text-center" style="width:15%;">수주번호</th>
+            <th class="text-center" style="width:35%;">품목</th>
+            <th class="text-center" style="width:15%;">출고번호</th>
+            <th class="text-center" style="width:15%;">출고검품</th>
+            <th class="text-center" style="width:20%;">납기일</th>
+        </tr>
+        <tr th:if="${toShip.size} eq 0">
+            <td colspan="5" class="text-center">현재 출하 등록 가능한 주문이 없습니다</td>
+        </tr>
+        <tr onclick="sendResult(this)" style="cursor: pointer;" th:each="item : ${toShip}">
+            <td class="text-center" th:data-sale-id="${item.saleId}" th:text="${item.saleId}"></td>
+
+            <td class="text-center" th:if="${item.itemCount > 1 }" th:data-items="${item.itemName} + ' 외 ' + ${item.itemCount - 1} + '건'"
+                th:text="${#strings.length(item.itemName + ' 외 ' + (item.itemCount - 1) + '건') > 20
+                            ? (item.itemName + ' 외 ' + (item.itemCount - 1) + '건').substring(0, 20) + '...'
+                            : item.itemName + ' 외 ' + (item.itemCount - 1) + '건'}"></td>
+            <td class="text-center" th:unless="${item.itemCount > 1 }" th:data-items="${item.itemName}" th:text="${item.itemName}"></td>
+
+            <td class="text-center" th:data-outgoing="처리필요" th:text="처리필요"></td>
+            <td class="text-center" th:data-quality="${item.qualityStatus}" th:text="${item.qualityStatus}"></td>
+            <td class="text-center" th:data-duedate="${#dates.format(item.dueDate, 'yyyy-MM-dd')}" th:text="${#dates.format(item.dueDate, 'yyyy-MM-dd')}"></td>
+            <input type="hidden" id="franchiseCode" th:value="${item.franchiseCode}">
+            <input type="hidden" id="franchiseName" th:value="${item.franchiseName}">
+            <input type="hidden" id="orderDate" th:value="${#dates.format(item.orderDate, 'yyyy-MM-dd')}">
+            <input type="hidden" id="totalPrice" th:value="${item.totalPrice}">
+            <input type="hidden" id="quantity" th:value="${item.itemCount}">
+        </tr>
+    </table>
+</div>
+
+<script th:inline="javascript">
+    // 선택한 항목 정보 넘겨주고 팝업창 닫기
+    function sendResult(row) {
+        var saleId = $(row).find('[data-sale-id]').attr('data-sale-id');
+        var items = $(row).find('[data-items]').attr('data-items');
+        var quality = $(row).find('[data-quality]').attr('data-quality');
+        var franchiseCode = $(row).find('#franchiseCode').val();
+        var franchiseName = $(row).find('#franchiseName').val();
+        var dueDate = $(row).find('[data-duedate]').attr('data-duedate');
+        var totalPrice = $(row).find('#totalPrice').val();
+        var quantity = $(row).find('#quantity').val();
+        var saleItems = null;
+
+        $.ajax({
+            url: '/tx/getSaleItems',
+            method: 'GET',
+            data: {saleId: saleId},
+            dataType: 'json',
+            success: function(response) {
+                saleItems = response;
+                window.opener.setToShip(saleId, items, quality, franchiseCode, franchiseName, dueDate, saleItems, totalPrice, quantity);
+                window.close();
+            },
+            error: function() {
+                alert('오류가 발생했습니다');
+            }
+        })
+
+    }
+</script>
+
+
+</body>
+</html>

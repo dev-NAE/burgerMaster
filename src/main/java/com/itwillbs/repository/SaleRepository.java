@@ -1,5 +1,6 @@
 package com.itwillbs.repository;
 
+import com.itwillbs.domain.transaction.SaleDTO;
 import com.itwillbs.entity.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -50,5 +51,6 @@ public interface SaleRepository extends JpaRepository<Sale, String> {
     @Modifying
     @Query("UPDATE Sale s SET s.status = :status WHERE s.saleId = :saleId ")
     void updateSaleStatusById(@Param("status") String status, @Param("saleId") String saleId);
+
 
 }

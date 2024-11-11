@@ -53,18 +53,18 @@
 		</ul>
 
 		<!-- Right navbar links -->
-		<ul class="navbar-nav ml-auto" >
+		<ul class="navbar-nav ml-auto">
 			<!-- Notifications Dropdown Menu -->
 
 			<!-- 알람 표시 -->
 			<div class="nav-item dropdown" id="notiClick">
-				<a class="nav-link" data-toggle="dropdown" id="Noti" href="#" >
-					<i class="far fa-bell" ></i>
-					<span class="badge badge-warning navbar-badge" id="notificationCount"  >0</span>
+				<a class="nav-link" data-toggle="dropdown" id="Noti" href="#">
+					<i class="far fa-bell"></i>
+					<span class="badge badge-warning navbar-badge" id="notificationCount">0</span>
 				</a>
-				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown" >
+				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown">
 					<span class="dropdown-item dropdown-header" id="notiHeader">알람이 0개 있습니다</span>
-					<div class="dropdown-divider"   ></div>
+					<div class="dropdown-divider"></div>
 					<div id="noticontent" style="font-size: 10px;"></div>
 					<a href="#" class="dropdown-item dropdown-footer">확인</a>
 				</div>
@@ -126,208 +126,118 @@
 
 				</div>
 
-				<!-- Main row -->
 				<div class="row">
-
-					<!--          <section class="col-lg-5 connectedSortable">-->
-
-
-					<!--			Bar Chart-->
-					<div class="card card-success" style="margin: 5px;">
-						<div class="card-header">
-							<h3 class="card-title">원재료 입고량 . 총 재고</h3>
-							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-								<button class="btn btn-light" id="xls1">.xls로 저장</button>
-							</div>
-							<div class="card-tools">
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="chart">
-								<div class="chartjs-size-monitor">
-									<div class="chartjs-size-monitor-expand">
-										<div class="">
-
-										</div>
-									</div>
-									<div class="chartjs-size-monitor-shrink">
-										<div class=""></div>
-									</div>
+					<!-- 원재료 입고량 . 총 재고 -->
+					<div class="col-md-4">
+						<div class="card card-success" style="margin: 5px;">
+							<div class="card-header">
+								<h3 class="card-title">원재료 입고량 . 총 재고</h3>
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button class="btn btn-light" id="xls1">.xls로 저장</button>
 								</div>
-								<canvas id="myChart"
-									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
-									width="375" height="250" class="chartjs-render-monitor"></canvas>
+							</div>
+							<div class="card-body">
+								<div class="chart">
+									<canvas id="myChart" width="375" height="250"></canvas>
+								</div>
 							</div>
 						</div>
-
 					</div>
-					<!--			/Bar Chart-->
 
-					<!--			Bar Chart-->
-					<div class="card card-success" style="margin: 5px;">
-						<div class="card-header">
-							<h3 class="card-title">완재품 입고량 . 총 재고</h3>
-							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-								<button class="btn btn-light" id="xls2">.xls로 저장</button>
-							</div>
-							<div class="card-tools">
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="chart">
-								<div class="chartjs-size-monitor">
-									<div class="chartjs-size-monitor-expand">
-										<div class="">
-
-										</div>
-									</div>
-									<div class="chartjs-size-monitor-shrink">
-										<div class=""></div>
-									</div>
+					<!-- 완재품 입고량 . 총 재고 -->
+					<div class="col-md-4">
+						<div class="card card-success" style="margin: 5px;">
+							<div class="card-header">
+								<h3 class="card-title">완재품 입고량 . 총 재고</h3>
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button class="btn btn-light" id="xls2">.xls로 저장</button>
 								</div>
-								<canvas id="myChart2"
-									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
-									width="375" height="250" class="chartjs-render-monitor"></canvas>
+							</div>
+							<div class="card-body">
+								<div class="chart">
+									<canvas id="myChart2" width="375" height="250"></canvas>
+								</div>
 							</div>
 						</div>
-
 					</div>
-					<!--			/Bar Chart-->
 
-
-					<!--			Bar Chart-->
-					<div class="card card-success" style="margin: 5px;">
-						<div class="card-header">
-							<h3 class="card-title">가공품 총재고</h3>
-							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-								<button class="btn btn-light" id="xls3">.xls로 저장</button>
-							</div>
-							<div class="card-tools">
-								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-								<!--			<i class="fas fa-minus"></i>-->
-								<!--			</button>-->
-								<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-								<!--			<i class="fas fa-times"></i>-->
-								<!--			</button>-->
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="chart">
-								<div class="chartjs-size-monitor">
-									<div class="chartjs-size-monitor-expand">
-										<div class=""></div>
-									</div>
-									<div class="chartjs-size-monitor-shrink">
-										<div class=""></div>
-									</div>
+					<!-- 가공품 입고량. 총재고 -->
+					<div class="col-md-4">
+						<div class="card card-success" style="margin: 5px;">
+							<div class="card-header">
+								<h3 class="card-title">가공품 입고량. 총재고</h3>
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button class="btn btn-light" id="xls3">.xls로 저장</button>
 								</div>
-								<canvas id="myChart3"
-									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
-									width="375" height="250" class="chartjs-render-monitor">
+							</div>
+							<div class="card-body">
+								<div class="chart">
+									<!-- 카드의 높이를 늘려서 그래프 크기 키우기 -->
+									<canvas id="myChart3" width="375" height="250"></canvas>
+									<!-- 100%로 크기 자동 조정 -->
+								</div>
 							</div>
 						</div>
-
 					</div>
-					<!--			/Bar Chart-->
 
-
-
-					<div class="card card-danger" style="margin: 5px;">
-						<div class="card-header">
-							<h3 class="card-title">반품 품목</h3>
-							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-								<button class="btn btn-light" id="xls4">.xls로 저장</button>
-							</div>
-							<div class="card-tools">
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="chartjs-size-monitor">
-								<div class="chartjs-size-monitor-expand">
-									<div class=""></div>
+					<div class="row">
+						<!-- 반품 품목 -->
+						<div class="col-md-4">
+							<div class="card card-danger" style="margin: 5px;">
+								<div class="card-header">
+									<h3 class="card-title">반품 품목</h3>
+									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+										<button class="btn btn-light" id="xls4">.xls로 저장</button>
+									</div>
 								</div>
-								<div class="chartjs-size-monitor-shrink">
-									<div class=""></div>
+								<div class="card-body">
+									<canvas id="pieChart1" width="375" height="250"></canvas>
 								</div>
 							</div>
-							<canvas id="pieChart1"
-								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
-								width="375" height="250" class="chartjs-render-monitor"></canvas>
 						</div>
 
+						<!-- 폐기 품목 -->
+						<div class="col-md-4">
+							<div class="card card-danger" style="margin: 5px;">
+								<div class="card-header">
+									<h3 class="card-title">폐기 품목</h3>
+									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+										<button class="btn btn-light" id="xls5">.xls로 저장</button>
+									</div>
+								</div>
+								<div class="card-body">
+									<canvas id="pieChart2" width="375" height="250"></canvas>
+								</div>
+							</div>
+						</div>
+
+						<!-- 월간 수주 현황 -->
+						<div class="col-md-4">
+							<div class="card card-primary" style="margin: 5px;">
+								<div class="card-header">
+									<h3 class="card-title">월간 수주 현황</h3>
+									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+										<button class="btn btn-light" id="xls6">.xls로 저장</button>
+									</div>
+								</div>
+								<div class="card-body">
+									<div class="chart">
+										<canvas id="areaChart" width="636" height="250"></canvas>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 
 
 
-
-
-
-
-
-					<div class="card card-danger" style="margin: 5px ;">
-						<div class="card-header">
-							<h3 class="card-title">폐기 품목</h3>
-							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-								<button class="btn btn-light" id="xls5">.xls로 저장</button>
-							</div>
-							<div class="card-tools">
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="chartjs-size-monitor">
-								<div class="chartjs-size-monitor-expand">
-									<div class=""></div>
-								</div>
-								<div class="chartjs-size-monitor-shrink">
-									<div class=""></div>
-								</div>
-							</div>
-							<canvas id="pieChart2"
-								style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
-								width="375" height="250" class="chartjs-render-monitor"></canvas>
-						</div>
-
-					</div>
-
-
-					<div class="card card-primary" style="margin: 5px;">
-						<div class="card-header">
-							<h3 class="card-title">월간 수주 현황</h3>
-							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-								<button class="btn btn-light" id="xls6">.xls로 저장</button>
-							</div>
-							<div class="card-tools">
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="chart">
-								<div class="chartjs-size-monitor">
-									<div class="chartjs-size-monitor-expand">
-										<div class=""></div>
-									</div>
-									<div class="chartjs-size-monitor-shrink">
-										<div class=""></div>
-									</div>
-								</div>
-								<canvas id="areaChart"
-									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 636px;"
-									width="636" height="250" class="chartjs-render-monitor"></canvas>
-							</div>
-						</div>
-
-					</div>
+					<!--          </section>-->
+					<!-- right col -->
 				</div>
-
-
-
-
-				<!--          </section>-->
-				<!-- right col -->
-		</div>
-		<!-- /.row (main row) -->
-	</div><!-- /.container-fluid -->
-	</section>
-	<!-- /.content -->
+				<!-- /.row (main row) -->
+		</div><!-- /.container-fluid -->
+		</section>
+		<!-- /.content -->
 	</div>
 	<!-- /.content-wrapper -->
 
@@ -409,18 +319,32 @@
 		//alert(JSON.stringify(rmItemList));
 
 		const rmInventory = rmInventoryList.map(item => item.quantity);  // 항목 이름
-		//const minReqQuantitiesrm = rmInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
+		const rmmin = rmInventoryList.map(item => item.minReqQuantity);
 
+		const rmItem = rmItemList.map(item => item.quantity);
 
+		//const labels = rmInventoryList.map(item => item.itemName);  // 항목 이름
+		const labels = rmInventoryList.map(item => {
+				    let itemName = item.itemName;
+				    
+				    if (itemName.includes('(') && itemName.includes(')')) {
+				        const startIdx = itemName.indexOf('(');  // 괄호 시작 위치
+				        const endIdx = itemName.indexOf(')');    // 괄호 끝 위치
+				        const beforeParentheses = itemName.slice(0, startIdx);  // 괄호 전의 부분
+				        const afterParentheses = itemName.slice(endIdx + 1);    // 괄호 후의 부분
+				        
+				        itemName = beforeParentheses + afterParentheses;
+				    }
 
-		const labels = rmInventoryList.map(item => item.itemName);  // 항목 이름
-		//const invenlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
+				    return itemName;
+				});
+				
 		const data = {
 			labels: labels,
 			datasets: [
 				{
 					label: '원재료 입고량',
-					data: rmItemList.map(item => item.quantity),  // 입고량 필드로 사용 (수정필요)
+					data: rmItem,  // 입고량 필드로 사용 (수정필요)
 					backgroundColor: 'lightblue',
 					borderColor: 'lightblue',
 					borderWidth: 1
@@ -429,11 +353,40 @@
 				{
 					label: '총 재고',
 					data: rmInventory,  // 총 재고 필드로 사용
-					backgroundColor: 'lightgreen',
-					borderColor: 'lightgreen',
-					borderWidth: 1
+					//backgroundColor: 'lightgreen',
+					//borderColor: 'lightgreen',
+					//borderWidth: 1
+					backgroundColor: function (context) {
+						const index = context.dataIndex;
+						return rmInventory[index] <= rmmin[index] ? 'red' : 'lightgreen';
+
+
+					},
+					borderColor: 'rgba(0, 0, 0, 0.1)',
+					borderWidth: 1,
+				}]
+		};
+
+		const options = {
+			responsive: true,
+			plugins: {
+				legend: {
+					labels: {
+						generateLabels: (chart) => {
+							return chart.data.datasets.map((dataset, i) => {
+								return {
+									text: dataset.label,
+									fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
+									strokeStyle: dataset.borderColor,
+									lineWidth: dataset.borderWidth,
+									hidden: !chart.isDatasetVisible(i),
+									index: i
+								};
+							});
+						}
+					}
 				}
-			]
+			}
 		};
 
 
@@ -442,12 +395,13 @@
 			type: 'bar',
 			data: data,
 			options: {
+				options
 
-				scales: {
-					y: {
-						beginAtZero: true
-					}
-				}
+				//scales: {
+				//y: {
+				//beginAtZero: true
+				//}
+				//}
 			}
 		};
 
@@ -494,11 +448,25 @@
 
 
 		const fpInventory = fpInventoryList.map(item => item.quantity);
-		//const minReqQuantitiesfp = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
+		const fpmin = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
 
-		//alert("fpItemList"+JSON.stringify(fpItemList));
+		//const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
+		const labels2 = fpInventoryList.map(item => {
+						    let itemName = item.itemName;
+						    
+						    // 괄호 안의 내용을 줄바꿈으로 변경
+						    if (itemName.includes('(') && itemName.includes(')')) {
+						        const startIdx = itemName.indexOf('(');  // 괄호 시작 위치
+						        const endIdx = itemName.indexOf(')');    // 괄호 끝 위치
+						        const beforeParentheses = itemName.slice(0, startIdx);  // 괄호 전의 부분
+						        const afterParentheses = itemName.slice(endIdx + 1);    // 괄호 후의 부분
+						        
+						        // 괄호 안의 내용을 줄바꿈으로 교체
+						        itemName = beforeParentheses + afterParentheses;
+						    }
 
-		const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
+						    return itemName;
+						});
 		const data2 = {
 			labels: labels2,
 			datasets: [
@@ -512,28 +480,52 @@
 				{
 					label: '총 재고',
 					data: fpInventory,  // 재량 필드로 사용 (예시)
-					backgroundColor: 'lightgreen',
-					borderColor: 'lightgreen',
-					borderWidth: 1
-				}
-			]
+					backgroundColor: function (context) {
+						const index = context.dataIndex;
+						return fpInventory[index] <= fpmin[index] ? 'red' : 'lightgreen';
+
+
+					},
+					borderColor: 'rgba(0, 0, 0, 0.1)',
+					borderWidth: 1,
+				}]
 		};
+
+		const options2 = {
+			responsive: true,
+			plugins: {
+				legend: {
+					labels: {
+						generateLabels: (chart) => {
+							return chart.data.datasets.map((dataset, i) => {
+								return {
+									text: dataset.label,
+									fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
+									strokeStyle: dataset.borderColor,
+									lineWidth: dataset.borderWidth,
+									hidden: !chart.isDatasetVisible(i),
+									index: i
+								};
+							});
+						}
+					}
+				}
+			}
+		};
+
+
 
 		const config2 = {
 			type: 'bar',
 			data: data2,
 			options: {
-				scales: {
-					y: {
-						beginAtZero: true
-					}
-				},
+				options2
 
-
-
-
-
-
+				//scales: {
+				//y: {
+				//beginAtZero: true
+				//}
+				//}
 			}
 		};
 
@@ -581,7 +573,26 @@
 
 		//alert("ppItemList:"+JSON.stringify(ppItemList));
 
-		const labels3 = ppInventoryList.map(item => item.itemName);  // 항목 이름
+		const minpp = ppInventoryList.map(item => item.minReqQuantity);  // 항목 이름
+		const ppInventory = ppInventoryList.map(item => item.quantity);  // 항목 이름
+		//const labels3 = ppInventoryList.map(item => item.itemName);  // 항목 이름
+		const labels3 = ppInventoryList.map(item => {
+		    let itemName = item.itemName;
+		    
+		    // 괄호 안의 내용을 줄바꿈으로 변경
+		    if (itemName.includes('(') && itemName.includes(')')) {
+		        const startIdx = itemName.indexOf('(');  // 괄호 시작 위치
+		        const endIdx = itemName.indexOf(')');    // 괄호 끝 위치
+		        const beforeParentheses = itemName.slice(0, startIdx);  // 괄호 전의 부분
+		        const afterParentheses = itemName.slice(endIdx + 1);    // 괄호 후의 부분
+		        
+		        // 괄호 안의 내용을 줄바꿈으로 교체
+		        itemName = beforeParentheses + afterParentheses;
+		    }
+
+		    return itemName;
+		});
+		
 		const data3 = {
 			labels: labels3,
 			datasets: [{
@@ -595,24 +606,57 @@
 
 
 				label: '총 재고',
-				data: ppInventoryList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-				backgroundColor: 'lightgreen',
-				borderColor: 'lightgreen',
-				borderWidth: 1
-			}
-			]
+				data: ppInventory,  // 입고량 필드로 사용 (예시)
+				backgroundColor: function (context) {
+					const index = context.dataIndex;
+					return ppInventory[index] <= minpp[index] ? 'red' : 'lightgreen';
+
+
+				},
+				borderColor: 'rgba(0, 0, 0, 0.1)',
+				borderWidth: 1,
+			}]
+		};
+
+		const options3 = {
+		    responsive: true,
+		    plugins: {
+		        legend: {
+		            labels: {
+		                generateLabels: (chart) => {
+		                    return chart.data.datasets.map((dataset, i) => {
+		                        return {
+		                            text: dataset.label,
+		                            fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
+		                            strokeStyle: dataset.borderColor,
+		                            lineWidth: dataset.borderWidth,
+		                            hidden: !chart.isDatasetVisible(i),
+		                            index: i
+		                        };
+		                    });
+		                }
+		            }
+		        }
+		    },
+		    scales: {
+		        x: {
+		            ticks: {
+		                callback: function(value) {
+		                    // 5글자 이상일 경우 '...' 추가
+		                    if (value.length > 5) {
+		                        return value.slice(0, 5) + "...";
+		                    }
+		                    return value;
+		                }
+		            }
+		        }
+		    }
 		};
 
 		const config3 = {
-			type: 'bar',
-			data: data3,
-			options: {
-				scales: {
-					y: {
-						beginAtZero: true
-					}
-				}
-			}
+		    type: 'bar',
+		    data: data3,
+		    options: options3  // options3을 설정
 		};
 
 		// Chart.js를 사용하여 차트 생성
@@ -903,43 +947,43 @@
 
 
 		$(function () {
-		        $.ajax({
-		            url: "/noticontent",
-		            dataType: "json",
-		            success: function (notifiList) {
+			$.ajax({
+				url: "/noticontent",
+				dataType: "json",
+				success: function (notifiList) {
 
-		                // 필터링된 알림 목록을 담을 리스트
-		                const filteredNotifications = [];
+					// 필터링된 알림 목록을 담을 리스트
+					const filteredNotifications = [];
 
-		                // `notifiList`의 각 항목을 반복하면서 `minReqQuantity` 조건을 비교
-		                notifiList.forEach(function (item, index) {
-		                    // 예: 해당 항목의 `quantity`가 `minReqQuantity` 이하인 경우에만 추가
-		                    if (item.quantity <= item.minReqQuantity) {
-		                        filteredNotifications.push(item);
-		                    }
-		                });
-
-		                // 알림 개수 및 헤더 표시
-		                if (filteredNotifications.length > 0) {
-		                    $('#notificationCount').text(filteredNotifications.length);
-		                    $('#notiHeader').text('알람이 ' + filteredNotifications.length + '개 있습니다');
-
-		                    // 알림 내용을 리스트로 출력
-		                    const contentElement = $('#noticontent');
-		                    contentElement.empty();  // 기존 알림 초기화
-
-		                    filteredNotifications.forEach(function (item) {
-		                        const listItem = $('<a href="#" class="dropdown-item"></a>')
-		                            .text(`${item.itemName} 재고 수량이 ${item.quantity} 개 입니다. 재주문이 필요합니다.`);
-		                        contentElement.append(listItem);
-		                        contentElement.append('<div class="dropdown-divider"></div>');
-		                    });
-		                } else {
-		                    $('#noticontent').html('<span class="dropdown-item">새로운 알림이 없습니다</span>');
-		                }
+					// `notifiList`의 각 항목을 반복하면서 `minReqQuantity` 조건을 비교
+					notifiList.forEach(function (item, index) {
+						// 예: 해당 항목의 `quantity`가 `minReqQuantity` 이하인 경우에만 추가
+						if (item.quantity <= item.minReqQuantity) {
+							filteredNotifications.push(item);
 						}
-		          
-		        });
+					});
+
+					// 알림 개수 및 헤더 표시
+					if (filteredNotifications.length > 0) {
+						$('#notificationCount').text(filteredNotifications.length);
+						$('#notiHeader').text('알람이 ' + filteredNotifications.length + '개 있습니다');
+
+						// 알림 내용을 리스트로 출력
+						const contentElement = $('#noticontent');
+						contentElement.empty();  // 기존 알림 초기화
+
+						filteredNotifications.forEach(function (item) {
+							const listItem = $(`<a href="/inven/inventoryList?itemName=${encodeURIComponent(item.itemName)}" class="dropdown-item"></a>`)
+								.text(`${item.itemName} 재고 수량이 ${item.quantity} 개 입니다. 재주문이 필요합니다.`);
+							contentElement.append(listItem);
+							contentElement.append('<div class="dropdown-divider"></div>');
+						});
+					} else {
+						$('#noticontent').html('<span class="dropdown-item">새로운 알림이 없습니다</span>');
+					}
+				}
+
+			});
 		});
 
 
