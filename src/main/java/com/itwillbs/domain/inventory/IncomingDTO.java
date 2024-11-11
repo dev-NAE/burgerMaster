@@ -25,7 +25,8 @@ public class IncomingDTO {
 	
 	private String incomingItemDisplay; //보여줄 품목 1개
 	private Integer otherCount; //품목 외 갯수 ex)패티 외 2건
-	private Integer totalAmount; //총 품목 수량
+	
+	
 	
 	//입고 조회하는 생성자
 	public IncomingDTO(String incomingId, Timestamp incomingStartDate, Timestamp incomingEndDate, String managerId,
@@ -44,7 +45,7 @@ public class IncomingDTO {
 
 
 
-	private String incomingItemName;
+	
 
 
 	

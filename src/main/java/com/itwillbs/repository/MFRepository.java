@@ -15,5 +15,8 @@ public interface MFRepository extends JpaRepository<MFOrder, String>{
 	@Query("SELECT new com.itwillbs.domain.manufacture.MFOrderDTO(m.orderId, i.itemName, m.orderAmount, m.orderDeadline, m.orderDate, m.orderState) " 
 				+ "FROM MFOrder m JOIN Item i ON m.orderItem = i.itemCode")
 	List<MFOrderDTO> findOrderList();
-
+	
+	@Query("SELECT MAX(m.orderId) FROM MFOrder m")
+	String findMaxId();
+	
 }
