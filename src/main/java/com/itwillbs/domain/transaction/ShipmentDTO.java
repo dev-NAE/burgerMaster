@@ -24,10 +24,37 @@ public class ShipmentDTO {
     private String qsStatus;
 
     // 출하 시 연관 수주정보 출력용
+    private String franchiseCode;
     private String franchiseName;
     private String itemName;
     private int itemCount;
     private int totalPrice;
     private Timestamp dueDate;
+    private String managerId;
+    private String managerName;
+
+    public ShipmentDTO() {}
+
+    public ShipmentDTO(String status, String qsStatus) {
+        this.status = status;
+        this.qsStatus = qsStatus;
+    }
+
+    public ShipmentDTO(String shipmentId, Timestamp shipDate, String status, String saleId, String franchiseCode,
+                       String franchiseName, String managerId, String managerName, Timestamp dueDate, String note,
+                       int totalPrice, String qsStatus) {
+        this.shipmentId = shipmentId;
+        this.shipDate = shipDate;
+        this.status = status;
+        this.saleId = saleId;
+        this.franchiseCode = franchiseCode;
+        this.franchiseName = franchiseName;
+        this.managerId = managerId;
+        this.managerName = managerName;
+        this.dueDate = dueDate;
+        this.note = note;
+        this.totalPrice = totalPrice;
+        this.qsStatus = qsStatus;
+    }
 
 }

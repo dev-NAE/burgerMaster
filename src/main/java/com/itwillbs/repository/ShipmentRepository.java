@@ -1,6 +1,7 @@
 package com.itwillbs.repository;
 
 import com.itwillbs.domain.transaction.SaleDTO;
+import com.itwillbs.domain.transaction.ShipmentDTO;
 import com.itwillbs.entity.Sale;
 import com.itwillbs.entity.Shipment;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -52,10 +53,24 @@ public interface ShipmentRepository extends JpaRepository<Shipment, String> {
             @Param("dueDateStart") Timestamp dueDateStart,
             @Param("dueDateEnd") Timestamp dueDateEnd
     );
-//
-//    @Transactional
-//    @Modifying
-//    @Query("UPDATE Sale s SET s.status = :status WHERE s.saleId = :saleId ")
-//    void updateSaleStatusById(@Param("status") String status, @Param("saleId") String saleId);
+
+    @Query("SELECT new com.itwillbs.domain.transaction.ShipmentDTO" +
+            "(sm.shipmentId, sm.shipDate, sm.status, sm.sale.saleId, sm.sale.franchise.franchiseCode, sm.sale.franchise.franchiseName," +
+            "sm.manager.managerId, sm.manager.name, sm.sale.dueDate, sm.note, sm.sale.totalPrice, qsm.status) " +
+            "FROM Shipment sm JOIN QualityShipment qsm ON sm.shipmentId = qsm.shipment.shipmentId " +
+            "WHERE sm.shipmentId = :shipmentId")
+    ShipmentDTO getShipmentDTOById(@Param("shipmentId") String shipmentId);
+
+
+    @Query("SELECT new com.itwillbs.domain.transaction.ShipmentDTO" +
+            "(sm.status, qsm.status) FROM Shipment sm JOIN QualityShipment qsm ON sm.shipmentId = qsm.shipment.shipmentId " +
+            "WHERE sm.shipmentId = :shipmentId")
+    ShipmentDTO syncByShipmentId(@Param("shipmentId") String shipmentId);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Shipment sm SET sm.status = :status WHERE sm.shipmentId = :shipmentId ")
+    void updateShipStatusById(@Param("shipmentId") String shipmentId, @Param("status") String status);
+
 
 }

@@ -149,11 +149,11 @@ $(function () {
             $('.dataTables_paginate').css('margin-top', '20px');
 
             // 상태별 행 색상 다르게
-            if (data.status === '수주완료') {
+            if (data.status === '출하완료') {
                 $(row).css('background-color', 'rgba(198, 239, 255, 0.5)');
-            } else if (data.status === '수주취소') {
+            } else if (data.status === '출하취소') {
                 $(row).css('background-color', 'rgba(248, 222, 222, 0.5)');
-            } else if (data.status === '검품완료') {
+            } else if (data.status === '출하등록(검품완료)') {
                 $(row).css('background-color', 'rgba(255,237,150,0.5)');
             }
 

@@ -400,7 +400,7 @@ public class TXService {
         return saleItemsRepository.findBySale2(saleId);
     }
 
-    public void completeShip(ShipmentDTO shipmentDTO) {
+    public void saveShip(ShipmentDTO shipmentDTO) {
         log.info("TXService: completeShip");
         // 출하번호 생성
         String shipmentId = generateNextShipId();
@@ -474,7 +474,8 @@ public class TXService {
                     String status = ship.getStatus();
                     String qsStatus = shipmentRepository.checkShipmentQualified(ship.getShipmentId());
                     if (status.equals("출하등록(검품요청)") && qsStatus.equals("검품완료")) {
-                        shipmentDTO.setStatus("검품완료");
+                        shipmentDTO.setStatus("출하등록(검품완료)");
+                        shipmentDTO.setQsStatus(qsStatus);
                     } else {
                         shipmentDTO.setStatus(status);
                         shipmentDTO.setQsStatus(qsStatus);
@@ -493,14 +494,19 @@ public class TXService {
                 .collect(Collectors.toList());
     }
 
-    public Shipment getShipmentById(String shipmentId) {
-        Optional<Shipment> shipment = shipmentRepository.findById(shipmentId);
-        if (shipment.isPresent()) {
-            return shipment.get();
-        } else {
-            throw new NoSuchElementException(shipment + "에 해당하는 출하 없음");
-        }
+    public ShipmentDTO getShipmentDTOById(String shipmentId) {
+        return shipmentRepository.getShipmentDTOById(shipmentId);
     }
 
+    public ShipmentDTO syncByShipmentId(String shipmentId) {
+        ShipmentDTO shipmentDTO = shipmentRepository.syncByShipmentId(shipmentId);
+        if (shipmentDTO.getStatus().equals("출하등록(검품요청)") && shipmentDTO.getQsStatus().equals("검품완료")) {
+            shipmentDTO.setStatus("출하등록(검품완료)");
+        }
+        return shipmentDTO;
+    }
 
+    public void updateShipStatus(String shipmentId, String status) {
+        shipmentRepository.updateShipStatusById(shipmentId, status);
+    }
 }

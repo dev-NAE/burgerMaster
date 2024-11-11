@@ -301,9 +301,9 @@ public class TXController {
     }
 
     @ResponseBody
-    @PostMapping("/completeShip")
+    @PostMapping("/saveShip")
     public String saveShip(ShipmentDTO shipmentDTO) {
-        txService.completeShip(shipmentDTO);
+        txService.saveShip(shipmentDTO);
         return "success";
     }
 
@@ -336,12 +336,18 @@ public class TXController {
     }
 
     @GetMapping("/shipDetail")
-    public String shipDetail(@RequestParam String shipmentId, Model model) {
-        Shipment shipment = txService.getShipmentById(shipmentId);
-        List<SaleItems> items = txService.getSaledItems(shipment.getSale());
+    public String shipDetail(@RequestParam String shipId, Model model) {
+        ShipmentDTO shipment = txService.getShipmentDTOById(shipId);
+        if (shipment.getStatus().equals("출하등록(검품요청)") && shipment.getQsStatus().equals("검품완료")) {
+            log.info("변경전: " + shipment.getStatus());
+            shipment.setStatus("출하등록(검품완료)");
+            log.info("변경후: " +shipment.getStatus());
+
+        }
+        List<SaleItems> items = txService.getSaledItems(txService.getSaleById(shipment.getSaleId()));
         model.addAttribute("shipment", shipment);
         model.addAttribute("items", items);
-        return "transaction/sale/detail";
+        return "transaction/shipment/detail";
     }
 
     @ResponseBody
@@ -356,11 +362,32 @@ public class TXController {
             @RequestParam(required = false) String dueDateEnd
     ) {
         log.info("TXController searchSales()");
-        List<ShipmentDTO> shipment = txService.searchShips(status, franchiseName, shipDateStart, shipDateEnd, itemName, dueDateStart, dueDateEnd);
+        List<ShipmentDTO> shipment = txService.searchShips(status, franchiseName, shipDateStart,
+                shipDateEnd, itemName, dueDateStart, dueDateEnd);
         log.info(shipment.toString());
         return ResponseEntity.ok(shipment);
     }
 
+    @ResponseBody
+    @GetMapping("/syncShipStatus")
+    public ResponseEntity<ShipmentDTO> syncShipStatus(@RequestParam String shipmentId) {
+        ShipmentDTO shipmentDTO = txService.syncByShipmentId(shipmentId);
+        return ResponseEntity.ok(shipmentDTO);
+    }
+
+    @ResponseBody
+    @PostMapping("/cancelShip")
+    public String cancelShip(@RequestParam String shipmentId) {
+        txService.updateShipStatus(shipmentId, "출하취소");
+        return "success";
+    }
+
+    @ResponseBody
+    @PostMapping("/completeShip")
+    public String completeShip(@RequestParam String shipmentId) {
+        txService.updateShipStatus(shipmentId, "출하완료");
+        return "success";
+    }
 
 
 }

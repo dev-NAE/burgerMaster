@@ -101,7 +101,7 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            url: '/tx/completeShip',
+            url: '/tx/saveShip',
             method: 'POST',
             data: shipment,
             beforeSend: function (xhr) {
