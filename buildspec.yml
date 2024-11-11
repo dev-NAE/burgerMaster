@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto17
+    commands:
+      - yum update -y
+      - echo Installing SDKMAN and Gradle
+      - curl -s "https://get.sdkman.io" | bash
+      - source "$HOME/.sdkman/bin/sdkman-init.sh" && sdk install gradle  # Gradle 설치
+  pre_build:
+    commands:
+      - echo Build started on `date`
+      - chmod +x gradlew  # ./gradlew 파일에 실행 권한 추가
+  build:
+    commands:
+      - echo Building the Spring Boot application
+      - source "$HOME/.sdkman/bin/sdkman-init.sh" && ./gradlew clean bootWar  # 빌드 명령
+      - ls -l build/libs/
+      - mv build/libs/*.war myapp.war
+  post_build:
+    commands:
+      - echo Build and packaging completed on `date`
+artifacts:
+  files:
+    - myapp.war
+    - appspec.yml
+    - scripts/*
