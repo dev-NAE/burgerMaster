@@ -198,16 +198,11 @@
 					<!--			Bar Chart-->
 					<div class="card card-success" style="margin: 5px;">
 						<div class="card-header">
-							<h3 class="card-title">가공품 총재고</h3>
+							<h3 class="card-title">가공품 입고량. 총재고</h3>
 							<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 								<button class="btn btn-light" id="xls3">.xls로 저장</button>
 							</div>
 							<div class="card-tools">
-								<!--			<button type="button" class="btn btn-tool" data-card-widget="collapse">-->
-								<!--			<i class="fas fa-minus"></i>-->
-								<!--			</button>-->
-								<!--			<button type="button" class="btn btn-tool" data-card-widget="remove">-->
-								<!--			<i class="fas fa-times"></i>-->
 								<!--			</button>-->
 							</div>
 						</div>
@@ -223,7 +218,7 @@
 								</div>
 								<canvas id="myChart3"
 									style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 375px;"
-									width="375" height="250" class="chartjs-render-monitor">
+									width="375" height="250" class="chartjs-render-monitor"></canvas>
 							</div>
 						</div>
 
@@ -409,9 +404,9 @@
 		//alert(JSON.stringify(rmItemList));
 
 		const rmInventory = rmInventoryList.map(item => item.quantity);  // 항목 이름
-		//const minReqQuantitiesrm = rmInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
+		const rmmin = rmInventoryList.map(item => item.minReqQuantity);
 
-
+		const rmItem = rmItemList.map(item => item.quantity);
 
 		const labels = rmInventoryList.map(item => item.itemName);  // 항목 이름
 		//const invenlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
@@ -420,7 +415,7 @@
 			datasets: [
 				{
 					label: '원재료 입고량',
-					data: rmItemList.map(item => item.quantity),  // 입고량 필드로 사용 (수정필요)
+					data: rmItem,  // 입고량 필드로 사용 (수정필요)
 					backgroundColor: 'lightblue',
 					borderColor: 'lightblue',
 					borderWidth: 1
@@ -429,11 +424,40 @@
 				{
 					label: '총 재고',
 					data: rmInventory,  // 총 재고 필드로 사용
-					backgroundColor: 'lightgreen',
-					borderColor: 'lightgreen',
-					borderWidth: 1
+					//backgroundColor: 'lightgreen',
+					//borderColor: 'lightgreen',
+					//borderWidth: 1
+					backgroundColor: function (context) {
+						const index = context.dataIndex;
+						return rmInventory[index] <= rmmin[index] ? 'red' : 'lightgreen';
+
+
+					},
+					borderColor: 'rgba(0, 0, 0, 0.1)',
+					borderWidth: 1,
+				}]
+		};
+
+		const options = {
+			responsive: true,
+			plugins: {
+				legend: {
+					labels: {
+						generateLabels: (chart) => {
+							return chart.data.datasets.map((dataset, i) => {
+								return {
+									text: dataset.label,
+									fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
+									strokeStyle: dataset.borderColor,
+									lineWidth: dataset.borderWidth,
+									hidden: !chart.isDatasetVisible(i),
+									index: i
+								};
+							});
+						}
+					}
 				}
-			]
+			}
 		};
 
 
@@ -442,12 +466,13 @@
 			type: 'bar',
 			data: data,
 			options: {
+				options
 
-				scales: {
-					y: {
-						beginAtZero: true
-					}
-				}
+				//scales: {
+				//y: {
+				//beginAtZero: true
+				//}
+				//}
 			}
 		};
 
@@ -494,9 +519,7 @@
 
 
 		const fpInventory = fpInventoryList.map(item => item.quantity);
-		//const minReqQuantitiesfp = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
-
-		//alert("fpItemList"+JSON.stringify(fpItemList));
+		const fpmin = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
 
 		const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
 		const data2 = {
@@ -512,28 +535,52 @@
 				{
 					label: '총 재고',
 					data: fpInventory,  // 재량 필드로 사용 (예시)
-					backgroundColor: 'lightgreen',
-					borderColor: 'lightgreen',
-					borderWidth: 1
-				}
-			]
+					backgroundColor: function (context) {
+						const index = context.dataIndex;
+						return fpInventory[index] <= fpmin[index] ? 'red' : 'lightgreen';
+
+
+					},
+					borderColor: 'rgba(0, 0, 0, 0.1)',
+					borderWidth: 1,
+				}]
 		};
+
+		const options2 = {
+			responsive: true,
+			plugins: {
+				legend: {
+					labels: {
+						generateLabels: (chart) => {
+							return chart.data.datasets.map((dataset, i) => {
+								return {
+									text: dataset.label,
+									fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
+									strokeStyle: dataset.borderColor,
+									lineWidth: dataset.borderWidth,
+									hidden: !chart.isDatasetVisible(i),
+									index: i
+								};
+							});
+						}
+					}
+				}
+			}
+		};
+
+
 
 		const config2 = {
 			type: 'bar',
 			data: data2,
 			options: {
-				scales: {
-					y: {
-						beginAtZero: true
-					}
-				},
+				options2
 
-
-
-
-
-
+				//scales: {
+				//y: {
+				//beginAtZero: true
+				//}
+				//}
 			}
 		};
 
@@ -581,6 +628,8 @@
 
 		//alert("ppItemList:"+JSON.stringify(ppItemList));
 
+		const minpp = ppInventoryList.map(item => item.minReqQuantity);  // 항목 이름
+		const ppInventory = ppInventoryList.map(item => item.quantity);  // 항목 이름
 		const labels3 = ppInventoryList.map(item => item.itemName);  // 항목 이름
 		const data3 = {
 			labels: labels3,
@@ -595,24 +644,45 @@
 
 
 				label: '총 재고',
-				data: ppInventoryList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
-				backgroundColor: 'lightgreen',
-				borderColor: 'lightgreen',
-				borderWidth: 1
+				data: ppInventory,  // 입고량 필드로 사용 (예시)
+				backgroundColor: function (context) {
+					const index = context.dataIndex;
+					return ppInventory[index] <= minpp[index] ? 'red' : 'lightgreen';
+
+
+				},
+				borderColor: 'rgba(0, 0, 0, 0.1)',
+				borderWidth: 1,
+			}]
+		};
+
+
+		const options3 = {
+			responsive: true,
+			plugins: {
+				legend: {
+					labels: {
+						generateLabels: (chart) => {
+							return chart.data.datasets.map((dataset, i) => {
+								return {
+									text: dataset.label,
+									fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
+									strokeStyle: dataset.borderColor,
+									lineWidth: dataset.borderWidth,
+									hidden: !chart.isDatasetVisible(i),
+									index: i
+								};
+							});
+						}
+					}
+				}
 			}
-			]
 		};
 
 		const config3 = {
 			type: 'bar',
 			data: data3,
-			options: {
-				scales: {
-					y: {
-						beginAtZero: true
-					}
-				}
-			}
+			options: options3  // options2를 직접 설정합니다.
 		};
 
 		// Chart.js를 사용하여 차트 생성
