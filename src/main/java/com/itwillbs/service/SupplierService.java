@@ -14,6 +14,7 @@ import com.itwillbs.entity.Supplier;
 import com.itwillbs.repository.SupplierRepository;
 
 @Service
+@Transactional(readOnly = true)
 public class SupplierService {
 	private final SupplierRepository supplierRepository;
 
@@ -21,7 +22,7 @@ public class SupplierService {
 		this.supplierRepository = supplierRepository;
 	}
 
-	public Page<Supplier> searchItems(SupplierSearchDTO searchDTO, Pageable pageable) {
+	public Page<Supplier> searchSuppliers(SupplierSearchDTO searchDTO, Pageable pageable) {
 		return supplierRepository.findBySearchConditions(searchDTO.getSupplierName(), searchDTO.getBusinessNumber(),
 				searchDTO.getContactPerson(), searchDTO.getIncludeUnused(), pageable);
 	}

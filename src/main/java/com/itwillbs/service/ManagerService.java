@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -84,28 +85,24 @@ public class ManagerService {
 
 
         if(managerDB != null) {
-            manager.setPass(managerDB.getPass());
-            log.info("manager : " + manager);
-            managerRepository.save(manager);
+            if(manager.getPass().isEmpty()) {
+                manager.setPass(managerDB.getPass());
+            }else{
+                manager.setPass(bCryptPasswordEncoder.encode(manager.getPass()));
+            }
 
+
+            managerRepository.save(manager);
             // 권한 리스트
             String[] managerRoles = manager.getManagerRole().split(",");
             ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
             for(String role : managerRoles){
                 grantedAuthorities.add(new SimpleGrantedAuthority(role));
             }
-            //세션 등록
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            manager.getManagerId(),
-                            manager.getPass(),
-                            grantedAuthorities
-                    ));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("updateManager : " + Arrays.toString(managerRoles));
+
             try {
                 json = objectMapper.writeValueAsString(manager);
-
-
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

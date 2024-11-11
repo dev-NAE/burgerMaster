@@ -31,7 +31,6 @@ public class Order {
     @Column(name = "due_date")
     private Timestamp dueDate;
 
-    @CreationTimestamp
     @Column(name = "real_date")
     private Timestamp realDate;
 

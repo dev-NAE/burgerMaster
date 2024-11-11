@@ -8,8 +8,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager, String> {
     @Query("SELECT m FROM Manager m where m.managerId = :search or m.email= :search or m.phone= :search or m.managerRole=:search")
     Page<Manager> findBySearch(Pageable pageable, @Param("search")String search);
+
+    // 이은지 작성: 거래 담당자 가져오기 (+ 이름 검색 포함)
+    @Query("SELECT m FROM Manager m WHERE " +
+            "(:managerName IS NULL OR m.name LIKE :managerName) AND " +
+            "m.managerRole IN ('ROLE_ADMIN', 'ROLE_TRANSACTION')")
+    List<Manager> findManagerOnTX(@Param("managerName") String managerName);
 }
