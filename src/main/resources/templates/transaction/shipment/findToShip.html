@@ -43,7 +43,6 @@
             <input type="hidden" id="franchiseCode" th:value="${item.franchiseCode}">
             <input type="hidden" id="franchiseName" th:value="${item.franchiseName}">
             <input type="hidden" id="orderDate" th:value="${#dates.format(item.orderDate, 'yyyy-MM-dd')}">
-            <input type="hidden" id="saleItems" th:value="${item.saleItems}">
             <input type="hidden" id="totalPrice" th:value="${item.totalPrice}">
             <input type="hidden" id="quantity" th:value="${item.itemCount}">
         </tr>
@@ -53,33 +52,31 @@
 <script th:inline="javascript">
     // 선택한 항목 정보 넘겨주고 팝업창 닫기
     function sendResult(row) {
-        var saleId = row.querySelector('[data-sale-id]').getAttribute('data-sale-id');
-        var items = row.querySelector('[data-items]').getAttribute('data-items');
-        var quality = row.querySelector('[data-quality]').getAttribute('data-quality');
-        var franchiseCode = row.querySelector('#franchiseCode').value;
-        var franchiseName = row.querySelector('#franchiseName').value;
-        var orderDate = row.querySelector('#orderDate').value;
-        var dueDate = row.querySelector('[data-duedate]').getAttribute('data-duedate');
-        var saleItems = row.querySelector('#saleItems').value;
-        var totalPrice = row.querySelector('#totalPrice').value;
-        var quantity = row.querySelector('#quantity').value;
+        var saleId = $(row).find('[data-sale-id]').attr('data-sale-id');
+        var items = $(row).find('[data-items]').attr('data-items');
+        var quality = $(row).find('[data-quality]').attr('data-quality');
+        var franchiseCode = $(row).find('#franchiseCode').val();
+        var franchiseName = $(row).find('#franchiseName').val();
+        var dueDate = $(row).find('[data-duedate]').attr('data-duedate');
+        var totalPrice = $(row).find('#totalPrice').val();
+        var quantity = $(row).find('#quantity').val();
+        var saleItems = null;
 
-        // saleItems 문자열을 JSON에 맞는 형식으로 변환
-        try {
-            // 1. 불필요한 텍스트 제거: "SaleItemsDTO(...)" 부분을 "{...}"으로 변환
-            saleItems = saleItems
-                .replace(/SaleItemsDTO\(/g, '{')  // "SaleItemsDTO("를 '{'로
-                .replace(/\)/g, '}')               // ")"를 '}'로
-                .replace(/(\w+)=/g, '"$1":');      // "key=" 형태를 '"key":'로 변환하여 JSON 속성 형식으로
+        $.ajax({
+            url: '/tx/getSaleItems',
+            method: 'GET',
+            data: {saleId: saleId},
+            dataType: 'json',
+            success: function(response) {
+                saleItems = response;
+                window.opener.setToShip(saleId, items, quality, franchiseCode, franchiseName, dueDate, saleItems, totalPrice, quantity);
+                window.close();
+            },
+            error: function() {
+                alert('오류가 발생했습니다');
+            }
+        })
 
-            // 2. JSON 파싱
-            saleItems = JSON.parse(saleItems);
-        } catch (e) {
-            console.error("saleItems 파싱 중 오류 발생:", e);
-        }
-
-        window.opener.setToShip(saleId, items, quality, franchiseCode, franchiseName, orderDate, dueDate, saleItems, totalPrice, quantity);
-        window.close();
     }
 </script>
 

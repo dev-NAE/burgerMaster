@@ -17,32 +17,26 @@ public interface ShipmentRepository extends JpaRepository<Shipment, String> {
     @Query("SELECT MAX(sm.shipmentId) FROM Shipment sm")
     String findMaxShipmentId();
 
-//    @Query("SELECT si.item.itemName FROM SaleItems si WHERE si.sale = :sale ORDER BY si.item.itemCode ASC")
-//    List<String> findFirstItemNameBySale(@Param("sale") Sale sale);
-//
-//    @Query("SELECT COUNT(si.item.itemCode) FROM SaleItems si WHERE si.sale = :sale")
-//    int findSaleItemCountBySale(@Param("sale") Sale sale);
-//
-//    @Query("SELECT s FROM Sale s " +
-//            "JOIN s.franchise f " +
-//            "LEFT JOIN s.saleItems si " +
-//            "LEFT JOIN si.item i " +
-//            "WHERE (:status IS NULL OR s.status = :status) AND " +
-//            "(:franchiseName IS NULL OR f.franchiseName LIKE :franchiseName) AND " +
-//            "(:orderDateStart IS NULL OR s.orderDate >= :orderDateStart) AND " +
-//            "(:orderDateEnd IS NULL OR s.orderDate <= :orderDateEnd) AND " +
-//            "(:itemName IS NULL OR i.itemName LIKE :itemName) AND " +
-//            "(:dueDateStart IS NULL OR s.dueDate >= :dueDateStart) AND " +
-//            "(:dueDateEnd IS NULL OR s.dueDate <= :dueDateEnd)")
-//    List<Sale> findSalesByConditions(
-//            @Param("status") String status,
-//            @Param("franchiseName") String franchiseName,
-//            @Param("orderDateStart") Timestamp orderDateStart,
-//            @Param("orderDateEnd") Timestamp orderDateEnd,
-//            @Param("itemName") String itemName,
-//            @Param("dueDateStart") Timestamp dueDateStart,
-//            @Param("dueDateEnd") Timestamp dueDateEnd
-//    );
+    @Query("SELECT sm FROM Shipment sm JOIN Sale s " +
+            "JOIN s.franchise f " +
+            "LEFT JOIN s.saleItems si " +
+            "LEFT JOIN si.item i " +
+            "WHERE (:status IS NULL OR sm.status = :status) AND " +
+            "(:franchiseName IS NULL OR f.franchiseName LIKE :franchiseName) AND " +
+            "(:shipDateStart IS NULL OR sm.shipDate >= :shipDateStart) AND " +
+            "(:shipDateEnd IS NULL OR sm.shipDate <= :shipDateEnd) AND " +
+            "(:itemName IS NULL OR i.itemName LIKE :itemName) AND " +
+            "(:dueDateStart IS NULL OR s.dueDate >= :dueDateStart) AND " +
+            "(:dueDateEnd IS NULL OR s.dueDate <= :dueDateEnd)")
+    List<Shipment> findShipmentByConditions(
+            @Param("status") String status,
+            @Param("franchiseName") String franchiseName,
+            @Param("shipDateStart") Timestamp shipDateStart,
+            @Param("shipDateEnd") Timestamp shipDateEnd,
+            @Param("itemName") String itemName,
+            @Param("dueDateStart") Timestamp dueDateStart,
+            @Param("dueDateEnd") Timestamp dueDateEnd
+    );
 //
 //    @Transactional
 //    @Modifying

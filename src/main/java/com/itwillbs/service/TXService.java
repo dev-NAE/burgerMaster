@@ -311,7 +311,6 @@ public class TXService {
         return saleItemsRepository.findBySale(sale);
     }
 
-
     public List<SaleDTO> searchSales(String status, String franchiseName, String orderDateStart, String orderDateEnd,
                                        String itemName, String dueDateStart, String dueDateEnd) {
         log.info("TXService: searchSales");
@@ -391,10 +390,95 @@ public class TXService {
                     if (!itemNames.isEmpty()) {
                         sale.setItemName(saleRepository.findFirstItemNameBySale(thisSale).get(0));
                     }
-                    sale.setSaleItems(saleItemsRepository.findBySale2(thisSale));
                 }
             });
         log.info(allQualified.toString());
         return allQualified;
     }
+
+    public List<SaleItemsDTO> getSaleItems(String saleId) {
+        return saleItemsRepository.findBySale2(saleId);
+    }
+
+    public void completeShip(ShipmentDTO shipmentDTO) {
+        log.info("TXService: completeShip");
+        // 출하번호 생성
+        String shipmentId = generateNextShipId();
+
+        // 출하 정보 저장
+        Shipment shipment = new Shipment();
+        BeanUtils.copyProperties(shipmentDTO, shipment);
+        log.info(shipmentDTO.toString());
+        shipment.setShipmentId(shipmentId);
+        shipment.setStatus("출하등록(검품요청)");
+        shipment.setRealDate(new Timestamp(System.currentTimeMillis()));
+        shipment.setManager(managerRepository.findById(shipmentDTO.getManager()).orElse(null));
+        shipment.setSale(saleRepository.findById(shipmentDTO.getSaleId()).orElse(null));
+        log.info(shipment.toString());
+        shipmentRepository.save(shipment);
+    }
+
+    public String generateNextShipId() {
+        String maxShipId = shipmentRepository.findMaxShipmentId();
+
+        String newShipId = null;
+
+        if (maxShipId == null) {
+            newShipId = "SM0001";
+        } else {
+            int numberPart = Integer.parseInt(maxShipId.substring(2));
+            newShipId = String.format("SM%04d", numberPart + 1);
+        }
+        return newShipId;
+    }
+
+    public List<ShipmentDTO> getShipList() {
+        List<Shipment> allShips = shipmentRepository.findAll(Sort.by(Sort.Direction.DESC, "shipmentId"));
+        return getShipmentDTOS(allShips);
+    }
+
+    public List<ShipmentDTO> searchShips(String status, String franchiseName, String shipDateStart, String shipDateEnd,
+                                       String itemName, String dueDateStart, String dueDateEnd) {
+        log.info("TXService: searchShips");
+
+        // 날짜 자료형 String -> Timestamp 변경
+        Timestamp shipStart = convertToTimestamp(shipDateStart);
+        Timestamp shipEnd = convertToTimestamp(shipDateEnd);
+        Timestamp dueStart = convertToTimestamp(dueDateStart);
+        Timestamp dueEnd = convertToTimestamp(dueDateEnd);
+
+        String formattedStatus = (status != null && !status.trim().isEmpty()) ? status : null;
+
+        // LIKE 검색할 것들 % 붙여주기
+        String formattedFranchiseName = franchiseName != null && !franchiseName.trim().isEmpty() ? "%" + franchiseName + "%" : null;
+        String formattedItemName = itemName != null && !itemName.trim().isEmpty() ? "%" + itemName + "%" : null;
+
+        log.info("status: " + formattedStatus + " supplierName: " + formattedFranchiseName + " shipStart: " + shipStart + " shipEnd: " + shipEnd + " itemName: " + formattedItemName + " dueStart: " + dueStart + " dueEnd: " + dueEnd);
+
+        List<Shipment> shipmentsByConditions = shipmentRepository.findShipmentByConditions
+                (formattedStatus, formattedFranchiseName, shipStart, shipEnd, formattedItemName, dueStart, dueEnd);
+
+        log.info("TXService: shipmentsByConditions" + shipmentsByConditions);
+
+        return getShipmentDTOS(shipmentsByConditions);
+    }
+
+    private List<ShipmentDTO> getShipmentDTOS(List<Shipment> shipmentByConditions) {
+        return shipmentByConditions.stream()
+                .map(ship -> {
+                    ShipmentDTO shipmentDTO = new ShipmentDTO();
+                    shipmentDTO.setShipmentId(ship.getShipmentId());
+                    shipmentDTO.setShipDate(ship.getShipDate());
+                    shipmentDTO.setDueDate(ship.getSale().getDueDate());
+                    shipmentDTO.setStatus(ship.getStatus());
+                    shipmentDTO.setFranchiseName(saleRepository.findFranchiseNameBySaleId(ship.getSale().getSaleId()));
+                    List<String> firstItem = saleRepository.findFirstItemNameBySale(ship.getSale());
+                    shipmentDTO.setItemName(firstItem.isEmpty() ? null : firstItem.get(0));
+                    shipmentDTO.setItemCount(saleRepository.findSaleItemCountBySale(ship.getSale()));
+                    log.info("TXService: shipmentDTO: " + shipmentDTO);
+                    return shipmentDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
 }
