@@ -1,5 +1,4 @@
-/* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
+let over = false;
 
 //수량 최대 자릿수
 $('input[type=number][maxlength]').on('input', function(ev) {
@@ -22,7 +21,7 @@ function filterFunction() {
   input = document.getElementById("search");
   filter = input.value.toUpperCase();
   div = document.getElementById("myDropdown");
-  a = div.getElementsByTagName("div");
+  a = div.getElementsByTagName("li");
   for (i = 0; i < a.length; i++) {
     txtValue = a[i].textContent || a[i].innerText;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -34,8 +33,9 @@ function filterFunction() {
 }
 
 //가공품 선택 후 검색창 off
-function change(itemName){
+function change(itemName, itemCode){
 	document.getElementById('item').value = itemName;
+	document.getElementById('itemCode').value = itemCode;
 	document.getElementById('search').value = null;
 	document.getElementById("myDropdown").classList.toggle("show");
 	getRM();
@@ -48,6 +48,8 @@ function reset(){
 	while(tbody.rows.length>0){
 		tbody.deleteRow(0);
 	}
+	
+	over = false;
 }
 
 //가공품과 수량 입력값 변화 감지
@@ -69,14 +71,26 @@ function getRM() {
 			const result = response;
 			let str = "";
 			$.each(result, function(i){
-				str+="<tr>"
+				str+="<tr>";
 				str+="<td>"+result[i].itemCode+"</td><td>"
-					+result[i].itemName+"</td><td>"
-					+result[i].amount*amount+"</td><td>"
-					+result[i].quantity+"</td>"
-				str+="</tr>"
+					+result[i].itemName+"</td>";
+				if((result[i].amount*amount)>result[i].quantity){
+					str+="<td style=\"color:red;\">"
+					over = true;
+				} else {
+					str+="<td>"
+				};
+				str+=result[i].amount*amount+"</td><td>"
+					+result[i].quantity+"</td>";
+				str+="</tr>";
 				$('#rm').append(str);
 			});
+			
+			if(over) {
+				$('#confirmationModalLabel').html('작업 지시를 등록하시겠습니까?<br>(현재 보유 중인 재료가 충분하지 않습니다.)');
+			} else {
+				$('#confirmationModalLabel').text('작업 지시를 등록하시겠습니까?');
+			}
 		},
 		error: function(xhr, status, error){
 			console.error("데이터 불러오기 오류 : ", error);
@@ -119,6 +133,12 @@ $(document).ready(function() {
     });
 	
     $('#confirmSubmitBtn').click(function() {
-        $('#input-form').unbind('submit').submit(); // 폼 제출
+        $('#input-form').unbind('submit').submit();
     });
 });
+
+let now = Date.now();
+let timeOff = new Date().getTimezoneOffset()*60000;
+let today = new Date(now-timeOff).toISOString().split("T")[0];
+
+document.getElementById('deadline').setAttribute("min", today);

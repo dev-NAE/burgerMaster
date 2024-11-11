@@ -1,6 +1,7 @@
 package com.itwillbs.domain.manufacture;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ public class MFOrderDTO {
 	private String orderId;
 	private String orderItem;
 	private int orderAmount;
-	private Timestamp orderDeadline;
+	private LocalDate orderDeadline;
 	private Timestamp orderDate;
 	private String orderState;
 	

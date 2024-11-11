@@ -1,5 +1,7 @@
 package com.itwillbs.service;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -67,6 +69,32 @@ public class MFService {
 		log.info("MFService getRM()");
 		
 		return itemRepostiory.findRM(itemName);
+	}
+
+	public void insertOrder(MFOrder order) {
+		log.info("MFService insertOrder()");
+		
+		order.setOrderId(getNewOrderId());
+		order.setOrderDeadline(LocalDate.now());
+		order.setOrderDate(new Timestamp(System.currentTimeMillis()));
+		order.setOrderState("작업 전달 전");
+		
+		mfRepository.save(order);
+	}
+	
+	public String getNewOrderId() {
+		String maxId = mfRepository.findMaxId();
+		
+		if(maxId==null) {
+			return "MO000001";
+		} else {
+			int num = Integer.parseInt(maxId.substring(2));
+			
+			String newId = String.format("MO%06d", num+1);
+			log.info("new id generated -> "+newId);
+			
+			return newId;
+		}
 	}
 	
 }
