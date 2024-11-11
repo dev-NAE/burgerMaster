@@ -13,6 +13,10 @@
 	<!-- JQVMap -->
 	<link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css" />
 	<link rel="stylesheet" href="/css/font.css" />
+	
+	<!-- CSRF Token -->
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -69,42 +73,44 @@
 
 											<div class="col-sm-8 col-md-3">
 
-												<!-- 검색 1) 품목코드/품목명 -->
+												<!--검색 1) 입고번호-->
 												<div class="form-group">
-												    <label>품목코드/품목명</label>
-												    <input type="text" class="form-control" id="itemCodeOrName"
-												        name="itemCodeOrName" placeholder="품목코드 또는 품목명을 입력하세요"
-												        th:value="${invenSearchDTO.itemCodeOrName}" />
+													<label>입고번호</label>
+													<input type="text" class="form-control" id="incomingId"
+														name="incomingId" placeholder="입고번호를 입력하세요"
+														th:value="${incomingId}" autocomplete="off" />
 												</div>
 											</div>
 
 											<div class="col-sm-6 col-md-3">
 												<!-- 검색 2) 입고 사유 -->
 												<div class="form-group">
-												    <label>입고 사유</label>
-												    <select class="form-control" id="reasonOfIncoming" name="reasonOfIncoming">
-												        <option value="" th:selected="${invenSearchDTO.reasonOfIncoming == null or invenSearchDTO.reasonOfIncoming == ''}">전체</option>
-												        <option value="검품완료" th:selected="${invenSearchDTO.reasonOfIncoming == '검품완료'}">검품완료</option>
-												        <option value="생산완료" th:selected="${invenSearchDTO.reasonOfIncoming == '생산완료'}">생산완료</option>
-												    </select>
+													<label>입고 사유</label>
+													<select class="form-control" id="reasonOfIncoming"
+														name="reasonOfIncoming">
+														<option value=""
+															th:selected="${reasonOfIncoming == null or reasonOfIncoming == ''}">
+															전체</option>
+														<option value="검품완료"
+															th:selected="${reasonOfIncoming == '검품완료'}">검품완료</option>
+														<option value="생산완료"
+															th:selected="${reasonOfIncoming == '생산완료'}">생산완료</option>
+													</select>
 												</div>
 											</div>
-											<div class="col-sm-6 col-md-4">
-												<!--검색 3) 입고 등록일자-->
+											<div class="col-sm-8 col-md-6">
+												<!-- 검색 3) 입고 등록일자 -->
 												<div class="form-group">
-													<label>입고 등록일자</label>
-
-													<div class="input-group">
-														<div class="input-group-prepend">
-															<span class="input-group-text">
-																<i class="far fa-calendar-alt"></i>
-
-															</span>
-														</div>
-														<input type="text" class="form-control float-right"
-															id="reservation">
+													<label class="mx-2">등록일</label>
+													<div class="col-10 d-flex">
+														<input class="form-control" type="date"
+															id="incomingStartDate_start" name="incomingStartDate_start"
+															th:value="${incomingStartDate_start}">
+														<span class="m-2"> ~ </span>
+														<input class="form-control" type="date"
+															id="incomingStartDate_end" name="incomingStartDate_end"
+															th:value="${incomingStartDate_end}">
 													</div>
-													<!-- /.input group -->
 												</div>
 											</div>
 
@@ -115,12 +121,13 @@
 										<div class="row">
 											<div class="col-sm-8 col-md-3">
 
-												<!--검색 4) 입고번호-->
+
+												<!-- 검색 4) 품목코드/품목명 -->
 												<div class="form-group">
-													<label>입고번호</label>
-													<input type="text" class="form-control" id="incomingId"
-														name="incomingId" placeholder="입고번호를 입력하세요"
-														th:value="${incomingId}" autocomplete="off" />
+													<label>품목코드/품목명</label>
+													<input type="text" class="form-control" id="itemCodeOrName"
+														name="itemCodeOrName" placeholder="품목코드 또는 품목명을 입력하세요"
+														th:value="${itemCodeOrName}" autocomplete="off" />
 												</div>
 											</div>
 
@@ -129,8 +136,8 @@
 												<div class="form-group">
 													<label>생산/검품 번호</label>
 													<input type="text" class="form-control" id="prodOrQualId"
-														name="prodOrQualId" placeholder="생산or검품 번호를 입력하세요"
-														th:value="${prodOrQualId}" />
+														name="prodOrQualId" placeholder="생산 또는 검품 번호를 입력하세요"
+														th:value="${prodOrQualId}" autocomplete="off" />
 												</div>
 											</div>
 											<div class="col-sm-6 col-md-2">
@@ -140,9 +147,10 @@
 													<select class="form-control" id="status" name="status">
 														<option value="" th:selected="${status == ''}">전체
 														</option>
-														<option value="입고 진행중" th:selected="${status == '검품완료'}">입고 진행중
+														<option value="입고 진행중" th:selected="${status == '입고 진행중'}">입고
+															진행중
 														</option>
-														<option value="입고 완료" th:selected="${status == '생산완료'}">입고 완료
+														<option value="입고 완료" th:selected="${status == '입고 완료'}">입고 완료
 														</option>
 													</select>
 												</div>
@@ -154,13 +162,14 @@
 													<label>담당자</label>
 													<input type="text" class="form-control" id="managerCodeOrName"
 														name="managerCodeOrName" placeholder="담당자 코드 또는 이름을 입력해주세요"
-														th:value="${managerCodeOrName}" />
+														th:value="${managerCodeOrName}" autocomplete="off" />
 												</div>
 											</div>
 
 											<div class="col-sm-4 col-md-1 ml-auto">
 												<label>&nbsp;</label>
-												<button type="submit" class="btn btn-block btn-primary">검색</button>
+												<button type="submit" class="btn btn-block btn-primary"
+													id="search_button">검색</button>
 											</div>
 
 										</div>
@@ -185,18 +194,19 @@
 											<th></th>
 										</tr>
 									</thead>
-									<tbody id="inventoryTableBody">
-										<!--										데이터가 없을 경우 검색 결과 없음 출력-->
-										<tr th:if="${#lists.isEmpty(incomingDTOs)}">
-											<td colspan="5" class="text-center">검색 결과가 없습니다.</td>
+									<tbody>
+										<!--데이터가 없을 경우 검색 결과 없음 출력-->
+										<tr th:if="${#lists.isEmpty(incomingDTOs.content)}">
+											<td colspan="9" class="text-center">검색 결과가 없습니다.</td>
 										</tr>
 
 										<tr th:each="incoming : ${incomingDTOs}">
 											<td th:text="${incoming.incomingId}"></td>
-											<td th:text="${#dates.format(incoming.incomingStartDate, 'yyyy-MM-dd')}">
+											<td
+												th:text="${#dates.format(incoming.incomingStartDate, 'yyyy-MM-dd HH:mm')}">
 											</td>
 											<td
-												th:text="${incoming.incomingEndDate != null ? #dates.format(incoming.incomingEndDate, 'yyyy-MM-dd') : ''}">
+												th:text="${incoming.incomingEndDate != null ? #dates.format(incoming.incomingEndDate, 'yyyy-MM-dd HH:mm') : ''}">
 											</td>
 
 											<td th:if="${incoming.otherCount == 0}"
@@ -215,8 +225,18 @@
 
 											<td th:text="${incoming.status}"></td>
 											<td>
+												<!-- 상세 버튼에 data- 속성 수정 -->
 												<button type="button"
-													class="btn btn-block btn-secondary btn-xs">상세</button>
+													class="btn btn-block btn-secondary btn-xs detail-button"
+													th:data-incoming-id="${incoming.incomingId}"
+													th:data-incoming-start-date="${#dates.format(incoming.incomingStartDate, 'yyyy-MM-dd HH:mm')}"
+													th:data-incoming-end-date="${incoming.incomingEndDate != null ? #dates.format(incoming.incomingEndDate, 'yyyy-MM-dd HH:mm') : ''}"
+													th:data-manager-name="${incoming.managerName}"
+													th:data-production-or-quality-id="${incoming.productionId != null ? incoming.productionId : incoming.qualityOrderId}"
+													th:data-reason-of-incoming="${incoming.productionId != null ? '생산 완료' : '검품 완료'}"
+													th:data-status="${incoming.status}">
+													상세
+												</button>
 											</td>
 										</tr>
 									</tbody>
@@ -233,6 +253,7 @@
 												총 <span th:text="${totalPages}"></span> 페이지 중 <span
 													th:text="${currentPage}"></span> 페이지
 											</div>
+
 										</div>
 										<div class="col-4">
 											<div class="dataTables_paginate paging_simple_numbers d-flex align-items-center justify-content-end h-100"
@@ -244,7 +265,8 @@
 														<a th:href="@{/inven/incomingListSearch(
 																	            itemCodeOrName=${itemCodeOrName},
 																				reasonOfIncoming=${reasonOfIncoming},
-																	            incomingStartDate=${incomingStartDate},	
+																				incomingStartDate_start=${incomingStartDate_start},	
+																				incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
 																				prodOrQualId=${prodOrQualId},
 																				status=${status},
@@ -260,7 +282,8 @@
 														<a th:href="@{/inven/incomingListSearch(
 																	            itemCodeOrName=${itemCodeOrName},
 																				reasonOfIncoming=${reasonOfIncoming},
-																	            incomingStartDate=${incomingStartDate},	
+																				incomingStartDate_start=${incomingStartDate_start},	
+																				incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
 																				prodOrQualId=${prodOrQualId},
 																				status=${status},
@@ -275,7 +298,8 @@
 														<a th:href="@{/inven/incomingListSearch(
 																	            itemCodeOrName=${itemCodeOrName},
 																				reasonOfIncoming=${reasonOfIncoming},
-																	            incomingStartDate=${incomingStartDate},	
+																	            incomingStartDate_start=${incomingStartDate_start},	
+																	            incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
 																				prodOrQualId=${prodOrQualId},
 																				status=${status},
@@ -311,10 +335,7 @@
 	</div>
 	<!-- ./wrapper -->
 
-	<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
-	<div th:replace="~{fragments/footer :: footerFragment}"></div>
-	<!-- 기본 js 링크 -->
-	<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
+
 
 	<!-- ChartJS -->
 	<!--	<script src="plugins/chart.js/Chart.min.js"></script>-->
@@ -330,6 +351,217 @@
 	<!-- daterangepicker -->
 	<!--	<script src="plugins/moment/moment.min.js"></script>-->
 	<!--	<script src="plugins/daterangepicker/daterangepicker.js"></script>-->
+	<!--<script>-->
+	<!--	$(document).ready(function() {-->
+	<!--	    // 조회 버튼 클릭 이벤트-->
+	<!--	    $('#search_button').on('click', function() {-->
+	<!--	        // 각 필드의 값을 가져옵니다.-->
+	<!--	        let itemCodeOrName = $('#itemCodeOrName').val();-->
+	<!--	        let reasonOfIncoming = $('#reasonOfIncoming').val();-->
+	<!--	        let incomingStartDate_start = $('#incomingStartDate_start').val();-->
+	<!--	        let incomingStartDate_end = $('#incomingStartDate_end').val();-->
+	<!--	        let incomingId = $('#incomingId').val();-->
+	<!--	        let prodOrQualId = $('#prodOrQualId').val();-->
+	<!--	        let status = $('#status').val();-->
+	<!--	        let managerCodeOrName = $('#managerCodeOrName').val();-->
+
+	<!--			console.log("안녕하세요");-->
+	<!--	        console.log(itemCodeOrName, reasonOfIncoming, incomingStartDate_start, incomingStartDate_end, incomingId, prodOrQualId, status, managerCodeOrName);-->
+	<!--			});-->
+	<!--	});-->
+	<!--</script>-->
+	<!-- 상세 정보 모달 -->
+	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="detailModalLabel">입고 상세 정보</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-3"></div>
+							<div class="col-9">
+								<dl class="row">
+									<dt class="col-4 py-2">입고 번호</dt>
+									<dd class="col-8 py-2"><span id="modalIncomingId"></span></dd>
+									<dt class="col-4 py-2">입고 등록일자</dt>
+									<dd class="col-8 py-2"><span id="modalIncomingStartDate"></span></dd>
+									<dt class="col-4 py-2">입고 완료일자</dt>
+									<dd class="col-8 py-2"><span id="modalIncomingEndDate"></span></dd>
+									<dt class="col-4 py-2">담당자</dt>
+									<dd class="col-8 py-2"><span id="modalManagerName"></span></dd>
+									<dt class="col-4 py-2">생산/검품 번호</dt>
+									<dd class="col-8 py-2"><span id="modalProductionOrQualityId"></span></dd>
+									<dt class="col-4 py-2">입고 사유</dt>
+									<dd class="col-8 py-2"><span id="modalReasonOfIncoming"></span></dd>
+									<dt class="col-4 py-2">진행상황</dt>
+									<dd class="col-8 py-2"><span id="modalStatus"></span></dd>
+									
+								</dl>
+							</div>
+
+							<div class="col-2"></div>
+						</div>
+						<!-- 입고 기본 정보 -->
+
+					</div>
+
+
+					<!-- 입고 항목 데이터 테이블 -->
+					<table class="table table-bordered table-hover dataTable dtr-inline">
+						<thead>
+							<tr>
+								<th>품목 코드</th>
+								<th>품목명</th>
+								<th>품목유형</th>
+								<th>수량</th>
+							</tr>
+						</thead>
+						<tbody id="modalIncomingItems">
+							<!-- AJAX로 가져온 데이터가 여기에 삽입됩니다. -->
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="updateIncomingButton">입고 완료하기</button>
+					
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+					<!-- 필요에 따라 추가 버튼 -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+	<div th:replace="~{fragments/footer :: footerFragment}"></div>
+	<!-- 기본 js 링크 -->
+	<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
+
+
+	<script>
+	    $(document).ready(function () {
+	        // CSRF 토큰 설정 (Spring Security)
+	        var csrfToken = $('meta[name="_csrf"]').attr('content');
+	        var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
+	        // AJAX 요청 시 CSRF 토큰을 헤더에 추가
+	        $.ajaxSetup({
+	            beforeSend: function(xhr) {
+	                if (csrfToken && csrfHeader) {
+	                    xhr.setRequestHeader(csrfHeader, csrfToken);
+	                }
+	            }
+	        });
+
+	        // "상세" 버튼 클릭 이벤트
+	        $('.detail-button').on('click', function () {
+	            var button = $(this); // 버튼 요소 참조
+	            var incomingId = button.data('incoming-id');
+	            var incomingStartDate = button.data('incoming-start-date');
+	            var incomingEndDate = button.data('incoming-end-date');
+	            var managerName = button.data('manager-name');
+	            var productionOrQualityId = button.data('production-or-quality-id');
+	            var reasonOfIncoming = button.data('reason-of-incoming');
+	            var status = button.data('status');
+
+	            // 모달의 기본 정보 채우기
+	            $('#modalIncomingId').text(incomingId);
+	            $('#modalIncomingStartDate').text(incomingStartDate);
+	            $('#modalIncomingEndDate').text(incomingEndDate);
+	            $('#modalManagerName').text(managerName);
+	            $('#modalProductionOrQualityId').text(productionOrQualityId);
+	            $('#modalReasonOfIncoming').text(reasonOfIncoming);
+	            $('#modalStatus').text(status);
+				
+				// 입고 상세 정보 모달창에서 "입고 완료하기" 버튼 표시 여부 결정
+				if (status === '입고 진행중') { // 상태가 '입고 진행중'인 경우
+				    $('#updateIncomingButton').show();
+				} else {
+				    $('#updateIncomingButton').hide();
+				}
+
+	            // 입고 품목 데이터 테이블 초기화 및 로딩 메시지 표시
+	            $('#modalIncomingItems').html('<tr><td colspan="4" class="text-center">로딩 중...</td></tr>');
+
+	            // AJAX 요청을 통해 입고 품목 정보 가져오기
+	            $.ajax({
+	                url: '/restInven/incomingDetail',
+	                type: 'GET',
+	                data: { incomingId: incomingId },
+	                dataType: 'json',
+	                success: function (data) {
+	                    // 입고 품목 데이터 테이블 채우기
+	                    if (data.length > 0) {
+	                        var incomingItemsHtml = '';
+	                        data.forEach(function (item) {
+	                            incomingItemsHtml += '<tr>';
+	                            incomingItemsHtml += '<td>' + item.itemCode + '</td>';
+	                            incomingItemsHtml += '<td>' + item.itemName + '</td>';
+	                            incomingItemsHtml += '<td>' + item.itemType + '</td>';
+	                            incomingItemsHtml += '<td>' + item.quantity + '</td>';
+	                            incomingItemsHtml += '</tr>';
+	                        });
+	                        $('#modalIncomingItems').html(incomingItemsHtml);
+	                    } else {
+	                        $('#modalIncomingItems').html('<tr><td colspan="4" class="text-center">입고 품목 정보가 없습니다.</td></tr>');
+	                    }
+
+	                    // 모달 표시
+	                    $('#detailModal').modal('show');
+	                },
+	                error: function (xhr, status, error) {
+	                    console.error('입고 품목 정보를 가져오는 중 오류 발생:', error);
+	                    $('#modalIncomingItems').html('<tr><td colspan="4" class="text-center text-danger">입고 품목 정보를 가져오는 데 실패했습니다.</td></tr>');
+	                }
+	            });
+	        });
+
+	        // "입고 완료하기" 버튼 클릭 이벤트
+	        $('#updateIncomingButton').on('click', function () {
+	            var incomingId = $('#modalIncomingId').text();
+
+	            if (!incomingId) {
+	                alert('입고 ID가 없습니다.');
+	                return;
+	            }
+
+	            // Confirm dialog
+	            if (!confirm('정말 입고를 완료하시겠습니까?')) {
+	                return;
+	            }
+
+	            // AJAX 요청을 통해 상태 업데이트
+	            $.ajax({
+	                url: '/restInven/updateIncomingStatus', // 컨트롤러 매핑과 일치
+	                type: 'POST',
+	                data: { incomingId: incomingId },
+	                dataType: 'json',
+	                success: function (response) {
+	                    if (response.success) {
+	                        alert(response.message);
+
+	                        // 모달 닫기 및 페이지 새로 고침
+	                        $('#detailModal').modal('hide');
+	                        location.reload();
+	                    } else {
+	                        alert('입고 상태 업데이트에 실패했습니다: ' + response.message);
+	                    }
+	                },
+	                error: function (xhr, status, error) {
+	                    console.error('입고 상태 업데이트 중 오류 발생:', error);
+	                    alert('입고 상태 업데이트 중 오류가 발생했습니다.');
+	                }
+	            });
+	        });
+	    });
+	</script>
+
+
 
 
 
