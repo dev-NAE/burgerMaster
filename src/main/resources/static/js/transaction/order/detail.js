@@ -218,7 +218,7 @@ $(document).ready(function() {
                 contentType: 'application/json',
                 dataType: 'text',
                 beforeSend : function(xhr){
-                    xhr.setRequestHeader(header, token);
+                    xhr.setRequestHeader(editHeader, editToken);
                 },
                 data: JSON.stringify(orderRequest),
                 success: function(response) {
@@ -290,7 +290,7 @@ $(document).ready(function() {
                 method: 'POST',
                 data: { orderId: orderId },
                 beforeSend : function(xhr){
-                    xhr.setRequestHeader(header, token);
+                    xhr.setRequestHeader(editHeader, editToken);
                 },
                 success: function(response) {
                     if (response === "success") {
