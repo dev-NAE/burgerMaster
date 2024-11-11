@@ -7,7 +7,7 @@
 	<title>BugerMaster</title>
 
 	<!-- Google Font: Source Sans Pro -->
-	<!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+	<!--  <link rel="styleewqaWAE	sheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
 	<link rel="stylesheet" href="/css/font.css">
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
@@ -53,18 +53,18 @@
 		</ul>
 
 		<!-- Right navbar links -->
-		<ul class="navbar-nav ml-auto" >
+		<ul class="navbar-nav ml-auto">
 			<!-- Notifications Dropdown Menu -->
 
 			<!-- 알람 표시 -->
 			<div class="nav-item dropdown" id="notiClick">
-				<a class="nav-link" data-toggle="dropdown" id="Noti" href="#" >
-					<i class="far fa-bell" ></i>
-					<span class="badge badge-warning navbar-badge" id="notificationCount"  >0</span>
+				<a class="nav-link" data-toggle="dropdown" id="Noti" href="#">
+					<i class="far fa-bell"></i>
+					<span class="badge badge-warning navbar-badge" id="notificationCount">0</span>
 				</a>
-				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown" >
+				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown">
 					<span class="dropdown-item dropdown-header" id="notiHeader">알람이 0개 있습니다</span>
-					<div class="dropdown-divider"   ></div>
+					<div class="dropdown-divider"></div>
 					<div id="noticontent" style="font-size: 10px;"></div>
 					<a href="#" class="dropdown-item dropdown-footer">확인</a>
 				</div>
@@ -903,43 +903,43 @@
 
 
 		$(function () {
-		        $.ajax({
-		            url: "/noticontent",
-		            dataType: "json",
-		            success: function (notifiList) {
+			$.ajax({
+				url: "/noticontent",
+				dataType: "json",
+				success: function (notifiList) {
 
-		                // 필터링된 알림 목록을 담을 리스트
-		                const filteredNotifications = [];
+					// 필터링된 알림 목록을 담을 리스트
+					const filteredNotifications = [];
 
-		                // `notifiList`의 각 항목을 반복하면서 `minReqQuantity` 조건을 비교
-		                notifiList.forEach(function (item, index) {
-		                    // 예: 해당 항목의 `quantity`가 `minReqQuantity` 이하인 경우에만 추가
-		                    if (item.quantity <= item.minReqQuantity) {
-		                        filteredNotifications.push(item);
-		                    }
-		                });
-
-		                // 알림 개수 및 헤더 표시
-		                if (filteredNotifications.length > 0) {
-		                    $('#notificationCount').text(filteredNotifications.length);
-		                    $('#notiHeader').text('알람이 ' + filteredNotifications.length + '개 있습니다');
-
-		                    // 알림 내용을 리스트로 출력
-		                    const contentElement = $('#noticontent');
-		                    contentElement.empty();  // 기존 알림 초기화
-
-		                    filteredNotifications.forEach(function (item) {
-		                        const listItem = $('<a href="#" class="dropdown-item"></a>')
-		                            .text(`${item.itemName} 재고 수량이 ${item.quantity} 개 입니다. 재주문이 필요합니다.`);
-		                        contentElement.append(listItem);
-		                        contentElement.append('<div class="dropdown-divider"></div>');
-		                    });
-		                } else {
-		                    $('#noticontent').html('<span class="dropdown-item">새로운 알림이 없습니다</span>');
-		                }
+					// `notifiList`의 각 항목을 반복하면서 `minReqQuantity` 조건을 비교
+					notifiList.forEach(function (item, index) {
+						// 예: 해당 항목의 `quantity`가 `minReqQuantity` 이하인 경우에만 추가
+						if (item.quantity <= item.minReqQuantity) {
+							filteredNotifications.push(item);
 						}
-		          
-		        });
+					});
+
+					// 알림 개수 및 헤더 표시
+					if (filteredNotifications.length > 0) {
+						$('#notificationCount').text(filteredNotifications.length);
+						$('#notiHeader').text('알람이 ' + filteredNotifications.length + '개 있습니다');
+
+						// 알림 내용을 리스트로 출력
+						const contentElement = $('#noticontent');
+						contentElement.empty();  // 기존 알림 초기화
+
+						filteredNotifications.forEach(function (item) {
+							const listItem = $('<a href="#" class="dropdown-item"></a>')
+								.text(`${item.itemName} 재고 수량이 ${item.quantity} 개 입니다. 재주문이 필요합니다.`);
+							contentElement.append(listItem);
+							contentElement.append('<div class="dropdown-divider"></div>');
+						});
+					} else {
+						$('#noticontent').html('<span class="dropdown-item">새로운 알림이 없습니다</span>');
+					}
+				}
+
+			});
 		});
 
 
