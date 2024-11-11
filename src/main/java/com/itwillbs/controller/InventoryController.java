@@ -16,17 +16,21 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwillbs.domain.inventory.IncomingDTO;
 
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.service.InventoryService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * 입고, 출고, 재고 관리하는 컨트롤러
@@ -44,7 +48,7 @@ public class InventoryController {
 
 //    재고 조회
 	@GetMapping("/inventoryList")
-	public String inventoryList(Model model, @PageableDefault(size = 8) Pageable pageable) {
+	public String inventoryList(Model model, @PageableDefault(size = 10) Pageable pageable) {
 		log.info("InventoryController inventoryList()");
 
 		// 페이징 처리하여 재고 중 10개의 데이터만 저장
@@ -70,7 +74,7 @@ public class InventoryController {
 			@RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
 			@RequestParam(name = "itemType", defaultValue = "") String itemType,
 			@RequestParam(name = "findOutOfStock", defaultValue = "N") String findOutOfStock,
-			@PageableDefault(size = 8) Pageable pageable) {
+			@PageableDefault(size = 10) Pageable pageable) {
 
 		log.info("InventoryController inventoryListSearch()");
 
@@ -93,6 +97,43 @@ public class InventoryController {
 		applyPagination(inventoryItemByPage, model);
 
 		return VIEW_PATH + "inventory_list";
+	}
+	
+    // 품목의 재고량, 최소필요재고량 수정 
+	@PostMapping("/updateInventory")
+	public String updateInventory(
+	        @RequestParam("itemCode") String itemCode,
+	        @RequestParam("quantity") int quantity,
+	        @RequestParam("minReqQuantity") int minReqQuantity,
+	        @RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
+	        @RequestParam(name = "itemType", defaultValue = "") String itemType,
+	        @RequestParam(name = "findOutOfStock", defaultValue = "N") String findOutOfStock,
+	        @RequestParam(name = "page", defaultValue = "0") int page, // 페이지 번호를 명시적으로 받습니다.
+	        RedirectAttributes redirectAttributes, // RedirectAttributes 추가
+	        Model model) {
+
+	    log.info("InventoryController.updateInventory() - itemCode: {}, quantity: {}, minReqQuantity: {}, itemCodeOrName: {}, itemType: {}, findOutOfStock: {}, page: {}",
+	            itemCode, quantity, minReqQuantity, itemCodeOrName, itemType, findOutOfStock, page);
+
+	    try {
+	        inventoryService.updateInventory(itemCode, quantity, minReqQuantity);
+	        redirectAttributes.addFlashAttribute("message", "재고 정보가 성공적으로 수정되었습니다.");
+	        log.info("성공");
+	    } catch (EntityNotFoundException e) {
+	        log.error("재고 정보 수정 실패: {}", e.getMessage());
+	        redirectAttributes.addFlashAttribute("error", "해당 품목의 재고 정보를 찾을 수 없습니다.");
+	    } catch (Exception e) {
+	        log.error("서버 오류: {}", e.getMessage());
+	        redirectAttributes.addFlashAttribute("error", "재고 정보 수정 중 오류가 발생했습니다.");
+	    }
+
+	    // Redirect 시 파라미터를 안전하게 추가
+	    redirectAttributes.addAttribute("itemCodeOrName", itemCodeOrName);
+	    redirectAttributes.addAttribute("itemType", itemType);
+	    redirectAttributes.addAttribute("findOutOfStock", findOutOfStock);
+	    redirectAttributes.addAttribute("page", page);
+
+	    return "redirect:/inven/inventoryListSearch";
 	}
 
 	// 입고 등록
@@ -236,6 +277,8 @@ public class InventoryController {
 		return VIEW_PATH + "outgoing_list";
 	}
 
+	
+	
 	// 페이지네이션 구현 메서드
 	private void applyPagination(Page<?> page, Model model) {
 

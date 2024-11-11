@@ -12,18 +12,27 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.itwillbs.domain.masterdata.ItemDTO;
 import com.itwillbs.domain.masterdata.ItemSearchDTO;
+import com.itwillbs.entity.InventoryItem;
 import com.itwillbs.entity.Item;
+import com.itwillbs.repository.InventoryRepository;
 import com.itwillbs.repository.ItemRepository;
 
 @Service
 @Transactional(readOnly = true)
 public class ItemService {
 	private final ItemRepository itemRepository;
+	private final InventoryRepository inventoryRepository;
+	
 
-	public ItemService(ItemRepository itemRepository) {
-		this.itemRepository = itemRepository;
-	}
-
+	
+ 
+    public ItemService(ItemRepository itemRepository, InventoryRepository inventoryRepository) {
+        this.itemRepository = itemRepository;
+        this.inventoryRepository = inventoryRepository;
+    }
+	
+	
+	
 	public Page<Item> searchItems(ItemSearchDTO searchDTO, Pageable pageable) {
 		return itemRepository.findBySearchConditions(searchDTO.getItemName(), searchDTO.getItemType(),
 				searchDTO.getIncludeUnused(), pageable);
@@ -37,7 +46,20 @@ public class ItemService {
 	public Item saveItem(Item item) {
 		validateItemCode(item);
 		validateDuplicate(item);
-		return itemRepository.save(item);
+		
+	    // Item을 먼저 저장
+	    Item savedItem = itemRepository.save(item);
+	    
+	    // InventoryItem 객체 생성 후 item_code 설정 및 기본값 설정
+	    InventoryItem inventoryItem = new InventoryItem();
+	    inventoryItem.setItemCode(savedItem.getItemCode());
+	    inventoryItem.setQuantity(0);           // 기본값 설정
+	    inventoryItem.setMinReqQuantity(-1);    // 기본값 설정
+	    
+	    // InventoryItem 저장
+	    inventoryRepository.save(inventoryItem);
+	    
+	    return savedItem;
 	}
 
 	@Transactional

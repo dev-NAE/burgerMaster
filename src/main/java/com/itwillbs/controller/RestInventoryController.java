@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -148,5 +149,28 @@ public class RestInventoryController {
 			return ResponseEntity.ok(incomingInsertDTO);
 		}
 	}
+
+    /**
+     * 재고량 및 최소 필요 재고량 배치 업데이트 엔드포인트
+     */
+    @PostMapping("/updateInventoryItems")
+    public ResponseEntity<InvenResponseMessage> updateInventoryItems(@RequestBody List<InventoryItemDTO> InventoryItemDTOList) {
+        log.info("RestInventoryController.updateInventoryItems() - InventoryItemDTOList: {}", InventoryItemDTOList);
+
+        try {
+            inventoryService.updateInventoryItems(InventoryItemDTOList);
+            InvenResponseMessage response = new InvenResponseMessage(true, "재고 정보가 성공적으로 수정되었습니다.");
+            return ResponseEntity.ok(response);
+        } catch (EntityNotFoundException e) {
+            log.error("재고 정보 수정 실패: {}", e.getMessage());
+            InvenResponseMessage response = new InvenResponseMessage(false, "해당 품목의 재고 정보를 찾을 수 없습니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (Exception e) {
+            log.error("서버 오류: {}", e.getMessage());
+            InvenResponseMessage response = new InvenResponseMessage(false, "재고 정보 수정 중 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+	
 
 }
