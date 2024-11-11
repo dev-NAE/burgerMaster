@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>수주 담당자 검색</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+    <!-- 스크립트 -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/dist/js/adminlte.min.js"></script>
+
+</head>
+<body>
+<h3 class="text-center my-5">수주 담당자 검색</h3>
+<form th:action="@{/tx/findManager}" method="get">
+    <div class="input-group col-8 my-5 mx-auto text-center">
+        <input type="search" name="query" class="form-control form-control-large" placeholder="이름으로 검색">
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-default">
+              <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+</form>
+<div class="item-list card-body col-10 mx-auto">
+    <table class="table table-bordered table-hover dataTable dtr-inline">
+        <tr class="bg-lightblue">
+            <th class="text-center" style="width:50%;">담당자코드</th>
+            <th class="text-center" style="width:50%;">성명</th>
+        </tr>
+        <tr onclick="sendResult(this)" style="cursor: pointer;" th:each="manager : ${managers}">
+            <td class="admin-id text-center" th:data-code="${manager.managerId}" th:text="${manager.managerId}"></td>
+            <td class="name text-center" th:data-name="${manager.name}" th:text="${manager.name}"></td>
+        </tr>
+    </table>
+</div>
+
+<script th:inline="javascript">
+    // 선택한 항목 정보 넘겨주고 팝업창 닫기
+    function sendResult(row) {
+        var managerCode = row.querySelector('[data-code]').getAttribute('data-code');
+        var managerName = row.querySelector('[data-name]').getAttribute('data-name');
+        window.opener.setManager(managerCode, managerName);
+        window.close();
+    }
+</script>
+
+
+</body>
+</html>

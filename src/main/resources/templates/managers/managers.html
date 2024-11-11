@@ -12,7 +12,8 @@
   <link rel="stylesheet" href="/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-
+  <!-- switch 버튼 -->
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/css/bootstrap-switch-button.min.css" rel="stylesheet">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 
@@ -163,8 +164,16 @@
               </div>
             </div>
             <div class="form-group">
+              <div class="row d-flex justify-content-between">
+
               <label for="manager_pass_create_modal">Password</label>
-              <input type="password" class="form-control" id="manager_pass_change_modal" placeholder="Enter Password">
+                <div class="custom-control">
+                  <input id="change-pass-switch" type="checkbox" data-toggle="switchbutton" data-size="sm">
+                  <label for="change-pass-switch">password 유지</label>
+                </div>
+
+              </div>
+              <input type="password" class="form-control" id="manager_pass_change_modal" placeholder="Enter Password" disabled>
             </div>
             <div  class="callout callout-info p-2">
               <p>비밀번호는 영문, 숫자, 특수문자(!@#$%^*+=-) 조합으로 이루어진 8~15자까지 가능합니다.</p>
@@ -207,7 +216,7 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteManager()">Delete</button>
+<!--            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteManager()">Delete</button>-->
             <button type="button" class="btn btn-primary"  data-dismiss="modal" onclick="changeManager()">Save</button>
           </div>
         </div>
@@ -318,6 +327,8 @@
 <script src="/plugins/sparklines/sparkline.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- switch 버튼 -->
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
 <!-- custom js -->
 <script src="/js/admins/admins.js"></script>
 </body>

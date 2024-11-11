@@ -58,6 +58,8 @@ public class SecurityConfig {
         };
         String[] TxUrls = {
                 "/tx/**"
+        };String[] inventoryUrls = {
+                "/inven/**"
         };
         String[] mfcUrls = {
                 "/mf/**"
@@ -73,7 +75,7 @@ public class SecurityConfig {
                 .requestMatchers("/bgmManager/**").hasRole("ADMIN")
                 .requestMatchers(masterDataUrls).hasAnyRole("MASTERDATA", "ADMIN")
                 .requestMatchers(TxUrls).hasAnyRole("TRANSACTION", "ADMIN")
-                .requestMatchers("/inven/**").hasAnyRole("INVENTORY", "ADMIN")
+                .requestMatchers(inventoryUrls).hasAnyRole("INVENTORY", "ADMIN")
                 .requestMatchers(mfcUrls).hasAnyRole("MANUFACTURE", "ADMIN")
                 .requestMatchers(qualityUrls).hasAnyRole("QUALITY", "ADMIN")
                 .anyRequest().authenticated()
@@ -81,6 +83,8 @@ public class SecurityConfig {
         // session 정책
         http.sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .maximumSessions(1)
+                .expiredUrl("/login")
         );
         // 자동 로그인
         http.rememberMe(rememberMe -> rememberMe

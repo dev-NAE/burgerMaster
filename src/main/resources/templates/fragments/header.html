@@ -30,6 +30,7 @@
 	<!-- summernote -->
 	<link rel="stylesheet" href="/plugins/summernote/summernote-bs4.min.css">
 </head>
+
 <body>
 
 	<th:block th:fragment="headerFragment">
@@ -58,41 +59,20 @@
 				<li>
 					<a th:if="${session.id}" class="nav-link">관리자 관리</a>
 				</li>
+				
 				<!-- 알람 표시 -->
-<!--				           <div class="nav-item dropdown">-->
-<!--				               <a class="nav-link" data-toggle="dropdown" href="#">-->
-<!--				                   <i class="far fa-bell"></i>-->
-<!--				                   <span class="badge badge-warning navbar-badge" id="notification-badge" th:text="${notificationCount}">0</span>-->
-<!--				               </a>-->
-<!--				               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown">-->
-<!--				                   <span class="dropdown-item dropdown-header" th:text="'알람이 ' + ${notificationCount} + '개 있습니다'">알람이 0개 있습니다</span>-->
-<!--				                   <div class="dropdown-divider"></div>-->
-<!--				                   <th:block th:each="notification : ${notifications}">-->
-<!--				                       <a href="#" class="dropdown-item" th:text="${notification}">알림 내용</a>-->
-<!--				                       <div class="dropdown-divider"></div>-->
-<!--				                   </th:block>-->
-<!--				                   <a href="#" class="dropdown-item dropdown-footer">알람 모두 보기</a>-->
-<!--				               </div>-->
-<!--				           </div>-->
-<!--				       </div>-->
-<!-- 알람 표시 -->
-<!--           <div class="nav-item dropdown">-->
-<!--               <a class="nav-link" data-toggle="dropdown" href="#">-->
-<!--                   <i class="far fa-bell"></i>-->
-<!--                   <span class="badge badge-warning navbar-badge" th:text="${notificationCount}">0</span>-->
-<!--               </a>-->
-<!--               <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">-->
-<!--                   <span class="dropdown-item dropdown-header" th:text="'알람이 ' + ${notificationCount} + '개 있습니다'">알람이 0개 있습니다</span>-->
-<!--                   <div class="dropdown-divider"></div>-->
-<!--                   <th:block th:each="notification : ${notifications}">-->
-<!--                       <a href="#" class="dropdown-item" th:text="${notification}">알림 내용</a>-->
-<!--                       <div class="dropdown-divider"></div>-->
-<!--                   </th:block>-->
-<!--                   <a href="#" class="dropdown-item dropdown-footer">알람 모두 보기</a>-->
-<!--               </div>-->
-<!--           </div>-->
-<!--       </div>-->
-
+<!--				<div class="nav-item dropdown" id="notiClick">-->
+<!--					<a class="nav-link" data-toggle="dropdown" id="Noti" href="#">-->
+<!--						<i class="far fa-bell"></i>-->
+<!--						<span class="badge badge-warning navbar-badge" id="notificationCount">0</span>-->
+<!--					</a>-->
+<!--					<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="notification-dropdown">-->
+<!--						<span class="dropdown-item dropdown-header" id="notiHeader">알람이 0개 있습니다</span>-->
+<!--						<div class="dropdown-divider"></div>-->
+<!--						<div id="noticontent"></div>-->
+<!--						<a href="#" class="dropdown-item dropdown-footer">알람 모두 보기</a>-->
+<!--					</div>-->
+<!--				</div>-->
 			</ul>
 		</nav>
 	</th:block>
@@ -131,11 +111,11 @@
 	<script src="dist/js/demo.js"></script>
 	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 	<script src="dist/js/pages/dashboard.js"></script>
-	
-
-
 
 	
+
+
+
 
 </body>
 

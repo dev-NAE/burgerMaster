@@ -32,12 +32,6 @@
 
 
     <div class="wrapper">
-
-        <!--   Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-        </div>
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -67,8 +61,8 @@
 
                     <!-- Contents -->
                         <div class="container-fluid col-sm-10 my-5">
-                            <div class="submit-btn-area row">
-                                <button id="print-form" class="btn btn-md btn-secondary ml-auto my-3 mr-2">발주서 출력</button>
+                            <div class="submit-btn-area row" th:if="${order.status != '발주취소'}">
+                                <button id="print-form" class="btn btn-md btn-info ml-auto my-3 mr-2">발주서 출력</button>
                             </div>
                             <div class="card insert-container px-3 py-3">
                                 <div class="card-body basic-info-area px-5">
@@ -119,42 +113,51 @@
                                 </div>
                                 <div class="input-items-area card-body">
                                     <div class="row">
-                                        <button class="btn btn-md btn-secondary ml-auto mr-2 mb-3" id="add-items">물품 추가</button>
+                                        <button class="btn btn-md btn-primary ml-auto mr-2 mb-3" id="add-items" style="display:none;">물품 추가</button>
                                     </div>
                                     <div class="item-list card-body border">
                                         <table id="item-list-table" class="table table-bordered table-hover dataTable dtr-inline">
-                                            <tr class="bg-lightblue">
-                                                <th class="text-center" style="width:10%"></th>
-                                                <th class="text-center" style="width:15%;">품목코드</th>
-                                                <th class="text-center" style="width:30%;">품목명</th>
-                                                <th class="text-center" style="width:15%;">단가(원)</th>
-                                                <th class="text-center" style="width:15%;">수량</th>
-                                                <th class="text-center" style="width:15%;">소계(원)</th>
-                                            </tr>
-                                            <tr class="item-row" th:each="i : ${items}">
-                                                <td class="text-center"></td>
-                                                <td class="text-center"><span class="item-code" th:text="${i.item.itemCode}"></span></td>
-                                                <td class="text-center"><span class="item-name" th:text="${i.item.itemName}"></span></td>
-                                                <td class="text-right"><input class="col-sm-8 item-price" type="text" th:value="${#numbers.formatInteger(i.price, 1, 'COMMA')}" style="text-align:right;" readonly> 원</td>
-                                                <td class="text-center"><input class="col-sm-6 item-quantity" type="text" th:value="${#numbers.formatInteger(i.quantity, 1, 'COMMA')}" style="text-align:right;" readonly> 단위</td>
-                                                <td class="text-right"><span class="subtotal" th:text="${#numbers.formatInteger(i.subtotalPrice, 1, 'COMMA')}"></span> 원</td>
-                                            </tr>
+                                            <thead>
+                                                <tr class="bg-lightblue">
+                                                    <th class="text-center" style="width:10%"></th>
+                                                    <th class="text-center" style="width:15%;">품목코드</th>
+                                                    <th class="text-center" style="width:30%;">품목명</th>
+                                                    <th class="text-center" style="width:15%;">단가(원)</th>
+                                                    <th class="text-center" style="width:15%;">수량</th>
+                                                    <th class="text-center" style="width:15%;">소계(원)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="item-row" th:each="i : ${items}">
+                                                    <td class="text-center"></td>
+                                                    <td class="text-center"><span class="item-code" th:text="${i.item.itemCode}"></span></td>
+                                                    <td class="text-center"><span class="item-name" th:text="${i.item.itemName}"></span></td>
+                                                    <td class="text-right"><input class="col-sm-8 item-price" type="text" th:value="${#numbers.formatInteger(i.price, 1, 'COMMA')}" style="text-align:right;" readonly> 원</td>
+                                                    <td class="text-center"><input class="col-sm-6 item-quantity" type="text" th:value="${#numbers.formatInteger(i.quantity, 1, 'COMMA')}" style="text-align:right;" readonly> 단위</td>
+                                                    <td class="text-right"><span class="subtotal" th:text="${#numbers.formatInteger(i.subtotalPrice, 1, 'COMMA') + ' 원'}"></span></td>
+                                                </tr>
+                                            </tbody>
                                         </table>
                                         <div class="calculating-brief row my-2 py-3 px-2 bg-light">
-                                            <div class="col-6 number-of-items"><span id="total-quantity" class="ml-3" th:text="${items.size()}">0</span>개 품목 선택</div>
-                                            <div class="col-6 text-right total-of-price">금액 합계: <span id="total-price" class="ml-1" th:text="${#numbers.formatInteger(order.totalPrice, 1, 'COMMA')}">0</span> 원</div>
+                                            <div class="col-6 number-of-items">
+                                                <span id="total-quantity-view" class="ml-3" th:text="${items.size()}">0</span>개 품목 선택
+                                                <input id="total-quantity" type="hidden" value="0" th:value="${items.size()}">
+                                            </div>
+                                            <div class="col-6 text-right total-of-price">금액 합계: <span id="total-price-view" class="ml-1" th:text="${#numbers.formatInteger(order.totalPrice, 1, 'COMMA')}">0</span> 원
+                                                <input id="total-price" type="hidden" th:value="${order.totalPrice}">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="submit-btn-area row">
                                 <div class="col-5 d-flex justify-content-start">
-                                    <button id="back-to-list" class="btn btn-lg btn-secondary my-3">목록으로 이동</button>
+                                    <button id="back-to-list" class="btn btn-lg btn-info my-3">목록으로 이동</button>
                                 </div>
-                                <div th:if="${order.status == '발주등록(저장)'}" class="col-7 d-flex justify-content-end">
-                                    <button id="modify-btn" class="btn btn-lg btn-success my-3 mx-2">수정</button>
-                                    <button class="btn btn-lg btn-danger my-3 mx-2" data-toggle="modal" data-target="#cancel-order">취소</button>
-                                    <button class="btn btn-lg btn-primary my-3 mx-2" data-toggle="modal" data-target="#complete-order">발주완료</button>
+                                <div id="btn-group" th:if="${order.status == '발주등록(저장)'}" class="col-7 d-flex justify-content-end">
+                                    <button id="edit-btn" class="btn btn-lg btn-success my-3 mx-2">수정</button>
+                                    <button id="cancel-btn" class="btn btn-lg btn-danger my-3 mx-2" data-toggle="modal" data-target="#cancel-order">취소</button>
+                                    <button id="complete-btn" class="btn btn-lg btn-primary my-3 mx-2" data-toggle="modal" data-target="#complete-order">발주완료</button>
                                 </div>
                             </div>
                         </div>
@@ -165,8 +168,11 @@
                                 <td class="text-center"><span class="item-code"></span></td>
                                 <td class="text-center"><span class="item-name"></span></td>
                                 <td class="text-right"><input class="col-sm-8 item-price" type="text" value="0" style="text-align:right;"> 원</td>
-                                <td class="text-center"><input class="col-sm-4 item-quantity" type="text" value="0" style="text-align:right;"> (단위)</td>
-                                <td class="text-right"><span class="subtotal">0</span> 원</td>
+                                <td class="text-center"><input class="col-sm-6 item-quantity" type="text" value="0" style="text-align:right;"> 단위</td>
+                                <td class="text-right">
+                                    <span class="subtotal-view">0</span> 원
+                                    <input class="subtotal" type="hidden">
+                                </td>
                             </tr>
                         </template>
 
