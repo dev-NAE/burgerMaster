@@ -1,6 +1,7 @@
 #!/bin/bash
 # 기존 WAR 파일 삭제
 rm -f /usr/local/tomcat/webapps/ROOT.war
+rm -f /usr/local/tomcat/webapps/ROOT
 
 # 새로운 WAR 파일 이동
 mv /usr/local/tomcat/webapps/myapp.war /usr/local/tomcat/webapps/ROOT.war
