@@ -172,15 +172,13 @@
 							</div>
 							<div class="card-body">
 								<div class="chart">
-									<!-- 카드의 높이를 늘려서 그래프 크기 키우기 -->
 									<canvas id="myChart3" width="375" height="250"></canvas>
-									<!-- 100%로 크기 자동 조정 -->
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="row">
+<!--					<div class="row">-->
 						<!-- 반품 품목 -->
 						<div class="col-md-4">
 							<div class="card card-danger" style="margin: 5px;">
@@ -210,7 +208,6 @@
 								</div>
 							</div>
 						</div>
-
 						<!-- 월간 수주 현황 -->
 						<div class="col-md-4">
 							<div class="card card-primary" style="margin: 5px;">
@@ -351,7 +348,7 @@
 
 				},
 				{
-					label: '총 재고',
+					label: '원재료 총 재고',
 					data: rmInventory,  // 총 재고 필드로 사용
 					//backgroundColor: 'lightgreen',
 					//borderColor: 'lightgreen',
@@ -478,7 +475,7 @@
 					borderWidth: 1
 				},
 				{
-					label: '총 재고',
+					label: '완재품 총 재고',
 					data: fpInventory,  // 재량 필드로 사용 (예시)
 					backgroundColor: function (context) {
 						const index = context.dataIndex;
@@ -605,7 +602,7 @@
 			{
 
 
-				label: '총 재고',
+				label: '가공품 총 재고',
 				data: ppInventory,  // 입고량 필드로 사용 (예시)
 				backgroundColor: function (context) {
 					const index = context.dataIndex;
