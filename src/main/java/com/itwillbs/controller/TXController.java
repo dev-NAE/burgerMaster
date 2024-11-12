@@ -300,20 +300,94 @@ public class TXController {
         return "transaction/shipment/insert";
     }
 
-//    @ResponseBody
-//    @PostMapping("/saveShip")
-//    public String saveShip(@RequestBody SaleDTO saleDTO) {
-//        // 불러온 sale 정보 + 등록번호 따서 상태 저장
-//        txService.saveShip(saleDTO);
-//        return "success";
-//        }
-//    }
-//
+    @ResponseBody
+    @PostMapping("/saveShip")
+    public String saveShip(ShipmentDTO shipmentDTO) {
+        txService.saveShip(shipmentDTO);
+        return "success";
+    }
+
     @GetMapping("/findToShip")
     public String findToShip(Model model) {
         List<SaleDTO> sales = txService.findToShip();
         model.addAttribute("toShip", sales);
         return "transaction/shipment/findToShip";
     }
+
+    // 출하정보 조회 수주물품정보
+    @ResponseBody
+    @GetMapping("/getSaleItems")
+    public ResponseEntity<List<SaleItemsDTO>> getSaleItems(String saleId) {
+        List<SaleItemsDTO> saleItems = txService.getSaleItems(saleId);
+        return ResponseEntity.ok(saleItems);
+    }
+
+    @GetMapping("/shipList")
+    public String getShipList() {
+        return "transaction/shipment/list";
+    }
+
+    @ResponseBody
+    @GetMapping("/shipInfo")
+    public ResponseEntity<List<ShipmentDTO>> getShipInfo() {
+        List<ShipmentDTO> ships = txService.getShipList();
+        log.info("ships: " + ships);
+        return ResponseEntity.ok(ships);
+    }
+
+    @GetMapping("/shipDetail")
+    public String shipDetail(@RequestParam String shipId, Model model) {
+        ShipmentDTO shipment = txService.getShipmentDTOById(shipId);
+        if (shipment.getStatus().equals("출하등록(검품요청)") && shipment.getQsStatus().equals("검품완료")) {
+            log.info("변경전: " + shipment.getStatus());
+            shipment.setStatus("출하등록(검품완료)");
+            log.info("변경후: " +shipment.getStatus());
+
+        }
+        List<SaleItems> items = txService.getSaledItems(txService.getSaleById(shipment.getSaleId()));
+        model.addAttribute("shipment", shipment);
+        model.addAttribute("items", items);
+        return "transaction/shipment/detail";
+    }
+
+    @ResponseBody
+    @GetMapping("/searchShips")
+    public ResponseEntity<List<ShipmentDTO>> searchShips(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String franchiseName,
+            @RequestParam(required = false) String shipDateStart,
+            @RequestParam(required = false) String shipDateEnd,
+            @RequestParam(required = false) String itemName,
+            @RequestParam(required = false) String dueDateStart,
+            @RequestParam(required = false) String dueDateEnd
+    ) {
+        log.info("TXController searchSales()");
+        List<ShipmentDTO> shipment = txService.searchShips(status, franchiseName, shipDateStart,
+                shipDateEnd, itemName, dueDateStart, dueDateEnd);
+        log.info(shipment.toString());
+        return ResponseEntity.ok(shipment);
+    }
+
+    @ResponseBody
+    @GetMapping("/syncShipStatus")
+    public ResponseEntity<ShipmentDTO> syncShipStatus(@RequestParam String shipmentId) {
+        ShipmentDTO shipmentDTO = txService.syncByShipmentId(shipmentId);
+        return ResponseEntity.ok(shipmentDTO);
+    }
+
+    @ResponseBody
+    @PostMapping("/cancelShip")
+    public String cancelShip(@RequestParam String shipmentId) {
+        txService.updateShipStatus(shipmentId, "출하취소");
+        return "success";
+    }
+
+    @ResponseBody
+    @PostMapping("/completeShip")
+    public String completeShip(@RequestParam String shipmentId) {
+        txService.updateShipStatus(shipmentId, "출하완료");
+        return "success";
+    }
+
 
 }
