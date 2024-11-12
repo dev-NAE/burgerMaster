@@ -114,11 +114,11 @@ public class MFController {
 		log.info("MFController submit()");
 		
 		MFOrder order = new MFOrder();
-		order.setOrderItem(itemCode);
+		
 		order.setOrderAmount(amount);
 		order.setOrderDeadline(deadline);
 		
-		mfService.insertOrder(order);
+		mfService.insertOrder(order, itemCode);
 		
 		return "redirect:/mf/insert";
 	}
