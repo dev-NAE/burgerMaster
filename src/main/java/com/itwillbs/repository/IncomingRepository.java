@@ -67,7 +67,7 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	/**
 	 * 생산 완료되었지만 입고등록되지 않은 데이터 조회
 	 */
-	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(mfo.orderId, mfo.orderState, mfo.orderDate, mfo.orderItem, mfo.orderAmount) " +
+	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(mfo.orderId, mfo.orderState, mfo.orderDate, mfo.item.itemName, mfo.orderAmount) " +
 			"FROM MFOrder mfo LEFT JOIN Incoming i ON mfo.orderId = i.productionId " +
 			"WHERE mfo.orderState = '작업 완료' " +
 			"AND i.productionId IS NULL")
