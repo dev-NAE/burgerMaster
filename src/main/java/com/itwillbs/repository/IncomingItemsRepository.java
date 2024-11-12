@@ -29,5 +29,13 @@ public interface IncomingItemsRepository extends JpaRepository<IncomingItems, St
 			"FROM IncomingItems ii left join fetch Item i ON ii.itemCode = i.itemCode " +
 			"WHERE incomingId = :incomingId")
 	List<IncomingItemsDTO> findByIncomingItems(@Param("incomingId") String incomingId);
+
+	
+	//입하 검품완료된 검품코드중 입고 등록이 되지 않은걸 조건으로 해당 검품코드의 품목들 조회
+	// 지금 quality_sale_items entity가 없어서 구현 불가하므로 임시 주석처리
+//	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, qsi.quantity) " +
+//			"FROM qualitySaleItems qsi left join fetch Item i ON qsi.itemCode = i.itemCode " + 
+//			"WHERE qsi.quality_sale_id = :qualitySaleId")
+//	List<IncomingItemsDTO> findQualitySaleItemsById(String qualitySaleId);
 	
 }

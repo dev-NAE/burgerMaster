@@ -1,5 +1,7 @@
 package com.itwillbs.repository;
 
+import com.itwillbs.domain.transaction.SaleDTO;
+import com.itwillbs.domain.transaction.ShipmentDTO;
 import com.itwillbs.entity.Sale;
 import com.itwillbs.entity.Shipment;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,36 +19,58 @@ public interface ShipmentRepository extends JpaRepository<Shipment, String> {
     @Query("SELECT MAX(sm.shipmentId) FROM Shipment sm")
     String findMaxShipmentId();
 
-//    @Query("SELECT si.item.itemName FROM SaleItems si WHERE si.sale = :sale ORDER BY si.item.itemCode ASC")
-//    List<String> findFirstItemNameBySale(@Param("sale") Sale sale);
-//
-//    @Query("SELECT COUNT(si.item.itemCode) FROM SaleItems si WHERE si.sale = :sale")
-//    int findSaleItemCountBySale(@Param("sale") Sale sale);
-//
-//    @Query("SELECT s FROM Sale s " +
-//            "JOIN s.franchise f " +
-//            "LEFT JOIN s.saleItems si " +
-//            "LEFT JOIN si.item i " +
-//            "WHERE (:status IS NULL OR s.status = :status) AND " +
-//            "(:franchiseName IS NULL OR f.franchiseName LIKE :franchiseName) AND " +
-//            "(:orderDateStart IS NULL OR s.orderDate >= :orderDateStart) AND " +
-//            "(:orderDateEnd IS NULL OR s.orderDate <= :orderDateEnd) AND " +
-//            "(:itemName IS NULL OR i.itemName LIKE :itemName) AND " +
-//            "(:dueDateStart IS NULL OR s.dueDate >= :dueDateStart) AND " +
-//            "(:dueDateEnd IS NULL OR s.dueDate <= :dueDateEnd)")
-//    List<Sale> findSalesByConditions(
-//            @Param("status") String status,
-//            @Param("franchiseName") String franchiseName,
-//            @Param("orderDateStart") Timestamp orderDateStart,
-//            @Param("orderDateEnd") Timestamp orderDateEnd,
-//            @Param("itemName") String itemName,
-//            @Param("dueDateStart") Timestamp dueDateStart,
-//            @Param("dueDateEnd") Timestamp dueDateEnd
-//    );
-//
-//    @Transactional
-//    @Modifying
-//    @Query("UPDATE Sale s SET s.status = :status WHERE s.saleId = :saleId ")
-//    void updateSaleStatusById(@Param("status") String status, @Param("saleId") String saleId);
+    // 출하 대상 수주 건 조회
+    @Query("SELECT new com.itwillbs.domain.transaction.SaleDTO " +
+            "(s.saleId, s.totalPrice, s.orderDate, s.dueDate, s.franchise, qs.status)" +
+            "FROM Shipment sm RIGHT JOIN sm.sale s RIGHT JOIN s.qualitySale qs " +
+            "WHERE qs.status = '검품완료' AND sm.status IS NULL " +
+            "ORDER BY s.dueDate")
+    // 출고 정보 추가해야 함
+    List<SaleDTO> findAllQualified();
+
+    // 출하등록 된 것 중 출하검품 상태 확인
+    @Query("SELECT qsm.status FROM QualityShipment qsm JOIN qsm.shipment sm WHERE sm.shipmentId = :shipmentId")
+    String checkShipmentQualified(@Param("shipmentId") String shipmentId);
+
+
+    @Query("SELECT sm FROM Shipment sm JOIN sm.sale s " +
+            "JOIN s.franchise f " +
+            "LEFT JOIN s.saleItems si " +
+            "LEFT JOIN si.item i " +
+            "WHERE (:status IS NULL OR sm.status = :status) AND " +
+            "(:franchiseName IS NULL OR f.franchiseName LIKE :franchiseName) AND " +
+            "(:shipDateStart IS NULL OR sm.shipDate >= :shipDateStart) AND " +
+            "(:shipDateEnd IS NULL OR sm.shipDate <= :shipDateEnd) AND " +
+            "(:itemName IS NULL OR i.itemName LIKE :itemName) AND " +
+            "(:dueDateStart IS NULL OR s.dueDate >= :dueDateStart) AND " +
+            "(:dueDateEnd IS NULL OR s.dueDate <= :dueDateEnd)")
+    List<Shipment> findShipmentByConditions(
+            @Param("status") String status,
+            @Param("franchiseName") String franchiseName,
+            @Param("shipDateStart") Timestamp shipDateStart,
+            @Param("shipDateEnd") Timestamp shipDateEnd,
+            @Param("itemName") String itemName,
+            @Param("dueDateStart") Timestamp dueDateStart,
+            @Param("dueDateEnd") Timestamp dueDateEnd
+    );
+
+    @Query("SELECT new com.itwillbs.domain.transaction.ShipmentDTO" +
+            "(sm.shipmentId, sm.shipDate, sm.status, sm.sale.saleId, sm.sale.franchise.franchiseCode, sm.sale.franchise.franchiseName," +
+            "sm.manager.managerId, sm.manager.name, sm.sale.dueDate, sm.note, sm.sale.totalPrice, qsm.status) " +
+            "FROM Shipment sm JOIN QualityShipment qsm ON sm.shipmentId = qsm.shipment.shipmentId " +
+            "WHERE sm.shipmentId = :shipmentId")
+    ShipmentDTO getShipmentDTOById(@Param("shipmentId") String shipmentId);
+
+
+    @Query("SELECT new com.itwillbs.domain.transaction.ShipmentDTO" +
+            "(sm.status, qsm.status) FROM Shipment sm JOIN QualityShipment qsm ON sm.shipmentId = qsm.shipment.shipmentId " +
+            "WHERE sm.shipmentId = :shipmentId")
+    ShipmentDTO syncByShipmentId(@Param("shipmentId") String shipmentId);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Shipment sm SET sm.status = :status WHERE sm.shipmentId = :shipmentId ")
+    void updateShipStatusById(@Param("shipmentId") String shipmentId, @Param("status") String status);
+
 
 }
