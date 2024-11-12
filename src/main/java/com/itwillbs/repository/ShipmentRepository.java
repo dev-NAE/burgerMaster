@@ -56,7 +56,7 @@ public interface ShipmentRepository extends JpaRepository<Shipment, String> {
 
     @Query("SELECT new com.itwillbs.domain.transaction.ShipmentDTO" +
             "(sm.shipmentId, sm.shipDate, sm.status, sm.sale.saleId, sm.sale.franchise.franchiseCode, sm.sale.franchise.franchiseName," +
-            "sm.manager.managerId, sm.manager.name, sm.sale.dueDate, sm.note, sm.sale.totalPrice, qsm.status) " +
+            "sm.manager.managerId, sm.manager.name, sm.sale.orderDate, sm.sale.dueDate, sm.note, sm.sale.totalPrice, qsm.status) " +
             "FROM Shipment sm JOIN QualityShipment qsm ON sm.shipmentId = qsm.shipment.shipmentId " +
             "WHERE sm.shipmentId = :shipmentId")
     ShipmentDTO getShipmentDTOById(@Param("shipmentId") String shipmentId);
