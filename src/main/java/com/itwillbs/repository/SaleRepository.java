@@ -52,10 +52,5 @@ public interface SaleRepository extends JpaRepository<Sale, String> {
     @Query("UPDATE Sale s SET s.status = :status WHERE s.saleId = :saleId ")
     void updateSaleStatusById(@Param("status") String status, @Param("saleId") String saleId);
 
-    @Query("SELECT new com.itwillbs.domain.transaction.SaleDTO " +
-            "(s.saleId, s.totalPrice, s.orderDate, s.dueDate, s.franchise, qs.status)" +
-            "FROM Sale s JOIN s.qualitySale qs WHERE qs.status = '검품완료' " +
-            "ORDER BY s.dueDate")
-    // 출고 정보 추가해야 함
-    List<SaleDTO> findAllQualified();
+
 }

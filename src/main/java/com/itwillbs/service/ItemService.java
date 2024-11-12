@@ -23,21 +23,17 @@ public class ItemService {
 	private final ItemRepository itemRepository;
 	private final InventoryRepository inventoryRepository;
 	
-
-	
  
-    public ItemService(ItemRepository itemRepository, InventoryRepository inventoryRepository) {
-        this.itemRepository = itemRepository;
-        this.inventoryRepository = inventoryRepository;
-    }
-	
-	
+  public ItemService(ItemRepository itemRepository, InventoryRepository inventoryRepository) {
+      this.itemRepository = itemRepository;
+      this.inventoryRepository = inventoryRepository;
+  }
 	
 	public Page<Item> searchItems(ItemSearchDTO searchDTO, Pageable pageable) {
 		return itemRepository.findBySearchConditions(searchDTO.getItemName(), searchDTO.getItemType(),
 				searchDTO.getIncludeUnused(), pageable);
 	}
-	
+
 	public Optional<Item> findItemByCode(String itemCode) {
 		return itemRepository.findById(itemCode);
 	}
@@ -47,19 +43,19 @@ public class ItemService {
 		validateItemCode(item);
 		validateDuplicate(item);
 		
-	    // Item을 먼저 저장
-	    Item savedItem = itemRepository.save(item);
-	    
-	    // InventoryItem 객체 생성 후 item_code 설정 및 기본값 설정
-	    InventoryItem inventoryItem = new InventoryItem();
-	    inventoryItem.setItemCode(savedItem.getItemCode());
-	    inventoryItem.setQuantity(0);           // 기본값 설정
-	    inventoryItem.setMinReqQuantity(-1);    // 기본값 설정
-	    
-	    // InventoryItem 저장
-	    inventoryRepository.save(inventoryItem);
-	    
-	    return savedItem;
+    // Item을 먼저 저장
+    Item savedItem = itemRepository.save(item);
+
+    // InventoryItem 객체 생성 후 item_code 설정 및 기본값 설정
+    InventoryItem inventoryItem = new InventoryItem();
+    inventoryItem.setItemCode(savedItem.getItemCode());
+    inventoryItem.setQuantity(0);           // 기본값 설정
+    inventoryItem.setMinReqQuantity(-1);    // 기본값 설정
+
+    // InventoryItem 저장
+    inventoryRepository.save(inventoryItem);
+
+    return savedItem;
 	}
 
 	@Transactional
@@ -93,9 +89,9 @@ public class ItemService {
 		int nextNumber = Integer.parseInt(maxCode.substring(2)) + 1;
 		return String.format("%s%03d", itemType, nextNumber);
 	}
-    
-    public List<ItemDTO> searchItemsForModal(String itemType, String itemName, String useYN) {
+
+	public List<ItemDTO> searchItemsForModal(String itemType, String itemName, String useYN) {
 		return itemRepository.findItemsForModal(itemType, itemName, useYN);
 	}
-	
+
 }
