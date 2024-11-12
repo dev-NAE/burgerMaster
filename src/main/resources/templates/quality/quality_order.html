@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>입하 검품 리스트</title>
   <!-- 기본 css 링크-->
-  <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
+  <th:block th:replace="~{fragments/basicLink :: basicLinkCssFragment}"></th:block>
   <!-- Google Font: Source Sans Pro -->
   <!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
   <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
 
 
 </head>
@@ -17,19 +17,17 @@
 
 
 <!-- 공통 헤더 불러오기 -->
-<div th:replace="fragments/header :: headerFragment"></div>
+<div th:replace="~{fragments/header :: headerFragment}"></div>
 
 <!-- 공통 사이드바 불러오기 -->
-<div th:replace="fragments/sidebar :: sidebarFragment"></div>
+<div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
 
 
 <div class="wrapper">
 
-  <!--   Preloader -->
-  <!-- 처음 로딩 시 나오는 요소-->
-  <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-  </div>
+	<!--   Preloader -->
+	<!-- 처음 로딩 시 나오는 요소 불러오기 -->
+	<div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -209,23 +207,23 @@
 <!-- ./wrapper -->
 
 <!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
-<div th:replace="fragments/footer :: footerFragment"></div>
+<div th:replace="~{fragments/footer :: footerFragment}"></div>
 <!-- 기본 js 링크 -->
-<th:block th:replace="fragments/basicLink :: basicLinkJsFragment"></th:block>
+<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
 
 <!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
+<script src="/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
 <!-- jQuery 차트 라이브러리-->
 <!-- 사용법 참고 용 사이트 : https://idenrai.tistory.com/55-->
-<script src="plugins/sparklines/sparkline.js"></script>
+<script src="/plugins/sparklines/sparkline.js"></script>
 <!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
-<script src="plugins/moment/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
+<script src="/plugins/moment/moment.min.js"></script>
+<script src="/plugins/daterangepicker/daterangepicker.js"></script>
 </body>
 </html>
