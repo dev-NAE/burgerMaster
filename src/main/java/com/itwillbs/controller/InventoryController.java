@@ -97,41 +97,6 @@ public class InventoryController {
 		return VIEW_PATH + "inventory_list";
 	}
 
-	// 품목의 재고량, 최소필요재고량 수정
-	@PostMapping("/updateInventory")
-	public String updateInventory(@RequestParam("itemCode") String itemCode, @RequestParam("quantity") int quantity,
-			@RequestParam("minReqQuantity") int minReqQuantity,
-			@RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
-			@RequestParam(name = "itemType", defaultValue = "") String itemType,
-			@RequestParam(name = "findOutOfStock", defaultValue = "N") String findOutOfStock,
-			@RequestParam(name = "page", defaultValue = "0") int page, // 페이지 번호를 명시적으로 받습니다.
-			RedirectAttributes redirectAttributes, // RedirectAttributes 추가
-			Model model) {
-
-		log.info(
-				"InventoryController.updateInventory() - itemCode: {}, quantity: {}, minReqQuantity: {}, itemCodeOrName: {}, itemType: {}, findOutOfStock: {}, page: {}",
-				itemCode, quantity, minReqQuantity, itemCodeOrName, itemType, findOutOfStock, page);
-
-		try {
-			inventoryService.updateInventory(itemCode, quantity, minReqQuantity);
-			redirectAttributes.addFlashAttribute("message", "재고 정보가 성공적으로 수정되었습니다.");
-			log.info("성공");
-		} catch (EntityNotFoundException e) {
-			log.error("재고 정보 수정 실패: {}", e.getMessage());
-			redirectAttributes.addFlashAttribute("error", "해당 품목의 재고 정보를 찾을 수 없습니다.");
-		} catch (Exception e) {
-			log.error("서버 오류: {}", e.getMessage());
-			redirectAttributes.addFlashAttribute("error", "재고 정보 수정 중 오류가 발생했습니다.");
-		}
-
-		// Redirect 시 파라미터를 안전하게 추가
-		redirectAttributes.addAttribute("itemCodeOrName", itemCodeOrName);
-		redirectAttributes.addAttribute("itemType", itemType);
-		redirectAttributes.addAttribute("findOutOfStock", findOutOfStock);
-		redirectAttributes.addAttribute("page", page);
-
-		return "redirect:/inven/inventoryListSearch";
-	}
 
 	// 입고 등록
 	@GetMapping("/incomingInsert")
@@ -193,7 +158,7 @@ public class InventoryController {
 
 		Timestamp incomingStartDate_start = null;
 		Timestamp incomingStartDate_end = null;
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 		// 문자열로 가져온 등록일검색 날짜는 DB에서 조회할때 TimeStamp 타입으로 변환해야 한다
 		try {
@@ -249,103 +214,103 @@ public class InventoryController {
 	}
 
 	// 출고 조회
-//	@GetMapping("/outgoingList")
-//	public String outgoingList(Model model, @PageableDefault(size = 8) Pageable pageable) {
-//		log.info("InventroyController outgoingList()");
-//
-//		// 입고된 리스트 1페이지 조회
-//		Page<OutgoingDTO> outgoingByPage = inventoryService.getOutgoingLists(pageable);
-////		log.info("Outgoing DTOs: {}", outgoingByPage.getContent());
-//
-//		// model에 입고테이블에 출력할 데이터 저장
-//		model.addAttribute("outgoingDTOs", outgoingByPage);
-//
-//		// 검색 조건의 기본값 설정
-//		model.addAttribute("itemCodeOrName", "");
-//		model.addAttribute("reasonOfOutgoing", "");
-//		model.addAttribute("outgoingStartDate_start", null);
-//		model.addAttribute("outgoingStartDate_end", null);
-//		model.addAttribute("outgoingId", "");
-//		model.addAttribute("prodOrQualId", "");
-//		model.addAttribute("status", "");
-//		model.addAttribute("managerCodeOrName", "");
-//
-//		// 페이징 처리하고 model에 저장
-//		applyPagination(outgoingByPage, model);
-//
-//		return VIEW_PATH + "outgoing_list";
-//	}
+	@GetMapping("/outgoingList")
+	public String outgoingList(Model model, @PageableDefault(size = 8) Pageable pageable) {
+		log.info("InventroyController outgoingList()");
+
+		// 입고된 리스트 1페이지 조회
+		Page<OutgoingDTO> outgoingByPage = inventoryService.getOutgoingLists(pageable);
+//		log.info("Outgoing DTOs: {}", outgoingByPage.getContent());
+
+		// model에 입고테이블에 출력할 데이터 저장
+		model.addAttribute("outgoingDTOs", outgoingByPage);
+
+		// 검색 조건의 기본값 설정
+		model.addAttribute("itemCodeOrName", "");
+		model.addAttribute("reasonOfOutgoing", "");
+		model.addAttribute("outgoingStartDate_start", null);
+		model.addAttribute("outgoingStartDate_end", null);
+		model.addAttribute("outgoingId", "");
+		model.addAttribute("prodOrQualId", "");
+		model.addAttribute("status", "");
+		model.addAttribute("managerCodeOrName", "");
+
+		// 페이징 처리하고 model에 저장
+		applyPagination(outgoingByPage, model);
+
+		return VIEW_PATH + "outgoing_list";
+	}
 
 	// 출고 조회 검색어 포함
-//	@GetMapping("/outgoingListSearch")
-//	public String outgoingListSearch(Model model, @PageableDefault(size = 8) Pageable pageable,
-//			@RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
-//			@RequestParam(name = "reasonOfOutgoing", defaultValue = "") String reasonOfOutgoing,
-//			@RequestParam(name = "outgoingStartDate_start", defaultValue = "") String outgoingStartDate_startStr,
-//			@RequestParam(name = "outgoingStartDate_end", defaultValue = "") String outgoingStartDate_endStr,
-//			@RequestParam(name = "outgoingId", defaultValue = "") String outgoingId,
-//			@RequestParam(name = "prodOrQualId", defaultValue = "") String prodOrQualId,
-//			@RequestParam(name = "status", defaultValue = "") String status,
-//			@RequestParam(name = "managerCodeOrName", defaultValue = "") String managerCodeOrName) {
-//
-//		log.info("InventoryController outgoingListSearch()");
-//		log.info("넘어온것 :");
-//		log.info("itemCodeOrName = " + itemCodeOrName);
-//		log.info("reasonOfOutgoing = " + reasonOfOutgoing);
-//
-//		log.info("outgoingId = " + outgoingId);
-//		log.info("prodOrQualId = " + prodOrQualId);
-//		log.info("status = " + status);
-//		log.info("managerCodeOrName = " + managerCodeOrName);
-//
-//		Timestamp outgoingStartDate_start = null;
-//		Timestamp outgoingStartDate_end = null;
+	@GetMapping("/outgoingListSearch")
+	public String outgoingListSearch(Model model, @PageableDefault(size = 8) Pageable pageable,
+			@RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
+			@RequestParam(name = "reasonOfOutgoing", defaultValue = "") String reasonOfOutgoing,
+			@RequestParam(name = "outgoingStartDate_start", defaultValue = "") String outgoingStartDate_startStr,//문자열로 가져옴
+			@RequestParam(name = "outgoingStartDate_end", defaultValue = "") String outgoingStartDate_endStr, //문자열로 가져옴
+			@RequestParam(name = "outgoingId", defaultValue = "") String outgoingId,
+			@RequestParam(name = "prodOrQualId", defaultValue = "") String prodOrQualId,
+			@RequestParam(name = "status", defaultValue = "") String status,
+			@RequestParam(name = "managerCodeOrName", defaultValue = "") String managerCodeOrName) {
+
+		log.info("InventoryController outgoingListSearch()");
+		log.info("넘어온것 :");
+		log.info("itemCodeOrName = " + itemCodeOrName);
+		log.info("reasonOfOutgoing = " + reasonOfOutgoing);
+
+		log.info("outgoingId = " + outgoingId);
+		log.info("prodOrQualId = " + prodOrQualId);
+		log.info("status = " + status);
+		log.info("managerCodeOrName = " + managerCodeOrName);
+
+		Timestamp outgoingStartDate_start = null;
+		Timestamp outgoingStartDate_end = null;
 //		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//
-//		// 문자열로 가져온 등록일검색 날짜는 DB에서 조회할때 TimeStamp 타입으로 변환해야 한다
-//		try {
-//			// 시작 날짜 처리
-//			if (outgoingStartDate_startStr != null && !outgoingStartDate_startStr.isEmpty()) {
-//				String startDateTimeStr = outgoingStartDate_startStr + " 00:00:00";
-//				outgoingStartDate_start = Timestamp.valueOf(startDateTimeStr);
-//			}
-//
-//			// 종료 날짜 처리
-//			if (outgoingStartDate_endStr != null && !outgoingStartDate_endStr.isEmpty()) {
-//				String endDateTimeStr = outgoingStartDate_endStr + " 23:59:59";
-//				outgoingStartDate_end = Timestamp.valueOf(endDateTimeStr);
-//			}
-//		} catch (IllegalArgumentException e) {
-//			log.error("날짜 변환 오류: " + e.getMessage());
-//			// 에러시 에러메세지를 model에 추가
-//			model.addAttribute("errorMessage", "날짜 형식이 올바르지 않습니다. yyyy-MM-dd 형식을 사용하세요.");
-//
-//			return VIEW_PATH + "outgoing_list";
-//		}
-//
-//		// 입고된 리스트 검색어 포함 조회
-//		Page<OutgoingDTO> outgoingByPage = inventoryService.findOutgoingBySearch(itemCodeOrName, reasonOfOutgoing,
-//				outgoingStartDate_start, outgoingStartDate_end, outgoingId, prodOrQualId, status, managerCodeOrName,
-//				pageable);
-//
-//		// 프론트에서 테이블 데이터 조회시 outgoingDTOs.[etc...]로 찾아야함
-//		model.addAttribute("outgoingDTOs", outgoingByPage);
-//
-//		// 검색 조건의 기본값 설정
-//		model.addAttribute("itemCodeOrName", itemCodeOrName);
-//		model.addAttribute("reasonOfOutgoing", reasonOfOutgoing);
-//		model.addAttribute("outgoingStartDate_start", outgoingStartDate_startStr);
-//		model.addAttribute("outgoingStartDate_end", outgoingStartDate_endStr);
-//		model.addAttribute("outgoingId", outgoingId);
-//		model.addAttribute("prodOrQualId", prodOrQualId);
-//		model.addAttribute("status", status);
-//		model.addAttribute("managerCodeOrName", managerCodeOrName);
-//
-//		// 페이징 처리하고 model에 저장
-//		applyPagination(outgoingByPage, model);
-//
-//		return VIEW_PATH + "outgoing_list";
-//	}
+
+		// 문자열로 가져온 등록일검색 날짜는 DB에서 조회할때 TimeStamp 타입으로 변환해야 한다
+		try {
+			// 시작 날짜 처리
+			if (outgoingStartDate_startStr != null && !outgoingStartDate_startStr.isEmpty()) {
+				String startDateTimeStr = outgoingStartDate_startStr + " 00:00:00";
+				outgoingStartDate_start = Timestamp.valueOf(startDateTimeStr);
+			}
+
+			// 종료 날짜 처리
+			if (outgoingStartDate_endStr != null && !outgoingStartDate_endStr.isEmpty()) {
+				String endDateTimeStr = outgoingStartDate_endStr + " 23:59:59";
+				outgoingStartDate_end = Timestamp.valueOf(endDateTimeStr);
+			}
+		} catch (IllegalArgumentException e) {
+			log.error("날짜 변환 오류: " + e.getMessage());
+			// 에러시 에러메세지를 model에 추가
+			model.addAttribute("errorMessage", "날짜 형식이 올바르지 않습니다. yyyy-MM-dd 형식을 사용하세요.");
+
+			return VIEW_PATH + "outgoing_list";
+		}
+
+		// 입고된 리스트 검색어 포함 조회
+		Page<OutgoingDTO> outgoingByPage = inventoryService.findOutgoingBySearch(itemCodeOrName, reasonOfOutgoing,
+				outgoingStartDate_start, outgoingStartDate_end, outgoingId, prodOrQualId, status, managerCodeOrName,
+				pageable);
+
+		// 프론트에서 테이블 데이터 조회시 outgoingDTOs.[etc...]로 찾아야함
+		model.addAttribute("outgoingDTOs", outgoingByPage);
+
+		// 검색 조건의 기본값 설정
+		model.addAttribute("itemCodeOrName", itemCodeOrName);
+		model.addAttribute("reasonOfOutgoing", reasonOfOutgoing);
+		model.addAttribute("outgoingStartDate_start", outgoingStartDate_startStr);
+		model.addAttribute("outgoingStartDate_end", outgoingStartDate_endStr);
+		model.addAttribute("outgoingId", outgoingId);
+		model.addAttribute("prodOrQualId", prodOrQualId);
+		model.addAttribute("status", status);
+		model.addAttribute("managerCodeOrName", managerCodeOrName);
+
+		// 페이징 처리하고 model에 저장
+		applyPagination(outgoingByPage, model);
+
+		return VIEW_PATH + "outgoing_list";
+	}
 
 	// 페이지네이션 구현 메서드
 	private void applyPagination(Page<?> page, Model model) {

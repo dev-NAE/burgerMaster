@@ -162,59 +162,59 @@ public class RestInventoryController {
 //	}
 
 	//출고 상세 정보 ajax
-//		@GetMapping("/outgoingDetail")
-//		public ResponseEntity<List<OutgoingItemsDTO>> getOutgoingDetail(
-//				@RequestParam(name = "outgoingId") String outgoingId) {
-//			log.info("RestInventoryController.getOutgoingDetail()");
-//			// 출고 품목 리스트 가져오기
-////			List<OutgoingItemsDTO> outgoingItemsDTO = inventoryService.getOutgoingItems(outgoingId);
-//
-//			// itemType 매핑
-//			outgoingItemsDTO.forEach(item -> {
-//				switch (item.getItemType()) {
-//				case "FP":
-//					item.setItemType("완제품");
-//					break;
-//				case "RM":
-//					item.setItemType("원재료");
-//					break;
-//				case "PP":
-//					item.setItemType("가공품");
-//					break;
-//				default:
-//					item.setItemType("알 수 없음");
-//				}
-//			});
-//
-//			// 출고 품목이 존재하면 반환
-//			if (!outgoingItemsDTO.isEmpty()) {
-//				return ResponseEntity.ok(outgoingItemsDTO);
-//			} else {
-//				log.info("출고 품목 정보가 없습니다. outgoingId: " + outgoingId);
-//				return ResponseEntity.notFound().build();
-//			}
-//		}
+		@GetMapping("/outgoingDetail")
+		public ResponseEntity<List<OutgoingItemsDTO>> getOutgoingDetail(
+				@RequestParam(name = "outgoingId") String outgoingId) {
+			log.info("RestInventoryController.getOutgoingDetail()");
+			// 출고 품목 리스트 가져오기
+			List<OutgoingItemsDTO> outgoingItemsDTO = inventoryService.getOutgoingItems(outgoingId);
+
+			// itemType 매핑
+			outgoingItemsDTO.forEach(item -> {
+				switch (item.getItemType()) {
+				case "FP":
+					item.setItemType("완제품");
+					break;
+				case "RM":
+					item.setItemType("원재료");
+					break;
+				case "PP":
+					item.setItemType("가공품");
+					break;
+				default:
+					item.setItemType("알 수 없음");
+				}
+			});
+
+			// 출고 품목이 존재하면 반환
+			if (!outgoingItemsDTO.isEmpty()) {
+				return ResponseEntity.ok(outgoingItemsDTO);
+			} else {
+				log.info("출고 품목 정보가 없습니다. outgoingId: " + outgoingId);
+				return ResponseEntity.notFound().build();
+			}
+		}
 
 		//출고 상태 업데이트
-//		@PostMapping("/updateOutgoingStatus")
-//		public ResponseEntity<InvenResponseMessage> updateOutgoingStatus(@RequestParam("outgoingId") String outgoingId) {
-//			log.info("RestInventoryController.updateOutgoingStatus()");
-//
-//			// 업데이트 실행, 성공or에러시 적절한 메세지를 프론트로 넘김
-//			try {
-//				inventoryService.updateOutgoingStatus(outgoingId);
-//				InvenResponseMessage response = new InvenResponseMessage(true, "출고 완료되었습니다.");
-//				return ResponseEntity.ok(response);
-//			} catch (EntityNotFoundException e) {
-//				InvenResponseMessage response = new InvenResponseMessage(false, "해당 출고 ID의 출고 상태를 업데이트할 수 없습니다.");
-//				// 400에러
-//				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-//			} catch (Exception e) {
-//				InvenResponseMessage response = new InvenResponseMessage(false, "서버 오류가 발생했습니다.");
-//				// 500에러
-//				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//			}
-//		}
+		@PostMapping("/updateOutgoingStatus")
+		public ResponseEntity<InvenResponseMessage> updateOutgoingStatus(@RequestParam("outgoingId") String outgoingId) {
+			log.info("RestInventoryController.updateOutgoingStatus()");
+
+			// 업데이트 실행, 성공or에러시 적절한 메세지를 프론트로 넘김
+			try {
+				inventoryService.updateOutgoingStatus(outgoingId);
+				InvenResponseMessage response = new InvenResponseMessage(true, "출고 완료되었습니다.");
+				return ResponseEntity.ok(response);
+			} catch (EntityNotFoundException e) {
+				InvenResponseMessage response = new InvenResponseMessage(false, "해당 출고 ID의 출고 상태를 업데이트할 수 없습니다.");
+				// 400에러
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+			} catch (Exception e) {
+				InvenResponseMessage response = new InvenResponseMessage(false, "서버 오류가 발생했습니다.");
+				// 500에러
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+			}
+		}
 
 		// 출고 등록할 목록들 조회
 		@GetMapping("/outgoingInsertList")

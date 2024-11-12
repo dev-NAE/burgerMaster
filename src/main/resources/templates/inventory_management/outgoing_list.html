@@ -91,10 +91,10 @@
 														<option value=""
 															th:selected="${reasonOfOutgoing == null or reasonOfOutgoing == ''}">
 															전체</option>
-														<option value="검품완료"
-															th:selected="${reasonOfOutgoing == '검품완료'}">검품완료</option>
-														<option value="생산완료"
-															th:selected="${reasonOfOutgoing == '생산완료'}">생산완료</option>
+														<option value="출고검품 완료"
+															th:selected="${reasonOfOutgoing == '출고검품 완료'}">출고검품 완료</option>
+														<option value="생산 요청"
+															th:selected="${reasonOfOutgoing == '생산 요청'}">생산 요청</option>
 													</select>
 												</div>
 											</div>
@@ -219,9 +219,9 @@
 
 											<td th:text="${outgoing.managerName}"></td>
 											<td
-												th:text="${outgoing.productionId != null ? outgoing.productionId : outgoing.qualityOrderId}">
+												th:text="${outgoing.productionId != null ? outgoing.productionId : outgoing.qualitySaleId}">
 											</td>
-											<td th:text="${outgoing.productionId != null ? '생산 지시' : '검품 완료'}"></td>
+											<td th:text="${outgoing.productionId != null ? '생산 요청' : '출고검품 완료'}"></td>
 
 											<td th:text="${outgoing.status}"></td>
 											<td>
@@ -232,8 +232,8 @@
 													th:data-outgoing-start-date="${#dates.format(outgoing.outgoingStartDate, 'yyyy-MM-dd HH:mm')}"
 													th:data-outgoing-end-date="${outgoing.outgoingEndDate != null ? #dates.format(outgoing.outgoingEndDate, 'yyyy-MM-dd HH:mm') : ''}"
 													th:data-manager-name="${outgoing.managerName}"
-													th:data-production-or-quality-id="${outgoing.productionId != null ? outgoing.productionId : outgoing.qualityOrderId}"
-													th:data-reason-of-outgoing="${outgoing.productionId != null ? '생산 지시' : '검품 완료'}"
+													th:data-production-or-quality-id="${outgoing.productionId != null ? outgoing.productionId : outgoing.qualitySaleId}"
+													th:data-reason-of-outgoing="${outgoing.productionId != null ? '생산 요청' : '출고검품 완료'}"
 													th:data-status="${outgoing.status}">
 													상세
 												</button>

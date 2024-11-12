@@ -4,11 +4,13 @@ import java.sql.Timestamp;
 
 import lombok.Data;
 
+
+//입고등록
 @Data
 public class IncomingInsertDTO {
 	
     private String IncomingInsertCode;
-    private String reasonOfIncoming; //생산 완료, 검품 완료
+    private String reasonOfIncoming; //생산 완료, 검품완료
     private Timestamp prodOrQualDate;
     private String itemName;
     private Integer quantity;

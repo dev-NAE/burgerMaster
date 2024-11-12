@@ -91,10 +91,10 @@
 														<option value=""
 															th:selected="${reasonOfIncoming == null or reasonOfIncoming == ''}">
 															전체</option>
-														<option value="검품완료"
-															th:selected="${reasonOfIncoming == '검품완료'}">검품완료</option>
-														<option value="생산완료"
-															th:selected="${reasonOfIncoming == '생산완료'}">생산완료</option>
+														<option value="입하검품 완료"
+															th:selected="${reasonOfIncoming == '입하검품 완료'}">입하검품 완료</option>
+														<option value="생산 완료"
+															th:selected="${reasonOfIncoming == '생산 완료'}">생산 완료</option>
 													</select>
 												</div>
 											</div>
@@ -221,7 +221,7 @@
 											<td
 												th:text="${incoming.productionId != null ? incoming.productionId : incoming.qualityOrderId}">
 											</td>
-											<td th:text="${incoming.productionId != null ? '생산 완료' : '검품 완료'}"></td>
+											<td th:text="${incoming.productionId != null ? '생산 완료' : '입하검품 완료'}"></td>
 
 											<td th:text="${incoming.status}"></td>
 											<td>
@@ -233,7 +233,7 @@
 													th:data-incoming-end-date="${incoming.incomingEndDate != null ? #dates.format(incoming.incomingEndDate, 'yyyy-MM-dd HH:mm') : ''}"
 													th:data-manager-name="${incoming.managerName}"
 													th:data-production-or-quality-id="${incoming.productionId != null ? incoming.productionId : incoming.qualityOrderId}"
-													th:data-reason-of-incoming="${incoming.productionId != null ? '생산 완료' : '검품 완료'}"
+													th:data-reason-of-incoming="${incoming.productionId != null ? '생산 완료' : '입하검품 완료'}"
 													th:data-status="${incoming.status}">
 													상세
 												</button>
