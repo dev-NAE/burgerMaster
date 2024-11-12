@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>수주 조회</title>
+    <title>출하 조회</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="/css/font.css">
@@ -43,7 +43,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">수주 조회</h1>
+                            <h1 class="m-0">출하 조회</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -75,9 +75,10 @@
                                         <div class="col-sm-4">
                                             <select class="form-control" id="status" name="status">
                                                 <option value="">전체</option>
-                                                <option value="수주등록(저장)">수주등록(저장)</option>
-                                                <option value="수주완료">수주완료</option>
-                                                <option value="수주취소">수주취소</option>
+                                                <option value="출하등록(검품요청)">출하등록(검품요청)</option>
+                                                <option value="검품완료">검품완료</option>
+                                                <option value="출하완료">출하완료</option>
+                                                <option value="출하취소">출하취소</option>
                                             </select>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="franchise-name">가맹점</label>
@@ -91,8 +92,8 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label text-center">등록일</label>
                                         <div class="col-sm-4 d-flex">
-                                            <input class="form-control" type="date" id="order_date-start" name="order_date_start"> ~
-                                            <input class="form-control" type="date" id="order_date-end" name="order_date_end">
+                                            <input class="form-control" type="date" id="ship_date-start" name="ship_date_start"> ~
+                                            <input class="form-control" type="date" id="ship_date-end" name="ship_date_end">
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="item-name">품목명</label>
                                         <div class="input-group col-sm-4">
@@ -117,10 +118,10 @@
                                     <div class="row">
                                         <button class="btn btn-md btn-success ml-auto mr-2 mb-3" id="download-to-excel">.xlsx로 저장</button>
                                     </div>
-                                    <table id="sale-list" class="table table-bordered table-hover">
+                                    <table id="ship-list" class="table table-bordered table-hover">
                                         <thead>
                                         <tr class="bg-gray-light">
-                                            <th>수주등록번호</th>
+                                            <th>출하등록번호</th>
                                             <th>가맹점</th>
                                             <th>거래품목</th>
                                             <th class="text-center">합계금액(원)</th>
@@ -170,7 +171,7 @@
     <script src="/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
     <!-- custom js -->
-    <script src="/js/transaction/sale/list.js"></script>
+    <script src="/js/transaction/shipment/list.js"></script>
 
 
 </body>
