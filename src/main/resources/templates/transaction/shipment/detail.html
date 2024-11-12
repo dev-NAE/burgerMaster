@@ -43,7 +43,7 @@
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item"><a href="/main">Home</a> / 거래관리 / 출하관리 / <a href="/tx/shipList">출하현황</a> / 출하상세조회</li>
                                 <!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
                             </ol>
                         </div><!-- /.col -->
@@ -62,8 +62,8 @@
                     <!-- Contents -->
                         <div class="container-fluid col-sm-10 my-5">
                             <div class="submit-btn-area row justify-content-end" th:if="${shipment.status != '출하취소'}">
-                                <button id="print-shipping-form" class="btn btn-md btn-info ml-auto my-3 mr-2">송장 출력</button>
-                                <button id="print-report-form" class="btn btn-md btn-info my-3 mr-2">출하보고서 출력</button>
+                                <button id="print-invoice" class="btn btn-md btn-info ml-auto my-3 mr-2">송장 출력</button>
+<!--                                <button id="print-report-form" class="btn btn-md btn-info my-3 mr-2">출하보고서 출력</button>-->
                             </div>
                             <div class="card insert-container px-3 py-3">
                                 <div class="card-body basic-info-area px-5">
@@ -77,17 +77,16 @@
                                             <span id="shipment-status" th:text="${shipment.status}"></span>
                                         </div>
                                     </div>
+                                    <input type="hidden" id="order-date" th:value="${#dates.format(shipment.orderDate, 'yyyy-MM-dd')}">
+                                    <input type="hidden" id="sale-id" th:value="${shipment.saleId}">
                                     <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label text-center" for="order_date">등록일</label>
+                                        <label class="col-sm-2 col-form-label text-center" for="ship-date">등록일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" name="order_date" id="order_date" th:value="${#dates.format(shipment.shipDate, 'yyyy-MM-dd')}" readonly>
+                                            <input class="form-control" type="date" name="ship-date" id="ship-date" th:value="${#dates.format(shipment.shipDate, 'yyyy-MM-dd')}" readonly>
                                         </div>
                                         <label class="col-sm-2 col-form-label text-center" for="manager-code">담당자</label>
                                         <div class="input-group col-sm-4">
                                             <input id="manager-code" class="form-control" type="text" name="manager_code" placeholder="코드" th:value="${shipment.managerId}" readonly>
-                                            <div class="input-group-append">
-                                                <span id="find-manager" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
-                                            </div>
                                             <input id="manager-name" class="form-control" type="text" name="manager_name" placeholder="이름" th:value="${shipment.managerName}" readonly>
                                         </div>
                                     </div>
@@ -95,14 +94,11 @@
                                         <label class="col-sm-2 col-form-label text-center" for="franchise-code">가맹점</label>
                                         <div class="input-group col-sm-4">
                                             <input id="franchise-code" class="form-control" type="text" name="franchise_code" placeholder="코드" th:value="${shipment.franchiseCode}" readonly>
-                                            <div class="input-group-append">
-                                                <span id="find-franchise" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
-                                            </div>
                                             <input id="franchise-name" class="form-control" type="text" name="franchise_name" placeholder="상호" th:value="${shipment.franchiseName}" readonly>
                                         </div>
-                                        <label class="col-sm-2 col-form-label text-center" for="due_date">납기일</label>
+                                        <label class="col-sm-2 col-form-label text-center" for="due-date">납기일</label>
                                         <div class="col-sm-4">
-                                            <input class="form-control" type="date" id="due_date" name="due_date" th:value="${#dates.format(shipment.dueDate, 'yyyy-MM-dd')}" readonly>
+                                            <input class="form-control" type="date" id="due-date" name="due_date" th:value="${#dates.format(shipment.dueDate, 'yyyy-MM-dd')}" readonly>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -148,7 +144,7 @@
                                                 <div class="align-content-center">출하검품상태 &nbsp;</div>
                                                 <input id="qs-status" class="form-control col-3" type="text" th:value="${shipment.qsStatus}" readonly>
                                                 <div class="input-group-append">
-                                                    <span id="refresh-qs-status" class="input-group-text" style="cursor:pointer;"><i class="fas fa-sync" aria-hidden="true"></i></span>
+                                                    <span id="refresh-qs-status" class="input-group-text bg-white" style="cursor:pointer;"><i class="fas fa-sync" aria-hidden="true"></i></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -160,7 +156,7 @@
                                     <button id="back-to-list" class="btn btn-lg btn-info my-3">목록으로 이동</button>
                                 </div>
                                 <div id="btn-group" th:if="${shipment.status == '출하등록(검품요청)' || shipment.status == '출하등록(검품완료)'}" class="col-7 d-flex justify-content-end">
-                                    <button id="cancel-btn" class="btn btn-lg btn-danger my-3 mx-2" data-toggle="modal" data-target="#cancel-ship">취소</button>
+<!--                                    <button id="cancel-btn" class="btn btn-lg btn-danger my-3 mx-2" data-toggle="modal" data-target="#cancel-ship">취소</button>-->
                                     <button id="complete-btn" class="btn btn-lg btn-primary my-3 mx-2" data-toggle="modal" data-target="#complete-ship">출하완료</button>
                                 </div>
                             </div>
