@@ -71,9 +71,10 @@ public class MFService {
 		return itemRepostiory.findRM(itemName);
 	}
 
-	public void insertOrder(MFOrder order) {
+	public void insertOrder(MFOrder order, String itemCode) {
 		log.info("MFService insertOrder()");
 		
+		order.setItem(itemRepostiory.findById(itemCode).orElse(null));
 		order.setOrderId(getNewOrderId());
 		order.setOrderDeadline(LocalDate.now());
 		order.setOrderDate(new Timestamp(System.currentTimeMillis()));

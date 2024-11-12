@@ -22,7 +22,7 @@ function setItemInfo(itemCode, itemName) {
     $('#item-name').val(itemName);
 }
 
-// 거래처 검색 팝업
+// 가맹점 검색 팝업
 $('#find-franchise').on('click', function(event) {
     openPopupAtMousePosition(event, '/tx/findFranchise', 600, 600)
 });
@@ -38,31 +38,30 @@ function setFranchise(franchiseCode, franchiseName) {
 $(document).ready(function() {
     // 조회 버튼 클릭 이벤트
     $('#search-btn').on('click', function() {
-
         // 각 필드의 값을 가져옵니다.
         let status = $('#status').val();
         let franchiseName = $('#franchise-name').val();
-        let orderDateStart = $('#order_date-start').val();
-        let orderDateEnd = $('#order_date-end').val();
+        let shipDateStart = $('#ship_date-start').val();
+        let shipDateEnd = $('#ship_date-end').val();
         let itemName = $('#item-name').val();
         let dueDateStart = $('#due_date-start').val();
         let dueDateEnd = $('#due_date-end').val();
 
         $.ajax({
-            url: "/tx/searchSales",
+            url: "/tx/searchShips",
             type: "GET",
             data: {
                 status: status,
                 franchiseName: franchiseName,
-                orderDateStart: orderDateStart,
-                orderDateEnd: orderDateEnd,
+                shipDateStart: shipDateStart,
+                shipDateEnd: shipDateEnd,
                 itemName: itemName,
                 dueDateStart: dueDateStart,
                 dueDateEnd: dueDateEnd
             },
             dataType: "json",
             success: function(response) {
-                $('#sale-list').DataTable().clear().rows.add(response).draw();
+                $('#ship-list').DataTable().clear().rows.add(response).draw();
             },
             error: function(xhr, status, error) {
                 console.error("검색 오류:", error);
@@ -85,9 +84,9 @@ let formatDate = (date) => {
 
 // 데이터테이블 커스텀
 $(function () {
-    const dataTable = $('#sale-list').DataTable({
+    const dataTable = $('#ship-list').DataTable({
         ajax: {
-            url: "/tx/saleInfo",
+            url: "/tx/shipInfo",
             type: "GET",
             dataType: "json",
             contentType: "application/json",
@@ -115,7 +114,7 @@ $(function () {
             }
         },
         "columns": [
-            { data: "saleId", className: "text-center" },
+            { data: "shipmentId", className: "text-center" },
             { data: "franchiseName", className: "text-center" },
             { data: "itemName", className: "text-center",
                 render: function(data, type, row) {
@@ -127,7 +126,7 @@ $(function () {
                     return data.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
             },
-            { data: "orderDate", className: "text-center",
+            { data: "shipDate", className: "text-center",
                 render: function(data) {
                     return formatDate(data);
                 }
@@ -139,7 +138,7 @@ $(function () {
             },
             { data: "status", className: "text-center",
                 render: function(data, type, row) {
-                    let color = data === '수주완료' ? 'blue' : data === '수주취소' ? 'red' : 'black';
+                    let color = data === '출하완료' ? 'blue' : data === '출하취소' ? 'red' : 'black';
                     return `<span style="color:${color}">${data}</span>`;
                 }
             }
@@ -150,15 +149,17 @@ $(function () {
             $('.dataTables_paginate').css('margin-top', '20px');
 
             // 상태별 행 색상 다르게
-            if (data.status === '수주완료') {
+            if (data.status === '출하완료') {
                 $(row).css('background-color', 'rgba(198, 239, 255, 0.5)');
-            } else if (data.status === '수주취소') {
+            } else if (data.status === '출하취소') {
                 $(row).css('background-color', 'rgba(248, 222, 222, 0.5)');
+            } else if (data.status === '출하등록(검품완료)') {
+                $(row).css('background-color', 'rgba(255,237,150,0.5)');
             }
 
             // 행 누르면 상세페이지로 이동하게
             $(row).on('click', function() {
-                window.location.href = `/tx/saleDetail?saleId=${data.saleId}`;
+                window.location.href = `/tx/shipDetail?shipId=${data.shipmentId}`;
             });
 
             $(row).css('cursor', 'pointer');
@@ -167,7 +168,7 @@ $(function () {
         buttons: [
             {
                 extend: 'excelHtml5',
-                title: '수주 조회(' + getCurrentDateTime() + ')',
+                title: '출하 조회(' + getCurrentDateTime() + ')',
                 text: '.xlsx로 저장'
             }
         ]

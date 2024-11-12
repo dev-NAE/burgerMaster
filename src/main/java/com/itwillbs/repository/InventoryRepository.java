@@ -52,6 +52,8 @@ public interface InventoryRepository extends JpaRepository<InventoryItem, String
             @Param("itemType") String itemType,
             Pageable pageable);
 
+  
+
 
 }
 
