@@ -79,7 +79,9 @@ $(document).ready(function() {
         const saveChangesButton = $('<button>', {
             id: 'save-changes-btn',
             class: 'btn btn-lg btn-primary my-3 mx-2',
-            text: '수정사항 저장'
+            text: '수정사항 저장',
+            'data-toggle': 'modal',
+            'data-target': '#edit-order'
         });
 
         $('#btn-group').append(cancelEditButton, saveChangesButton);
@@ -174,8 +176,8 @@ $(document).ready(function() {
 
         });
 
-        // [수정사항 저장] 버튼 누르면 변경사항 DB저장 후 변경사항 적용된 발주상세페이지 로드
-        $('#save-changes-btn').on('click', function(event) {
+        // [수정사항 저장] - [예] 버튼 누르면 변경사항 DB저장 후 변경사항 적용된 발주상세페이지 로드
+        $('#edit-yes').on('click', function(event) {
             event.preventDefault();
 
             // 중복클릭 방지용 로더(스피너) 작동

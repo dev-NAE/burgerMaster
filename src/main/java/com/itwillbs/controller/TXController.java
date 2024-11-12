@@ -389,5 +389,9 @@ public class TXController {
         return "success";
     }
 
+    @GetMapping("/invoiceForm")
+    public String invoiceForm() {
+        return "transaction/shipment/invoiceform";
+    }
 
 }
