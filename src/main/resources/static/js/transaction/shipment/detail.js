@@ -16,16 +16,17 @@ $(document).ready(function() {
 
     checkComplete();
 
-    // [주문서 출력] 버튼 누르면 생기는 일
-    $('#print-form').on('click', function() {
+    // [송장 출력] 버튼 누르면 생기는 일
+    $('#print-invoice').on('click', function() {
 
         // 출력에 필요한 데이터 저장
         const printData = {
-            saleId: saleId,
-            managerName: $('#manager-name').val(),
+            shipmentId: shipmentId,
+            saleId: $('#sale-id').val(),
+            orderDate: $('#order-date').val(),
+            dueDate: $('#due-date').val(),
+            shipDate: $('#ship-date').val(),
             franchiseName: $('#franchise-name').val(),
-            orderDate: $('#order_date').val(),
-            dueDate: $('#due_date').val(),
             totalPrice: $('#total-price').val()
         }
         printData.tableRows = $('#item-list-table .item-row').map(function() {
@@ -39,14 +40,15 @@ $(document).ready(function() {
 
         // 출력페이지 팝업
         const printPopup =
-            window.open('/tx/saleForm', 'popupWindow',
-            `width=700, height=700, top=100, left=500, resizable=no`);
+            window.open('/tx/invoiceForm', 'popupWindow',
+                `width=700, height=700, top=100, left=500, resizable=no`);
 
         // 출력페이지로 데이터 전송
         $(printPopup).on('load', function() {
             printPopup.postMessage(printData, "*");
         });
     });
+
 
     // 검품상태 리프레시 버튼 -> 누르면 검품상태와 처리상태 현행화
     $('#refresh-qs-status').on('click', function(event) {

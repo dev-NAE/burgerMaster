@@ -29,6 +29,7 @@ public class ShipmentDTO {
     private String itemName;
     private int itemCount;
     private int totalPrice;
+    private Timestamp orderDate;
     private Timestamp dueDate;
     private String managerId;
     private String managerName;
@@ -41,7 +42,7 @@ public class ShipmentDTO {
     }
 
     public ShipmentDTO(String shipmentId, Timestamp shipDate, String status, String saleId, String franchiseCode,
-                       String franchiseName, String managerId, String managerName, Timestamp dueDate, String note,
+                       String franchiseName, String managerId, String managerName, Timestamp orderDate, Timestamp dueDate, String note,
                        int totalPrice, String qsStatus) {
         this.shipmentId = shipmentId;
         this.shipDate = shipDate;
@@ -51,6 +52,7 @@ public class ShipmentDTO {
         this.franchiseName = franchiseName;
         this.managerId = managerId;
         this.managerName = managerName;
+        this.orderDate = orderDate;
         this.dueDate = dueDate;
         this.note = note;
         this.totalPrice = totalPrice;
