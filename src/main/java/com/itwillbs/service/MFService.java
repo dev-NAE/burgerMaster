@@ -32,10 +32,10 @@ public class MFService {
 		return mfRepository.findOrderList();
 	}
 	
-	public List<Item> getPPList(){
+	public List<Item> getPPList(String searchId, String searchName){
 		log.info("MFService getPPList()");
 		
-		return itemRepostiory.findByItemType();
+		return itemRepostiory.findByItemType(searchId, searchName);
 	}
 
 	public List<MFBomDTO> getRmList(List<MFBomDTO> list) {

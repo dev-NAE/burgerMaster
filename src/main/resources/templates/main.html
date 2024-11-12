@@ -356,7 +356,7 @@
 							//borderWidth: 1
 							backgroundColor: function (context) {
 								const index = context.dataIndex;
-								return rmInventory[index] <= rmmin[index] ? 'red' : 'lightgreen';
+								return rmInventory[index] < rmmin[index] ? 'red' : 'lightgreen';
 
 
 							},
@@ -490,7 +490,7 @@
 					data: fpInventory,  // 재량 필드로 사용 (예시)
 					backgroundColor: function (context) {
 						const index = context.dataIndex;
-						return fpInventory[index] <= fpmin[index] ? 'red' : 'lightgreen';
+						return fpInventory[index] < fpmin[index] ? 'red' : 'lightgreen';
 
 
 					},
@@ -621,7 +621,7 @@
 				data: ppInventory,  // 입고량 필드로 사용 (예시)
 				backgroundColor: function (context) {
 					const index = context.dataIndex;
-					return ppInventory[index] <= minpp[index] ? 'red' : 'lightgreen';
+					return ppInventory[index] < minpp[index] ? 'red' : 'lightgreen';
 
 
 				},
@@ -970,7 +970,7 @@
 					// `notifiList`의 각 항목을 반복하면서 `minReqQuantity` 조건을 비교
 					notifiList.forEach(function (item, index) {
 						// 예: 해당 항목의 `quantity`가 `minReqQuantity` 이하인 경우에만 추가
-						if (item.quantity <= item.minReqQuantity) {
+						if (item.quantity < item.minReqQuantity) {
 							filteredNotifications.push(item);
 						}
 					});
@@ -985,7 +985,7 @@
 						contentElement.empty();  // 기존 알림 초기화
 
 						filteredNotifications.forEach(function (item) {
-							const listItem = $(`<a href="/inven/inventoryList?itemName=${encodeURIComponent(item.itemName)}" class="dropdown-item"></a>`)
+							const listItem = $(`<a href="/inven/inventoryListSearch?itemCodeOrName=&itemType=&findOutOfStock=Y" class="dropdown-item"></a>`)
 								.text(`${item.itemName} 재고 수량이 ${item.quantity} 개 입니다. 재주문이 필요합니다.`);
 							contentElement.append(listItem);
 							contentElement.append('<div class="dropdown-divider"></div>');

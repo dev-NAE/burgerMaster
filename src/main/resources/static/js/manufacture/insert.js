@@ -134,6 +134,7 @@ $(document).ready(function() {
 	
     $('#confirmSubmitBtn').click(function() {
         $('#input-form').unbind('submit').submit();
+		alert('작업 지시가 등록되었습니다.');
     });
 });
 
