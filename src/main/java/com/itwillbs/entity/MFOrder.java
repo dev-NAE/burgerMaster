@@ -7,7 +7,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,15 +42,16 @@ public class MFOrder {
 	@Column(name = "order_state", length = 20, nullable = false)
 	private String orderState;
 	
-	@Column(name = "order_item", length = 20, nullable = false)
-	private String orderItem;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "order_item")
+	private Item item;
 	
-	public MFOrder(String orderId, int orderAmount, LocalDate orderDeadline, Timestamp orderDate, String orderState, String orderItem) {
+	public MFOrder(String orderId, int orderAmount, LocalDate orderDeadline, Timestamp orderDate, String orderState, Item item) {
 		this.orderId = orderId;
 		this.orderAmount = orderAmount;
 		this.orderDeadline = orderDeadline;
 		this.orderDate = orderDate;
 		this.orderState = orderState;
-		this.orderItem = orderItem;
+		this.item = item;
 	}
 }
