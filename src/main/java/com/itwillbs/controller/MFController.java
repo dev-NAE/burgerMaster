@@ -51,12 +51,15 @@ public class MFController {
 	@GetMapping("/bom")
 	public String bom(Model model,
 			@RequestParam(value = "page", defaultValue = "1", required = false) int page,
-			@RequestParam(value = "size", defaultValue = "10", required = false) int size) {
+			@RequestParam(value = "size", defaultValue = "10", required = false) int size,
+			@RequestParam(value = "searchId", defaultValue = "", required = false) String searchId,
+			@RequestParam(value = "searchName", defaultValue = "", required = false) String searchName
+			) {
 		log.info("MFController bom()");
 		
 		List<MFBomDTO> bomList = new ArrayList<>();
 		
-		List<Item> ppList = mfService.getPPList();
+		List<Item> ppList = mfService.getPPList(searchId, searchName);
 		
 		for(int i = 0; i<ppList.size(); i++) {
 			MFBomDTO bom = new MFBomDTO();
@@ -99,7 +102,7 @@ public class MFController {
 	public String insert(Model model) {
 		log.info("MFController insert()");
 		
-		List<Item> ppList = mfService.getPPList();
+		List<Item> ppList = mfService.getPPList(null, null);
 		
 		model.addAttribute("ppList", ppList);
 		

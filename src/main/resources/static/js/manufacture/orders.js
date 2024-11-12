@@ -11,10 +11,12 @@ $(document).ready(function(){
 		alert("완료");
 		$('#confirmationModalLabel').text('해당 작업 지시를 완료 처리 하시겠습니까?');
 		$('#confirmationModal').modal('show');
-		
+		$('#confirmSubmitBtn').attr('name', this.id);
 	});
 });
 
 $('#confirmSubmitBtn').click(function(){
-	alert($('#confirmSubmitBtn').attr('name'));
+	const key = $('#confirmSubmitBtn').attr('name');
+	
+	
 });
