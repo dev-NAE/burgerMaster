@@ -48,8 +48,12 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 
 	//김성목
 	@Query("SELECT i FROM Item i " + 
-				"WHERE i.itemType = 'PP'")
-	List<Item> findByItemType();
+				"WHERE i.itemType = 'PP' "
+				+ "AND (:searchId IS NULL OR i.itemCode LIKE %:searchId%) "
+				+ "AND (:searchName IS NULL OR i.itemName LIKE %:searchName%)")
+	List<Item> findByItemType(
+			@Param("searchId") String searchId,
+			@Param("searchName") String searchName);
 
 	@Query("SELECT new com.itwillbs.domain.manufacture.MFRmDTO(i.itemName, b.quantity) "
 				+ "FROM BOM b JOIN Item i ON b.rawMaterial.itemCode = i.itemCode "
