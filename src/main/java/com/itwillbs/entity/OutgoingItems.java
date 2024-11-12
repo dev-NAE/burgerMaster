@@ -39,7 +39,7 @@ public class OutgoingItems {
 	
     // Many-to-One 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "outgoing", insertable = false, updatable = false)
+    @JoinColumn(name = "outgoing_id", insertable = false, updatable = false)
     private Outgoing outgoing;
     
     // Many-to-One 관계 설정 (Item 엔티티와 연결)
