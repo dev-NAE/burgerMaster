@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 
@@ -22,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.domain.inventory.IncomingDTO;
 
 import com.itwillbs.domain.inventory.InventoryItemDTO;
@@ -101,11 +104,29 @@ public class InventoryController {
 	// 입고 등록
 	@GetMapping("/incomingInsert")
 	public String incomingInsert() {
-		log.info("InventroyController incomingInsert()");
+		log.info("InventroyController incomingInsertget()");
+		
 
+		
+		
 		return VIEW_PATH + "incoming_insert";
 	}
 
+	// 입고 등록post
+	@PostMapping("/incomingInsert")
+	public String incomingInsertPost(@RequestParam(name = "incomingInsertCode") String incomingInsertCode,
+									@RequestParam(name = "managerId") String managerId) {
+		log.info("InventroyController incomingInsertget()");
+		log.info("incomingInsertCode = " + incomingInsertCode);
+		log.info("managerId = " + managerId);
+		
+		//입고등록하기
+		
+		
+		return "redirect:/inven/incomingInsert";
+	}
+	
+	
 	// 입고 조회
 	@GetMapping("/incomingList")
 	public String incomingList(Model model, @PageableDefault(size = 8) Pageable pageable) {
@@ -127,7 +148,13 @@ public class InventoryController {
 		model.addAttribute("prodOrQualId", "");
 		model.addAttribute("status", "");
 		model.addAttribute("managerCodeOrName", "");
-
+		
+        // 현재 사용자의 권한 정보 추가
+        List<String> userRoles = SecurityUtil.getUserAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.toList());
+        model.addAttribute("userRoles", userRoles);
+        
 		// 페이징 처리하고 model에 저장
 		applyPagination(incomingByPage, model);
 
@@ -177,7 +204,13 @@ public class InventoryController {
 			log.error("날짜 변환 오류: " + e.getMessage());
 			// 에러시 에러메세지를 model에 추가
 			model.addAttribute("errorMessage", "날짜 형식이 올바르지 않습니다. yyyy-MM-dd 형식을 사용하세요.");
-
+			
+	        // 현재 사용자의 권한 정보 추가
+	        List<String> userRoles = SecurityUtil.getUserAuthorities().stream()
+	                .map(authority -> authority.getAuthority())
+	                .collect(Collectors.toList());
+	        model.addAttribute("userRoles", userRoles);
+	        
 			return VIEW_PATH + "incoming_list";
 		}
 
@@ -199,6 +232,12 @@ public class InventoryController {
 		model.addAttribute("status", status);
 		model.addAttribute("managerCodeOrName", managerCodeOrName);
 
+        // 현재 사용자의 권한 정보 추가
+        List<String> userRoles = SecurityUtil.getUserAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.toList());
+        model.addAttribute("userRoles", userRoles);
+		
 		// 페이징 처리하고 model에 저장
 		applyPagination(incomingByPage, model);
 

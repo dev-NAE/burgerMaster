@@ -17,6 +17,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.IncomingInsertDTO;
+import com.itwillbs.domain.inventory.IncomingItemsDTO;
 import com.itwillbs.entity.Incoming;
 
 import jakarta.transaction.Transactional;
@@ -78,11 +79,15 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	/**
 	 * 입하검품 완료되었지만 입고등록되지 않은 데이터 조회
 	 */
-	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(qs.quality_order_id, qs.status, qs.order_date) " +
-			"FROM QualityOrder qs LEFT JOIN Incoming i ON qs.quality_order_id = i.qualityOrderId " +
-			"WHERE qs.status = '입하검품 완료' " +
-			"AND i.qualityOrderId IS NULL")
+	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(qo.quality_order_id, qo.status, qo.order_date) " +
+		       "FROM QualityOrder qo " +
+		       "LEFT JOIN qo.quality_order_items qoi " +
+		       "LEFT JOIN Incoming i ON qo.quality_order_id = i.qualityOrderId " +
+		       "WHERE qo.status = '검품완료' AND qoi.status = '통과' AND i.qualityOrderId IS NULL"
+		       )
 	List<IncomingInsertDTO> findAllEndOfQuality();
+
+
 	
 	
 	

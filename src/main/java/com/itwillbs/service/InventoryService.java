@@ -2,6 +2,7 @@ package com.itwillbs.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -19,9 +20,11 @@ import com.itwillbs.domain.inventory.OutgoingInsertDTO;
 import com.itwillbs.domain.inventory.OutgoingItemsDTO;
 
 import com.itwillbs.entity.InventoryItem;
+import com.itwillbs.entity.Manager;
 import com.itwillbs.repository.IncomingItemsRepository;
 import com.itwillbs.repository.IncomingRepository;
 import com.itwillbs.repository.InventoryRepository;
+import com.itwillbs.repository.ManagerRepository;
 import com.itwillbs.repository.OutgoingItemsRepository;
 import com.itwillbs.repository.OutgoingRepository;
 
@@ -40,7 +43,8 @@ public class InventoryService {
 	private final IncomingItemsRepository incomingItemsRepository;
 	private final OutgoingRepository outgoingRepository;
 	private final OutgoingItemsRepository outgoingItemsRepository;
-
+	private final ManagerRepository managerRepository;
+	
 	// 재고 전체 조회 (페이지네이션 지원)
 	public Page<InventoryItemDTO> getInventoryItems(Pageable pageable) {
 		log.info("getInventoryItems()");
@@ -158,7 +162,7 @@ public class InventoryService {
 
 	// 입고 등록 페이지에서 입고 대상 가져오기
 	public List<IncomingInsertDTO> findIncomingInsertList() {
-
+		log.info("findIncomingInsertList()");
 		// 생산 완료가되었지만 아직 입고 등록이 안된 생산데이터 저장
 		List<IncomingInsertDTO> incomingInsertDTOProd = incomingRepository.findAllEndOfProduction();
 
@@ -170,30 +174,53 @@ public class InventoryService {
 
 		// 각 검품완료된 데이터행마다 품목의 이름과 갯수를 구하기 위한 반복문
 		// ※최적화 생각해야함
-//		incomingInsertDTOQual.forEach(dto -> {
-//
-//			String QualityOrderId = dto.getIncomingInsertCode();
-//
-//			// quality_order_items테이블에서 품목코드와 품목이름을 구함
-//			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findQualityOrderItemsById(QualityOrderId);
-//
-//			if (!itemNames.isEmpty()) {
-//				// 첫 번째 품목의 이름을 설정
-//				dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
-//				// 나머지 품목 갯수 설정
-//				dto.setOtherCount(itemNames.size() - 1);
-//			} else {
-//				dto.setIncomingItemDisplay("");
-//				dto.setOtherCount(0);
-//			}
-//		});
+		incomingInsertDTOQual.forEach(dto -> {
+
+			int totalAmount = 0;
+			String QualityOrderId = dto.getProdOrQualId();
+
+			// quality_order_items테이블에서 품목코드와 품목이름을 구함
+			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findQualityOrderItemsById(QualityOrderId);
+
+			
+			if (!itemNames.isEmpty()) {
+				// 첫 번째 품목의 이름을 설정
+				dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+				// 나머지 품목 갯수 설정
+				dto.setOtherCount(itemNames.size() - 1);
+				
+				//총 수량 구하기
+				for (IncomingItemsDTO item : itemNames) {
+					totalAmount += item.getQuantity();
+				} 
+				dto.setTotalAmount(totalAmount);	
+				
+			} else {
+				dto.setIncomingItemDisplay("");
+				dto.setOtherCount(0);
+			}
+		});
 
 		incomingInsertDTOProd.addAll(incomingInsertDTOQual);
 
-		return null;
+		log.info("incomingInsertDTOProd = " + incomingInsertDTOProd.toString());
+		
+		return incomingInsertDTOProd;
 	}
 
-
+	//입고 등록페이지에서 선택한 검품/생산 번호의 품목들 찾기
+	public List<IncomingItemsDTO> findIncomingInsertItems(String prodOrQualId, String reasonOfIncoming) {
+		
+		if(reasonOfIncoming.equals("작업 완료")){
+			//생산 테이블에서 조회
+			return incomingItemsRepository.findIncomingInsertProdItemsById(prodOrQualId);
+		}else {
+			// 입하 검품품목테이블에서 조회
+			return incomingItemsRepository.findQualityOrderItemsById(prodOrQualId);
+		}
+		
+		
+	}
 
 	
 	
@@ -319,6 +346,24 @@ public class InventoryService {
 
 			return null;
 		}
+
+		//권한이 있는 관리자 찾기
+		public List<Manager> findManager() {
+		    log.info("findManager()");
+		    List<Manager> allManagers = managerRepository.findAll();
+		    List<Manager> filteredManagers = new ArrayList<>();
+		    
+		    for (Manager manager : allManagers) {
+		        if (manager.getManagerRole().contains("INVENTORY") || manager.getManagerRole().contains("ADMIN")) {
+		            filteredManagers.add(manager);
+		        }
+		    }
+		    
+		    log.info(filteredManagers.toString());
+		    return filteredManagers;
+		}
+
+
 	
 	
 	

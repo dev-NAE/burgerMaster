@@ -29,11 +29,21 @@ public interface IncomingItemsRepository extends JpaRepository<IncomingItems, St
 	List<IncomingItemsDTO> findByIncomingItems(@Param("incomingId") String incomingId);
 
 
-	//입하 검품완료된 해당 검품코드의 품목들 조회
-	// 지금 quality_order_items entity가 없어서 구현 불가하므로 임시 주석처리
-//	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, qoi.quantity) " +
-//			"FROM qualityOrderItems qoi left join fetch Item i ON qoi.itemCode = i.itemCode " + 
-//			"WHERE qoi.quality_order_id = :qualityOrderId")
-//	List<IncomingItemsDTO> findQualityOrderItemsById(String qualityOrderId);
+	//입하 검품완료된 해당 검품코드의 불량 아닌 통과된 품목들만 조회
+	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, qoi.quantity) " +
+			"FROM QualityOrderItems qoi " +
+			"LEFT JOIN qoi.item i " +
+			"LEFT JOIN qoi.quality_order qo " +
+			"WHERE qo.quality_order_id = :qualityOrderId " +
+			"AND qoi.status = '통과'")
+	List<IncomingItemsDTO> findQualityOrderItemsById(@Param("qualityOrderId") String qualityOrderId);
+	
+	
+	//입고 등록페이지에서 선택한 생산완료입고대상자의 데이터 조회
+	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, mfo.orderAmount) " +
+			"FROM MFOrder mfo " +
+			"LEFT JOIN mfo.item i " +
+			"WHERE mfo.orderId = :prodOrQualId")
+	List<IncomingItemsDTO> findIncomingInsertProdItemsById(@Param("prodOrQualId") String prodOrQualId);
 	
 }

@@ -479,7 +479,7 @@
 	            $('#modalStatus').text(status);
 				
 				// 입고 상세 정보 모달창에서 "입고 완료하기" 버튼 표시 여부 결정
-				if (status === '입고 진행중') { // 상태가 '입고 진행중'인 경우
+				if (status === '입고 진행중' && (userRoles.includes('ROLE_ADMIN') || userRoles.includes('ROLE_INVENTORY'))) { 
 				    $('#updateIncomingButton').show();
 				} else {
 				    $('#updateIncomingButton').hide();
@@ -560,7 +560,11 @@
 	        });
 	    });
 	</script>
-
+	<script th:inline="javascript">
+	    /*<![CDATA[*/
+	    var userRoles = /*[[${userRoles}]]*/ [];
+	    /*]]>*/
+	</script>
 
 
 
