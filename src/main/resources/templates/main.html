@@ -144,6 +144,7 @@
 						</div>
 					</div>
 
+					
 					<!-- 완재품 입고량 . 총 재고 -->
 					<div class="col-md-4">
 						<div class="card card-success" style="margin: 5px;">
@@ -178,63 +179,63 @@
 						</div>
 					</div>
 
-<!--					<div class="row">-->
-						<!-- 반품 품목 -->
-						<div class="col-md-4">
-							<div class="card card-danger" style="margin: 5px;">
-								<div class="card-header">
-									<h3 class="card-title">반품 품목</h3>
-									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-										<button class="btn btn-light" id="xls4">.xls로 저장</button>
-									</div>
-								</div>
-								<div class="card-body">
-									<canvas id="pieChart1" width="375" height="250"></canvas>
+					<!--					<div class="row">-->
+					<!-- 반품 품목 -->
+					<div class="col-md-4">
+						<div class="card card-danger" style="margin: 5px;">
+							<div class="card-header">
+								<h3 class="card-title">반품 품목</h3>
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button class="btn btn-light" id="xls4">.xls로 저장</button>
 								</div>
 							</div>
-						</div>
-
-						<!-- 폐기 품목 -->
-						<div class="col-md-4">
-							<div class="card card-danger" style="margin: 5px;">
-								<div class="card-header">
-									<h3 class="card-title">폐기 품목</h3>
-									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-										<button class="btn btn-light" id="xls5">.xls로 저장</button>
-									</div>
-								</div>
-								<div class="card-body">
-									<canvas id="pieChart2" width="375" height="250"></canvas>
-								</div>
-							</div>
-						</div>
-						<!-- 월간 수주 현황 -->
-						<div class="col-md-4">
-							<div class="card card-primary" style="margin: 5px;">
-								<div class="card-header">
-									<h3 class="card-title">월간 수주 현황</h3>
-									<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-										<button class="btn btn-light" id="xls6">.xls로 저장</button>
-									</div>
-								</div>
-								<div class="card-body">
-									<div class="chart">
-										<canvas id="areaChart" width="636" height="250"></canvas>
-									</div>
-								</div>
+							<div class="card-body">
+								<canvas id="pieChart1" width="375" height="250"></canvas>
 							</div>
 						</div>
 					</div>
 
-
-
-					<!--          </section>-->
-					<!-- right col -->
+					<!-- 폐기 품목 -->
+					<div class="col-md-4">
+						<div class="card card-danger" style="margin: 5px;">
+							<div class="card-header">
+								<h3 class="card-title">폐기 품목</h3>
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button class="btn btn-light" id="xls5">.xls로 저장</button>
+								</div>
+							</div>
+							<div class="card-body">
+								<canvas id="pieChart2" width="375" height="250"></canvas>
+							</div>
+						</div>
+					</div>
+					<!-- 월간 수주 현황 -->
+					<div class="col-md-4">
+						<div class="card card-primary" style="margin: 5px;">
+							<div class="card-header">
+								<h3 class="card-title">월간 수주 현황</h3>
+								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+									<button class="btn btn-light" id="xls6">.xls로 저장</button>
+								</div>
+							</div>
+							<div class="card-body">
+								<div class="chart">
+									<canvas id="areaChart" width="636" height="250"></canvas>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-				<!-- /.row (main row) -->
-		</div><!-- /.container-fluid -->
-		</section>
-		<!-- /.content -->
+
+
+
+				<!--          </section>-->
+				<!-- right col -->
+		</div>
+		<!-- /.row (main row) -->
+	</div><!-- /.container-fluid -->
+	</section>
+	<!-- /.content -->
 	</div>
 	<!-- /.content-wrapper -->
 
@@ -307,127 +308,137 @@
 	<script th:inline="javascript">
 
 		// 원재료 입고
-		const rmItemList = /*[[${rmItemList}]]*/[
-		];
+				const rmItemList = /*[[${rmItemList}]]*/[
+				];
 
-		const rmInventoryList = /*[[${rmInventoryList}]]*/[
-		];
-		//alert(JSON.stringify(rmInventoryList));
-		//alert(JSON.stringify(rmItemList));
+				const rmInventoryList = /*[[${rmInventoryList}]]*/[
+				];
+				//0이 아닌 재고만 생성
+				const filteredinvenListrm = rmInventoryList.filter(item => item.quantity > 0);
+				//재고품목
+				const rmInventory = filteredinvenListrm.map(item => item.quantity);  // 항목 이름
+				//재고최소품목
+				const rmmin = filteredinvenListrm.map(item => item.minReqQuantity);
+				//0이 아닌 입고만 생성
+				const filtereditemListrm = rmItemList.filter(item => item.quantity > 0);
+				//입고품목
+				const rmItem = filtereditemListrm.map(item => item.quantity);
 
-		const rmInventory = rmInventoryList.map(item => item.quantity);  // 항목 이름
-		const rmmin = rmInventoryList.map(item => item.minReqQuantity);
+				const labels = filteredinvenListrm.map(item => {
+					let itemName = item.itemName;
 
-		const rmItem = rmItemList.map(item => item.quantity);
+					if (itemName.includes('(') && itemName.includes(')')) {
+						itemName = itemName.replace(/\(.*?\)/, ''); // 괄호와 그 안의 내용 제거
 
-		//const labels = rmInventoryList.map(item => item.itemName);  // 항목 이름
-		const labels = rmInventoryList.map(item => {
-				    let itemName = item.itemName;
-				    
-				    if (itemName.includes('(') && itemName.includes(')')) {
-				        const startIdx = itemName.indexOf('(');  // 괄호 시작 위치
-				        const endIdx = itemName.indexOf(')');    // 괄호 끝 위치
-				        const beforeParentheses = itemName.slice(0, startIdx);  // 괄호 전의 부분
-				        const afterParentheses = itemName.slice(endIdx + 1);    // 괄호 후의 부분
-				        
-				        itemName = beforeParentheses + afterParentheses;
-				    }
-
-				    return itemName;
-				});
-				
-		const data = {
-			labels: labels,
-			datasets: [
-				{
-					label: '원재료 입고량',
-					data: rmItem,  // 입고량 필드로 사용 (수정필요)
-					backgroundColor: 'lightblue',
-					borderColor: 'lightblue',
-					borderWidth: 1
-
-				},
-				{
-					label: '원재료 총 재고',
-					data: rmInventory,  // 총 재고 필드로 사용
-					//backgroundColor: 'lightgreen',
-					//borderColor: 'lightgreen',
-					//borderWidth: 1
-					backgroundColor: function (context) {
-						const index = context.dataIndex;
-						return rmInventory[index] <= rmmin[index] ? 'red' : 'lightgreen';
-
-
-					},
-					borderColor: 'rgba(0, 0, 0, 0.1)',
-					borderWidth: 1,
-				}]
-		};
-
-		const options = {
-			responsive: true,
-			plugins: {
-				legend: {
-					labels: {
-						generateLabels: (chart) => {
-							return chart.data.datasets.map((dataset, i) => {
-								return {
-									text: dataset.label,
-									fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
-									strokeStyle: dataset.borderColor,
-									lineWidth: dataset.borderWidth,
-									hidden: !chart.isDatasetVisible(i),
-									index: i
-								};
-							});
-						}
 					}
-				}
-			}
-		};
+
+
+					return itemName.trim();  // 양쪽 공백 제거
+				});
+
+				const data = {
+					labels: labels,
+					datasets: [
+						{
+							label: '원재료 입고량',
+							data: rmItem,  // 입고량 필드로 사용 (수정필요)
+							backgroundColor: 'lightblue',
+							borderColor: 'lightblue',
+							borderWidth: 1
+
+						},
+
+						{
+							label: '원재료 총 재고',
+							data: rmInventory,  // 총 재고 필드로 사용
+							//backgroundColor: 'lightgreen',
+							//borderColor: 'lightgreen',
+							//borderWidth: 1
+							backgroundColor: function (context) {
+								const index = context.dataIndex;
+								return rmInventory[index] <= rmmin[index] ? 'red' : 'lightgreen';
+
+
+							},
+							borderColor: 'rgba(0, 0, 0, 0.1)',
+							borderWidth: 1,
+						}]
+				};
+
+				const options = {
+					responsive: true,
+					plugins: {
+						legend: {
+							labels: {
+								generateLabels: (chart) => {
+									return chart.data.datasets.map((dataset, i) => {
+										return {
+											text: dataset.label,
+											fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
+											strokeStyle: dataset.borderColor,
+											lineWidth: dataset.borderWidth,
+											hidden: !chart.isDatasetVisible(i),
+											index: i
+										};
+									});
+								}
+							}
+						}
+					},
+					scales: {
+						xAxes: [{
+							ticks: {
+								maxRotation: 0,
+								minRotation: 0
+							}
+						}]
+					}
+				};
 
 
 
-		const config = {
-			type: 'bar',
-			data: data,
-			options: {
-				options
 
-			}
-		};
+				const config = {
+					type: 'bar',
+					data: data,
+					options: {
+						options
 
-		// Chart.js를 사용하여 차트 생성
-		const ctx = document.getElementById('myChart').getContext('2d');
-		new Chart(ctx, config);
+					}
+				};
+
+				// Chart.js를 사용하여 차트 생성
+				const ctx = document.getElementById('myChart').getContext('2d');
+				new Chart(ctx, config);
 
 
 
-		// 엑셀 저장 함수
-		document.getElementById('xls1').addEventListener('click', () => {
-			// 차트 데이터 가져오기
-			const xlsrmlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
-			const rmQuantities = rmItemList.map(item => item.quantity); // 원재료 입고량
-			const totalrmInventory = rmInventoryList.map(item => item.quantity); // 총 재고량
-			const rmItemCode = rmItemList.map(item => item.itemCode);
-			const rmIncommingItemCode = rmItemList.map(item => item.incomingItemId);
-			// 데이터를 JSON 형식으로 정리
-			const excelData1 = xlsrmlabels.map((label, index) => ({
-				'#': rmItemCode[index],
-				'품목 이름': label,
-				'입고 #': rmIncommingItemCode[index],
-				'원재료 입고량': rmQuantities[index],
-				'총 재고량': totalrmInventory[index]
-			}));
+				// 엑셀 저장 함수
+				document.getElementById('xls1').addEventListener('click', () => {
+					// 차트 데이터 가져오기
+					const xlsrmlabels = rmInventoryList.map(item => item.itemName);  // 항목 이름
+					const rmQuantities = rmItemList.map(item => item.quantity); // 원재료 입고량
+					const totalrmInventory = rmInventoryList.map(item => item.quantity); // 총 재고량
+					const rmItemCode = rmItemList.map(item => item.itemCode);
+					const rmIncommingItemCode = rmItemList.map(item => item.incomingItemId);
+					// 데이터를 JSON 형식으로 정리
+					const excelData1 = xlsrmlabels.map((label, index) => ({
+						'#': rmItemCode[index],
+						'품목 이름': label,
+						'입고 #': rmIncommingItemCode[index],
+						'원재료 입고량': rmQuantities[index],
+						'총 재고량': totalrmInventory[index]
+					}));
 
-			// JSON 데이터를 엑셀 시트로 변환
-			const worksheet1 = XLSX.utils.json_to_sheet(excelData1);
-			const workbook1 = XLSX.utils.book_new();
-			XLSX.utils.book_append_sheet(workbook1, worksheet1, '원재료 데이터');
+					// JSON 데이터를 엑셀 시트로 변환
+					const worksheet1 = XLSX.utils.json_to_sheet(excelData1);
+					const workbook1 = XLSX.utils.book_new();
+					XLSX.utils.book_append_sheet(workbook1, worksheet1, '원재료 데이터');
 
-			// 엑셀 파일로 다운로드
-			XLSX.writeFile(workbook1, '원재료 품목명, 입고량, 총재고.xlsx');
-		});
+					// 엑셀 파일로 다운로드
+					XLSX.writeFile(workbook1, '원재료 품목명, 입고량, 총재고.xlsx');
+				});
+
 
 
 
@@ -437,34 +448,39 @@
 		];
 		const fpInventoryList = /*[[${fpInventoryList}]]*/[
 		];
+		//0이 아닌 재고만 생성
+		const filteredinvenListfm = fpInventoryList.filter(item => item.quantity > 0);
+		//재고품목
+		const fpInventory = filteredinvenListfm.map(item => item.quantity);  // 항목 이름
+		//재고최소품목
+		const fpmin = filteredinvenListfm.map(item => item.minReqQuantity);
+		//0이 아닌 입고만 생성
+		const filtereditemListfm = fpItemList.filter(item => item.quantity > 0);
+		//입고품목
+		const fmItem = filtereditemListfm.map(item => item.quantity);
 
+		const labels2 = filteredinvenListfm.map(item => {
+			let itemName = item.itemName;
 
-		const fpInventory = fpInventoryList.map(item => item.quantity);
-		const fpmin = fpInventoryList.map(item => item.minReqQuantity);  // 각 항목의 기준 수량
+			// 괄호 안의 내용을 줄바꿈으로 변경
+			if (itemName.includes('(') && itemName.includes(')')) {
+				const startIdx = itemName.indexOf('(');  // 괄호 시작 위치
+				const endIdx = itemName.indexOf(')');    // 괄호 끝 위치
+				const beforeParentheses = itemName.slice(0, startIdx);  // 괄호 전의 부분
+				const afterParentheses = itemName.slice(endIdx + 1);    // 괄호 후의 부분
 
-		//const labels2 = fpInventoryList.map(item => item.itemName);  // 항목 이름 
-		const labels2 = fpInventoryList.map(item => {
-						    let itemName = item.itemName;
-						    
-						    // 괄호 안의 내용을 줄바꿈으로 변경
-						    if (itemName.includes('(') && itemName.includes(')')) {
-						        const startIdx = itemName.indexOf('(');  // 괄호 시작 위치
-						        const endIdx = itemName.indexOf(')');    // 괄호 끝 위치
-						        const beforeParentheses = itemName.slice(0, startIdx);  // 괄호 전의 부분
-						        const afterParentheses = itemName.slice(endIdx + 1);    // 괄호 후의 부분
-						        
-						        // 괄호 안의 내용을 줄바꿈으로 교체
-						        itemName = beforeParentheses + afterParentheses;
-						    }
+				// 괄호 안의 내용을 줄바꿈으로 교체
+				itemName = beforeParentheses + afterParentheses;
+			}
 
-						    return itemName;
-						});
+			return itemName;
+		});
 		const data2 = {
 			labels: labels2,
 			datasets: [
 				{
 					label: '완재품 입고량',
-					data: fpItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+					data: fmItem,  // 입고량 필드로 사용 (예시)
 					backgroundColor: 'lightblue',
 					borderColor: 'lightblue',
 					borderWidth: 1
@@ -561,35 +577,39 @@
 		const ppInventoryList = /*[[${ppInventoryList}]]*/[
 		];
 
+		//0이 아닌 재고만 생성
+		const filteredinvenListpp = ppInventoryList.filter(item => item.quantity > 0);
+		//재고품목
+		const ppInventory = filteredinvenListpp.map(item => item.quantity);  // 항목 이름
+		//재고최소품목
+		const minpp = filteredinvenListpp.map(item => item.minReqQuantity);
+		//0이 아닌 입고만 생성
+		const filtereditemListpp = ppItemList.filter(item => item.quantity > 0);
+		//입고품목
+		const ppItem = filtereditemListpp.map(item => item.quantity);
 
+		const labels3 = filteredinvenListpp.map(item => {
+			let itemName = item.itemName;
 
-		//alert("ppItemList:"+JSON.stringify(ppItemList));
+			// 괄호 안의 내용을 줄바꿈으로 변경
+			if (itemName.includes('(') && itemName.includes(')')) {
+				const startIdx = itemName.indexOf('(');  // 괄호 시작 위치
+				const endIdx = itemName.indexOf(')');    // 괄호 끝 위치
+				const beforeParentheses = itemName.slice(0, startIdx);  // 괄호 전의 부분
+				const afterParentheses = itemName.slice(endIdx + 1);    // 괄호 후의 부분
 
-		const minpp = ppInventoryList.map(item => item.minReqQuantity);  // 항목 이름
-		const ppInventory = ppInventoryList.map(item => item.quantity);  // 항목 이름
-		//const labels3 = ppInventoryList.map(item => item.itemName);  // 항목 이름
-		const labels3 = ppInventoryList.map(item => {
-		    let itemName = item.itemName;
-		    
-		    // 괄호 안의 내용을 줄바꿈으로 변경
-		    if (itemName.includes('(') && itemName.includes(')')) {
-		        const startIdx = itemName.indexOf('(');  // 괄호 시작 위치
-		        const endIdx = itemName.indexOf(')');    // 괄호 끝 위치
-		        const beforeParentheses = itemName.slice(0, startIdx);  // 괄호 전의 부분
-		        const afterParentheses = itemName.slice(endIdx + 1);    // 괄호 후의 부분
-		        
-		        // 괄호 안의 내용을 줄바꿈으로 교체
-		        itemName = beforeParentheses + afterParentheses;
-		    }
+				// 괄호 안의 내용을 줄바꿈으로 교체
+				itemName = beforeParentheses + afterParentheses;
+			}
 
-		    return itemName;
+			return itemName;
 		});
-		
+
 		const data3 = {
 			labels: labels3,
 			datasets: [{
 				label: '가공품 입고량',
-				data: ppItemList.map(item => item.quantity),  // 입고량 필드로 사용 (예시)
+				data: ppItem,  // 입고량 필드로 사용 (예시)
 				backgroundColor: 'lightblue',
 				borderColor: 'lightblue',
 				borderWidth: 1
@@ -611,44 +631,44 @@
 		};
 
 		const options3 = {
-		    responsive: true,
-		    plugins: {
-		        legend: {
-		            labels: {
-		                generateLabels: (chart) => {
-		                    return chart.data.datasets.map((dataset, i) => {
-		                        return {
-		                            text: dataset.label,
-		                            fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
-		                            strokeStyle: dataset.borderColor,
-		                            lineWidth: dataset.borderWidth,
-		                            hidden: !chart.isDatasetVisible(i),
-		                            index: i
-		                        };
-		                    });
-		                }
-		            }
-		        }
-		    },
-		    scales: {
-		        x: {
-		            ticks: {
-		                callback: function(value) {
-		                    // 5글자 이상일 경우 '...' 추가
-		                    if (value.length > 5) {
-		                        return value.slice(0, 5) + "...";
-		                    }
-		                    return value;
-		                }
-		            }
-		        }
-		    }
+			responsive: true,
+			plugins: {
+				legend: {
+					labels: {
+						generateLabels: (chart) => {
+							return chart.data.datasets.map((dataset, i) => {
+								return {
+									text: dataset.label,
+									fillStyle: i === 1 ? 'lightgreen' : 'lightblue', // 범례의 색상 고정
+									strokeStyle: dataset.borderColor,
+									lineWidth: dataset.borderWidth,
+									hidden: !chart.isDatasetVisible(i),
+									index: i
+								};
+							});
+						}
+					}
+				}
+			},
+			scales: {
+				x: {
+					ticks: {
+						callback: function (value) {
+							// 5글자 이상일 경우 '...' 추가
+							if (value.length > 5) {
+								return value.slice(0, 5) + "...";
+							}
+							return value;
+						}
+					}
+				}
+			}
 		};
 
 		const config3 = {
-		    type: 'bar',
-		    data: data3,
-		    options: options3  // options3을 설정
+			type: 'bar',
+			data: data3,
+			options: options3  // options3을 설정
 		};
 
 		// Chart.js를 사용하여 차트 생성
