@@ -1,8 +1,9 @@
 package com.itwillbs.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.itwillbs.domain.quality.QualitySaleDTO;
+import com.itwillbs.service.quality.QualityService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ import lombok.extern.log4j.Log4j2;
 public class QualityController {
 
 	private final QualityOrderService qualityOrderService;
-	
+	private final QualityService qualityService;
 	
 	//추후에 지워야함
 	@GetMapping("/formSample")
@@ -40,10 +41,16 @@ public class QualityController {
 		return "/quality/quality_shipment";
 	}
 
+	// 출고 검푸 리스트
 	@GetMapping("/quality/quality_sale")
-	public String quality_sale() {
+	public String quality_sale(Model model) {
 		log.info("QualityController quality_sale().....");
-		return "/quality/quality_sale";
+		List<QualitySaleDTO> qualitySaleList = null;
+        qualitySaleList = qualityService.getQualitySaleList();
+
+		model.addAttribute("qualitySaleList", qualitySaleList);
+
+        return "/quality/quality_sale";
 	}
 
 	@GetMapping("/quality/quality_order")
@@ -55,12 +62,12 @@ public class QualityController {
 		
 		for(int i = 0; i < list.size(); i++) {
 			
-			//qualityOrderService.getItemName(list.get(i).getItem_code());
+
 			
 			
 		}
 		
-		model.addAttribute("qualityList", qualityOrderService.getDashBaord());
+		//model.addAttribute("qualityList", qualityOrderService.getDashBaord());
 		
 		return "/quality/quality_order";
 	}
