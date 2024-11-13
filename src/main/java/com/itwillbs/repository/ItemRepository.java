@@ -50,7 +50,8 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 	@Query("SELECT i FROM Item i " + 
 				"WHERE i.itemType = 'PP' "
 				+ "AND (:searchId IS NULL OR i.itemCode LIKE %:searchId%) "
-				+ "AND (:searchName IS NULL OR i.itemName LIKE %:searchName%)")
+				+ "AND (:searchName IS NULL OR i.itemName LIKE %:searchName%) "
+				+ "ORDER BY i.itemCode")
 	List<Item> findByItemType(
 			@Param("searchId") String searchId,
 			@Param("searchName") String searchName);
@@ -63,7 +64,8 @@ public interface ItemRepository extends JpaRepository<Item, String> {
 	@Query("SELECT new com.itwillbs.domain.manufacture.MFRmListDTO(i.itemCode, i.itemName, b.quantity, ii.quantity) "
 			+ "FROM Item i JOIN BOM b ON i.itemCode = b.rawMaterial.itemCode "
 			+ "JOIN InventoryItem ii ON i.itemCode = ii.itemCode "
-			+ "WHERE b.processedProduct.itemCode = (SELECT i2.itemCode FROM Item i2 where i2.itemName = :itemName)")
+			+ "WHERE b.processedProduct.itemCode = (SELECT i2.itemCode FROM Item i2 where i2.itemName = :itemName) "
+			+ "ORDER BY i.itemCode ASC")
 	List<MFRmListDTO> findRM(@Param("itemName") String itemName);
 
 
