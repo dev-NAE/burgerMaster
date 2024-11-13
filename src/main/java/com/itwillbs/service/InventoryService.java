@@ -102,10 +102,10 @@ public class InventoryService {
 			String incomingId = dto.getIncomingId();
 
 			// incoming_items테이블에서 품목의 이름과 갯수를 구한다.
-			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId);
+			List<IncomingItems> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId);
 
 			// 품목중 첫번째 품목의 이름을 저장
-			dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+			dto.setIncomingItemDisplay(itemNames.get(0).getItem().getItemName());
 
 			// 품목 갯수 - 1을 저장
 			dto.setOtherCount(itemNames.size() - 1);
@@ -134,11 +134,11 @@ public class InventoryService {
 			String incomingId2 = dto.getIncomingId();
 
 			// incoming_items 테이블에서 품목코드와 품목이름을 구함
-			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId2);
+			List<IncomingItems> itemNames = incomingItemsRepository.findIncomingItemsListById(incomingId2);
 
 			if (!itemNames.isEmpty()) {
 				// 첫 번째 품목의 이름을 설정
-				dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+				dto.setIncomingItemDisplay(itemNames.get(0).getItem().getItemName());
 				// 나머지 품목 갯수 설정
 				dto.setOtherCount(itemNames.size() - 1);
 			} else {
@@ -151,7 +151,7 @@ public class InventoryService {
 	}
 
 	// 입고 품목 리스트 가져오기
-	public List<IncomingItemsDTO> getIncomingItems(String incomingId) {
+	public List<IncomingItems> getIncomingItems(String incomingId) {
 
 		return incomingItemsRepository.findByIncomingItems(incomingId);
 	}
@@ -186,17 +186,18 @@ public class InventoryService {
 			String QualityOrderId = dto.getProdOrQualId();
 
 			// quality_order_items테이블에서 품목코드와 품목이름을 구함
-			List<IncomingItemsDTO> itemNames = incomingItemsRepository.findQualityOrderItemsById(QualityOrderId);
-
+//			List<IncomingItems> itemNames = incomingItemsRepository.findQualityOrderItemsById(QualityOrderId);
+			// order_items테이블에서 품목코드와 품목이름을 구함
+			List<IncomingItems> itemNames = incomingItemsRepository.findOrderItemsById(QualityOrderId);
 			
 			if (!itemNames.isEmpty()) {
 				// 첫 번째 품목의 이름을 설정
-				dto.setIncomingItemDisplay(itemNames.get(0).getItemName());
+				dto.setIncomingItemDisplay(itemNames.get(0).getItem().getItemName());
 				// 나머지 품목 갯수 설정
 				dto.setOtherCount(itemNames.size() - 1);
 				
 				//총 수량 구하기
-				for (IncomingItemsDTO item : itemNames) {
+				for (IncomingItems item : itemNames) {
 					totalAmount += item.getQuantity();
 				} 
 				dto.setTotalAmount(totalAmount);	
@@ -215,14 +216,17 @@ public class InventoryService {
 	}
 
 	//입고 등록페이지에서 선택한 검품/생산 번호의 품목들 찾기
-	public List<IncomingItemsDTO> findIncomingInsertItems(String prodOrQualId, String reasonOfIncoming) {
+	public List<IncomingItems> findIncomingInsertItems(String prodOrQualId, String reasonOfIncoming) {
 		
 		if(reasonOfIncoming.equals("작업 완료")){
 			//생산 테이블에서 조회
 			return incomingItemsRepository.findIncomingInsertProdItemsById(prodOrQualId);
 		}else {
 			// 입하 검품품목테이블에서 조회
-			return incomingItemsRepository.findQualityOrderItemsById(prodOrQualId);
+//			return incomingItemsRepository.findQualityOrderItemsById(prodOrQualId);
+			
+			// 발주품목테이블에서 조회
+			return incomingItemsRepository.findOrderItemsById(prodOrQualId);
 		}
 		
 		

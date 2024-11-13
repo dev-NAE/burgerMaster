@@ -75,32 +75,32 @@ public class RestInventoryController {
 	
 	//입고 상세 정보 ajax
 	@GetMapping("/incomingDetail")
-	public ResponseEntity<List<IncomingItemsDTO>> getIncomingDetail(
+	public ResponseEntity<List<IncomingItems>> getIncomingDetail(
 			@RequestParam(name = "incomingId") String incomingId) {
 		log.info("RestInventoryController.getIncomingDetail()");
 		// 입고 품목 리스트 가져오기
-		List<IncomingItemsDTO> incomingItemsDTO = inventoryService.getIncomingItems(incomingId);
+		List<IncomingItems> incomingItems = inventoryService.getIncomingItems(incomingId);
 
 		// itemType 매핑
-		incomingItemsDTO.forEach(item -> {
-			switch (item.getItemType()) {
+		incomingItems.forEach(item -> {
+			switch (item.getItem().getItemType()) {
 			case "FP":
-				item.setItemType("완제품");
+				item.getItem().setItemType("완제품");
 				break;
 			case "RM":
-				item.setItemType("원재료");
+				item.getItem().setItemType("원재료");
 				break;
 			case "PP":
-				item.setItemType("가공품");
+				item.getItem().setItemType("가공품");
 				break;
 			default:
-				item.setItemType("알 수 없음");
+				item.getItem().setItemType("알 수 없음");
 			}
 		});
 
 		// 입고 품목이 존재하면 반환
-		if (!incomingItemsDTO.isEmpty()) {
-			return ResponseEntity.ok(incomingItemsDTO);
+		if (!incomingItems.isEmpty()) {
+			return ResponseEntity.ok(incomingItems);
 		} else {
 			log.info("입고 품목 정보가 없습니다. incomingId: " + incomingId);
 			return ResponseEntity.notFound().build();
@@ -160,18 +160,18 @@ public class RestInventoryController {
 	
 	// 입고 등록할 목록중 하나 선택해서 그 목록의 품목들을 보여줌
 	@GetMapping("/getIncomingInsertItems")
-	public ResponseEntity<List<IncomingItemsDTO>> getIncomingInsertItems(@RequestParam("prodOrQualId") String prodOrQualId,
+	public ResponseEntity<List<IncomingItems>> getIncomingInsertItems(@RequestParam("prodOrQualId") String prodOrQualId,
 																	@RequestParam("reasonOfIncoming") String reasonOfIncoming){
 		log.info("RestInventoryController.incomingInsertItems()");
 		
-		List<IncomingItemsDTO> incomingItemsDTO = inventoryService.findIncomingInsertItems(prodOrQualId, reasonOfIncoming);
-		log.info(incomingItemsDTO.toString());
+		List<IncomingItems> incomingItems = inventoryService.findIncomingInsertItems(prodOrQualId, reasonOfIncoming);
+		log.info(incomingItems.toString());
 		// 품목이 존재하면 반환
-		if (!incomingItemsDTO.isEmpty()) {
-			return ResponseEntity.ok(incomingItemsDTO);
+		if (!incomingItems.isEmpty()) {
+			return ResponseEntity.ok(incomingItems);
 		} else {
 			log.info("입고 등록할 품목이 존재하지 않습니다.");
-			return ResponseEntity.ok(incomingItemsDTO);
+			return ResponseEntity.ok(incomingItems);
 		}
 	}
 
