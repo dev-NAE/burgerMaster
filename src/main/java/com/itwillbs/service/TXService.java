@@ -35,6 +35,7 @@ public class TXService {
     private final SaleItemsRepository saleItemsRepository;
     private final FranchiseRepository franchiseRepository;
     private final ShipmentRepository shipmentRepository;
+    private final QualityShipmentRepository qualityShipmentRepository;
 
     @Transactional
     public void saveOrder(OrderDTO orderDTO, List<OrderItemsDTO> orderItems) {
@@ -401,6 +402,7 @@ public class TXService {
         return saleItemsRepository.findBySale2(saleId);
     }
 
+    @Transactional
     public void saveShip(ShipmentDTO shipmentDTO) {
         log.info("TXService: completeShip");
         // 출하번호 생성
@@ -414,9 +416,20 @@ public class TXService {
         shipment.setStatus("출하등록(검품요청)");
         shipment.setRealDate(new Timestamp(System.currentTimeMillis()));
         shipment.setManager(managerRepository.findById(shipmentDTO.getManager()).orElse(null));
-        shipment.setSale(saleRepository.findById(shipmentDTO.getSaleId()).orElse(null));
+        Sale sale = saleRepository.findById(shipmentDTO.getSaleId()).orElse(null);
+        shipment.setSale(sale);
         log.info(shipment.toString());
         shipmentRepository.save(shipment);
+
+        // 검품 정보 저장
+        String qsId = "QA_" + shipmentId;
+        QualityShipment qualityShipment = new QualityShipment();
+        qualityShipment.setQualityShipmentId(qsId);
+        qualityShipment.setShipDate(shipment.getShipDate());
+        qualityShipment.setStatus("대기중");
+        qualityShipment.setShipment(shipment);
+        qualityShipment.setSale(sale);
+        qualityShipmentRepository.save(qualityShipment);
     }
 
     public String generateNextShipId() {

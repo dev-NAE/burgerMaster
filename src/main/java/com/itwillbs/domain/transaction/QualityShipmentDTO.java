@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @ToString
 public class QualityShipmentDTO {
 
-
     private String qualityShipmentId;
 
     private String shipmentId;
@@ -38,22 +37,18 @@ public class QualityShipmentDTO {
 
     public QualityShipmentDTO() {}
 
-    public QualityShipmentDTO(String status, String qsStatus) {
-        this.status = status;
-        this.qsStatus = qsStatus;
-    }
-
-    public QualityShipmentDTO(String shipmentId, Timestamp shipDate, String status, String saleId, String franchiseCode,
-                       String franchiseName, String managerId, String managerName, Timestamp orderDate, Timestamp dueDate, String note,
-                       int totalPrice, String qsStatus) {
+    public QualityShipmentDTO(String qualityShipmentId, String shipmentId, Timestamp shipDate, String status, String saleId, String franchiseCode,
+                              String franchiseName, String managerId, String managerName, Timestamp orderDate, Timestamp dueDate, String note,
+                              int totalPrice, String qsStatus) {
+        this.qualityShipmentId = qualityShipmentId;
         this.shipmentId = shipmentId;
         this.shipDate = shipDate;
         this.status = status;
         this.saleId = saleId;
         this.franchiseCode = franchiseCode;
         this.franchiseName = franchiseName;
-        this.managerId = managerId;
-        this.managerName = managerName;
+        this.managerId = (managerId != null ? managerId : ""); // 기본값 설정
+        this.managerName = (managerName != null ? managerName : ""); // 기본값 설정
         this.orderDate = orderDate;
         this.dueDate = dueDate;
         this.note = note;
