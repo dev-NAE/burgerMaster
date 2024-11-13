@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Timestamp;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +19,7 @@ import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.IncomingInsertDTO;
 import com.itwillbs.domain.inventory.IncomingItemsDTO;
 import com.itwillbs.entity.Incoming;
+import com.itwillbs.entity.IncomingItems;
 
 import jakarta.transaction.Transactional;
 
@@ -28,15 +29,15 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	/**
 	 * 입고 페이지 진입할 때 입고테이블 조회(페이징 처리)
 	 */
-	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, ic.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) "
-			+ "FROM Incoming ic LEFT JOIN fetch Manager m ON ic.managerId = m.managerId "
+	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, m.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) "
+			+ "FROM Incoming ic LEFT JOIN ic.manager m "
 			+ "ORDER BY ic.incomingId DESC")
 	Page<IncomingDTO> getIncomingLists(Pageable pageable);
 
 	/**
 	 * 입고 검색 조회
 	 */
-	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, ic.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) "
+	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, m.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) "
 			+ "FROM Incoming ic " + "LEFT JOIN ic.manager m " + "LEFT JOIN ic.incomingItems ii "
 			+ "LEFT JOIN ii.item i " 
 			+ "WHERE " + "(:reasonOfIncoming = '' OR "
@@ -86,6 +87,13 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 		       "WHERE qo.status = '검품완료' AND qoi.status = '통과' AND i.qualityOrderId IS NULL"
 		       )
 	List<IncomingInsertDTO> findAllEndOfQuality();
+
+	
+
+	
+	
+
+	Optional<Incoming> findTopByOrderByIncomingIdDesc();
 
 
 	

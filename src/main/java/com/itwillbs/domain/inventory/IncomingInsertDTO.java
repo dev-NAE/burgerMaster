@@ -2,6 +2,8 @@ package com.itwillbs.domain.inventory;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 
@@ -11,7 +13,10 @@ public class IncomingInsertDTO {
 	
     private String prodOrQualId;
     private String reasonOfIncoming; //생산 완료, 검품완료
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp prodOrQualDate;
+   
     private String itemName;
     private Integer quantity;
     private Integer totalAmount; //총 수량

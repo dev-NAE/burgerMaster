@@ -26,7 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.domain.inventory.IncomingDTO;
-
+import com.itwillbs.domain.inventory.IncomingItemsDTO;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.domain.inventory.OutgoingDTO;
 import com.itwillbs.service.InventoryService;
@@ -115,12 +115,20 @@ public class InventoryController {
 	// 입고 등록post
 	@PostMapping("/incomingInsert")
 	public String incomingInsertPost(@RequestParam(name = "incomingInsertCode") String incomingInsertCode,
-									@RequestParam(name = "managerId") String managerId) {
-		log.info("InventroyController incomingInsertget()");
+							            @RequestParam(name = "reasonOfIncoming") String reasonOfIncoming,
+							            @RequestParam(name = "managerId") String managerId) {
+		log.info("InventroyController incomingInsertPost()");
 		log.info("incomingInsertCode = " + incomingInsertCode);
+	    log.info("reasonOfIncoming = " + reasonOfIncoming);
 		log.info("managerId = " + managerId);
 		
 		//입고등록하기
+		
+		//11월 13일 변경!! 발주완료되었지만 입고 등록되지 않은 발주번호를 가져와서 입고 테이블에 등록함 + 입고 품목테이블에도 등록함
+		inventoryService.insertIncoming(incomingInsertCode, managerId);
+		
+		
+		
 		
 		
 		return "redirect:/inven/incomingInsert";

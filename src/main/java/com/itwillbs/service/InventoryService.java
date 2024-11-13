@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +18,18 @@ import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.domain.inventory.OutgoingDTO;
 import com.itwillbs.domain.inventory.OutgoingInsertDTO;
 import com.itwillbs.domain.inventory.OutgoingItemsDTO;
-
+import com.itwillbs.domain.transaction.OrderDTO;
+import com.itwillbs.entity.Incoming;
+import com.itwillbs.entity.IncomingItems;
 import com.itwillbs.entity.InventoryItem;
 import com.itwillbs.entity.Manager;
+import com.itwillbs.entity.Order;
+import com.itwillbs.entity.OrderItems;
 import com.itwillbs.repository.IncomingItemsRepository;
 import com.itwillbs.repository.IncomingRepository;
 import com.itwillbs.repository.InventoryRepository;
 import com.itwillbs.repository.ManagerRepository;
+import com.itwillbs.repository.OrderRepository;
 import com.itwillbs.repository.OutgoingItemsRepository;
 import com.itwillbs.repository.OutgoingRepository;
 
@@ -44,6 +49,7 @@ public class InventoryService {
 	private final OutgoingRepository outgoingRepository;
 	private final OutgoingItemsRepository outgoingItemsRepository;
 	private final ManagerRepository managerRepository;
+	private final OrderRepository orderRepository;
 	
 	// 재고 전체 조회 (페이지네이션 지원)
 	public Page<InventoryItemDTO> getInventoryItems(Pageable pageable) {
@@ -222,7 +228,52 @@ public class InventoryService {
 		
 	}
 
-	
+	//입고와 입고품목들 등록하기
+	@Transactional
+	public void insertIncoming(String incomingInsertCode, String managerId) {
+		log.info("입고 등록");
+		
+		//가져온 발주코드를 기준으로 발주데이터 찾기
+		Optional<Order> optionalOrder = orderRepository.findById("OD0001");
+		if(!optionalOrder.isPresent()) {
+			 log.error("발주 데이터를 찾을 수 없습니다. incomingInsertCode={}", incomingInsertCode);
+			 throw new IllegalArgumentException("Invalid incomingInsertCode: " + incomingInsertCode);
+		}
+		
+		 
+		Order order = optionalOrder.get();
+		log.info("발주 데이터 조회 완료 : " + order);
+		
+		//입고 엔티티 생성 및 설정
+		Incoming incoming = new Incoming();
+		
+		incoming.setIncomingId(generateIncomingId());
+		incoming.setIncomingStartDate(new Timestamp(System.currentTimeMillis()));
+		incoming.getManager().setManagerId(managerId);
+		incoming.setStatus("입고 진행중");
+		
+		
+		//발주 품목을 가져와서 입고 품목에 생성 및 설정
+		List<OrderItems> orderItemsList = order.getOrderItems();
+		for (OrderItems orderItem : orderItemsList) {
+			IncomingItems incomingItem = new IncomingItems();
+            incomingItem.setIncomingItemId(generateIncomingItemId());
+            incomingItem.getItem().setItemCode(orderItem.getItem().getItemCode());
+            incomingItem.setQuantity(orderItem.getQuantity());
+            
+
+            // 입고 엔티티와의 관계 설정
+            incomingItem.setIncoming(incoming);
+
+            // 입고 품목 리스트에 추가
+            incoming.getIncomingItems().add(incomingItem);
+		}
+		
+		incomingRepository.save(incoming);
+		log.info("입고 데이터 저장 완료: {}", incoming);
+		
+	}
+
 	
 	
 	
@@ -363,9 +414,32 @@ public class InventoryService {
 		    return filteredManagers;
 		}
 
-
 	
+		private String generateIncomingId() {
+		    // 현재 최대 incoming ID 조회
+		    Optional<Incoming> lastIncoming = incomingRepository.findTopByOrderByIncomingIdDesc();
+		    if (lastIncoming.isPresent()) {
+		        String lastId = lastIncoming.get().getIncomingId();
+		        int numericPart = Integer.parseInt(lastId.substring(3)); // "INC" 이후 숫자 부분 추출
+		        numericPart += 1;
+		        return String.format("INC%05d", numericPart); // "INC" + 5자리 숫자
+		    } else {
+		        return "INC00001"; // 첫 번째 ID
+		    }
+		}
 	
+	    private String generateIncomingItemId() {
+	        // 현재 최대 IncomingItem ID 조회
+	        Optional<IncomingItems> lastIncomingItem = incomingItemsRepository.findTopByOrderByIncomingItemIdDesc();
+	        if (lastIncomingItem.isPresent()) {
+	            String lastId = lastIncomingItem.get().getIncomingItemId();
+	            int numericPart = Integer.parseInt(lastId.substring(7)); // "INCITEM" 이후 숫자 부분 추출
+	            numericPart += 1;
+	            return String.format("INCITEM%05d", numericPart); // "INCITEM" + 4자리 숫자
+	        } else {
+	            return "INCITEM00001"; // 첫 번째 ID
+	        }
+	    }
 	
 	
 	

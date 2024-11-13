@@ -1,6 +1,7 @@
 package com.itwillbs.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -45,5 +46,8 @@ public interface IncomingItemsRepository extends JpaRepository<IncomingItems, St
 			"LEFT JOIN mfo.item i " +
 			"WHERE mfo.orderId = :prodOrQualId")
 	List<IncomingItemsDTO> findIncomingInsertProdItemsById(@Param("prodOrQualId") String prodOrQualId);
+
+	//입고 품목id의 가장 높은 값 구하기
+	Optional<IncomingItems> findTopByOrderByIncomingItemIdDesc();
 	
 }
