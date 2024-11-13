@@ -3,14 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
+  <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
   <title>작업 지시 조회</title>
   <!-- 기본 css 링크-->
   <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
   <!-- Google Font: Source Sans Pro -->
   <!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
   <!-- JQVMap -->
-  <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
-  <link rel="stylesheet" href="css/font.css">
+  <link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+  <link rel="stylesheet" href="/css/font.css">
   
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -76,7 +78,13 @@
 						<td th:text="${List.orderAmount}"></td>
 						<td th:text="${List.orderDeadline}"></td>
 						<td th:text="${List.orderDate}"></td>
-						<td th:text="${List.orderState}"></td>
+						<td th:switch="${List.orderState}">
+							<span th:case="'작업 전달 전'" th:name="${List.orderId}" style="color:orange;">작업 전달 전</span>
+							<span th:case="'작업 중'" th:name="${List.orderId}" style="color:red;">작업 중</span>
+							<span th:case="'작업 완료'" th:name="${List.orderId}" style="color:blue;">작업 완료</span>
+							<span th:case="'작업 종료'" th:name="${List.orderId}" style="color:green;">작업 종료</span>
+							<span th:case="*"></span>
+						</td>
 						<td th:if="${List.orderState=='작업 전달 전'}">
 							<button type="button" th:id="${List.orderId}" class="btn btn-warning transmit">전달</button>
 						</td>
@@ -98,44 +106,58 @@
 				
 <!--				페이지네이션-->
 			  <div style="display: inline-block;">
-			  <ul class="pagination">
-			    <li class="page-item"><a class="page-link" href="#">◀</a></li>
-			    <li class="page-item"><a class="page-link" href="#">1</a></li>
-			    <li class="page-item"><a class="page-link" href="#">2</a></li>
-			    <li class="page-item"><a class="page-link" href="#">3</a></li>
-			    <li class="page-item"><a class="page-link" href="#">▶</a></li>
-			  </ul>
+				<ul class="pagination">
+				  <li class="page-item"><a class="page-link" th:href="@{/mf/orders(page=${currentPage-1})}"
+					 th:if="${currentPage > 1}">◀</a></li>
+				<li class="page-item"><a class="page-link" th:unless="${currentPage > 1}">◀</a></li>
+
+				<span th:each="page:${#numbers.sequence(startPage,endPage)}">
+				    <li class="page-item" th:unless="${page==0}"><a class="page-link" th:href="@{/mf/orders(page=${page})}" th:text="${page}"></a></li>
+				</span>
+
+				  <li class="page-item"><a class="page-link" th:href="@{/mf/orders(page=${currentPage+1})}"
+					th:if="${currentPage < totalPages}">▶</a></li>
+				<li class="page-item"><a class="page-link" th:unless="${currentPage < totalPages}">▶</a></li>
+				</ul>
 			  </div>
 			  
 <!--			  검색 도구-->
 			  <div class="searching" style="float: right;">
-			  
-<!--				키워드 분류-->
+				
+			  <form th:action="@{/mf/orders}" method="get">
+				
+				<!--			  데드라인 검색-->
 			  <div style="display: inline-block;">
-			    <select class="form-control">
-					<option th:text="식별번호"></option>
-					<option th:text="가공품명"></option>
-					<option th:text="요청일"></option>
+				<input class="form-control" type="date" name="searchDeadline">
+			  </div>	
+			
+<!--			  작업 상태 분류-->
+			  <div style="display: inline-block;">
+			    <select class="form-control" onchange="changeState(this.value)">
+			  	  <option th:text="작업전달전" value="작업 전달 전" selected></option>
+			  	  <option th:text="작업완료" value="작업 완료"></option>
+			  	  <option th:text="작업중" value="작업 중"></option>
+				  <option th:text="작업완료" value="작업 완료"></option>
+			  	</select>
+				<input type="hidden" name="searchState" id="state">
+			  </div>
+			  
+<!--			  검색어 분류-->
+			  <div style="display: inline-block;">
+			    <select id="type" class="form-control" onchange="changeSearch(this.value)">
+					<option th:text="지시식별번호" value="searchId" selected></option>
+					<option th:text="가공품명" value="searchName"></option>
 				</select>
 			  </div>
 			  
-<!--			  작업 상태 분류-->
 			  <div style="display: inline-block;">
-			    <select class="form-control">
-			  	  <option th:text="작업완료"></option>
-			  	  <option th:text="작업전달전"></option>
-			  	  <option th:text="작업중"></option>
-				  <option th:text="작업완료"></option>
-			  	</select>
+			  	<input type="text" name="searchId" id="keyword" placeholder="검색어">
 			  </div>
 			  
 			  <div style="display: inline-block;">
-			  	<input type="text" name="keyword" placeholder="검색어">
+				<button type="submit" class="btn btn-success">검색</button>
 			  </div>
-			  
-			  <div style="display: inline-block;">
-				<button type="button" class="btn btn-success">검색</button>
-			  </div>
+			  </form>
 			  
 			  </div>
 <!--			  searching-->
@@ -184,19 +206,5 @@
 
 <script src="/js/manufacture/orders.js"></script>
 
-<!-- ChartJS -->
-<script src="plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<!-- jQuery 차트 라이브러리-->
-<!-- 사용법 참고 용 사이트 : https://idenrai.tistory.com/55-->
-<script src="plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-<!-- daterangepicker -->
-<script src="plugins/moment/moment.min.js"></script>
-<script src="plugins/daterangepicker/daterangepicker.js"></script>
 </body>
 </html>
