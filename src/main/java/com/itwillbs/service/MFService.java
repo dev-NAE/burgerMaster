@@ -84,6 +84,8 @@ public class MFService {
 	}
 	
 	public String getNewOrderId() {
+		log.info("MFService getNewOrderId()");
+		
 		String maxId = mfRepository.findMaxId();
 		
 		if(maxId==null) {
@@ -96,6 +98,25 @@ public class MFService {
 			
 			return newId;
 		}
+	}
+
+	public boolean orderUpdate(String type, String key) {
+		log.info("MFService orderUpdate()");
+		
+		if(type.equals("transmit")) {
+			mfRepository.transmitOrder(key);
+			log.info("MFService transmit");
+			
+			return true;
+		}
+		else if(type.equals("complete")) {
+			mfRepository.completeOrder(key);
+			log.info("MFService complete");
+			
+			return true;
+		}
+		
+		return false;
 	}
 	
 }

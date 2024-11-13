@@ -1,3 +1,5 @@
+let token = $("meta[name='_csrf']").attr("content");
+let header = $("meta[name='_csrf_header']").attr("content");
 
 //전달, 완료에 따라 모달 수정
 $(document).ready(function(){
@@ -18,42 +20,52 @@ $(document).ready(function(){
 
 //작업 상태 변경 후, 테이블 변경
 $('#confirmSubmitBtn').click(function(){
-	const type = $('#confirmSubmitBtn').attr('value');
-	const key = $('#confirmSubmitBtn').attr('name');
+	let type = $('#confirmSubmitBtn').attr('name');
+	let key = $('#confirmSubmitBtn').attr('value');
+	
+	console.log(type+" "+key);
 	
 	$.ajax({
 		url: "/mf/orderUpdate",
 		method: "POST",
-		dataType: "json",
+		contentType : "application/x-www-form-urlencoded; charset=utf-8",
+		            dataType : "json",
 		data: {
 			type: type,
 			key: key
 		},
+		beforeSend : function(xhr)
+		            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+		                xhr.setRequestHeader(header, token);
+		            },
 		success: function(response){
+			$('#confirmationModal').modal('hide');
+			console.log(response);
+			
+			if(response==='success'){
+				
 			alert("처리되었습니다.");
+			
 			$('#'+key).attr('disabled', true);
+			$('#'+key).removeClass('btn-warning');
+			$('#'+key).removeClass('btn-primary');
+			$('#'+key).addClass('btn-secondary')
 			if(type=='transmit'){
-				$('td[name=key]').text('작업 중');
+				$('span[name='+key+']').text('작업 중');
+				$('span[name='+key+']').css("color", "red");
 			} else if(type=='complete'){
-				$('td[name=key]').text('작업 완료');
+				$('span[name='+key+']').text('작업 종료');
+				$('span[name='+key+']').css("color", "green");
+			}
+			
+			} else {
+				alert("잘못된 요청입니다. 다시 시도해주세요.");
 			}
 		},error: function(xhr, status, error) {
-		    console.error("요청 오류:", error);
+			$('#confirmationModal').modal('hide');
+		    console.error("요청 오류 : ", error);
 		    alert("요청 오류 발생.");
 		}
 	});
 });
-
-function color(state, row){
-	alert(state+' '+row);
-	if(state=='작업 전달 전'){
-		$(row).css("color", "red");
-	} else if(state=='작업 중'){
-		this.style.color="orange";
-	} else if(state=='작업 완료'){
-		this.style.color="blue";
-	} else if(state=='작업 종료'){
-		this.style.color="green";
-	} 
-}
 

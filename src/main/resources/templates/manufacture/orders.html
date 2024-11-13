@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
+  <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
   <title>작업 지시 조회</title>
   <!-- 기본 css 링크-->
   <th:block th:replace="fragments/basicLink :: basicLinkCssFragment"></th:block>
@@ -76,7 +78,13 @@
 						<td th:text="${List.orderAmount}"></td>
 						<td th:text="${List.orderDeadline}"></td>
 						<td th:text="${List.orderDate}"></td>
-						<td th:text="${List.orderState}" th:name="${List.orderId}" onclick="color(innerText,this.name)"></td>
+						<td th:switch="${List.orderState}">
+							<span th:case="'작업 전달 전'" th:name="${List.orderId}" style="color:orange;">작업 전달 전</span>
+							<span th:case="'작업 중'" th:name="${List.orderId}" style="color:red;">작업 중</span>
+							<span th:case="'작업 완료'" th:name="${List.orderId}" style="color:blue;">작업 완료</span>
+							<span th:case="'작업 종료'" th:name="${List.orderId}" style="color:green;">작업 종료</span>
+							<span th:case="*"></span>
+						</td>
 						<td th:if="${List.orderState=='작업 전달 전'}">
 							<button type="button" th:id="${List.orderId}" class="btn btn-warning transmit">전달</button>
 						</td>
