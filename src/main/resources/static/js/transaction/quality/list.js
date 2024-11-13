@@ -48,7 +48,7 @@ $(document).ready(function() {
         let dueDateEnd = $('#due_date-end').val();
 
         $.ajax({
-            url: "/tx/searchShips",
+            url: "/quality/searchQS",
             type: "GET",
             data: {
                 status: status,
@@ -61,7 +61,7 @@ $(document).ready(function() {
             },
             dataType: "json",
             success: function(response) {
-                $('#ship-list').DataTable().clear().rows.add(response).draw();
+                $('#qual-list').DataTable().clear().rows.add(response).draw();
             },
             error: function(xhr, status, error) {
                 console.error("검색 오류:", error);
@@ -133,7 +133,7 @@ $(function () {
             },
             { data: "status", className: "text-center",
                 render: function(data, type, row) {
-                    let color = data === '검품 완료' ? 'blue' : 'black';
+                    let color = data === '검품완료' ? 'blue' : 'black';
                     return `<span style="color:${color}">${data}</span>`;
                 }
             }
@@ -150,7 +150,7 @@ $(function () {
 
             // 행 누르면 상세페이지로 이동하게
             $(row).on('click', function() {
-                window.location.href = `/tx/qualityDetail?qsId=${data.qualityShipmentId}`;
+                window.location.href = `/quality/qsDetail?qsId=${data.qualityShipmentId}`;
             });
 
             $(row).css('cursor', 'pointer');

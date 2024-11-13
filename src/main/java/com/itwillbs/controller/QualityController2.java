@@ -37,95 +37,55 @@ public class QualityController2 {
         log.info("qualShips: " + qualShips);
         return ResponseEntity.ok(qualShips);
     }
-//
-//    @GetMapping("/insertShip")
-//    public String insertShip() {
-//        // '등록대상' 버튼으로 값 가져오기 전까지는 빈 화면
-//        return "transaction/shipment/insert";
-//    }
-//
-//    @ResponseBody
-//    @PostMapping("/saveShip")
-//    public String saveShip(ShipmentDTO shipmentDTO) {
-//        txService.saveShip(shipmentDTO);
-//        return "success";
-//    }
-//
-//    @GetMapping("/findToShip")
-//    public String findToShip(Model model) {
-//        List<SaleDTO> sales = txService.findToShip();
-//        model.addAttribute("toShip", sales);
-//        return "transaction/shipment/findToShip";
-//    }
-//
-//    // 출하정보 조회 수주물품정보
-//    @ResponseBody
-//    @GetMapping("/getSaleItems")
-//    public ResponseEntity<List<SaleItemsDTO>> getSaleItems(String saleId) {
-//        List<SaleItemsDTO> saleItems = txService.getSaleItems(saleId);
-//        return ResponseEntity.ok(saleItems);
-//    }
-//
-//
-//
-//
-//    @GetMapping("/shipDetail")
-//    public String shipDetail(@RequestParam String shipId, Model model) {
-//        ShipmentDTO shipment = txService.getShipmentDTOById(shipId);
-//        if (shipment.getStatus().equals("출하등록(검품요청)") && shipment.getQsStatus().equals("검품완료")) {
-//            log.info("변경전: " + shipment.getStatus());
-//            shipment.setStatus("출하등록(검품완료)");
-//            log.info("변경후: " +shipment.getStatus());
-//
-//        }
-//        List<SaleItems> items = txService.getSaledItems(txService.getSaleById(shipment.getSaleId()));
-//        model.addAttribute("shipment", shipment);
-//        model.addAttribute("items", items);
-//        return "transaction/shipment/detail";
-//    }
-//
-//    @ResponseBody
-//    @GetMapping("/searchShips")
-//    public ResponseEntity<List<ShipmentDTO>> searchShips(
-//            @RequestParam(required = false) String status,
-//            @RequestParam(required = false) String franchiseName,
-//            @RequestParam(required = false) String shipDateStart,
-//            @RequestParam(required = false) String shipDateEnd,
-//            @RequestParam(required = false) String itemName,
-//            @RequestParam(required = false) String dueDateStart,
-//            @RequestParam(required = false) String dueDateEnd
-//    ) {
-//        log.info("TXController searchSales()");
-//        List<ShipmentDTO> shipment = txService.searchShips(status, franchiseName, shipDateStart,
-//                shipDateEnd, itemName, dueDateStart, dueDateEnd);
-//        log.info(shipment.toString());
-//        return ResponseEntity.ok(shipment);
-//    }
-//
-//    @ResponseBody
-//    @GetMapping("/syncShipStatus")
-//    public ResponseEntity<ShipmentDTO> syncShipStatus(@RequestParam String shipmentId) {
-//        ShipmentDTO shipmentDTO = txService.syncByShipmentId(shipmentId);
-//        return ResponseEntity.ok(shipmentDTO);
-//    }
-//
-//    @ResponseBody
-//    @PostMapping("/cancelShip")
-//    public String cancelShip(@RequestParam String shipmentId) {
-//        txService.updateShipStatus(shipmentId, "출하취소");
-//        return "success";
-//    }
-//
-//    @ResponseBody
-//    @PostMapping("/completeShip")
-//    public String completeShip(@RequestParam String shipmentId) {
-//        txService.updateShipStatus(shipmentId, "출하완료");
-//        return "success";
-//    }
-//
-//    @GetMapping("/invoiceForm")
-//    public String invoiceForm() {
-//        return "transaction/shipment/invoiceform";
-//    }
+
+    @GetMapping("/qsDetail")
+    public String qsDetail(@RequestParam String qsId, Model model) {
+        QualityShipmentDTO qsDTO = qsService.getQSShipmentDTOById(qsId);
+        log.info("qsDTO: " + qsDTO);
+        List<SaleItems> items = txService.getSaledItems(txService.getSaleById(qsDTO.getSaleId()));
+        model.addAttribute("qsDTO", qsDTO);
+        model.addAttribute("items", items);
+        return "transaction/quality/detail";
+    }
+
+    @ResponseBody
+    @GetMapping("/searchQS")
+    public ResponseEntity<List<QualityShipmentDTO>> searchQS(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String franchiseName,
+            @RequestParam(required = false) String shipDateStart,
+            @RequestParam(required = false) String shipDateEnd,
+            @RequestParam(required = false) String itemName,
+            @RequestParam(required = false) String dueDateStart,
+            @RequestParam(required = false) String dueDateEnd
+    ) {
+        log.info("QS2 Controller searchQS()");
+        List<QualityShipmentDTO> qs = qsService.searchQS(status, franchiseName, shipDateStart,
+                shipDateEnd, itemName, dueDateStart, dueDateEnd);
+        log.info(qs.toString());
+        return ResponseEntity.ok(qs);
+    }
+
+    @GetMapping("/findManager")
+    public String findManager(@RequestParam(required = false) String query, Model model) {
+        if (query == null || query.isEmpty()) {
+            query = null;
+        }
+        List<Manager> managers = qsService.findManagers(query);
+        model.addAttribute("managers", managers);
+        return "transaction/quality/findManager";
+    }
+
+    @ResponseBody
+    @PostMapping("/completeQS")
+    public String completeShip(@RequestParam String qsId,
+                               @RequestParam String manager,
+                               @RequestParam(required = false) String note) {
+        if (note == null || note.isEmpty()) {
+            note = null;
+        }
+        qsService.updateQsStatus(qsId, manager, note);
+        return "success";
+    }
 
 }
