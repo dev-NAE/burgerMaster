@@ -106,44 +106,58 @@
 				
 <!--				페이지네이션-->
 			  <div style="display: inline-block;">
-			  <ul class="pagination">
-			    <li class="page-item"><a class="page-link" href="#">◀</a></li>
-			    <li class="page-item"><a class="page-link" href="#">1</a></li>
-			    <li class="page-item"><a class="page-link" href="#">2</a></li>
-			    <li class="page-item"><a class="page-link" href="#">3</a></li>
-			    <li class="page-item"><a class="page-link" href="#">▶</a></li>
-			  </ul>
+				<ul class="pagination">
+				  <li class="page-item"><a class="page-link" th:href="@{/mf/orders(page=${currentPage-1})}"
+					 th:if="${currentPage > 1}">◀</a></li>
+				<li class="page-item"><a class="page-link" th:unless="${currentPage > 1}">◀</a></li>
+
+				<span th:each="page:${#numbers.sequence(startPage,endPage)}">
+				    <li class="page-item" th:unless="${page==0}"><a class="page-link" th:href="@{/mf/orders(page=${page})}" th:text="${page}"></a></li>
+				</span>
+
+				  <li class="page-item"><a class="page-link" th:href="@{/mf/orders(page=${currentPage+1})}"
+					th:if="${currentPage < totalPages}">▶</a></li>
+				<li class="page-item"><a class="page-link" th:unless="${currentPage < totalPages}">▶</a></li>
+				</ul>
 			  </div>
 			  
 <!--			  검색 도구-->
 			  <div class="searching" style="float: right;">
-			  
-<!--				키워드 분류-->
+				
+			  <form th:action="@{/mf/orders}" method="get">
+				
+				<!--			  데드라인 검색-->
 			  <div style="display: inline-block;">
-			    <select class="form-control">
-					<option th:text="식별번호"></option>
-					<option th:text="가공품명"></option>
-					<option th:text="요청일"></option>
+				<input class="form-control" type="date" name="searchDeadline">
+			  </div>	
+			
+<!--			  작업 상태 분류-->
+			  <div style="display: inline-block;">
+			    <select class="form-control" onchange="changeState(this.value)">
+			  	  <option th:text="작업전달전" value="작업 전달 전" selected></option>
+			  	  <option th:text="작업완료" value="작업 완료"></option>
+			  	  <option th:text="작업중" value="작업 중"></option>
+				  <option th:text="작업완료" value="작업 완료"></option>
+			  	</select>
+				<input type="hidden" name="searchState" id="state">
+			  </div>
+			  
+<!--			  검색어 분류-->
+			  <div style="display: inline-block;">
+			    <select id="type" class="form-control" onchange="changeSearch(this.value)">
+					<option th:text="지시식별번호" value="searchId" selected></option>
+					<option th:text="가공품명" value="searchName"></option>
 				</select>
 			  </div>
 			  
-<!--			  작업 상태 분류-->
 			  <div style="display: inline-block;">
-			    <select class="form-control">
-			  	  <option th:text="작업완료"></option>
-			  	  <option th:text="작업전달전"></option>
-			  	  <option th:text="작업중"></option>
-				  <option th:text="작업완료"></option>
-			  	</select>
+			  	<input type="text" name="searchId" id="keyword" placeholder="검색어">
 			  </div>
 			  
 			  <div style="display: inline-block;">
-			  	<input type="text" name="keyword" placeholder="검색어">
+				<button type="submit" class="btn btn-success">검색</button>
 			  </div>
-			  
-			  <div style="display: inline-block;">
-				<button type="button" class="btn btn-success">검색</button>
-			  </div>
+			  </form>
 			  
 			  </div>
 <!--			  searching-->

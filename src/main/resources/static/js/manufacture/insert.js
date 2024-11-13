@@ -137,6 +137,7 @@ $(document).ready(function() {
 	
     $('#confirmSubmitBtn').click(function() {
         $('#input-form').unbind('submit').submit();
+		$('#confirmationModal').modal('hide');
 		alert('작업 지시가 등록되었습니다.');
     });
 });

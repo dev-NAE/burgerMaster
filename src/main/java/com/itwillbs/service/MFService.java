@@ -26,10 +26,14 @@ public class MFService {
 	private final MFRepository mfRepository;
 	private final ItemRepository itemRepostiory; 
 
-	public List<MFOrderDTO> getOrderList() {
+	public List<MFOrderDTO> getOrderList(
+			LocalDate searchDeadline,
+			String searchState,
+			String searchId,
+			String searchName) {
 		log.info("MFService getOrderList()");
 		
-		return mfRepository.findOrderList();
+		return mfRepository.findOrderList(searchDeadline, searchState, searchId, searchName);
 	}
 	
 	public List<Item> getPPList(String searchId, String searchName){
@@ -76,7 +80,6 @@ public class MFService {
 		
 		order.setItem(itemRepostiory.findById(itemCode).orElse(null));
 		order.setOrderId(getNewOrderId());
-		order.setOrderDeadline(LocalDate.now());
 		order.setOrderDate(new Timestamp(System.currentTimeMillis()));
 		order.setOrderState("작업 전달 전");
 		

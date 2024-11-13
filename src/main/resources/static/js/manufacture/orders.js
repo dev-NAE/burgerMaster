@@ -1,6 +1,13 @@
 let token = $("meta[name='_csrf']").attr("content");
 let header = $("meta[name='_csrf_header']").attr("content");
 
+function changeSearch(type){
+	document.getElementById('keyword').name = type;
+}
+function changeState(state){
+	document.getElementById('state').value = state;
+}
+
 //전달, 완료에 따라 모달 수정
 $(document).ready(function(){
 	$('.transmit').click(function(){
@@ -29,7 +36,7 @@ $('#confirmSubmitBtn').click(function(){
 		url: "/mf/orderUpdate",
 		method: "POST",
 		contentType : "application/x-www-form-urlencoded; charset=utf-8",
-		            dataType : "json",
+		dataType : "text",
 		data: {
 			type: type,
 			key: key
@@ -42,7 +49,7 @@ $('#confirmSubmitBtn').click(function(){
 			$('#confirmationModal').modal('hide');
 			console.log(response);
 			
-			if(response==='success'){
+			if(response=='success'){
 				
 			alert("처리되었습니다.");
 			
