@@ -11,7 +11,6 @@ import java.sql.Timestamp;
 @Table(name = "quality_shipment")
 @Getter
 @Setter
-@ToString
 public class QualityShipment {
 
 	@Id
@@ -27,12 +26,13 @@ public class QualityShipment {
 	@Column(name = "note" , length = 100)
 	private String note;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "shipment_id")
 	private Shipment shipment;
 
-	@Column(name = "manager" , length = 20 ,nullable = false)
-	private String manager;
+	@ManyToOne
+	@JoinColumn(name = "manager")
+	private Manager manager;
 
 	@OneToOne
 	@JoinColumn(name = "sale_id")
