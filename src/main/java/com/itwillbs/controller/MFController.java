@@ -138,5 +138,19 @@ public class MFController {
 		
 	}
 	
+	@ResponseBody
+	@PostMapping("/orderUpdate")
+	public String orderUpdate(
+			@RequestParam(name = "type") String type,
+			@RequestParam(name = "key") String key) {
+		log.info("MFController orderUpdate()");
+		
+		boolean response = mfService.orderUpdate(type, key);
+		
+		if(response)
+			return "success";
+		else
+			return "failed";
+	}
 	
 }
