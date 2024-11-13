@@ -19,19 +19,27 @@ public interface ShipmentRepository extends JpaRepository<Shipment, String> {
     @Query("SELECT MAX(sm.shipmentId) FROM Shipment sm")
     String findMaxShipmentId();
 
-    // 출하 대상 수주 건 조회
+    // 출하 대상 수주 건 조회 ver.1 (출고 완료 + 출고검품 완료 건 불러오기)
+//    @Query("SELECT new com.itwillbs.domain.transaction.SaleDTO " +
+//            "(s.saleId, s.totalPrice, s.orderDate, s.dueDate, s.franchise, qs.status)" +
+//            "FROM Shipment sm RIGHT JOIN sm.sale s RIGHT JOIN s.qualitySale qs " +
+//            "WHERE qs.status = '검품완료' AND sm.status IS NULL " +
+//            "ORDER BY s.dueDate")
+//    // 출고 정보 추가해야 함
+//    List<SaleDTO> findAllQualified();
+
+    // 출하 대상 수주 건 조회 ver.2 (출고 완료 건 불러오기)
     @Query("SELECT new com.itwillbs.domain.transaction.SaleDTO " +
-            "(s.saleId, s.totalPrice, s.orderDate, s.dueDate, s.franchise, qs.status)" +
-            "FROM Shipment sm RIGHT JOIN sm.sale s RIGHT JOIN s.qualitySale qs " +
-            "WHERE qs.status = '검품완료' AND sm.status IS NULL " +
+            "(s.saleId, s.totalPrice, s.orderDate, s.dueDate, s.franchise, o.outgoingId, o.status)" +
+            "FROM Shipment sm RIGHT JOIN sm.sale s RIGHT JOIN s.outgoing o " +
+            "WHERE o.status = '출고 완료' AND sm.status IS NULL " +
             "ORDER BY s.dueDate")
-    // 출고 정보 추가해야 함
+        // 출고 정보 추가해야 함
     List<SaleDTO> findAllQualified();
 
     // 출하등록 된 것 중 출하검품 상태 확인
     @Query("SELECT qsm.status FROM QualityShipment qsm JOIN qsm.shipment sm WHERE sm.shipmentId = :shipmentId")
     String checkShipmentQualified(@Param("shipmentId") String shipmentId);
-
 
     @Query("SELECT sm FROM Shipment sm JOIN sm.sale s " +
             "JOIN s.franchise f " +

@@ -16,13 +16,10 @@ public class QualityShipment {
 
 	@Id
 	@Column(name = "quality_shipment_id" , length = 20 , nullable = false)
-	private String quality_shipment_id;
+	private String qualityShipmentId;
 	
 	@Column(name = "ship_date" , nullable = false)
-	private Timestamp order_date;
-	
-	@Column(name = "due_date" , nullable = false)
-	private Timestamp due_date;
+	private Timestamp shipDate;
 
 	@Column(name = "status" , length = 20 ,nullable = false)
 	private String status;

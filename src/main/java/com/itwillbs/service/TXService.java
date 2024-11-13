@@ -382,6 +382,7 @@ public class TXService {
 
     public List<SaleDTO> findToShip() {
         List<SaleDTO> allQualified = shipmentRepository.findAllQualified();
+        log.info(allQualified.toString());
         allQualified.forEach(sale -> {
                 Sale thisSale = saleRepository.findById(sale.getSaleId()).orElse(null);
                 if (thisSale != null) {
