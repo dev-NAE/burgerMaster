@@ -37,11 +37,6 @@ public class QualityShipmentDTO {
 
     public QualityShipmentDTO() {}
 
-    public QualityShipmentDTO(String status, String qsStatus) {
-        this.status = status;
-        this.qsStatus = qsStatus;
-    }
-
     public QualityShipmentDTO(String qualityShipmentId, String shipmentId, Timestamp shipDate, String status, String saleId, String franchiseCode,
                               String franchiseName, String managerId, String managerName, Timestamp orderDate, Timestamp dueDate, String note,
                               int totalPrice, String qsStatus) {
