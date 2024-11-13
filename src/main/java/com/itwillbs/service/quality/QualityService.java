@@ -27,6 +27,7 @@ public class QualityService {
 	public List<QualitySaleDTO> getQualitySaleList() {
 		return qualitySaleRepository.findQualitySaleList();
 	}
+	// 출고 검품 상세 처리
 
 	
 	
