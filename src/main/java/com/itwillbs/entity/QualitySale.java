@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "quality_sale")
@@ -37,6 +38,8 @@ public class QualitySale {
 	@Column(name = "manager" , length = 20 ,nullable = false)
 	private String manager;
 	
-
+	@OneToMany
+	@JoinColumn(name = "quality_sale_id")
+	private List<QualitySaleItems> quality_sale_items;
 
 }

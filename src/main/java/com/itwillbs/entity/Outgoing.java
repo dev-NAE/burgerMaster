@@ -47,10 +47,10 @@ public class Outgoing {
 	@Column(name = "production_id")
 	private String productionId;
 	
-	@Column(name = "quality_order_id")
-	private String qualityOrderId;
+	@Column(name = "quality_sale_id")
+	private String qualitySaleId;
 	
-
+ 
     // Many-to-One 관계 설정: Incoming과 Manager
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id", insertable = false, updatable = false)

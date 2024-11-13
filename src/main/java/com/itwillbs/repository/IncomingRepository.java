@@ -1,12 +1,12 @@
 package com.itwillbs.repository;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +17,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.IncomingInsertDTO;
+import com.itwillbs.domain.inventory.IncomingItemsDTO;
 import com.itwillbs.entity.Incoming;
 
 import jakarta.transaction.Transactional;
@@ -37,9 +38,10 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	 */
 	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, ic.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) "
 			+ "FROM Incoming ic " + "LEFT JOIN ic.manager m " + "LEFT JOIN ic.incomingItems ii "
-			+ "LEFT JOIN ii.item i " + "WHERE " + "(:reasonOfIncoming = '' OR "
-			+ " (:reasonOfIncoming = '생산완료' AND ic.productionId IS NOT NULL) OR "
-			+ " (:reasonOfIncoming = '검품완료' AND ic.qualityOrderId IS NOT NULL)) "
+			+ "LEFT JOIN ii.item i " 
+			+ "WHERE " + "(:reasonOfIncoming = '' OR "
+			+ " (:reasonOfIncoming = '생산 완료' AND ic.productionId IS NOT NULL) OR "
+			+ " (:reasonOfIncoming = '입하검품 완료' AND ic.qualityOrderId IS NOT NULL)) "
 			+ "AND (:incomingStartDate_start IS NULL OR ic.incomingStartDate >= :incomingStartDate_start) "
 			+ "AND (:incomingStartDate_end IS NULL OR ic.incomingStartDate <= :incomingStartDate_end) "
 			+ "AND (:incomingId = '' OR ic.incomingId LIKE CONCAT('%', :incomingId, '%')) "
@@ -77,11 +79,15 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	/**
 	 * 입하검품 완료되었지만 입고등록되지 않은 데이터 조회
 	 */
-	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(qs.quality_sale_id, qs.status, qs.order_date) " +
-			"FROM QualitySale qs LEFT JOIN Incoming i ON qs.quality_sale_id = i.qualityOrderId " +
-			"WHERE qs.status = '검품완료' " +
-			"AND i.qualityOrderId IS NULL")
+	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(qo.quality_order_id, qo.status, qo.order_date) " +
+		       "FROM QualityOrder qo " +
+		       "LEFT JOIN qo.quality_order_items qoi " +
+		       "LEFT JOIN Incoming i ON qo.quality_order_id = i.qualityOrderId " +
+		       "WHERE qo.status = '검품완료' AND qoi.status = '통과' AND i.qualityOrderId IS NULL"
+		       )
 	List<IncomingInsertDTO> findAllEndOfQuality();
+
+
 	
 	
 	
