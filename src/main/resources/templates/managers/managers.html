@@ -42,7 +42,7 @@
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
               <li class="breadcrumb-item active">관리자 관리</li>
             </ol>
           </div><!-- /.col -->
@@ -68,10 +68,10 @@
                     <a class="btn-sm btn-primary" href="#" id="createManager">관리자 생성</a>
                   </div>
                   <div class="input-group input-group-sm" style="width: 250px;">
+                    <label>
                     <input type="text" id="search" name="search" class="form-control float-right" placeholder="Search"
-                           th:if="${search.isEmpty() || search eq ''}">
-                    <input type="text" name="search" class="form-control float-right" placeholder="Search"
-                             th:unless="${search.isEmpty() || search ne ''}" th:value="${search}">
+                              th:value="${!search.isEmpty()} ? ${search} : ''">
+                    </label>
                     <div class="input-group-append">
                       <button type="submit" class="btn btn-default" id="btn_search">
                         <i class="fas fa-search"></i>
@@ -101,11 +101,8 @@
                   </tr>
                   </tbody>
                 </table>
-
-
               </div>
               <!-- /div managers table-->
-
             </div>
             <!-- /card -->
           </div>
@@ -120,16 +117,15 @@
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
               <ul class="pagination">
                 <li th:if="${currentPage > 1}" class="paginate_button page-item previous" id="example2_previous">
-                  <a th:href="@{/manager/list(page=${currentPage - 1})}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                  <a th:href="@{/bgmManager/list(page=${currentPage - 1})}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
                 </li>
                 <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
                     class="paginate_button page-item" th:classappend="${currentPage eq page} ? 'active' ">
-                  <a th:if="${search.isEmpty() || search eq ''}" th:href="@{/manager/list(page=${page})}" th:text="${page}" aria-controls="example2"  class="page-link" ></a>
-                  <a th:unless="${ search.isEmpty() || search ne ''}" th:href="@{/manager/list(page=${page},search=${search})}" th:text="${page}" aria-controls="example2"  class="page-link"></a>
+                  <a th:if="${search.isEmpty() || search eq ''}" th:href="@{/bgmManager/list(page=${page})}" th:text="${page}" aria-controls="example2"  class="page-link" ></a>
+                  <a th:unless="${ search.isEmpty() || search eq ''}" th:href="@{/bgmManager/list(page=${page},search=${search})}" th:text="${page}" aria-controls="example2"  class="page-link"></a>
                 </li>
-
                 <li th:if="${currentPage  < totalPages}" class="paginate_button page-item next" id="example2_next">
-                  <a th:href="@{/manager/list(page=${currentPage + 1})}" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+                  <a th:href="@{/bgmManager/list(page=${currentPage + 1})}" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
                 </li>
               </ul>
             </div>
@@ -166,7 +162,7 @@
             <div class="form-group">
               <div class="row d-flex justify-content-between">
 
-              <label for="manager_pass_create_modal">Password</label>
+              <label for="manager_pass_change_modal">Password</label>
                 <div class="custom-control">
                   <input id="change-pass-switch" type="checkbox" data-toggle="switchbutton" data-size="sm">
                   <label for="change-pass-switch">password 유지</label>
@@ -321,12 +317,6 @@
 <!-- 기본 js 링크 -->
 <th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
 
-<!-- ChartJS -->
-<script src="/plugins/chart.js/Chart.min.js"></script>
-<!-- Sparkline -->
-<script src="/plugins/sparklines/sparkline.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- switch 버튼 -->
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap-switch-button@1.1.0/dist/bootstrap-switch-button.min.js"></script>
 <!-- custom js -->

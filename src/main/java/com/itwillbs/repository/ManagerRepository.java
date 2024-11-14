@@ -12,7 +12,12 @@ import java.util.List;
 
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager, String> {
-    @Query("SELECT m FROM Manager m where m.managerId = :search or m.email= :search or m.phone= :search or m.managerRole=:search")
+    @Query("SELECT m FROM Manager m " +
+            "where m.managerId LIKE concat('%', :search, '%') " +
+            "or m.name LIKE concat('%', :search, '%') " +
+            "or m.email LIKE concat('%', :search, '%') " +
+            "or m.phone LIKE concat('%', :search, '%') " +
+            "or m.managerRole LIKE concat('%', :search, '%')")
     Page<Manager> findBySearch(Pageable pageable, @Param("search")String search);
 
     // 이은지 작성: 거래 담당자 가져오기 (+ 이름 검색 포함)

@@ -160,11 +160,11 @@ public class RestInventoryController {
 	
 	// 입고 등록할 목록중 하나 선택해서 그 목록의 품목들을 보여줌
 	@GetMapping("/getIncomingInsertItems")
-	public ResponseEntity<List<IncomingItems>> getIncomingInsertItems(@RequestParam("prodOrOrderId") String prodOrOrderId,
+	public ResponseEntity<List<IncomingItemsDTO>> getIncomingInsertItems(@RequestParam("prodOrOrderId") String prodOrOrderId,
 																	@RequestParam("reasonOfIncoming") String reasonOfIncoming){
 		log.info("RestInventoryController.incomingInsertItems()");
 		
-		List<IncomingItems> incomingItems = inventoryService.findIncomingInsertItems(prodOrOrderId, reasonOfIncoming);
+		List<IncomingItemsDTO> incomingItems = inventoryService.findIncomingInsertItems(prodOrOrderId, reasonOfIncoming);
 		log.info(incomingItems.toString());
 		// 품목이 존재하면 반환
 		if (!incomingItems.isEmpty()) {

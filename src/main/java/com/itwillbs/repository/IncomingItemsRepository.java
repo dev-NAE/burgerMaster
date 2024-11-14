@@ -43,13 +43,12 @@ public interface IncomingItemsRepository extends JpaRepository<IncomingItems, St
 //	List<IncomingItems> findQualityOrderItemsById(@Param("qualityOrderId") String qualityOrderId);
 	
 	//입하 검품완료된 해당 검품코드의 불량 아닌 통과된 품목들만 조회
-	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, qoi.quantity) " +
-			"FROM QualityOrderItems qoi " +
-			"LEFT JOIN qoi.item i " +
-			"LEFT JOIN qoi.quality_order qo " +
-			"WHERE qo.quality_order_id = :qualityOrderId " +
-			"AND qoi.status = '통과'")
-	List<IncomingItems> findOrderItemsById(@Param("qualityOrderId") String qualityOrderId);
+	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, oi.quantity) " +
+			"FROM OrderItems oi " +
+			"LEFT JOIN oi.item i " +
+			"LEFT JOIN oi.order o " +
+			"WHERE o.orderId = :orderId")
+	List<IncomingItemsDTO> findOrderItemsById(@Param("orderId") String orderId);
 	
 	
 	
@@ -58,8 +57,8 @@ public interface IncomingItemsRepository extends JpaRepository<IncomingItems, St
 	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, mfo.orderAmount) " +
 			"FROM MFOrder mfo " +
 			"LEFT JOIN mfo.item i " +
-			"WHERE mfo.orderId = :prodOrQualId")
-	List<IncomingItems> findIncomingInsertProdItemsById(@Param("prodOrQualId") String prodOrQualId);
+			"WHERE mfo.orderId = :prodOrOrderId")
+	List<IncomingItemsDTO> findIncomingInsertProdItemsById(@Param("prodOrOrderId") String prodOrOrderId);
 
 	//입고 품목id의 가장 높은 값 구하기
 	Optional<IncomingItems> findTopByOrderByIncomingItemIdDesc();

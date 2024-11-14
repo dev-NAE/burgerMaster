@@ -94,7 +94,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 										<i class="far fa-circle nav-icon"></i>
 										<p>발주관리<i class="right fas fa-angle-left"></i></p>
 									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1">
+									<ul class="nav nav-treeview" >
 										<li class="nav-item">
 											<a href="/tx/insertOrder" class="nav-link">
 												<p>발주등록</p>
@@ -112,7 +112,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 										<i class="far fa-circle nav-icon"></i>
 										<p>수주관리<i class="right fas fa-angle-left"></i></p>
 									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+									<ul class="nav nav-treeview" style="display: none;">
 										<li class="nav-item">
 											<a href="/tx/insertSale" class="nav-link">
 												<p>수주등록</p>
@@ -131,10 +131,15 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 										<i class="far fa-circle nav-icon"></i>
 										<p>출하관리<i class="right fas fa-angle-left"></i></p>
 									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+									<ul class="nav nav-treeview" style="display: none;">
 										<li class="nav-item">
 											<a href="/tx/insertShip" class="nav-link">
 												<p>출하등록</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="/quality/qualityShipment" class="nav-link">
+												<p>출하검품</p>
 											</a>
 										</li>
 										<li class="nav-item">
@@ -159,7 +164,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 										<i class="far fa-circle nav-icon"></i>
 										<p>재고관리<i class="right fas fa-angle-left"></i></p>
 									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1">
+									<ul class="nav nav-treeview" >
 										<li class="nav-item">
 											<a href="/inven/inventoryList" class="nav-link">
 												<p>재고조회</p>
@@ -173,7 +178,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 										<i class="far fa-circle nav-icon"></i>
 										<p>입고관리<i class="right fas fa-angle-left"></i></p>
 									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+									<ul class="nav nav-treeview" style="display: none;">
 										<li class="nav-item">
 											<a href="/inven/incomingInsert" class="nav-link">
 												<p>입고등록</p>
@@ -192,7 +197,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 										<i class="far fa-circle nav-icon"></i>
 										<p>출고관리<i class="right fas fa-angle-left"></i></p>
 									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
+									<ul class="nav nav-treeview"  style="display: none;">
 										<li class="nav-item">
 											<a href="/inven/outgoingInsert" class="nav-link">
 												<p>출고등록</p>
@@ -220,7 +225,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 										<i class="far fa-circle nav-icon"></i>
 										<p>가공품목록<i class="right fas fa-angle-left"></i></p>
 									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1">
+									<ul class="nav nav-treeview" >
 										<li class="nav-item">
 											<a href="/mf/bom" class="nav-link">
 												<p>가공품 상세 정보</p>
@@ -242,7 +247,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 											<i class="right fas fa-angle-left"></i>
 										</p>
 									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1">
+									<ul class="nav nav-treeview" >
 										<li class="nav-item">
 											<a href="/mf/insert" class="nav-link">
 												<p>작업지시 등록</p>
@@ -264,64 +269,60 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
 							<!-- 품질관리 -->
-						<li class="nav-item">
-							<a href="#" class="nav-link">
-								<img src="/img/sidebar/5.png" alt="Icon" class="nav-icon">
-								<p>품질관리<i class="right fas fa-angle-left"></i></p>
-							</a>
-							<ul class="nav nav-treeview">
-								<li class="nav-item">
-									<a href="#" class="nav-link ">
-										<i class="far fa-circle nav-icon"></i>
-										<p>품질관리<i class="right fas fa-angle-left"></i></p>
-									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1">
-										<li class="nav-item">
-											<a href="/quality/quality_order" class="nav-link">
-												<p>입하검품</p>
-											</a>
-										</li>
+<!--						<li class="nav-item">-->
+<!--							<a href="#" class="nav-link">-->
+<!--								<img src="/img/sidebar/5.png" alt="Icon" class="nav-icon">-->
+<!--								<p>품질관리<i class="right fas fa-angle-left"></i></p>-->
+<!--							</a>-->
+<!--							<ul class="nav nav-treeview">-->
+<!--								<li class="nav-item">-->
+<!--									<a href="#" class="nav-link ">-->
+<!--										<i class="far fa-circle nav-icon"></i>-->
+<!--										<p>품질관리<i class="right fas fa-angle-left"></i></p>-->
+<!--									</a>-->
+<!--									<ul class="nav nav-treeview" >-->
+<!--										<li class="nav-item">-->
+<!--											<a href="/quality/quality_order" class="nav-link">-->
+<!--												<p>입하검품</p>-->
+<!--											</a>-->
+<!--										</li>-->
 
-										<li class="nav-item">
-											<a href="/quality/quality_sale" class="nav-link">
-												<p>출고검품</p>
-											</a>
-										</li>
+<!--										<li class="nav-item">-->
+<!--											<a href="/quality/quality_sale" class="nav-link">-->
+<!--												<p>출고검품</p>-->
+<!--											</a>-->
+<!--										</li>-->
 
-										<li class="nav-item">
-											<a href="/quality/qualityShipment" class="nav-link">
-												<p>출하검품</p>
-											</a>
-										</li>
-										<li class="nav-item">
-											<a href="/quality/qualityList" class="nav-link">
-												<p>품질관리리스트</p>
-											</a>
-										</li>
+<!--										-->
+<!--										<li class="nav-item">-->
+<!--											<a href="/quality/qualityList" class="nav-link">-->
+<!--												<p>품질관리리스트</p>-->
+<!--											</a>-->
+<!--										</li>-->
 
-									</ul>
+<!--									</ul>-->
 
 
 
-								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link ">
-										<i class="far fa-circle nav-icon"></i>
-										<p>반품관리<i class="right fas fa-angle-left"></i></p>
-									</a>
-									<ul class="nav nav-treeview" id="sub-menu-1" style="display: none;">
-										<li class="nav-item">
-											<a href="/defective/defectiveList" class="nav-link">
-												<p>반품 품목 조회</p>
-											</a>
-										</li>
+<!--								</li>-->
+<!--								<li class="nav-item">-->
+<!--									<a href="#" class="nav-link ">-->
+<!--										<i class="far fa-circle nav-icon"></i>-->
+<!--										<p>반품관리<i class="right fas fa-angle-left"></i></p>-->
+<!--									</a>-->
+<!--									<ul class="nav nav-treeview" style="display: none;">-->
+<!--										<li class="nav-item">-->
+<!--											<a href="/defective/defectiveList" class="nav-link">-->
+<!--												<p>반품 품목 조회</p>-->
+<!--											</a>-->
+<!--										</li>-->
 
-									</ul>
-								</li>
+<!--									</ul>-->
+<!--								</li>-->
 
 
-							</ul>
-						</li>
+<!--							</ul>-->
+<!--						</li>-->
 
 						<!-- 관리자관리 -->
 						<li class="nav-item" sec:authorize="hasRole('ADMIN')">
