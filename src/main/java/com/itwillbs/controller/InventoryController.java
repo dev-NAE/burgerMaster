@@ -227,6 +227,8 @@ public class InventoryController {
 				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrOrderId, status, managerCodeOrName,
 				pageable);
 
+		
+		
 		// 프론트에서 테이블 데이터 조회시 incomingDTOs.[etc...]로 찾아야함
 		model.addAttribute("incomingDTOs", incomingByPage);
 

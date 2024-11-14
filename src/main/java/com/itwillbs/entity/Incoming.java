@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,7 +29,7 @@ import lombok.ToString;
 @Table(name = "incoming")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"manager", "incomingItems"}) // 'manager'와 'incomingItems' 필드를 toString에서 제외
 @NoArgsConstructor
 @AllArgsConstructor
 public class Incoming {
@@ -54,11 +56,12 @@ public class Incoming {
     private String qualityOrderId;
 
     //발주번호 : orders테이블의 order_id
-    @Column(name = "order_id")
-    private String orderId;
-    
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "order_id")
+    private Order order;
     
     // Many-to-One 관계 설정: Incoming과 Manager
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
     private Manager manager;
