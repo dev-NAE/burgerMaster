@@ -2,6 +2,8 @@ package com.itwillbs.domain.inventory;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 
@@ -9,9 +11,12 @@ import lombok.Data;
 @Data
 public class IncomingInsertDTO {
 	
-    private String prodOrQualId;
+    private String prodOrOrderId;
     private String reasonOfIncoming; //생산 완료, 검품완료
-    private Timestamp prodOrQualDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp prodOrOrderDate;
+   
     private String itemName;
     private Integer quantity;
     private Integer totalAmount; //총 수량
@@ -22,21 +27,21 @@ public class IncomingInsertDTO {
     private String managerId;
     private String managerName;
     
-	public IncomingInsertDTO(String prodOrQualId, String reasonOfIncoming, Timestamp prodOrQualDate, String incomingItemDisplay,
+	public IncomingInsertDTO(String prodOrOrderId, String reasonOfIncoming, Timestamp prodOrQualDate, String incomingItemDisplay,
 			Integer totalAmount) {
 //		super();
-		this.prodOrQualId = prodOrQualId;
+		this.prodOrOrderId = prodOrOrderId;
 		this.reasonOfIncoming = reasonOfIncoming;
-		this.prodOrQualDate = prodOrQualDate;
+		this.prodOrOrderDate = prodOrOrderDate;
 		this.incomingItemDisplay = incomingItemDisplay;
 		this.totalAmount = totalAmount;
 	}
 
-	public IncomingInsertDTO(String prodOrQualId, String reasonOfIncoming, Timestamp prodOrQualDate) {
+	public IncomingInsertDTO(String prodOrOrderId, String reasonOfIncoming, Timestamp prodOrQualDate) {
 //		super();
-		this.prodOrQualId = prodOrQualId;
+		this.prodOrOrderId = prodOrOrderId;
 		this.reasonOfIncoming = reasonOfIncoming;
-		this.prodOrQualDate = prodOrQualDate;
+		this.prodOrOrderDate = prodOrOrderDate;
 	}
     
     
