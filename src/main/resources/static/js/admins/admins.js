@@ -221,8 +221,8 @@ function resetCreateModal(){
     emailInput.removeClass('is-invalid');
 
     resultInfo.removeClass();
-    resultInfo.addClass('callout callout-success p-2');
-    resultInfo.children('p').text('사용 가능한 아이디입니다.');
+    resultInfo.addClass('callout callout-info p-2');
+    resultInfo.children('p').text('아이디는 영문, 숫자만 5~19자리까지 가능합니다.');
     CHECK_ID = true;
 }
 //관리자 생성하기
