@@ -25,9 +25,10 @@ public interface MFRepository extends JpaRepository<MFOrder, String>{
 				+ "AND (:searchName = '' OR i.itemName LIKE %:searchName%) "
 				+ "ORDER BY CASE m.orderState "
 				+ "WHEN '작업 전달 전' THEN 1 "
-				+ "WHEN '작업 완료' THEN 2 "
+				+ "WHEN '작업 대기' THEN 2 "
 				+ "WHEN '작업 중' THEN 3 "
-				+ "WHEN '작업 종료' THEN 4 "
+				+ "WHEN '작업 완료' THEN 4 "
+				+ "WHEN '작업 종료' THEN 5 "
 				+ "END ASC, "
 				+ "m.orderDeadline ASC")
 	List<MFOrderDTO> findOrderList(
@@ -40,9 +41,14 @@ public interface MFRepository extends JpaRepository<MFOrder, String>{
 	String findMaxId();
 	
 	@Modifying
-	@Query("UPDATE MFOrder m SET m.orderState = '작업 중' " 
+	@Query("UPDATE MFOrder m SET m.orderState = '작업 대기' " 
 			+ "WHERE m.orderId = :key")
 	void transmitOrder(@Param("key") String key);
+	
+	@Modifying
+	@Query("UPDATE MFOrder m SET m.orderState = '작업 중' " 
+			+ "WHERE m.orderId = :key")
+	void startOrder(@Param("key") String key);
 	
 	@Modifying
 	@Query("UPDATE MFOrder m SET m.orderState = '작업 종료' " 
