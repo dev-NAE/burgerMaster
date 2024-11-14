@@ -68,10 +68,10 @@
                     <a class="btn-sm btn-primary" href="#" id="createManager">관리자 생성</a>
                   </div>
                   <div class="input-group input-group-sm" style="width: 250px;">
+                    <label>
                     <input type="text" id="search" name="search" class="form-control float-right" placeholder="Search"
-                           th:if="${search.isEmpty() || search eq ''}">
-                    <input type="text" name="search" class="form-control float-right" placeholder="Search"
-                             th:unless="${search.isEmpty() || search eq ''}" th:value="${search}">
+                              th:value="${!search.isEmpty()} ? ${search} : ''">
+                    </label>
                     <div class="input-group-append">
                       <button type="submit" class="btn btn-default" id="btn_search">
                         <i class="fas fa-search"></i>
@@ -162,7 +162,7 @@
             <div class="form-group">
               <div class="row d-flex justify-content-between">
 
-              <label for="manager_pass_create_modal">Password</label>
+              <label for="manager_pass_change_modal">Password</label>
                 <div class="custom-control">
                   <input id="change-pass-switch" type="checkbox" data-toggle="switchbutton" data-size="sm">
                   <label for="change-pass-switch">password 유지</label>
