@@ -230,7 +230,7 @@
           <div class="modal-header">
             <h3 class="modal-title fs-4" id="createModalLabel">관리자 생성</h3>
 
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="resetCreateModal()">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -296,7 +296,7 @@
           </div>
 
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="resetCreateModal()">Close</button>
             <button type="button" class="btn btn-primary"  data-dismiss="modal" onclick="createManager()">Save</button>
           </div>
         </div>
