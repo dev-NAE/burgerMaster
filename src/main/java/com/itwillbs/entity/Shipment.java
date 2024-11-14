@@ -39,4 +39,7 @@ public class Shipment {
     @JoinColumn(name = "sale_id")
     private Sale sale;
 
+    @OneToOne(mappedBy = "shipment")
+    private QualityShipment qualityShipment;
+
 }

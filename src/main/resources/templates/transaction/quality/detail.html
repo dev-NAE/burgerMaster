@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>출하 검품 처리</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/font.css">
+    <link rel="stylesheet" href="/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+
+    <!-- 스크립트 -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/dist/js/adminlte.min.js"></script>
+
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}">
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}">
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+
+    <!-- 공통 프리로더 -->
+    <div th:replace="~{fragments/Preloader :: PreloaderFragment}"></div>
+
+    <!-- 공통 헤더 불러오기 -->
+    <div th:replace="~{fragments/header :: headerFragment}"></div>
+
+    <!-- 공통 사이드바 불러오기 -->
+    <div th:replace="~{fragments/sidebar :: sidebarFragment}"></div>
+
+
+    <div class="wrapper">
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">출하 검품 처리</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/main">Home</a> / 품질관리 / <a href="/quality/qualityShipment">출하검품조회</a> / 출하검품처리</li>
+                                <!--              <li class="breadcrumb-item active">Dashboard v1</li>-->
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+
+                    <!-- Main row -->
+                    <div class="row">
+
+                    <!-- Contents -->
+                        <div class="container-fluid col-sm-10 my-5">
+                            <div class="card insert-container px-3 py-3">
+                                <form id="sq-form">
+                                <div class="card-body basic-info-area px-5">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label text-center">검사요청번호</label>
+                                        <div class="col-sm-4">
+                                            <span id="qs-id" th:text="${qsDTO.qualityShipmentId}"></span>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label text-center">처리상태</label>
+                                        <div class="col-sm-4">
+                                            <span id="qs-status" th:text="${qsDTO.qsStatus}"></span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="order-date" th:value="${#dates.format(qsDTO.orderDate, 'yyyy-MM-dd')}">
+                                    <input type="hidden" id="sale-id" th:value="${qsDTO.saleId}">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label text-center" for="ship-date">검사등록일</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="date" name="ship-date" id="ship-date" th:value="${#dates.format(qsDTO.shipDate, 'yyyy-MM-dd')}" readonly>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label text-center" for="manager-code">담당자</label>
+                                        <div class="input-group col-sm-4">
+                                            <input id="manager-code" class="form-control" type="text" name="manager_code" placeholder="코드" th:value="${qsDTO.managerId != null ? qsDTO.managerId : ''}" required>
+                                            <div class="input-group-append">
+                                                <span id="find-manager" class="input-group-text" style="cursor:pointer;"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <input id="manager-name" class="form-control" type="text" name="manager_name" placeholder="이름" th:value="${qsDTO.managerName != null ? qsDTO.managerName : ''}" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label text-center" for="franchise-code">가맹점</label>
+                                        <div class="input-group col-sm-4">
+                                            <input id="franchise-code" class="form-control" type="text" name="franchise_code" placeholder="코드" th:value="${qsDTO.franchiseCode}" readonly>
+                                            <input id="franchise-name" class="form-control" type="text" name="franchise_name" placeholder="상호" th:value="${qsDTO.franchiseName}" readonly>
+                                        </div>
+                                        <label class="col-sm-2 col-form-label text-center" for="due-date">납기일</label>
+                                        <div class="col-sm-4">
+                                            <input class="form-control" type="date" id="due-date" name="due_date" th:value="${#dates.format(qsDTO.dueDate, 'yyyy-MM-dd')}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label text-center" for="note">검품 메모</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" type="text" id="note" name="note" th:value="${qsDTO.note != null ? qsDTO.note : ''}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-items-area card-body">
+                                    <div class="item-list card-body border">
+                                        <table id="item-list-table" class="table table-bordered table-hover dataTable dtr-inline">
+                                            <thead>
+                                                <tr class="bg-lightblue">
+                                                    <th class="text-center" style="width:30%;">품목코드</th>
+                                                    <th class="text-center" style="width:50%;">품목명</th>
+                                                    <th class="text-center" style="width:20%;">수량</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="item-row" th:each="i : ${items}">
+                                                    <td class="text-center"><span class="item-code" th:text="${i.item.itemCode}"></span></td>
+                                                    <td class="text-center"><span class="item-name" th:text="${i.item.itemName}"></span></td>
+                                                    <td class="text-center"><span class="item-quantity" th:text="${#numbers.formatInteger(i.quantity, 1, 'COMMA')}"></span></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="calculating-brief row my-2 py-3 px-2 bg-light">
+                                            <div class="col-6 number-of-items justify-content-end">
+                                                <span id="total-quantity-view text-right" class="ml-3" th:text="${items.size()}">0</span>개 품목
+                                                <input id="total-quantity" type="hidden" value="0" th:value="${items.size()}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                            <div class="submit-btn-area row">
+                                <div class="col-5 d-flex justify-content-start">
+                                    <button id="back-to-list" class="btn btn-lg btn-info my-3">목록으로 이동</button>
+                                </div>
+                                <div id="btn-group" th:if="${qsDTO.qsStatus != '검품완료'}" class="col-7 d-flex justify-content-end">
+<!--                                    <button id="cancel-btn" class="btn btn-lg btn-danger my-3 mx-2" data-toggle="modal" data-target="#cancel-ship">취소</button>-->
+                                    <button id="complete-btn" class="btn btn-lg btn-primary my-3 mx-2" data-toggle="modal" data-target="#complete-qs">검품완료</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal: 완료 -->
+                        <div class="modal fade" id="complete-qs" tabindex="-1" role="dialog" aria-labelledby="completeModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="completeModalCenterTitle">검품 완료</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <h5>해당 출하의 검품을 완료하셨습니까?</h5>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="button" class="btn btn-secondary col-3" data-dismiss="modal">아니오</button>
+                                        <button id="complete-yes" type="button" class="btn btn-primary col-3">예</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="loadingSpinner" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999;">
+                            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                                <div class="loader spinner-border text-primary" role="status">
+                                    <span class="visually-hidden"></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <!-- /.Contents -->
+
+                    </div>
+                    <!-- /.row (main row) -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Control Sidebar -->
+        <!--  <aside class="control-sidebar control-sidebar-dark">-->
+        <!-- Control sidebar content goes here -->
+        <!--  </aside>-->
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- 공통 푸터 불러오기  맨아래에 위치해야함-->
+    <div th:replace="~{fragments/footer :: footerFragment}"></div>
+
+    <!-- custom js -->
+    <script src="/js/transaction/quality/detail.js"></script>
+
+</body>
+
+</html>

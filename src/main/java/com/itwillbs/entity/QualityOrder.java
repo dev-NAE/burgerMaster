@@ -1,17 +1,21 @@
 package com.itwillbs.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "Quality_order")
+@Table(name = "quality_order")
 @Getter
 @Setter
 @ToString
@@ -42,6 +46,9 @@ public class QualityOrder {
 	@Column(name = "manager" , length = 20 ,nullable = false)
 	private String manager;
 	
-
+	@OneToMany
+	@JoinColumn(name = "quality_order_id")
+	private List<QualityOrderItems> quality_order_items;
+	
 
 }

@@ -38,12 +38,37 @@ public class MFController {
 	private final MFService mfService;
 	
 	@GetMapping("/orders")
-	public String orders(Model model) {
+	public String orders(Model model,
+			@RequestParam(value = "page", defaultValue = "1", required = false) int page,
+			@RequestParam(value = "size", defaultValue = "10", required = false) int size,
+			@RequestParam(value = "searchDeadline", defaultValue = "", required = false) LocalDate searchDeadline,
+			@RequestParam(value = "searchState", defaultValue = "", required = false) String searchState,
+			@RequestParam(value = "searchId", defaultValue = "", required = false) String searchId,
+			@RequestParam(value = "searchName", defaultValue = "", required = false) String searchName) {
 		log.info("MFController order()");
 		
-		List<MFOrderDTO> orderList = mfService.getOrderList();
+		List<MFOrderDTO> orderList = mfService.getOrderList(searchDeadline, searchState, searchId, searchName);
 		
-		model.addAttribute("orderList", orderList);
+//		리스트를 페이지 객체로
+		PageRequest pageRequest = PageRequest.of(page-1, size, Sort.by("orderId").descending());
+		int start = (int) pageRequest.getOffset();
+		int end = Math.min((start + pageRequest.getPageSize()),orderList.size());
+		Page<MFOrderDTO> orderPage = new PageImpl<>(orderList.subList(start, end), pageRequest, orderList.size());
+		
+		model.addAttribute("orderList", orderPage);
+		model.addAttribute("currentPage", page);
+		model.addAttribute("pageSize", size);
+		model.addAttribute("totalPages", orderPage.getTotalPages());
+		
+		int pageBlock = 3;
+		int startPage = (page-1)/pageBlock*pageBlock+1;
+		int endPage=startPage + pageBlock - 1;
+		if(endPage > orderPage.getTotalPages()) {
+			endPage = orderPage.getTotalPages();
+		}
+		
+		model.addAttribute("startPage", startPage);
+		model.addAttribute("endPage", endPage);
 		
 		return "/manufacture/orders";
 	}
@@ -138,5 +163,19 @@ public class MFController {
 		
 	}
 	
+	@ResponseBody
+	@PostMapping("/orderUpdate")
+	public String orderUpdate(
+			@RequestParam(name = "type") String type,
+			@RequestParam(name = "key") String key) {
+		log.info("MFController orderUpdate()");
+		
+		boolean response = mfService.orderUpdate(type, key);
+		
+		if(response)
+			return "success";
+		else
+			return "failed";
+	}
 	
 }
