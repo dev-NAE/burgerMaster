@@ -41,15 +41,15 @@ public interface MFRepository extends JpaRepository<MFOrder, String>{
 	String findMaxId();
 	
 	@Modifying
-	@Query("UPDATE MFOrder m SET m.orderState = '작업 대기' " 
+	@Query("UPDATE MFOrder m SET m.orderState = '작업 대기' "
 			+ "WHERE m.orderId = :key")
 	void transmitOrder(@Param("key") String key);
 	
 	@Modifying
-	@Query("UPDATE MFOrder m SET m.orderState = '작업 중' " 
+	@Query("UPDATE MFOrder m SET m.orderState = '작업 중' "
 			+ "WHERE m.orderId = :key")
 	void startOrder(@Param("key") String key);
-	
+
 	@Modifying
 	@Query("UPDATE MFOrder m SET m.orderState = '작업 종료' " 
 			+ "WHERE m.orderId = :key")
