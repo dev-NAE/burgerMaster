@@ -5,8 +5,11 @@ let CHECK_ID = false;
 $(document).ready(function(){
     $('#btn_search').click(function () {
         let search = $('#search').val();
-        console.log(search);
-        window.location.href="/bgmManager/list?search=" + search;
+
+        if(typeof search == "undefined" || search === '' || search == null)
+            window.location.href="/bgmManager/list";
+        else
+            window.location.href="/bgmManager/list?search=" + search.trim();
     })
     funcFillChangeModal();
     document.getElementById('change-pass-switch').switchButton('on');
