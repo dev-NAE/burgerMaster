@@ -73,39 +73,39 @@ public class RestInventoryController {
     }
 	
 	
-	//입고 상세 정보 ajax
-	@GetMapping("/incomingDetail")
-	public ResponseEntity<List<IncomingItems>> getIncomingDetail(
-			@RequestParam(name = "incomingId") String incomingId) {
-		log.info("RestInventoryController.getIncomingDetail()");
-		// 입고 품목 리스트 가져오기
-		List<IncomingItems> incomingItems = inventoryService.getIncomingItems(incomingId);
+ // 입고 상세 정보 ajax
+    @GetMapping("/incomingDetail")
+    public ResponseEntity<List<IncomingItemsDTO>> getIncomingDetail(@RequestParam(name = "incomingId") String incomingId) {
+        log.info("RestInventoryController.getIncomingDetail()");
 
-		// itemType 매핑
-		incomingItems.forEach(item -> {
-			switch (item.getItem().getItemType()) {
-			case "FP":
-				item.getItem().setItemType("완제품");
-				break;
-			case "RM":
-				item.getItem().setItemType("원재료");
-				break;
-			case "PP":
-				item.getItem().setItemType("가공품");
-				break;
-			default:
-				item.getItem().setItemType("알 수 없음");
-			}
-		});
+        // 입고 품목 DTO 리스트 가져오기
+        List<IncomingItemsDTO> incomingItemsDTOs = inventoryService.getIncomingItemsDTO(incomingId);
 
-		// 입고 품목이 존재하면 반환
-		if (!incomingItems.isEmpty()) {
-			return ResponseEntity.ok(incomingItems);
-		} else {
-			log.info("입고 품목 정보가 없습니다. incomingId: " + incomingId);
-			return ResponseEntity.notFound().build();
-		}
-	}
+        // itemType 매핑 (DTO에서 직접 설정)
+        incomingItemsDTOs.forEach(dto -> {
+            switch (dto.getItemType()) {
+                case "FP":
+                    dto.setItemType("완제품");
+                    break;
+                case "RM":
+                    dto.setItemType("원재료");
+                    break;
+                case "PP":
+                    dto.setItemType("가공품");
+                    break;
+                default:
+                    dto.setItemType("알 수 없음");
+            }
+        });
+
+        // 입고 품목이 존재하면 반환
+        if (!incomingItemsDTOs.isEmpty()) {
+            return ResponseEntity.ok(incomingItemsDTOs);
+        } else {
+            log.info("입고 품목 정보가 없습니다. incomingId: " + incomingId);
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 	//입고 상태 업데이트
 	@PostMapping("/updateIncomingStatus")
@@ -146,7 +146,7 @@ public class RestInventoryController {
 
 
 		//생산 : status = '생산완료'이고 입고 등록되지 않은 생산번호를 기준으로 가져옴
-		//검품 : 입고번호의 status= '검품완료'이고 입고번호의 품목들의 status = '통과'인 검품번호를 가져옴  
+		//발주 : 입고번호의 status= '발주완료'이고 입고번호의 품목들의 status = '통과'인 발주번호를 가져옴  
     	List<IncomingInsertDTO> incomingInsertDTO = inventoryService.findIncomingInsertList();
 
 		// 입고 등록할 목록이 존재하면 반환
@@ -160,11 +160,11 @@ public class RestInventoryController {
 	
 	// 입고 등록할 목록중 하나 선택해서 그 목록의 품목들을 보여줌
 	@GetMapping("/getIncomingInsertItems")
-	public ResponseEntity<List<IncomingItems>> getIncomingInsertItems(@RequestParam("prodOrQualId") String prodOrQualId,
+	public ResponseEntity<List<IncomingItems>> getIncomingInsertItems(@RequestParam("prodOrOrderId") String prodOrOrderId,
 																	@RequestParam("reasonOfIncoming") String reasonOfIncoming){
 		log.info("RestInventoryController.incomingInsertItems()");
 		
-		List<IncomingItems> incomingItems = inventoryService.findIncomingInsertItems(prodOrQualId, reasonOfIncoming);
+		List<IncomingItems> incomingItems = inventoryService.findIncomingInsertItems(prodOrOrderId, reasonOfIncoming);
 		log.info(incomingItems.toString());
 		// 품목이 존재하면 반환
 		if (!incomingItems.isEmpty()) {

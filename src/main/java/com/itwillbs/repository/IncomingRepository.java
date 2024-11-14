@@ -42,7 +42,7 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 			+ "LEFT JOIN ii.item i " 
 			+ "WHERE " + "(:reasonOfIncoming = '' OR "
 			+ " (:reasonOfIncoming = '생산 완료' AND ic.productionId IS NOT NULL) OR "
-			+ " (:reasonOfIncoming = '입하검품 완료' AND ic.qualityOrderId IS NOT NULL)) "
+			+ " (:reasonOfIncoming = '발주 완료' AND ic.qualityOrderId IS NOT NULL)) "
 			+ "AND (:incomingStartDate_start IS NULL OR ic.incomingStartDate >= :incomingStartDate_start) "
 			+ "AND (:incomingStartDate_end IS NULL OR ic.incomingStartDate <= :incomingStartDate_end) "
 			+ "AND (:incomingId = '' OR ic.incomingId LIKE CONCAT('%', :incomingId, '%')) "
@@ -77,8 +77,21 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	List<IncomingInsertDTO> findAllEndOfProduction();
 	
 	
+//	/**
+//	 * 검품 완료되었지만 입고등록되지 않은 데이터 조회
+//	 */
+//	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(qo.quality_order_id, qo.status, qo.order_date) " +
+//		       "FROM QualityOrder qo " +
+//		       "LEFT JOIN qo.quality_order_items qoi " +
+//		       "LEFT JOIN Incoming i ON qo.quality_order_id = i.qualityOrderId " +
+//		       "WHERE qo.status = '검품완료' AND qoi.status = '통과' AND i.qualityOrderId IS NULL"
+//		       )
+//	List<IncomingInsertDTO> findAllEndOfQaul();
+
+	
+
 	/**
-	 * 입하검품 완료되었지만 입고등록되지 않은 데이터 조회
+	 * 발주 완료되었지만 입고등록되지 않은 데이터 조회
 	 */
 	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(qo.quality_order_id, qo.status, qo.order_date) " +
 		       "FROM QualityOrder qo " +
@@ -86,13 +99,10 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 		       "LEFT JOIN Incoming i ON qo.quality_order_id = i.qualityOrderId " +
 		       "WHERE qo.status = '검품완료' AND qoi.status = '통과' AND i.qualityOrderId IS NULL"
 		       )
-	List<IncomingInsertDTO> findAllEndOfQuality();
-
+	List<IncomingInsertDTO> findAllEndOfOrder();
 	
 
-	
-	
-
+	//입고등록번호 제일 높은 숫자 조회
 	Optional<Incoming> findTopByOrderByIncomingIdDesc();
 
 

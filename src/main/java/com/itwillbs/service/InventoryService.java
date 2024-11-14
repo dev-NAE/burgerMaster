@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -150,10 +151,18 @@ public class InventoryService {
 		return incomingByPage;
 	}
 
-	// 입고 품목 리스트 가져오기
-	public List<IncomingItems> getIncomingItems(String incomingId) {
-
-		return incomingItemsRepository.findByIncomingItems(incomingId);
+	// 입고 품목 리스트 가져오기 
+	public List<IncomingItemsDTO> getIncomingItemsDTO(String incomingId) {
+	    log.info("getIncomingItemsDTO");
+	    List<IncomingItems> incomingItems = incomingItemsRepository.findByIncomingItems(incomingId);
+	    return incomingItems.stream().map(item -> {
+	        IncomingItemsDTO dto = new IncomingItemsDTO();
+	        dto.setItemCode(item.getItem().getItemCode());
+	        dto.setItemName(item.getItem().getItemName());
+	        dto.setItemType(item.getItem().getItemType()); // 실제 DB에서 가져온 itemType
+	        dto.setQuantity(item.getQuantity());
+	        return dto;
+	    }).collect(Collectors.toList());
 	}
 
 	// 입고 상세 정보 모달창에서 입고 상태 업데이트
@@ -175,20 +184,20 @@ public class InventoryService {
 		// 각 생산 완료된 데이터행마다 품목의 이름과 갯수를 구하기 위한 반복문
 		// 생산코드 하나에 품목 하나만 있으므로 구현하지 않음. 필요시 구현
 
-		// 입하 검품완료가되었지만 아직 입고 등록이 안된 검품데이터 저장
-		List<IncomingInsertDTO> incomingInsertDTOQual = incomingRepository.findAllEndOfQuality();
+		// 발주완료가되었지만 아직 입고 등록이 안된 발주데이터 저장
+		List<IncomingInsertDTO> incomingInsertDTOOrder = incomingRepository.findAllEndOfOrder();
 
-		// 각 검품완료된 데이터행마다 품목의 이름과 갯수를 구하기 위한 반복문
+		// 각 발주완료된 데이터행마다 품목의 이름과 갯수를 구하기 위한 반복문
 		// ※최적화 생각해야함
-		incomingInsertDTOQual.forEach(dto -> {
+		incomingInsertDTOOrder.forEach(dto -> {
 
 			int totalAmount = 0;
-			String QualityOrderId = dto.getProdOrQualId();
+			String OrderId = dto.getProdOrOrderId();
 
-			// quality_order_items테이블에서 품목코드와 품목이름을 구함
-//			List<IncomingItems> itemNames = incomingItemsRepository.findQualityOrderItemsById(QualityOrderId);
 			// order_items테이블에서 품목코드와 품목이름을 구함
-			List<IncomingItems> itemNames = incomingItemsRepository.findOrderItemsById(QualityOrderId);
+//			List<IncomingItems> itemNames = incomingItemsRepository.findOrderItemsById(OrderId);
+			// order_items테이블에서 품목코드와 품목이름을 구함
+			List<IncomingItems> itemNames = incomingItemsRepository.findOrderItemsById(OrderId);
 			
 			if (!itemNames.isEmpty()) {
 				// 첫 번째 품목의 이름을 설정
@@ -208,25 +217,25 @@ public class InventoryService {
 			}
 		});
 
-		incomingInsertDTOProd.addAll(incomingInsertDTOQual);
+		incomingInsertDTOProd.addAll(incomingInsertDTOOrder);
 
 		log.info("incomingInsertDTOProd = " + incomingInsertDTOProd.toString());
 		
 		return incomingInsertDTOProd;
 	}
 
-	//입고 등록페이지에서 선택한 검품/생산 번호의 품목들 찾기
-	public List<IncomingItems> findIncomingInsertItems(String prodOrQualId, String reasonOfIncoming) {
+	//입고 등록페이지에서 선택한 발주/생산 번호의 품목들 찾기
+	public List<IncomingItems> findIncomingInsertItems(String prodOrOrderId, String reasonOfIncoming) {
 		
 		if(reasonOfIncoming.equals("작업 완료")){
 			//생산 테이블에서 조회
-			return incomingItemsRepository.findIncomingInsertProdItemsById(prodOrQualId);
+			return incomingItemsRepository.findIncomingInsertProdItemsById(prodOrOrderId);
 		}else {
-			// 입하 검품품목테이블에서 조회
-//			return incomingItemsRepository.findQualityOrderItemsById(prodOrQualId);
+			//  발주품목테이블에서 조회
+//			return incomingItemsRepository.findOrderItemsById(prodOrOrderId);
 			
 			// 발주품목테이블에서 조회
-			return incomingItemsRepository.findOrderItemsById(prodOrQualId);
+			return incomingItemsRepository.findOrderItemsById(prodOrOrderId);
 		}
 		
 		
@@ -374,7 +383,7 @@ public class InventoryService {
 			// 각 생산 요청된 데이터행마다 품목의 이름과 갯수를 구하기 위한 반복문
 			// 생산코드 하나에 품목 하나만 있으므로 구현하지 않음. 필요시 구현
 
-			// 입하 검품완료가되었지만 아직 출고 등록이 안된 검품데이터 저장
+			//  검품완료가되었지만 아직 출고 등록이 안된 검품데이터 저장
 			List<OutgoingInsertDTO> outgoingInsertDTOQual = outgoingRepository.findAllEndOfQuality();
 
 			// 각 검품완료된 데이터행마다 품목의 이름과 갯수를 구하기 위한 반복문

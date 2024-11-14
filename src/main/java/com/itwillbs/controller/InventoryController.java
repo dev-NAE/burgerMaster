@@ -153,7 +153,7 @@ public class InventoryController {
 		model.addAttribute("incomingStartDate_start", null);
 		model.addAttribute("incomingStartDate_end", null);
 		model.addAttribute("incomingId", "");
-		model.addAttribute("prodOrQualId", "");
+		model.addAttribute("prodOrOrderId", "");
 		model.addAttribute("status", "");
 		model.addAttribute("managerCodeOrName", "");
 		
@@ -177,7 +177,7 @@ public class InventoryController {
 			@RequestParam(name = "incomingStartDate_start", defaultValue = "") String incomingStartDate_startStr,
 			@RequestParam(name = "incomingStartDate_end", defaultValue = "") String incomingStartDate_endStr,
 			@RequestParam(name = "incomingId", defaultValue = "") String incomingId,
-			@RequestParam(name = "prodOrQualId", defaultValue = "") String prodOrQualId,
+			@RequestParam(name = "prodOrOrderId", defaultValue = "") String prodOrOrderId,
 			@RequestParam(name = "status", defaultValue = "") String status,
 			@RequestParam(name = "managerCodeOrName", defaultValue = "") String managerCodeOrName) {
 
@@ -187,7 +187,7 @@ public class InventoryController {
 		log.info("reasonOfIncoming = " + reasonOfIncoming);
 
 		log.info("incomingId = " + incomingId);
-		log.info("prodOrQualId = " + prodOrQualId);
+		log.info("prodOrOrderId = " + prodOrOrderId);
 		log.info("status = " + status);
 		log.info("managerCodeOrName = " + managerCodeOrName);
 
@@ -224,7 +224,7 @@ public class InventoryController {
 
 		// 입고된 리스트 검색어 포함 조회
 		Page<IncomingDTO> incomingByPage = inventoryService.findIncomingBySearch(itemCodeOrName, reasonOfIncoming,
-				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrQualId, status, managerCodeOrName,
+				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrOrderId, status, managerCodeOrName,
 				pageable);
 
 		// 프론트에서 테이블 데이터 조회시 incomingDTOs.[etc...]로 찾아야함
@@ -236,7 +236,7 @@ public class InventoryController {
 		model.addAttribute("incomingStartDate_start", incomingStartDate_startStr);
 		model.addAttribute("incomingStartDate_end", incomingStartDate_endStr);
 		model.addAttribute("incomingId", incomingId);
-		model.addAttribute("prodOrQualId", prodOrQualId);
+		model.addAttribute("prodOrOrderId", prodOrOrderId);
 		model.addAttribute("status", status);
 		model.addAttribute("managerCodeOrName", managerCodeOrName);
 
@@ -335,7 +335,7 @@ public class InventoryController {
 			return VIEW_PATH + "outgoing_list";
 		}
 
-		// 입고된 리스트 검색어 포함 조회
+		// 출고된 리스트 검색어 포함 조회
 		Page<OutgoingDTO> outgoingByPage = inventoryService.findOutgoingBySearch(itemCodeOrName, reasonOfOutgoing,
 				outgoingStartDate_start, outgoingStartDate_end, outgoingId, prodOrQualId, status, managerCodeOrName,
 				pageable);

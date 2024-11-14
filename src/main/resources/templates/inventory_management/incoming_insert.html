@@ -199,9 +199,9 @@
 					<table class="table table-bordered table-hover dataTable dtr-inline">
 						<thead>
 							<tr>
-								<th>생산/검품 코드</th>
+								<th>생산/발주 코드</th>
 								<th>입고 사유</th>
-								<th>생산/검품 완료 날짜</th>
+								<th>생산/발주 완료 날짜</th>
 								<th>품목명</th>
 								<th>총 수량</th>
 							</tr>
@@ -308,12 +308,12 @@
 	                    if (data.length > 0) {
 	                        var incomingInsertListHtml = '';
 	                        data.forEach(function (list) { // forEach로 수정
-	                            incomingInsertListHtml += '<tr class="selectable-row" data-prod-or-qual-id="' +
-	                                list.prodOrQualId + '" data-reason-of-incoming="' +
+	                            incomingInsertListHtml += '<tr class="selectable-row" data-prod-or-order-id="' +
+	                                list.prodOrOrderId + '" data-reason-of-incoming="' +
 	                                list.reasonOfIncoming + '">';
-	                            incomingInsertListHtml += '<td>' + list.prodOrQualId + '</td>';
+	                            incomingInsertListHtml += '<td>' + list.prodOrOrderId + '</td>';
 	                            incomingInsertListHtml += '<td>' + list.reasonOfIncoming + '</td>';
-	                            incomingInsertListHtml += '<td>' + list.prodOrQualDate + '</td>';
+	                            incomingInsertListHtml += '<td>' + list.prodOrOrderDate + '</td>';
 	                            // 조건에 따라 다른 내용의 <td> 생성
 	                            if (list.otherCount === 0) {
 	                                incomingInsertListHtml += '<td>' + list.incomingItemDisplay + '</td>';
@@ -405,15 +405,15 @@
 	            $(this).addClass('active-row');
 
 	            // data 속성에서 값 가져오기
-	            var prodOrQualId = $(this).data('prod-or-qual-id');
+	            var prodOrOrderId = $(this).data('prod-or-order-id');
 	            var reasonOfIncoming = $(this).data('reason-of-incoming');
 
 	            // 입력 필드에 값 설정 (표시용 readonly 입력 필드)
-	            $('#incomingInsertCode_display').val(prodOrQualId);
+	            $('#incomingInsertCode_display').val(prodOrOrderId);
 	            $('#reasonOfIncoming_display').val(reasonOfIncoming);
 
 	            // 숨겨진 입력 필드에 값 설정 (제출용 hidden 입력 필드)
-	            $('#incomingInsertCode_hidden').val(prodOrQualId);
+	            $('#incomingInsertCode_hidden').val(prodOrOrderId);
 	            $('#reasonOfIncoming_hidden').val(reasonOfIncoming);
 
 	            // 상세 정보 테이블 초기화 및 로딩 메시지 표시
@@ -424,7 +424,7 @@
 	                url: '/restInven/getIncomingInsertItems',
 	                type: 'GET',
 	                data: {
-	                    prodOrQualId: prodOrQualId,
+	                    prodOrOrderId: prodOrOrderId,
 	                    reasonOfIncoming: reasonOfIncoming
 	                },
 	                dataType: 'json',

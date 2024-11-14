@@ -1,8 +1,6 @@
 package com.itwillbs.entity;
 
-import java.sql.Timestamp;
 
-import org.springframework.data.jpa.repository.Query;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,8 +32,8 @@ public class IncomingItems {
     @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "subtotal_price")
-    private int subtotalPrice;
+//    @Column(name = "subtotal_price")
+//    private int subtotalPrice;
 
     // Many-to-One 관계 설정: IncomingItems과 Incoming
     @ManyToOne(fetch = FetchType.LAZY)

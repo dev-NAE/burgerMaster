@@ -18,17 +18,20 @@ public interface IncomingItemsRepository extends JpaRepository<IncomingItems, St
 	
 
 	//하나의 입고코드에 해당되는 품목들 조회
-	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName) " +
-			"FROM IncomingItems ii left join ii.item i " +
-			"WHERE incomingId = :incomingId")
+//	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName) " +
+//			"FROM IncomingItems ii left join ii.item i " +
+//			"WHERE incomingId = :incomingId")
+//	List<IncomingItems> findIncomingItemsListById(@Param("incomingId") String incomingId);
+	@Query("SELECT ii FROM IncomingItems ii WHERE ii.incoming.incomingId = :incomingId")
 	List<IncomingItems> findIncomingItemsListById(@Param("incomingId") String incomingId);
-	
 	//입고 상세 조회
-	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, ii.quantity) " +
-			"FROM IncomingItems ii left join ii.item i left join ii.incoming i " +
-			"WHERE i.incomingId = :incomingId")
+//	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(item.itemCode, item.itemName, item.itemType, ii.quantity) " +
+//		       "FROM IncomingItems ii LEFT JOIN ii.item item LEFT JOIN ii.incoming inc " +
+//		       "WHERE inc.incomingId = :incomingId")
+//		List<IncomingItems> findByIncomingItems(@Param("incomingId") String incomingId);
+	//입고 상세 조회
+	@Query("SELECT ii FROM IncomingItems ii WHERE ii.incoming.incomingId = :incomingId")
 	List<IncomingItems> findByIncomingItems(@Param("incomingId") String incomingId);
-
 
 //	//입하 검품완료된 해당 검품코드의 불량 아닌 통과된 품목들만 조회
 //	@Query("SELECT new com.itwillbs.domain.inventory.IncomingItemsDTO(i.itemCode, i.itemName, i.itemType, qoi.quantity) " +
