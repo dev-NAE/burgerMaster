@@ -69,8 +69,11 @@ function getRM() {
 		dataType:"json",
 		success: function(response){
 			const result = response;
+			console.log(result);
+			
 			let str = "";
 			$.each(result, function(i){
+				str = "";
 				str+="<tr>";
 				str+="<td>"+result[i].itemCode+"</td><td>"
 					+result[i].itemName+"</td>";
@@ -134,10 +137,12 @@ $(document).ready(function() {
 	
     $('#confirmSubmitBtn').click(function() {
         $('#input-form').unbind('submit').submit();
+		$('#confirmationModal').modal('hide');
 		alert('작업 지시가 등록되었습니다.');
     });
 });
 
+//날짜 포맷 변경
 let now = Date.now();
 let timeOff = new Date().getTimezoneOffset()*60000;
 let today = new Date(now-timeOff).toISOString().split("T")[0];

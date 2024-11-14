@@ -20,4 +20,10 @@ public interface ManagerRepository extends JpaRepository<Manager, String> {
             "(:managerName IS NULL OR m.name LIKE :managerName) AND " +
             "m.managerRole IN ('ROLE_ADMIN', 'ROLE_TRANSACTION')")
     List<Manager> findManagerOnTX(@Param("managerName") String managerName);
+
+    // 이은지 작성: 검품 담당자 가져오기 (+ 이름 검색 포함)
+    @Query("SELECT m FROM Manager m WHERE " +
+            "(:managerName IS NULL OR m.name LIKE :managerName) AND " +
+            "m.managerRole IN ('ROLE_ADMIN', 'ROLE_QUALITY')")
+    List<Manager> findManagerOnQuality(@Param("managerName") String managerName);
 }

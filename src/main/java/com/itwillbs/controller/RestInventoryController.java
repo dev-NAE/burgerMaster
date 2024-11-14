@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.domain.inventory.IncomingDTO;
 import com.itwillbs.domain.inventory.IncomingInsertDTO;
 import com.itwillbs.domain.inventory.IncomingItemsDTO;
@@ -37,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/restInven")
@@ -110,6 +112,17 @@ public class RestInventoryController {
 	public ResponseEntity<InvenResponseMessage> updateIncomingStatus(@RequestParam("incomingId") String incomingId) {
 		log.info("RestInventoryController.updateIncomingStatus()");
 
+	      // 현재 사용자 권한 확인
+        List<String> userRoles = SecurityUtil.getUserAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.toList());
+		
+        if (!(userRoles.contains("ROLE_ADMIN") || userRoles.contains("ROLE_INVENTORY"))) {
+            InvenResponseMessage response = new InvenResponseMessage(false, "권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response); //403 에러
+        }
+		
+		
 		// 업데이트 실행, 성공or에러시 적절한 메세지를 프론트로 넘김
 		try {
 			inventoryService.updateIncomingStatus(incomingId);
@@ -131,10 +144,12 @@ public class RestInventoryController {
 	public ResponseEntity<List<IncomingInsertDTO>> incomingInsertList() {
 		log.info("RestInventoryController.incomingInsertList()");
 
-		List<IncomingInsertDTO> incomingInsertDTO = new ArrayList<>();
-//    	List<IncomingInsertDTO> incomingInsertDTO = inventoryService.findIncomingInsertList();
 
-		// 입고 등록할 품목이 존재하면 반환
+		//생산 : status = '생산완료'이고 입고 등록되지 않은 생산번호를 기준으로 가져옴
+		//검품 : 입고번호의 status= '검품완료'이고 입고번호의 품목들의 status = '통과'인 검품번호를 가져옴  
+    	List<IncomingInsertDTO> incomingInsertDTO = inventoryService.findIncomingInsertList();
+
+		// 입고 등록할 목록이 존재하면 반환
 		if (!incomingInsertDTO.isEmpty()) {
 			return ResponseEntity.ok(incomingInsertDTO);
 		} else {
@@ -142,79 +157,85 @@ public class RestInventoryController {
 			return ResponseEntity.ok(incomingInsertDTO);
 		}
 	}
+	
+	// 입고 등록할 목록중 하나 선택해서 그 목록의 품목들을 보여줌
+	@GetMapping("/getIncomingInsertItems")
+	public ResponseEntity<List<IncomingItemsDTO>> getIncomingInsertItems(@RequestParam("prodOrQualId") String prodOrQualId,
+																	@RequestParam("reasonOfIncoming") String reasonOfIncoming){
+		log.info("RestInventoryController.incomingInsertItems()");
+		
+		List<IncomingItemsDTO> incomingItemsDTO = inventoryService.findIncomingInsertItems(prodOrQualId, reasonOfIncoming);
+		log.info(incomingItemsDTO.toString());
+		// 품목이 존재하면 반환
+		if (!incomingItemsDTO.isEmpty()) {
+			return ResponseEntity.ok(incomingItemsDTO);
+		} else {
+			log.info("입고 등록할 품목이 존재하지 않습니다.");
+			return ResponseEntity.ok(incomingItemsDTO);
+		}
+	}
 
-	//INVEN 권한 있는 매니저 조회
-//	@GetMapping("/findManagerList")
-//	public ResponseEntity<List<IncomingInsertDTO>> findManagerList() {
-//		log.info("RestInventoryController.findManagerList()");
-//
-//		
-//		//전체 매니저 조회
-//		List<Manager> managers =  
-//
-//		// 입고 등록할 품목이 존재하면 반환
-//		if (!incomingInsertDTO.isEmpty()) {
-//			return ResponseEntity.ok(incomingInsertDTO);
-//		} else {
-//			log.info("관리자 정보를 찾을 수 없습니다.");
-//			return ResponseEntity.ok(incomingInsertDTO);
-//		}
-//	}
+	
+	
 
+
+	
+	
+	
 	//출고 상세 정보 ajax
-//		@GetMapping("/outgoingDetail")
-//		public ResponseEntity<List<OutgoingItemsDTO>> getOutgoingDetail(
-//				@RequestParam(name = "outgoingId") String outgoingId) {
-//			log.info("RestInventoryController.getOutgoingDetail()");
-//			// 출고 품목 리스트 가져오기
-////			List<OutgoingItemsDTO> outgoingItemsDTO = inventoryService.getOutgoingItems(outgoingId);
-//
-//			// itemType 매핑
-//			outgoingItemsDTO.forEach(item -> {
-//				switch (item.getItemType()) {
-//				case "FP":
-//					item.setItemType("완제품");
-//					break;
-//				case "RM":
-//					item.setItemType("원재료");
-//					break;
-//				case "PP":
-//					item.setItemType("가공품");
-//					break;
-//				default:
-//					item.setItemType("알 수 없음");
-//				}
-//			});
-//
-//			// 출고 품목이 존재하면 반환
-//			if (!outgoingItemsDTO.isEmpty()) {
-//				return ResponseEntity.ok(outgoingItemsDTO);
-//			} else {
-//				log.info("출고 품목 정보가 없습니다. outgoingId: " + outgoingId);
-//				return ResponseEntity.notFound().build();
-//			}
-//		}
+		@GetMapping("/outgoingDetail")
+		public ResponseEntity<List<OutgoingItemsDTO>> getOutgoingDetail(
+				@RequestParam(name = "outgoingId") String outgoingId) {
+			log.info("RestInventoryController.getOutgoingDetail()");
+			// 출고 품목 리스트 가져오기
+			List<OutgoingItemsDTO> outgoingItemsDTO = inventoryService.getOutgoingItems(outgoingId);
+
+			// itemType 매핑
+			outgoingItemsDTO.forEach(item -> {
+				switch (item.getItemType()) {
+				case "FP":
+					item.setItemType("완제품");
+					break;
+				case "RM":
+					item.setItemType("원재료");
+					break;
+				case "PP":
+					item.setItemType("가공품");
+					break;
+				default:
+					item.setItemType("알 수 없음");
+				}
+			});
+
+			// 출고 품목이 존재하면 반환
+			if (!outgoingItemsDTO.isEmpty()) {
+				return ResponseEntity.ok(outgoingItemsDTO);
+			} else {
+				log.info("출고 품목 정보가 없습니다. outgoingId: " + outgoingId);
+				return ResponseEntity.notFound().build();
+			}
+		}
 
 		//출고 상태 업데이트
-//		@PostMapping("/updateOutgoingStatus")
-//		public ResponseEntity<InvenResponseMessage> updateOutgoingStatus(@RequestParam("outgoingId") String outgoingId) {
-//			log.info("RestInventoryController.updateOutgoingStatus()");
-//
-//			// 업데이트 실행, 성공or에러시 적절한 메세지를 프론트로 넘김
-//			try {
-//				inventoryService.updateOutgoingStatus(outgoingId);
-//				InvenResponseMessage response = new InvenResponseMessage(true, "출고 완료되었습니다.");
-//				return ResponseEntity.ok(response);
-//			} catch (EntityNotFoundException e) {
-//				InvenResponseMessage response = new InvenResponseMessage(false, "해당 출고 ID의 출고 상태를 업데이트할 수 없습니다.");
-//				// 400에러
-//				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-//			} catch (Exception e) {
-//				InvenResponseMessage response = new InvenResponseMessage(false, "서버 오류가 발생했습니다.");
-//				// 500에러
-//				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//			}
-//		}
+		@PostMapping("/updateOutgoingStatus")
+		public ResponseEntity<InvenResponseMessage> updateOutgoingStatus(@RequestParam("outgoingId") String outgoingId) {
+			log.info("RestInventoryController.updateOutgoingStatus()");
+
+			// 업데이트 실행, 성공or에러시 적절한 메세지를 프론트로 넘김
+			try {
+				inventoryService.updateOutgoingStatus(outgoingId);
+				InvenResponseMessage response = new InvenResponseMessage(true, "출고 완료되었습니다.");
+				return ResponseEntity.ok(response);
+			} catch (EntityNotFoundException e) {
+				InvenResponseMessage response = new InvenResponseMessage(false, "해당 출고 ID의 출고 상태를 업데이트할 수 없습니다.");
+				// 400에러
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+			} catch (Exception e) {
+				InvenResponseMessage response = new InvenResponseMessage(false, "서버 오류가 발생했습니다.");
+				// 500에러
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+			}
+		}
 
 		// 출고 등록할 목록들 조회
 		@GetMapping("/outgoingInsertList")
@@ -234,7 +255,23 @@ public class RestInventoryController {
 		}
 
 
-	
+		//INVEN 권한 있는 매니저 조회
+		@GetMapping("/findManagerList")
+		public ResponseEntity<List<Manager>> findManagerList() {
+			log.info("RestInventoryController.findManagerList()");
+			
+			
+			//재고관리 권한이 있는 매니저 찾기(admin, inventory)
+			List<Manager> managers = inventoryService.findManager();
+
+			// 입고 등록할 품목이 존재하면 반환
+			if (!managers.isEmpty()) {
+				return ResponseEntity.ok(managers);
+			} else {
+				log.info("관리자 정보를 찾을 수 없습니다.");
+				return ResponseEntity.ok(managers);
+			}
+		}
 	
 
 }

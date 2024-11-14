@@ -13,6 +13,19 @@
 	<!-- JQVMap -->
 	<link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css" />
 	<link rel="stylesheet" href="/css/font.css" />
+	<style>
+		/* 마우스를 올렸을 때 행 강조 */
+		.selectable-row:hover,
+		.selectable-manager-row:hover {
+			background-color: #f1f1f1;
+			cursor: pointer;
+		}
+
+		/* 선택된 행 스타일 */
+		.active-row {
+			background-color: #d1ecf1;
+		}
+	</style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -50,18 +63,19 @@
 				<div class="container-fluid">
 					<!-- Main row -->
 					<div class="row">
-						<section class="col-lg-10 connectedSortable">
+						<section class="col-lg-8 connectedSortable">
 							<div class="card card-info">
 								<!-- /.card-header -->
 								<!-- form start -->
-								<div class="card-body">
-									<form class="form-horizontal" th:action="@{/inven/incomingInsert}" method="post">
+								<form class="form-horizontal" th:action="@{/inven/incomingInsert}" method="post">
+									<div class="card-body">
+
 										<div class="form-group row">
-											<label for="IncomingInsertCode" class="col-sm-4 col-form-label text-center">
+											<label for="incomingInsertCode" class="col-sm-4 col-form-label text-center">
 												입고 대상</label>
 											<div class="input-group col-6">
-												<input id="IncomingInsertCode" class="form-control" type="text"
-													name="IncomingInsertCode" placeholder="번호" required>
+												<input id="incomingInsertCode" class="form-control" type="text"
+													name="incomingInsertCode" placeholder="번호" required>
 												<div class="input-group-append">
 													<span id="findIncomingInsertList" class="input-group-text"
 														style="cursor:pointer;"><i class="fas fa-search"></i></span>
@@ -84,6 +98,7 @@
 											<div class="input-group col-6">
 												<input type="text" class="form-control" id="managerName"
 													name="managerName" placeholder="담당자 불러오기" required>
+													<input type="hidden" id="managerId" name="managerId">
 												<div class="input-group-append">
 													<span id="findManagerButton" class="input-group-text"
 														style="cursor:pointer;">
@@ -106,27 +121,24 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr>
-													<td>sdf</td>
-													<td>sdf</td>
-													<td>sdf</td>
-													<td>sdf</td>
-												</tr>
+												<!-- 데이터는 JavaScript를 통해 AJAX로 삽입됩니다. -->
 												<!-- 데이터가 없을 경우 검색 결과 없음 출력 -->
 												<tr th:if="${#lists.isEmpty(incomingitemsDTO)}">
 													<td colspan="4" class="text-center">검색 결과가 없습니다.</td>
 												</tr>
 											</tbody>
 										</table>
-									</form>
-									<!-- /.입고 등록할 정보 -->
-								</div>
 
-								<div class="card-footer">
-									<button type="submit" class="btn btn-primary float-right">입고 등록</button>
-								</div>
-								<!-- /.card-footer -->
+										<!-- /.입고 등록할 정보 -->
+									</div>
+
+									<div class="card-footer">
+										<button type="submit" class="btn btn-primary float-right">입고 등록</button>
+									</div>
+									<!-- /.card-footer -->
+								</form>
 							</div>
+
 						</section>
 					</div>
 					<!-- /.row (main row) -->
@@ -148,7 +160,7 @@
 	<div th:replace="~{fragments/footer :: footerFragment}"></div>
 	<!-- 기본 js 링크 -->
 	<th:block th:replace="~{fragments/basicLink :: basicLinkJsFragment}"></th:block>
-	
+
 	<!-- 입고 등록 목록 모달 -->
 	<div class="modal fade" id="InsertListModal" tabindex="-1" role="dialog" aria-labelledby="InsertListModalLabel"
 		aria-hidden="true">
@@ -173,6 +185,35 @@
 							</tr>
 						</thead>
 						<tbody id="modalIncomingInsertList">
+							<!-- AJAX로 가져온 데이터가 여기에 삽입됩니다. -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 담당자 목록 모달 -->
+	<div class="modal fade" id="ManagerListModal" tabindex="-1" role="dialog" aria-labelledby="ManagerListModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="ManagerListModalLabel">담당자 목록</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 담당자 목록 데이터 테이블 -->
+					<table class="table table-bordered table-hover dataTable dtr-inline">
+						<thead>
+							<tr>
+								<th>담당자 ID</th>
+								<th>이름</th>
+							</tr>
+						</thead>
+						<tbody id="modalManagerList">
 							<!-- AJAX로 가져온 데이터가 여기에 삽입됩니다. -->
 						</tbody>
 					</table>
@@ -207,12 +248,20 @@
 						if (data.length > 0) {
 							var incomingInsertListHtml = '';
 							data.forEach(function (list) { // forEach로 수정
-								incomingInsertListHtml += '<tr>';
+								incomingInsertListHtml += '<tr class="selectable-row" data-prod-or-qual-id="' +
+									list.prodOrQualId + '" data-reason-of-incoming="' +
+									list.reasonOfIncoming + '">';
 								incomingInsertListHtml += '<td>' + list.prodOrQualId + '</td>';
 								incomingInsertListHtml += '<td>' + list.reasonOfIncoming + '</td>';
 								incomingInsertListHtml += '<td>' + list.prodOrQualDate + '</td>';
-								incomingInsertListHtml += '<td>' + list.itemName + '</td>';
-								incomingInsertListHtml += '<td>' + list.totalAmountOfitems + '</td>';
+								// 조건에 따라 다른 내용의 <td> 생성
+								if (list.otherCount === 0) {
+									incomingInsertListHtml += '<td>' + list.incomingItemDisplay + '</td>';
+								} else {
+									incomingInsertListHtml += '<td>' + list.incomingItemDisplay + ' 외 ' + list.otherCount + '건' + '</td>';
+								}
+
+								incomingInsertListHtml += '<td>' + list.totalAmount + '</td>';
 								incomingInsertListHtml += '</tr>'; // 닫는 태그 추가
 							});
 							$('#modalIncomingInsertList').html(incomingInsertListHtml);
@@ -222,6 +271,8 @@
 
 						// 모달 표시
 						$('#InsertListModal').modal('show'); // 올바른 선택자 사용
+						// 선택된 행의 스타일 초기화
+						$('.selectable-row').removeClass('active-row');
 					},
 					error: function (xhr, status, error) {
 						console.error('입고등록할 목록을 가져오는 중 오류 발생:', error);
@@ -230,7 +281,7 @@
 				});
 			});
 
-			// 담당자 찾기 버튼 클릭 이벤트 (선택 사항)
+			// 담당자 찾기 버튼 클릭 시 담당자 목록 모달창 생성		
 			$('#findManagerButton').on('click', function () {
 				// AJAX를 통해 담당자 목록 가져오기
 				$.ajax({
@@ -241,67 +292,101 @@
 						if (data.length > 0) {
 							var managerListHtml = '';
 							data.forEach(function (manager) {
-								managerListHtml += '<tr>';
+								managerListHtml += '<tr class="selectable-manager-row" data-manager-id="' + manager.managerId + '" data-manager-name="' + manager.name + '">';
 								managerListHtml += '<td>' + manager.managerId + '</td>';
 								managerListHtml += '<td>' + manager.name + '</td>';
-								managerListHtml += '<td><button type="button" class="btn btn-sm btn-primary select-manager" data-manager-name="' + manager.name + '">선택</button></td>';
 								managerListHtml += '</tr>';
 							});
-							$('#modalManagerList tbody').html(managerListHtml);
+							$('#modalManagerList').html(managerListHtml);
 						} else {
-							$('#modalManagerList tbody').html('<tr><td colspan="3" class="text-center">담당자가 없습니다.</td></tr>');
+							$('#modalManagerList').html('<tr><td colspan="2" class="text-center">담당자가 없습니다.</td></tr>');
 						}
 
 						// 모달 표시
 						$('#ManagerListModal').modal('show');
+						// 선택된 행의 스타일 초기화
+						$('.selectable-manager-row').removeClass('active-row');
 					},
 					error: function (xhr, status, error) {
 						console.error('담당자 목록을 가져오는 중 오류 발생:', error);
-						alert('담당자 목록을 가져오는 데 실패했습니다.');
+						$('#modalManagerList').html('<tr><td colspan="2" class="text-center text-danger">담당자 정보를 가져오는 데 실패했습니다.</td></tr>');
 					}
 				});
 			});
 
-			// 담당자 선택 버튼 클릭 이벤트 (선택 사항)
-			$(document).on('click', '.select-manager', function () {
-				var selectedManager = $(this).data('manager-name');
-				$('#managerName').val(selectedManager);
+			// '담당자 목록 모달'의 행 클릭 시 입력 필드에 값 설정 및 모달 닫기
+			$(document).on('click', '.selectable-manager-row', function () {
+				// 모든 행의 active-row 클래스 제거
+				$('.selectable-manager-row').removeClass('active-row');
+
+				// 현재 클릭된 행에 active-row 클래스 추가
+				$(this).addClass('active-row');
+
+				// data 속성에서 값 가져오기
+				var managerId = $(this).data('manager-id');
+				var managerName = $(this).data('manager-name');
+
+				// 입력 필드에 값 설정
+				$('#managerName').val(managerName);
+				
+				$('#managerId').val(managerId);
+
+				// 모달 닫기
 				$('#ManagerListModal').modal('hide');
+			});
+
+			// 선택 가능한 입고대상 행 클릭 시 이벤트 핸들러
+			$(document).on('click', '.selectable-row', function () {
+				// 모든 행의 active-row 클래스 제거
+				$('.selectable-row').removeClass('active-row');
+
+				// 현재 클릭된 행에 active-row 클래스 추가
+				$(this).addClass('active-row');
+
+				// data 속성에서 값 가져오기
+				var prodOrQualId = $(this).data('prod-or-qual-id');
+				var reasonOfIncoming = $(this).data('reason-of-incoming');
+
+				// 입력 필드에 값 설정
+				$('#incomingInsertCode').val(prodOrQualId);
+				$('#reasonOfIncoming').val(reasonOfIncoming);
+
+				// 상세 정보 테이블 초기화 및 로딩 메시지 표시
+				$('#example2 tbody').html('<tr><td colspan="4" class="text-center">로딩 중...</td></tr>');
+
+				// AJAX 요청을 통해 상세 품목 정보 가져오기
+				$.ajax({
+					url: '/restInven/getIncomingInsertItems',
+					type: 'GET',
+					data: {
+						prodOrQualId: prodOrQualId,
+						reasonOfIncoming: reasonOfIncoming
+					},
+					dataType: 'json',
+					success: function (data) {
+						if (data.length > 0) {
+							var incomingItemsHtml = '';
+							data.forEach(function (item) {
+								incomingItemsHtml += '<tr>';
+								incomingItemsHtml += '<td>' + item.itemCode + '</td>';
+								incomingItemsHtml += '<td>' + item.itemName + '</td>';
+								incomingItemsHtml += '<td>' + item.itemType + '</td>';
+								incomingItemsHtml += '<td>' + item.quantity + '</td>';
+								incomingItemsHtml += '</tr>';
+							});
+							$('#example2 tbody').html(incomingItemsHtml);
+						} else {
+							$('#example2 tbody').html('<tr><td colspan="4" class="text-center">입고 품목 정보가 없습니다.</td></tr>');
+						}
+					},
+					error: function (xhr, status, error) {
+						console.error('입고 품목 정보를 가져오는 중 오류 발생:', error);
+						$('#example2 tbody').html('<tr><td colspan="4" class="text-center text-danger">입고 품목 정보를 가져오는 데 실패했습니다.</td></tr>');
+					}
+				});
+
+				// 모달 닫기
+				$('#InsertListModal').modal('hide');
 			});
 		});
 	</script>
-
-	<!-- 담당자 목록 모달 (선택 사항) -->
-	<div class="modal fade" id="ManagerListModal" tabindex="-1" role="dialog" aria-labelledby="ManagerListModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="ManagerListModalLabel">담당자 목록</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="닫기">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<!-- 담당자 목록 데이터 테이블 -->
-					<table class="table table-bordered table-hover dataTable dtr-inline">
-						<thead>
-							<tr>
-								<th>담당자 ID</th>
-								<th>이름</th>
-								<th>선택</th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- AJAX로 가져온 데이터가 여기에 삽입됩니다. -->
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-</body>
-
-</html>
