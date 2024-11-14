@@ -16,10 +16,16 @@
 	<style>
 		/* 마우스를 올렸을 때 행 강조 */
 		.selectable-row:hover,
-		.selectable-manager-row:hover {
-			background-color: #f1f1f1;
+		.selectable-manager-row:hover,
+		.input-group-text:hover {
+			color: #1f2d3d;
+			background-color: #e2e6ea;
+			border-color: #dae0e5;
+			box-shadow: none;
 			cursor: pointer;
 		}
+
+
 
 		/* 선택된 행 스타일 */
 		.active-row {
@@ -71,17 +77,29 @@
 									<div class="card-body">
 
 										<div class="form-group row">
-											<label for="incomingInsertCode" class="col-sm-4 col-form-label text-center">
-												입고 대상</label>
+											<label for="incomingInsertCode_display"
+												class="col-sm-4 col-form-label text-center">입고 대상</label>
 											<div class="input-group col-6">
-												<input id="incomingInsertCode" class="form-control" type="text"
-													name="incomingInsertCode" placeholder="번호" required>
+												<!-- 표시용 readonly 입력 필드  -->
+												<input id="incomingInsertCode_display" class="form-control" type="text"
+													placeholder="번호" readonly>
+												<!-- 제출용 hidden 입력 필드 (name과 required 추가) -->
+												<input type="hidden" name="incomingInsertCode"
+													id="incomingInsertCode_hidden" required>
+
 												<div class="input-group-append">
 													<span id="findIncomingInsertList" class="input-group-text"
-														style="cursor:pointer;"><i class="fas fa-search"></i></span>
+														style="cursor:pointer; background-color: #f8f9fa;">
+														<i class="fas fa-search"></i>
+													</span>
 												</div>
-												<input id="reasonOfIncoming" class="form-control" type="text"
-													name="reasonOfIncoming" placeholder="입고사유" required>
+
+												<!-- 표시용 readonly 입력 필드  -->
+												<input id="reasonOfIncoming_display" class="form-control" type="text"
+													placeholder="입고사유" readonly>
+												<!-- 제출용 hidden 입력 필드 (name과 required 추가) -->
+												<input type="hidden" name="reasonOfIncoming"
+													id="reasonOfIncoming_hidden" required>
 											</div>
 										</div>
 										<div class="form-group row">
@@ -89,19 +107,23 @@
 												class="col-4 col-form-label text-center">입고 등록일</label>
 											<div class="col-6">
 												<input type="text" class="form-control" id="inputIncomingStartDate"
-													name="incomingStartDate" placeholder="입고 등록일은 자동 설정됩니다." disabled>
+													name="incomingStartDate" placeholder="입고 등록일은 현재 시간으로 자동 설정됩니다."
+													readonly>
 											</div>
 										</div>
 										<div class="form-group row">
-											<label for="managerName"
+											<label for="managerName_display"
 												class="col-4 col-form-label text-center">담당자</label>
-											<div class="input-group col-6">
-												<input type="text" class="form-control" id="managerName"
-													name="managerName" placeholder="담당자 불러오기" required>
-													<input type="hidden" id="managerId" name="managerId">
+											<div class="input-group col-3">
+												<!-- 표시용 readonly 입력 필드 (name과 required 제거) -->
+												<input type="text" class="form-control" id="managerName_display"
+													placeholder="담당자 불러오기" readonly>
+												<!-- 제출용 hidden 입력 필드 (name과 required 추가) -->
+												<input type="hidden" id="managerId" name="managerId" required>
+
 												<div class="input-group-append">
 													<span id="findManagerButton" class="input-group-text"
-														style="cursor:pointer;">
+														style="cursor:pointer; background-color: #f8f9fa;">
 														<i class="fas fa-search"></i>
 													</span>
 												</div>
@@ -164,7 +186,7 @@
 	<!-- 입고 등록 목록 모달 -->
 	<div class="modal fade" id="InsertListModal" tabindex="-1" role="dialog" aria-labelledby="InsertListModalLabel"
 		aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-dialog modal-xl" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title" id="InsertListModalLabel">입고 등록 목록</h5>
@@ -177,9 +199,9 @@
 					<table class="table table-bordered table-hover dataTable dtr-inline">
 						<thead>
 							<tr>
-								<th>생산/검품 코드</th>
+								<th>생산/발주 코드</th>
 								<th>입고 사유</th>
-								<th>생산/검품 완료 날짜</th>
+								<th>생산/발주 완료 날짜</th>
 								<th>품목명</th>
 								<th>총 수량</th>
 							</tr>
@@ -223,170 +245,216 @@
 	</div>
 
 	<script>
-		$(document).ready(function () {
-			// CSRF 토큰 설정 (Spring Security)
-			var csrfToken = $('meta[name="_csrf"]').attr('content');
-			var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+	    $(document).ready(function () {
+	        // CSRF 토큰 설정 (Spring Security)
+	        var csrfToken = $('meta[name="_csrf"]').attr('content');
+	        var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
 
-			// AJAX 요청 시 CSRF 토큰을 헤더에 추가
-			$.ajaxSetup({
-				beforeSend: function (xhr) {
-					if (csrfToken && csrfHeader) {
-						xhr.setRequestHeader(csrfHeader, csrfToken);
-					}
-				}
-			});
+	        // AJAX 요청 시 CSRF 토큰을 헤더에 추가
+	        $.ajaxSetup({
+	            beforeSend: function (xhr) {
+	                if (csrfToken && csrfHeader) {
+	                    xhr.setRequestHeader(csrfHeader, csrfToken);
+	                }
+	            }
+	        });
 
-			// 입고 대상 검색 클릭 시 입고 등록 목록 모달창 생성		
-			$('#findIncomingInsertList').on('click', function () {
-				// AJAX를 통해 입고 등록 대상 목록 가져오기
-				$.ajax({
-					url: '/restInven/incomingInsertList',
-					type: 'GET',
-					dataType: 'json',
-					success: function (data) {
-						if (data.length > 0) {
-							var incomingInsertListHtml = '';
-							data.forEach(function (list) { // forEach로 수정
-								incomingInsertListHtml += '<tr class="selectable-row" data-prod-or-qual-id="' +
-									list.prodOrQualId + '" data-reason-of-incoming="' +
-									list.reasonOfIncoming + '">';
-								incomingInsertListHtml += '<td>' + list.prodOrQualId + '</td>';
-								incomingInsertListHtml += '<td>' + list.reasonOfIncoming + '</td>';
-								incomingInsertListHtml += '<td>' + list.prodOrQualDate + '</td>';
-								// 조건에 따라 다른 내용의 <td> 생성
-								if (list.otherCount === 0) {
-									incomingInsertListHtml += '<td>' + list.incomingItemDisplay + '</td>';
-								} else {
-									incomingInsertListHtml += '<td>' + list.incomingItemDisplay + ' 외 ' + list.otherCount + '건' + '</td>';
-								}
+	        // 유효성 검사 함수
+	        function validateForm() {
+	            var incomingInsertCode = $('#incomingInsertCode_hidden').val().trim();
+	            var reasonOfIncoming = $('#reasonOfIncoming_hidden').val().trim();
+	            var managerId = $('#managerId').val().trim();
 
-								incomingInsertListHtml += '<td>' + list.totalAmount + '</td>';
-								incomingInsertListHtml += '</tr>'; // 닫는 태그 추가
-							});
-							$('#modalIncomingInsertList').html(incomingInsertListHtml);
-						} else {
-							$('#modalIncomingInsertList').html('<tr><td colspan="5" class="text-center">입고 등록할 대상이 없습니다.</td></tr>');
-						}
+	            var isValid = true;
+	            var errorMessage = '';
 
-						// 모달 표시
-						$('#InsertListModal').modal('show'); // 올바른 선택자 사용
-						// 선택된 행의 스타일 초기화
-						$('.selectable-row').removeClass('active-row');
-					},
-					error: function (xhr, status, error) {
-						console.error('입고등록할 목록을 가져오는 중 오류 발생:', error);
-						$('#modalIncomingInsertList').html('<tr><td colspan="5" class="text-center text-danger">입고 품목 정보를 가져오는 데 실패했습니다.</td></tr>');
-					}
-				});
-			});
+	            if (incomingInsertCode === '') {
+	                isValid = false;
+	                errorMessage += '입고 대상이 선택되지 않았습니다.\n';
+	            }
 
-			// 담당자 찾기 버튼 클릭 시 담당자 목록 모달창 생성		
-			$('#findManagerButton').on('click', function () {
-				// AJAX를 통해 담당자 목록 가져오기
-				$.ajax({
-					url: '/restInven/findManagerList',
-					type: 'GET',
-					dataType: 'json',
-					success: function (data) {
-						if (data.length > 0) {
-							var managerListHtml = '';
-							data.forEach(function (manager) {
-								managerListHtml += '<tr class="selectable-manager-row" data-manager-id="' + manager.managerId + '" data-manager-name="' + manager.name + '">';
-								managerListHtml += '<td>' + manager.managerId + '</td>';
-								managerListHtml += '<td>' + manager.name + '</td>';
-								managerListHtml += '</tr>';
-							});
-							$('#modalManagerList').html(managerListHtml);
-						} else {
-							$('#modalManagerList').html('<tr><td colspan="2" class="text-center">담당자가 없습니다.</td></tr>');
-						}
+	            if (reasonOfIncoming === '') {
+	                isValid = false;
+	                errorMessage += '입고 사유가 선택되지 않았습니다.\n';
+	            }
 
-						// 모달 표시
-						$('#ManagerListModal').modal('show');
-						// 선택된 행의 스타일 초기화
-						$('.selectable-manager-row').removeClass('active-row');
-					},
-					error: function (xhr, status, error) {
-						console.error('담당자 목록을 가져오는 중 오류 발생:', error);
-						$('#modalManagerList').html('<tr><td colspan="2" class="text-center text-danger">담당자 정보를 가져오는 데 실패했습니다.</td></tr>');
-					}
-				});
-			});
+	            if (managerId === '') {
+	                isValid = false;
+	                errorMessage += '담당자가 선택되지 않았습니다.\n';
+	            }
 
-			// '담당자 목록 모달'의 행 클릭 시 입력 필드에 값 설정 및 모달 닫기
-			$(document).on('click', '.selectable-manager-row', function () {
-				// 모든 행의 active-row 클래스 제거
-				$('.selectable-manager-row').removeClass('active-row');
+	            if (!isValid) {
+	                alert(errorMessage);
+	            }
 
-				// 현재 클릭된 행에 active-row 클래스 추가
-				$(this).addClass('active-row');
+	            return isValid;
+	        }
 
-				// data 속성에서 값 가져오기
-				var managerId = $(this).data('manager-id');
-				var managerName = $(this).data('manager-name');
+	        // 폼 제출 시 유효성 검사
+	        $('form').on('submit', function (e) {
+	            if (!validateForm()) {
+	                e.preventDefault(); // 제출 방지
+	            }
+	        });
 
-				// 입력 필드에 값 설정
-				$('#managerName').val(managerName);
-				
-				$('#managerId').val(managerId);
+	        // 입고 대상 검색 클릭 시 입고 등록 목록 모달창 생성		
+	        $('#findIncomingInsertList').on('click', function () {
+	            // AJAX를 통해 입고 등록 대상 목록 가져오기
+	            $.ajax({
+	                url: '/restInven/incomingInsertList',
+	                type: 'GET',
+	                dataType: 'json',
+	                success: function (data) {
+	                    if (data.length > 0) {
+	                        var incomingInsertListHtml = '';
+	                        data.forEach(function (list) { // forEach로 수정
+	                            incomingInsertListHtml += '<tr class="selectable-row" data-prod-or-order-id="' +
+	                                list.prodOrOrderId + '" data-reason-of-incoming="' +
+	                                list.reasonOfIncoming + '">';
+	                            incomingInsertListHtml += '<td>' + list.prodOrOrderId + '</td>';
+	                            incomingInsertListHtml += '<td>' + list.reasonOfIncoming + '</td>';
+	                            incomingInsertListHtml += '<td>' + list.prodOrOrderDate + '</td>';
+	                            // 조건에 따라 다른 내용의 <td> 생성
+	                            if (list.otherCount === 0) {
+	                                incomingInsertListHtml += '<td>' + list.incomingItemDisplay + '</td>';
+	                            } else {
+	                                incomingInsertListHtml += '<td>' + list.incomingItemDisplay + ' 외 ' + list.otherCount + '건' + '</td>';
+	                            }
 
-				// 모달 닫기
-				$('#ManagerListModal').modal('hide');
-			});
+	                            incomingInsertListHtml += '<td>' + list.totalAmount + '</td>';
+	                            incomingInsertListHtml += '</tr>'; // 닫는 태그 추가
+	                        });
+	                        $('#modalIncomingInsertList').html(incomingInsertListHtml);
+	                    } else {
+	                        $('#modalIncomingInsertList').html('<tr><td colspan="5" class="text-center">입고 등록할 대상이 없습니다.</td></tr>');
+	                    }
 
-			// 선택 가능한 입고대상 행 클릭 시 이벤트 핸들러
-			$(document).on('click', '.selectable-row', function () {
-				// 모든 행의 active-row 클래스 제거
-				$('.selectable-row').removeClass('active-row');
+	                    // 모달 표시
+	                    $('#InsertListModal').modal('show'); // 올바른 선택자 사용
+	                    // 선택된 행의 스타일 초기화
+	                    $('.selectable-row').removeClass('active-row');
+	                },
+	                error: function (xhr, status, error) {
+	                    console.error('입고등록할 목록을 가져오는 중 오류 발생:', error);
+	                    $('#modalIncomingInsertList').html('<tr><td colspan="5" class="text-center text-danger">입고 품목 정보를 가져오는 데 실패했습니다.</td></tr>');
+	                }
+	            });
+	        });
 
-				// 현재 클릭된 행에 active-row 클래스 추가
-				$(this).addClass('active-row');
+	        // 담당자 찾기 버튼 클릭 시 담당자 목록 모달창 생성		
+	        $('#findManagerButton').on('click', function () {
+	            // AJAX를 통해 담당자 목록 가져오기
+	            $.ajax({
+	                url: '/restInven/findManagerList',
+	                type: 'GET',
+	                dataType: 'json',
+	                success: function (data) {
+	                    if (data.length > 0) {
+	                        var managerListHtml = '';
+	                        data.forEach(function (manager) {
+	                            managerListHtml += '<tr class="selectable-manager-row" data-manager-id="' + manager.managerId + '" data-manager-name="' + manager.name + '">';
+	                            managerListHtml += '<td>' + manager.managerId + '</td>';
+	                            managerListHtml += '<td>' + manager.name + '</td>';
+	                            managerListHtml += '</tr>';
+	                        });
+	                        $('#modalManagerList').html(managerListHtml);
+	                    } else {
+	                        $('#modalManagerList').html('<tr><td colspan="2" class="text-center">담당자가 없습니다.</td></tr>');
+	                    }
 
-				// data 속성에서 값 가져오기
-				var prodOrQualId = $(this).data('prod-or-qual-id');
-				var reasonOfIncoming = $(this).data('reason-of-incoming');
+	                    // 모달 표시
+	                    $('#ManagerListModal').modal('show');
+	                    // 선택된 행의 스타일 초기화
+	                    $('.selectable-manager-row').removeClass('active-row');
+	                },
+	                error: function (xhr, status, error) {
+	                    console.error('담당자 목록을 가져오는 중 오류 발생:', error);
+	                    $('#modalManagerList').html('<tr><td colspan="2" class="text-center text-danger">담당자 정보를 가져오는 데 실패했습니다.</td></tr>');
+	                }
+	            });
+	        });
 
-				// 입력 필드에 값 설정
-				$('#incomingInsertCode').val(prodOrQualId);
-				$('#reasonOfIncoming').val(reasonOfIncoming);
+	        // '담당자 목록 모달'의 행 클릭 시 입력 필드에 값 설정 및 모달 닫기
+	        $(document).on('click', '.selectable-manager-row', function () {
+	            // 모든 행의 active-row 클래스 제거
+	            $('.selectable-manager-row').removeClass('active-row');
 
-				// 상세 정보 테이블 초기화 및 로딩 메시지 표시
-				$('#example2 tbody').html('<tr><td colspan="4" class="text-center">로딩 중...</td></tr>');
+	            // 현재 클릭된 행에 active-row 클래스 추가
+	            $(this).addClass('active-row');
 
-				// AJAX 요청을 통해 상세 품목 정보 가져오기
-				$.ajax({
-					url: '/restInven/getIncomingInsertItems',
-					type: 'GET',
-					data: {
-						prodOrQualId: prodOrQualId,
-						reasonOfIncoming: reasonOfIncoming
-					},
-					dataType: 'json',
-					success: function (data) {
-						if (data.length > 0) {
-							var incomingItemsHtml = '';
-							data.forEach(function (item) {
-								incomingItemsHtml += '<tr>';
-								incomingItemsHtml += '<td>' + item.itemCode + '</td>';
-								incomingItemsHtml += '<td>' + item.itemName + '</td>';
-								incomingItemsHtml += '<td>' + item.itemType + '</td>';
-								incomingItemsHtml += '<td>' + item.quantity + '</td>';
-								incomingItemsHtml += '</tr>';
-							});
-							$('#example2 tbody').html(incomingItemsHtml);
-						} else {
-							$('#example2 tbody').html('<tr><td colspan="4" class="text-center">입고 품목 정보가 없습니다.</td></tr>');
-						}
-					},
-					error: function (xhr, status, error) {
-						console.error('입고 품목 정보를 가져오는 중 오류 발생:', error);
-						$('#example2 tbody').html('<tr><td colspan="4" class="text-center text-danger">입고 품목 정보를 가져오는 데 실패했습니다.</td></tr>');
-					}
-				});
+	            // data 속성에서 값 가져오기
+	            var managerId = $(this).data('manager-id');
+	            var managerName = $(this).data('manager-name');
 
-				// 모달 닫기
-				$('#InsertListModal').modal('hide');
-			});
-		});
+	            // 입력 필드에 값 설정 (표시용 readonly 입력 필드)
+	            $('#managerName_display').val(managerName);
+
+	            // 숨겨진 입력 필드에 값 설정 (제출용 hidden 입력 필드)
+	            $('#managerId').val(managerId);
+
+	            // 모달 닫기
+	            $('#ManagerListModal').modal('hide');
+	        });
+
+	        // 선택 가능한 입고대상 행 클릭 시 이벤트 핸들러
+	        $(document).on('click', '.selectable-row', function () {
+	            // 모든 행의 active-row 클래스 제거
+	            $('.selectable-row').removeClass('active-row');
+
+	            // 현재 클릭된 행에 active-row 클래스 추가
+	            $(this).addClass('active-row');
+
+	            // data 속성에서 값 가져오기
+	            var prodOrOrderId = $(this).data('prod-or-order-id');
+	            var reasonOfIncoming = $(this).data('reason-of-incoming');
+
+	            // 입력 필드에 값 설정 (표시용 readonly 입력 필드)
+	            $('#incomingInsertCode_display').val(prodOrOrderId);
+	            $('#reasonOfIncoming_display').val(reasonOfIncoming);
+
+	            // 숨겨진 입력 필드에 값 설정 (제출용 hidden 입력 필드)
+	            $('#incomingInsertCode_hidden').val(prodOrOrderId);
+	            $('#reasonOfIncoming_hidden').val(reasonOfIncoming);
+
+	            // 상세 정보 테이블 초기화 및 로딩 메시지 표시
+	            $('#example2 tbody').html('<tr><td colspan="4" class="text-center">로딩 중...</td></tr>');
+
+	            // AJAX 요청을 통해 상세 품목 정보 가져오기
+	            $.ajax({
+	                url: '/restInven/getIncomingInsertItems',
+	                type: 'GET',
+	                data: {
+	                    prodOrOrderId: prodOrOrderId,
+	                    reasonOfIncoming: reasonOfIncoming
+	                },
+	                dataType: 'json',
+	                success: function (data) {
+	                    if (data.length > 0) {
+	                        var incomingItemsHtml = '';
+	                        data.forEach(function (item) {
+	                            incomingItemsHtml += '<tr>';
+	                            incomingItemsHtml += '<td>' + item.itemCode + '</td>';
+	                            incomingItemsHtml += '<td>' + item.itemName + '</td>';
+	                            incomingItemsHtml += '<td>' + item.itemType + '</td>';
+	                            incomingItemsHtml += '<td>' + item.quantity + '</td>';
+	                            incomingItemsHtml += '</tr>';
+	                        });
+	                        $('#example2 tbody').html(incomingItemsHtml);
+	                    } else {
+	                        $('#example2 tbody').html('<tr><td colspan="4" class="text-center">입고 품목 정보가 없습니다.</td></tr>');
+	                    }
+	                },
+	                error: function (xhr, status, error) {
+	                    console.error('입고 품목 정보를 가져오는 중 오류 발생:', error);
+	                    $('#example2 tbody').html('<tr><td colspan="4" class="text-center text-danger">입고 품목 정보를 가져오는 데 실패했습니다.</td></tr>');
+	                }
+	            });
+
+	            // 모달 닫기
+	            $('#InsertListModal').modal('hide');
+	        });
+	    });
 	</script>
+</body>
+
+</html>
