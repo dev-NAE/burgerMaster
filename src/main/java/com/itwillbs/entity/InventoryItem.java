@@ -18,7 +18,7 @@ import lombok.ToString;
 @Table(name = "inventory_items")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "item")
 @NoArgsConstructor
 public class InventoryItem {
 

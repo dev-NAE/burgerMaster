@@ -30,8 +30,8 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	/**
 	 * 입고 페이지 진입할 때 입고테이블 조회(페이징 처리)
 	 */
-	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, m.managerId, m.name, ic.status, ic.productionId, ic.qualityOrderId) "
-			+ "FROM Incoming ic LEFT JOIN ic.manager m "
+	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.IncomingDTO(ic.incomingId, ic.incomingStartDate, ic.incomingEndDate, m.managerId, m.name, ic.status, mfo.orderId, o.orderId) "
+			+ "FROM Incoming ic LEFT JOIN ic.manager m LEFT JOIN ic.mfOrder mfo LEFT JOIN ic.order o "
 			+ "ORDER BY ic.incomingId DESC")
 	Page<IncomingDTO> getIncomingLists(Pageable pageable);
 
@@ -40,13 +40,15 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	        "LEFT JOIN FETCH ic.manager m " +
 	        "LEFT JOIN FETCH ic.incomingItems ii " +
 	        "LEFT JOIN FETCH ii.item i " +
+	        "LEFT JOIN FETCH ic.order o " +
+	        "LEFT JOIN FETCH ic.mfOrder mfo " +
 	        "WHERE (:reasonOfIncoming = '' OR " +
-	        "       (:reasonOfIncoming = '생산 완료' AND ic.productionId IS NOT NULL) OR " +
-	        "       (:reasonOfIncoming = '발주 완료' AND ic.qualityOrderId IS NOT NULL)) " +
+	        "       (:reasonOfIncoming = '생산 완료' AND mfo.orderId IS NOT NULL) OR " +
+	        "       (:reasonOfIncoming = '발주 완료' AND o.orderId IS NOT NULL)) " +
 	        "AND (:incomingStartDate_start IS NULL OR ic.incomingStartDate >= :incomingStartDate_start) " +
 	        "AND (:incomingStartDate_end IS NULL OR ic.incomingStartDate <= :incomingStartDate_end) " +
 	        "AND (:incomingId = '' OR ic.incomingId LIKE CONCAT('%', :incomingId, '%')) " +
-	        "AND (:prodOrQualId = '' OR ic.productionId LIKE CONCAT('%', :prodOrQualId, '%') OR ic.qualityOrderId LIKE CONCAT('%', :prodOrQualId, '%')) " +
+	        "AND (:prodOrQualId = '' OR mfo.orderId LIKE CONCAT('%', :prodOrQualId, '%') OR o.orderId LIKE CONCAT('%', :prodOrQualId, '%')) " +
 	        "AND (:status = '' OR ic.status = :status) " +
 	        "AND (:managerCodeOrName = '' OR m.managerId LIKE CONCAT('%', :managerCodeOrName, '%') OR m.name LIKE CONCAT('%', :managerCodeOrName, '%')) " +
 	        "AND (:itemCodeOrName = '' OR i.itemCode LIKE CONCAT('%', :itemCodeOrName, '%') OR i.itemName LIKE CONCAT('%', :itemCodeOrName, '%')) " +
@@ -75,9 +77,9 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	 * 생산 완료되었지만 입고등록되지 않은 데이터 조회
 	 */
 	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(mfo.orderId, mfo.orderState, mfo.orderDate, mfo.item.itemName, mfo.orderAmount) " +
-			"FROM MFOrder mfo LEFT JOIN Incoming i ON mfo.orderId = i.productionId " +
+			"FROM MFOrder mfo " +
 			"WHERE mfo.orderState = '작업 완료' " +
-			"AND i.productionId IS NULL")
+			"AND mfo.orderId NOT IN (SELECT inc.mfOrder.orderId FROM Incoming inc WHERE inc.mfOrder IS NOT NULL)")
 	List<IncomingInsertDTO> findAllEndOfProduction();
 	
 	
