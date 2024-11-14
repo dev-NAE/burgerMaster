@@ -155,42 +155,75 @@ function check_modal_text(action){
 // 중복 확인
 function checkMangerId(){
     let managerId = $("#manager_id_create_modal").val().trim();
-    if(typeof managerId != "undefined" && managerId != null && managerId !== ''){
-        $.ajax({
-            type: "POST",
-            url : "/bgmManager/check/id",
-            data : {
-                managerId : managerId,
-            },
-            beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                xhr.setRequestHeader(header, token);
-            },
-            contentType : "application/x-www-form-urlencoded; charset=utf-8",
-            dataType : "json",
-            success : function(bool){
-                console.log('중복 확인 완료');
-                // true 중복 있음
-                if(bool){
-                    let resultInfo = $('#resultCheckId');
-                    $("#manager_id_create_modal").addClass('is-invalid');
-                    resultInfo.removeClass();
-                    resultInfo.addClass('callout callout-danger p-2');
-                    resultInfo.children('p').text('중복된 아이디가 있습니다');
-                    CHECK_ID = false;
-                }else{
-                    let resultInfo = $('#resultCheckId');
-                    $("#manager_id_create_modal").removeClass('is-invalid');
-                    resultInfo.removeClass();
-                    resultInfo.addClass('callout callout-success p-2');
-                    resultInfo.children('p').text('사용 가능한 아이디입니다');
-                    CHECK_ID = true;
+    let resultInfo = $('#resultCheckId');
+    let idRegexp = /^[a-zA-Z]+[a-zA-Z0-9]{5,19}$/g;
+
+    if(idRegexp.test(managerId)){
+        if(typeof managerId != "undefined" && managerId != null && managerId !== ''){
+            $.ajax({
+                type: "POST",
+                url : "/bgmManager/check/id",
+                data : {
+                    managerId : managerId,
+                },
+                beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    xhr.setRequestHeader(header, token);
+                },
+                contentType : "application/x-www-form-urlencoded; charset=utf-8",
+                dataType : "json",
+                success : function(bool){
+                    console.log('중복 확인 완료');
+                    // true 중복 있음
+                    if(bool){
+                        $("#manager_id_create_modal").addClass('is-invalid');
+                        resultInfo.removeClass();
+                        resultInfo.addClass('callout callout-danger p-2');
+                        resultInfo.children('p').text('중복된 아이디가 있습니다.');
+                        CHECK_ID = false;
+                    }else{
+                        $("#manager_id_create_modal").removeClass('is-invalid');
+                        resultInfo.removeClass();
+                        resultInfo.addClass('callout callout-success p-2');
+                        resultInfo.children('p').text('사용 가능한 아이디입니다.');
+                        CHECK_ID = true;
+                    }
+                },error : function(){
+                    console.log('중복 확인 실패');
                 }
-            },error : function(){
-                console.log('중복 확인 실패');
-            }
-        });
+            });
+        }
+    }else {
+        resultInfo.removeClass();
+        resultInfo.addClass('callout callout-danger p-2');
+        resultInfo.children('p').text('사용 불가능한 아이디입니다.');
+        CHECK_ID = false;
     }
+}
+//생성 초기화
+function resetCreateModal(){
+    let idInput = $("#manager_id_create_modal");
+    let passInput = $("#manager_pass_create_modal");
+    let nameInput = $("#manager_name_create_modal");
+    let phoneInput = $("#manager_phone_create_modal");
+    let emailInput = $("#manager_email_create_modal");
+    let resultInfo = $('#resultCheckId');
+
+    idInput.val('');
+    idInput.removeClass('is-invalid');
+    passInput.val('');
+    passInput.removeClass('is-invalid');
+    nameInput.val('');
+    nameInput.removeClass('is-invalid');
+    phoneInput.val('');
+    phoneInput.removeClass('is-invalid');
+    emailInput.val('');
+    emailInput.removeClass('is-invalid');
+
+    resultInfo.removeClass();
+    resultInfo.addClass('callout callout-info p-2');
+    resultInfo.children('p').text('아이디는 영문, 숫자만 5~19자리까지 가능합니다.');
+    CHECK_ID = true;
 }
 //관리자 생성하기
 function createManager(){

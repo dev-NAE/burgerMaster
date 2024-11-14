@@ -58,8 +58,8 @@ $('#confirmSubmitBtn').click(function(){
 			$('#'+key).removeClass('btn-primary');
 			$('#'+key).addClass('btn-secondary')
 			if(type=='transmit'){
-				$('span[name='+key+']').text('작업 중');
-				$('span[name='+key+']').css("color", "red");
+				$('span[name='+key+']').text('작업 대기');
+				$('span[name='+key+']').css("color", "brown");
 			} else if(type=='complete'){
 				$('span[name='+key+']').text('작업 종료');
 				$('span[name='+key+']').css("color", "green");
