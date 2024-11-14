@@ -68,7 +68,6 @@
 						<th>요청일</th>
 						<th>작업 상태</th>
 						<th>작업 전달 확인</th>
-						<th>작업 완료 확인</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -80,6 +79,7 @@
 						<td th:text="${List.orderDate}"></td>
 						<td th:switch="${List.orderState}">
 							<span th:case="'작업 전달 전'" th:name="${List.orderId}" style="color:orange;">작업 전달 전</span>
+							<span th:case="'작업 대기'" th:name="${List.orderId}" style="color: brown">작업 대기</span>
 							<span th:case="'작업 중'" th:name="${List.orderId}" style="color:red;">작업 중</span>
 							<span th:case="'작업 완료'" th:name="${List.orderId}" style="color:blue;">작업 완료</span>
 							<span th:case="'작업 종료'" th:name="${List.orderId}" style="color:green;">작업 종료</span>
@@ -91,12 +91,12 @@
 						<td th:unless="${List.orderState=='작업 전달 전'}">
 							<button type="button" class="btn btn-secondary transmit" disabled>전달</button>
 						</td>
-						<td th:if="${List.orderState=='작업 완료'}">
-							<button type="button" th:id="${List.orderId}" class="btn btn-primary complete">완료</button>
-						</td>
-						<td th:unless="${List.orderState=='작업 완료'}">
-							<button type="button" class="btn btn-secondary complete" disabled>완료</button>
-						</td>
+<!--						<td th:if="${List.orderState=='작업 완료'}">-->
+<!--							<button type="button" th:id="${List.orderId}" class="btn btn-primary complete">완료</button>-->
+<!--						</td>-->
+<!--						<td th:unless="${List.orderState=='작업 완료'}">-->
+<!--							<button type="button" class="btn btn-secondary complete" disabled>완료</button>-->
+<!--						</td>-->
 					</tr>
 				</tbody>
 			</table>
@@ -135,9 +135,10 @@
 			  <div style="display: inline-block;">
 			    <select class="form-control" onchange="changeState(this.value)">
 			  	  <option th:text="작업전달전" value="작업 전달 전" selected></option>
-			  	  <option th:text="작업완료" value="작업 완료"></option>
+				  <option th:text="작업대기" value="작업 대기"></option>
 			  	  <option th:text="작업중" value="작업 중"></option>
 				  <option th:text="작업완료" value="작업 완료"></option>
+				  <option th:text="작업종료" value="작업 종료"></option>
 			  	</select>
 				<input type="hidden" name="searchState" id="state">
 			  </div>
