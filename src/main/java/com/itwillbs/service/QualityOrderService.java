@@ -17,20 +17,12 @@ import lombok.extern.java.Log;
 public class QualityOrderService {
 
 	private final QualityOrderRepository qualityOrderRepository;
-
 	public List<QualityOrder> getDashBaord() {
 		
 		return qualityOrderRepository.findAll();
 		
 	}
 
-	/*
-	 * public String getItemName(int item_code) {
-	 * 
-	 * return;
-	 * 
-	 * }
-	 */
 	
 	
 	
