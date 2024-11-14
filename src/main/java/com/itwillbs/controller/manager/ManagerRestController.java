@@ -6,6 +6,7 @@ import com.itwillbs.service.ManagerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,7 +24,7 @@ public class ManagerRestController {
     }
 
     @PostMapping(value = "/bgmManager/check/id")
-    public Boolean  checkId(String managerId) {
+    public Boolean  checkId(@RequestParam(value="managerId") String managerId) {
         log.info("ManagerRestController checkId()");
         boolean result = false;
         // false 중복 없음, true 중복 있음min
