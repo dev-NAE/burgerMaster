@@ -53,11 +53,14 @@ public class ManagerController {
         //전체 페이지 개수
         model.addAttribute("totalPages", managers.getTotalPages());
 
-        int pageBlock =5;
+        int pageBlock = 5;
         int startPage = (page-1)/pageBlock * pageBlock + 1;
         int endPage = startPage + pageBlock - 1;
         if(endPage > managers.getTotalPages()) {
-            endPage = managers.getTotalPages();
+            if(managers.getTotalPages() == 0)
+                endPage = startPage;
+            else
+                endPage = managers.getTotalPages();
         }
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
