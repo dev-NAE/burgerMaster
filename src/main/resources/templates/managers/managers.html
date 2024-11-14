@@ -71,7 +71,7 @@
                     <input type="text" id="search" name="search" class="form-control float-right" placeholder="Search"
                            th:if="${search.isEmpty() || search eq ''}">
                     <input type="text" name="search" class="form-control float-right" placeholder="Search"
-                             th:unless="${search.isEmpty() || search ne ''}" th:value="${search}">
+                             th:unless="${search.isEmpty() || search eq ''}" th:value="${search}">
                     <div class="input-group-append">
                       <button type="submit" class="btn btn-default" id="btn_search">
                         <i class="fas fa-search"></i>
@@ -120,16 +120,16 @@
             <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
               <ul class="pagination">
                 <li th:if="${currentPage > 1}" class="paginate_button page-item previous" id="example2_previous">
-                  <a th:href="@{/manager/list(page=${currentPage - 1})}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+                  <a th:href="@{/bgmManager/list(page=${currentPage - 1})}" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
                 </li>
                 <li th:each="page: ${#numbers.sequence(startPage, endPage)}"
                     class="paginate_button page-item" th:classappend="${currentPage eq page} ? 'active' ">
-                  <a th:if="${search.isEmpty() || search eq ''}" th:href="@{/manager/list(page=${page})}" th:text="${page}" aria-controls="example2"  class="page-link" ></a>
-                  <a th:unless="${ search.isEmpty() || search ne ''}" th:href="@{/manager/list(page=${page},search=${search})}" th:text="${page}" aria-controls="example2"  class="page-link"></a>
+                  <a th:if="${search.isEmpty() || search eq ''}" th:href="@{/bgmManager/list(page=${page})}" th:text="${page}" aria-controls="example2"  class="page-link" ></a>
+                  <a th:unless="${ search.isEmpty() || search eq ''}" th:href="@{/bgmManager/list(page=${page},search=${search})}" th:text="${page}" aria-controls="example2"  class="page-link"></a>
                 </li>
 
                 <li th:if="${currentPage  < totalPages}" class="paginate_button page-item next" id="example2_next">
-                  <a th:href="@{/manager/list(page=${currentPage + 1})}" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+                  <a th:href="@{/bgmManager/list(page=${currentPage + 1})}" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
                 </li>
               </ul>
             </div>
