@@ -4,12 +4,12 @@ let CHECK_ID = false;
 
 $(document).ready(function(){
     $('#btn_search').click(function () {
-        let search = $('#search').val().trim();
+        let search = $('#search').val();
 
         if(typeof search == "undefined" || search === '' || search == null)
             window.location.href="/bgmManager/list";
         else
-            window.location.href="/bgmManager/list?search=" + search;
+            window.location.href="/bgmManager/list?search=" + search.trim();
     })
     funcFillChangeModal();
     document.getElementById('change-pass-switch').switchButton('on');
