@@ -25,6 +25,7 @@ import com.itwillbs.entity.Incoming;
 import com.itwillbs.entity.IncomingItems;
 import com.itwillbs.entity.InventoryItem;
 import com.itwillbs.entity.Item;
+import com.itwillbs.entity.MFOrder;
 import com.itwillbs.entity.Manager;
 import com.itwillbs.entity.Order;
 import com.itwillbs.entity.OrderItems;
@@ -123,13 +124,13 @@ public class InventoryService {
 
 	// 입고 목록 검색 (검색 조건과 페이지네이션 포함)
 	public Page<IncomingDTO> findIncomingBySearch(String itemCodeOrName, String reasonOfIncoming,
-			Timestamp incomingStartDate_start, Timestamp incomingStartDate_end, String incomingId, String prodOrQualId,
+			Timestamp incomingStartDate_start, Timestamp incomingStartDate_end, String incomingId, String prodOrOrderId,
 			String status, String managerCodeOrName, Pageable pageable) {
 		log.info("findIncomingBySearch()");
 
 		// 한 번의 쿼리로 Incoming 엔티티와 연관된 데이터를 모두 조회
 		Page<Incoming> incomingEntitiesPage = incomingRepository.findIncomingEntities(reasonOfIncoming,
-				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrQualId, status, managerCodeOrName,
+				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrOrderId, status, managerCodeOrName,
 				itemCodeOrName, pageable);
 
 		// Incoming 엔티티를 IncomingDTO로 매핑
@@ -137,8 +138,10 @@ public class InventoryService {
 			IncomingDTO dto = new IncomingDTO(incoming.getIncomingId(), incoming.getIncomingStartDate(),
 					incoming.getIncomingEndDate(),
 					incoming.getManager() != null ? incoming.getManager().getManagerId() : "",
-					incoming.getManager() != null ? incoming.getManager().getName() : "", incoming.getStatus(),
-					incoming.getProductionId(), incoming.getQualityOrderId());
+					incoming.getManager() != null ? incoming.getManager().getName() : "",
+					incoming.getStatus(),
+					incoming.getMfOrder() != null ? incoming.getMfOrder().getOrderId() : "",
+					incoming.getOrder() != null ? incoming.getOrder().getOrderId() : "");
 
 			// 입고 품목 데이터 설정
 			List<IncomingItems> itemNames = incoming.getIncomingItems(); // Fetch Join으로 이미 로드됨
@@ -182,10 +185,13 @@ public class InventoryService {
 		}
 		
 		Optional<Incoming> incoming = incomingRepository.findById(incomingId);
+	    if (!incoming.isPresent()) {
+	        throw new EntityNotFoundException("해당 입고 ID가 존재하지 않습니다: " + incomingId);
+	    }
 		
-		//작업번호의 status를 작업완료 → 작업종료로 변경
-		mfRepository.completeOrder(incoming.get().getProductionId()); 
-		
+		if(incoming.get().getMfOrder() != null){//작업번호의 status를 작업완료 → 작업종료로 변경
+			mfRepository.completeOrder(incoming.get().getMfOrder().getOrderId()); 
+		}
 	}
 
 	// 입고 등록 페이지에서 입고 대상 가져오기
@@ -258,52 +264,64 @@ public class InventoryService {
 
 	// 입고와 입고품목들 등록하기
 	@Transactional
-	public void insertIncoming(String incomingInsertCode, String managerId) {
+	public void insertIncoming(String incomingInsertCode, String reasonOfIncoming, String managerId) {
 		log.info("입고 등록");
+	    
 
-		// 가져온 발주코드를 기준으로 발주데이터 찾기
-		Optional<Order> optionalOrder = orderRepository.findById(incomingInsertCode);
-		if (!optionalOrder.isPresent()) {
-			log.error("발주 데이터를 찾을 수 없습니다. incomingInsertCode={}", incomingInsertCode);
-			throw new IllegalArgumentException("Invalid incomingInsertCode: " + incomingInsertCode);
-		}
-
-		Order order = optionalOrder.get();
-		log.info("발주 데이터 조회 완료 : " + order.toString());
-
-	    // 입고 엔티티 생성 및 설정
+		// 입고 엔티티 생성 및 설정
 	    Incoming incoming = new Incoming();
-
 	    incoming.setIncomingId(generateIncomingId());
+	    // 입고 등록일 설정
 	    incoming.setIncomingStartDate(new Timestamp(System.currentTimeMillis()));
-	    // Manager 객체 생성 및 설정
+	    incoming.setStatus("입고 진행중");
+
+	    // Manager 설정
 	    Manager manager = new Manager();
 	    manager.setManagerId(managerId);
 	    incoming.setManager(manager);
-	    incoming.setStatus("입고 진행중");
+		
+		// 가져온 코드를 기준으로 작업 또는 발주 데이터 찾기
 
-		// 발주 품목을 가져와서 입고 품목에 생성 및 설정
-		List<OrderItems> orderItemsList = order.getOrderItems();
-		for (OrderItems orderItem : orderItemsList) {
-			IncomingItems incomingItem = new IncomingItems();
-			incomingItem.setIncomingItemId(generateIncomingItemId());
-			if(incomingItem.getItem() == null) {
-			    incomingItem.setItem(new Item());
-			}
-			log.info("if문 다음");
-			incomingItem.getItem().setItemCode(orderItem.getItem().getItemCode());
-			incomingItem.setQuantity(orderItem.getQuantity());
+	    if (reasonOfIncoming.equals("작업 완료")) {
+	        // 생산 완료 로직
+	        Optional<MFOrder> optionalMFOrder = mfRepository.findById(incomingInsertCode);
+	        if (!optionalMFOrder.isPresent()) {
+	            log.error("생산 데이터를 찾을 수 없습니다. incomingInsertCode={}", incomingInsertCode);
+	            throw new IllegalArgumentException("Invalid incomingInsertCode: " + incomingInsertCode);
+	        }
 
-			
-			// 입고 엔티티와의 관계 설정
-			incomingItem.setIncoming(incoming);
+	        MFOrder mfOrder = optionalMFOrder.get();
+	        log.info("생산 데이터 조회 완료 : " + mfOrder.toString());
 
-			// 입고 품목 리스트에 추가
-			incoming.getIncomingItems().add(incomingItem);
-			log.info("add 다음");
-		}
+	        
+	        // 이제 mfOrder 데이터를 사용하여 incoming 및 incomingItems를 설정
+	        IncomingItems incomingItem = new IncomingItems();
+	        if (incomingItem.getItem() == null) {
+	            incomingItem.setItem(new Item());
+	        }
+	        incomingItem.setIncomingItemId(generateIncomingItemId());	        
+	        incomingItem.getItem().setItemCode(mfOrder.getItem().getItemCode());        
+	        incomingItem.setQuantity(mfOrder.getOrderAmount());	        
+	        incomingItem.setIncoming(incoming);	        
+	        incoming.setMfOrder(mfOrder);
+	        incoming.getIncomingItems().add(incomingItem); 
+	        
+	    } else {
+	        // 발주 완료 로직
+	        Optional<Order> optionalOrder = orderRepository.findById(incomingInsertCode);
+	        if (!optionalOrder.isPresent()) {
+	            log.error("발주 데이터를 찾을 수 없습니다. incomingInsertCode={}", incomingInsertCode);
+	            throw new IllegalArgumentException("Invalid incomingInsertCode: " + incomingInsertCode);
+	        }
 
-		incoming.setOrder(order);
+	        Order order = optionalOrder.get();
+	        log.info("발주 데이터 조회 완료 : " + order.toString());
+
+	        // 이제 order 데이터를 사용하여 incoming 및 incomingItems를 설정
+	        createIncomingFromOrder(incoming, order);
+	    }
+	    
+	    
 		incomingRepository.save(incoming);
 		log.info("입고 데이터 저장 완료: {}", incoming);
 
@@ -449,7 +467,7 @@ public class InventoryService {
 		Optional<Incoming> lastIncoming = incomingRepository.findTopByOrderByIncomingIdDesc();
 		if (lastIncoming.isPresent()) {
 			String lastId = lastIncoming.get().getIncomingId();
-			int numericPart = Integer.parseInt(lastId.substring(3)); // "INC" 이후 숫자 부분 추출
+			int numericPart = Integer.parseInt(lastId.substring(5)); // "INC" 이후 숫자 부분 추출
 			numericPart += 1;
 			return String.format("INC%05d", numericPart); // "INC" + 5자리 숫자
 		} else {
@@ -461,4 +479,33 @@ public class InventoryService {
 	    return "INCITEM" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
 	}
 
+
+
+
+	private void createIncomingFromOrder(Incoming incoming, Order order) {
+	    // OrderItems를 가져와서 IncomingItems를 생성 및 추가
+	    List<OrderItems> orderItemsList = order.getOrderItems();
+	    for (OrderItems orderItem : orderItemsList) {
+	        IncomingItems incomingItem = new IncomingItems();
+	        incomingItem.setIncomingItemId(generateIncomingItemId());
+	        if (incomingItem.getItem() == null) {
+	            incomingItem.setItem(new Item());
+	        }
+	        log.info("if문 다음");
+	        incomingItem.getItem().setItemCode(orderItem.getItem().getItemCode());
+	        incomingItem.setQuantity(orderItem.getQuantity());
+	
+	        // 입고 엔티티와의 관계 설정
+	        incomingItem.setIncoming(incoming);
+	
+	        // 입고 품목 리스트에 추가
+	        incoming.getIncomingItems().add(incomingItem);
+	        log.info("add 다음");
+	    }
+	
+	    incoming.setOrder(order);
+	}
+	
 }
+
+
