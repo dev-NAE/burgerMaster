@@ -132,12 +132,12 @@
 											</div>
 
 											<div class="col-sm-6 col-md-3">
-												<!--검색 5) 생산/검품 번호-->
+												<!--검색 5) 생산/발주 번호-->
 												<div class="form-group">
-													<label>생산/검품 번호</label>
-													<input type="text" class="form-control" id="prodOrQualId"
-														name="prodOrQualId" placeholder="생산 또는 검품 번호를 입력하세요"
-														th:value="${prodOrQualId}" autocomplete="off" />
+													<label>생산/발주 번호</label>
+													<input type="text" class="form-control" id="prodOrOrderId"
+														name="prodOrOrderId" placeholder="생산 또는 발주 번호를 입력하세요"
+														th:value="${prodOrOrderId}" autocomplete="off" />
 												</div>
 											</div>
 											<div class="col-sm-6 col-md-2">
@@ -188,7 +188,7 @@
 											<th>품목명</th>
 
 											<th>담당자</th>
-											<th>생산/검품 번호</th>
+											<th>생산/발주 번호</th>
 											<th>입고 사유</th>
 											<th>진행상황</th>
 											<th></th>
@@ -218,10 +218,9 @@
 
 
 											<td th:text="${incoming.managerName}"></td>
-											<td
-												th:text="${incoming.productionId != null ? incoming.productionId : incoming.qualityOrderId}">
+											<td th:text="${(incoming.productionId != null && !#strings.isEmpty(incoming.productionId)) ? incoming.productionId : incoming.orderId}">
 											</td>
-											<td th:text="${incoming.productionId != null ? '생산 완료' : '발주 완료'}"></td>
+											<td th:text="${(incoming.productionId != null && !#strings.isEmpty(incoming.productionId)) ? '생산 완료' : '발주 완료'}"></td>
 
 											<td th:text="${incoming.status}"></td>
 											<td>
@@ -232,7 +231,7 @@
 													th:data-incoming-start-date="${#dates.format(incoming.incomingStartDate, 'yyyy-MM-dd HH:mm')}"
 													th:data-incoming-end-date="${incoming.incomingEndDate != null ? #dates.format(incoming.incomingEndDate, 'yyyy-MM-dd HH:mm') : ''}"
 													th:data-manager-name="${incoming.managerName}"
-													th:data-production-or-quality-id="${incoming.productionId != null ? incoming.productionId : incoming.qualityOrderId}"
+													th:data-production-or-order-id="${incoming.productionId != null ? incoming.productionId : incoming.orderId}"
 													th:data-reason-of-incoming="${incoming.productionId != null ? '생산 완료' : '발주 완료'}"
 													th:data-status="${incoming.status}">
 													상세
@@ -268,7 +267,7 @@
 																				incomingStartDate_start=${incomingStartDate_start},	
 																				incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
-																				prodOrQualId=${prodOrQualId},
+																				prodOrOrderId=${prodOrOrderId},
 																				status=${status},
 																				managerCodeOrName=${managerCodeOrName},														            
 																	            page=${currentPage - 2}
@@ -285,7 +284,7 @@
 																				incomingStartDate_start=${incomingStartDate_start},	
 																				incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
-																				prodOrQualId=${prodOrQualId},
+																				prodOrOrderId=${prodOrOrderId},
 																				status=${status},
 																				managerCodeOrName=${managerCodeOrName},		
 																	            page=${i - 1}
@@ -301,7 +300,7 @@
 																	            incomingStartDate_start=${incomingStartDate_start},	
 																	            incomingStartDate_end=${incomingStartDate_end},	
 																				incomingId=${incomingId},
-																				prodOrQualId=${prodOrQualId},
+																				prodOrOrderId=${prodOrOrderId},
 																				status=${status},
 																				managerCodeOrName=${managerCodeOrName},		
 																	            page=${currentPage}
@@ -361,12 +360,12 @@
 	<!--	        let incomingStartDate_start = $('#incomingStartDate_start').val();-->
 	<!--	        let incomingStartDate_end = $('#incomingStartDate_end').val();-->
 	<!--	        let incomingId = $('#incomingId').val();-->
-	<!--	        let prodOrQualId = $('#prodOrQualId').val();-->
+	<!--	        let prodOrOrderId = $('#prodOrOrderId').val();-->
 	<!--	        let status = $('#status').val();-->
 	<!--	        let managerCodeOrName = $('#managerCodeOrName').val();-->
 
 	<!--			console.log("안녕하세요");-->
-	<!--	        console.log(itemCodeOrName, reasonOfIncoming, incomingStartDate_start, incomingStartDate_end, incomingId, prodOrQualId, status, managerCodeOrName);-->
+	<!--	        console.log(itemCodeOrName, reasonOfIncoming, incomingStartDate_start, incomingStartDate_end, incomingId, prodOrOrderId, status, managerCodeOrName);-->
 	<!--			});-->
 	<!--	});-->
 	<!--</script>-->
@@ -395,8 +394,8 @@
 									<dd class="col-8 py-2"><span id="modalIncomingEndDate"></span></dd>
 									<dt class="col-4 py-2">담당자</dt>
 									<dd class="col-8 py-2"><span id="modalManagerName"></span></dd>
-									<dt class="col-4 py-2">생산/검품 번호</dt>
-									<dd class="col-8 py-2"><span id="modalProductionOrQualityId"></span></dd>
+									<dt class="col-4 py-2">생산/발주 번호</dt>
+									<dd class="col-8 py-2"><span id="modalProductionOrOrderId"></span></dd>
 									<dt class="col-4 py-2">입고 사유</dt>
 									<dd class="col-8 py-2"><span id="modalReasonOfIncoming"></span></dd>
 									<dt class="col-4 py-2">진행상황</dt>
@@ -465,7 +464,7 @@
 	            var incomingStartDate = button.data('incoming-start-date');
 	            var incomingEndDate = button.data('incoming-end-date');
 	            var managerName = button.data('manager-name');
-	            var productionOrQualityId = button.data('production-or-quality-id');
+	            var productionOrOrderId = button.data('production-or-order-id');
 	            var reasonOfIncoming = button.data('reason-of-incoming');
 	            var status = button.data('status');
 
@@ -474,7 +473,7 @@
 	            $('#modalIncomingStartDate').text(incomingStartDate);
 	            $('#modalIncomingEndDate').text(incomingEndDate);
 	            $('#modalManagerName').text(managerName);
-	            $('#modalProductionOrQualityId').text(productionOrQualityId);
+	            $('#modalProductionOrOrderId').text(productionOrOrderId);
 	            $('#modalReasonOfIncoming').text(reasonOfIncoming);
 	            $('#modalStatus').text(status);
 				
