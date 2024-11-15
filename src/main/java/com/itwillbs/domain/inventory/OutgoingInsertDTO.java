@@ -1,6 +1,10 @@
 package com.itwillbs.domain.inventory;
 
 import java.sql.Timestamp;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.itwillbs.entity.SaleItems;
 
 import lombok.Data;
 
@@ -8,34 +12,43 @@ import lombok.Data;
 @Data
 public class OutgoingInsertDTO {
 	
-    private String OutgoingInsertCode;
-    private String reasonOfOutgoing; //생산 완료, 검품요청
-    private Timestamp prodOrQualDate;
+    private String prodOrSaleId;
+    private String reasonOfOutgoing; //생산 요청, 수주 완료
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Timestamp prodOrSaleDate;
+
+    
     private String itemName;
     private Integer quantity;
     private Integer totalAmount; //총 수량
     
 	private String outgoingItemDisplay; //보여줄 품목 1개
-	private Integer otherCount; //품목 외 갯수 ex)패티 외 2건
+	private Integer otherCount = 0; //품목 외 갯수 ex)패티 외 2건
     
     private String managerId;
     private String managerName;
     
-	public OutgoingInsertDTO(String outgoingInsertCode, String reasonOfOutgoing, Timestamp prodOrQualDate, String itemName,
-			Integer quantity) {
+    private List<SaleItems> saleItems;
+    
+    
+	public OutgoingInsertDTO(String prodOrSaleId, String reasonOfOutgoing, Timestamp prodOrSaleDate, String outgoingItemDisplay,
+			Integer totalAmount) {
 //		super();
-		OutgoingInsertCode = outgoingInsertCode;
+		this.prodOrSaleId = prodOrSaleId;
 		this.reasonOfOutgoing = reasonOfOutgoing;
-		this.prodOrQualDate = prodOrQualDate;
-		this.itemName = itemName;
-		this.quantity = quantity;
+		this.prodOrSaleDate = prodOrSaleDate;
+		this.outgoingItemDisplay = outgoingItemDisplay;
+		this.totalAmount = totalAmount;
 	}
 
-	public OutgoingInsertDTO(String outgoingInsertCode, String reasonOfOutgoing, Timestamp prodOrQualDate) {
+	public OutgoingInsertDTO(String prodOrSaleId, String reasonOfOutgoing, Timestamp prodOrSaleDate) {
 //		super();
-		OutgoingInsertCode = outgoingInsertCode;
+		this.prodOrSaleId = prodOrSaleId;
 		this.reasonOfOutgoing = reasonOfOutgoing;
-		this.prodOrQualDate = prodOrQualDate;
+		this.prodOrSaleDate = prodOrSaleDate;
 	}
+    
+    
     
 }

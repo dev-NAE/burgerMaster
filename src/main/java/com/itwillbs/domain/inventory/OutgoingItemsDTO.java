@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class OutgoingItemsDTO {
+	
+	
 	private String outgoingItemId;
 	private String outgoingId = "";
 	private String itemCode = "";
@@ -16,14 +18,14 @@ public class OutgoingItemsDTO {
 	
 	private String itemType; //품목 유형
 	
-	// 입고 조회에서 품목이름과 갯수 확인할 떄 쓰는 생성자
+	// 출고 조회에서 품목이름과 갯수 확인할 떄 쓰는 생성자
 	public OutgoingItemsDTO(String itemCode, String itemName) {
 //		super();
 		this.itemCode = itemCode;
 		this.itemName = itemName;
 	}
 	
-	// 입고 상세 조회에서 테이블 출력할 때 쓰는 생성자
+	// 출고 상세 조회에서 테이블 출력할 때 쓰는 생성자
 	public OutgoingItemsDTO(String itemCode, String itemName, String itemType, Integer quantity) {
 		super();
 		this.itemCode = itemCode;
@@ -31,4 +33,6 @@ public class OutgoingItemsDTO {
 		this.itemType = itemType;
 		this.quantity = quantity;
 	}
+	
+	
 }

@@ -34,7 +34,7 @@ import com.itwillbs.service.InventoryService;
 import jakarta.persistence.EntityNotFoundException;
 
 /**
- * 입고, 출고, 재고 관리하는 컨트롤러
+ * 출고, 출고, 재고 관리하는 컨트롤러
  */
 @Controller
 @RequestMapping("/inven")
@@ -242,11 +242,7 @@ public class InventoryController {
 		model.addAttribute("status", status);
 		model.addAttribute("managerCodeOrName", managerCodeOrName);
 
-        // 현재 사용자의 권한 정보 추가
-        List<String> userRoles = SecurityUtil.getUserAuthorities().stream()
-                .map(authority -> authority.getAuthority())
-                .collect(Collectors.toList());
-        model.addAttribute("userRoles", userRoles);
+
 		
 		// 페이징 처리하고 model에 저장
 		applyPagination(incomingByPage, model);
@@ -254,24 +250,69 @@ public class InventoryController {
 		return VIEW_PATH + "incoming_list";
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// 출고 등록
 	@GetMapping("/outgoingInsert")
 	public String outgoingInsert() {
-		log.info("InventroyController outgoingInsert()");
+		log.info("InventroyController outgoingInsertget()");
+		
 
+		
+		
 		return VIEW_PATH + "outgoing_insert";
 	}
 
+	// 출고 등록post
+	@PostMapping("/outgoingInsert")
+	public String outgoingInsertPost(@RequestParam(name = "outgoingInsertCode") String outgoingInsertCode,
+							            @RequestParam(name = "reasonOfOutgoing") String reasonOfOutgoing,
+							            @RequestParam(name = "managerId") String managerId) {
+		log.info("InventroyController outgoingInsertPost()");
+		log.info("outgoingInsertCode = " + outgoingInsertCode);
+	    log.info("reasonOfOutgoing = " + reasonOfOutgoing);
+		log.info("managerId = " + managerId);
+		
+		//출고등록하기
+		
+		//11월 13일 변경!! 발주완료되었지만 출고 등록되지 않은 발주번호를 가져와서 출고 테이블에 등록함 + 출고 품목테이블에도 등록함
+		inventoryService.insertOutgoing(outgoingInsertCode, reasonOfOutgoing, managerId);
+		
+		
+		
+		
+		
+		return "redirect:/inven/outgoingInsert";
+	}
+	
+	
+	
+	
 	// 출고 조회
 	@GetMapping("/outgoingList")
 	public String outgoingList(Model model, @PageableDefault(size = 8) Pageable pageable) {
 		log.info("InventroyController outgoingList()");
 
-		// 입고된 리스트 1페이지 조회
+		// 출고된 리스트 1페이지 조회
 		Page<OutgoingDTO> outgoingByPage = inventoryService.getOutgoingLists(pageable);
 //		log.info("Outgoing DTOs: {}", outgoingByPage.getContent());
 
-		// model에 입고테이블에 출력할 데이터 저장
+		// model에 출고테이블에 출력할 데이터 저장
 		model.addAttribute("outgoingDTOs", outgoingByPage);
 
 		// 검색 조건의 기본값 설정
@@ -280,9 +321,15 @@ public class InventoryController {
 		model.addAttribute("outgoingStartDate_start", null);
 		model.addAttribute("outgoingStartDate_end", null);
 		model.addAttribute("outgoingId", "");
-		model.addAttribute("prodOrQualId", "");
+		model.addAttribute("prodOrSaleId", "");
 		model.addAttribute("status", "");
 		model.addAttribute("managerCodeOrName", "");
+		
+		// 현재 사용자의 권한 정보 추가
+	    List<String> userRoles = SecurityUtil.getUserAuthorities().stream()
+	            .map(authority -> authority.getAuthority())
+	            .collect(Collectors.toList());
+	    model.addAttribute("userRoles", userRoles);
 
 		// 페이징 처리하고 model에 저장
 		applyPagination(outgoingByPage, model);
@@ -295,10 +342,10 @@ public class InventoryController {
 	public String outgoingListSearch(Model model, @PageableDefault(size = 8) Pageable pageable,
 			@RequestParam(name = "itemCodeOrName", defaultValue = "") String itemCodeOrName,
 			@RequestParam(name = "reasonOfOutgoing", defaultValue = "") String reasonOfOutgoing,
-			@RequestParam(name = "outgoingStartDate_start", defaultValue = "") String outgoingStartDate_startStr,//문자열로 가져옴
-			@RequestParam(name = "outgoingStartDate_end", defaultValue = "") String outgoingStartDate_endStr, //문자열로 가져옴
+			@RequestParam(name = "outgoingStartDate_start", defaultValue = "") String outgoingStartDate_startStr,
+			@RequestParam(name = "outgoingStartDate_end", defaultValue = "") String outgoingStartDate_endStr,
 			@RequestParam(name = "outgoingId", defaultValue = "") String outgoingId,
-			@RequestParam(name = "prodOrQualId", defaultValue = "") String prodOrQualId,
+			@RequestParam(name = "prodOrSaleId", defaultValue = "") String prodOrSaleId,
 			@RequestParam(name = "status", defaultValue = "") String status,
 			@RequestParam(name = "managerCodeOrName", defaultValue = "") String managerCodeOrName) {
 
@@ -308,7 +355,7 @@ public class InventoryController {
 		log.info("reasonOfOutgoing = " + reasonOfOutgoing);
 
 		log.info("outgoingId = " + outgoingId);
-		log.info("prodOrQualId = " + prodOrQualId);
+		log.info("prodOrSaleId = " + prodOrSaleId);
 		log.info("status = " + status);
 		log.info("managerCodeOrName = " + managerCodeOrName);
 
@@ -333,15 +380,23 @@ public class InventoryController {
 			log.error("날짜 변환 오류: " + e.getMessage());
 			// 에러시 에러메세지를 model에 추가
 			model.addAttribute("errorMessage", "날짜 형식이 올바르지 않습니다. yyyy-MM-dd 형식을 사용하세요.");
-
+			
+	        // 현재 사용자의 권한 정보 추가
+	        List<String> userRoles = SecurityUtil.getUserAuthorities().stream()
+	                .map(authority -> authority.getAuthority())
+	                .collect(Collectors.toList());
+	        model.addAttribute("userRoles", userRoles);
+	        
 			return VIEW_PATH + "outgoing_list";
 		}
 
 		// 출고된 리스트 검색어 포함 조회
 		Page<OutgoingDTO> outgoingByPage = inventoryService.findOutgoingBySearch(itemCodeOrName, reasonOfOutgoing,
-				outgoingStartDate_start, outgoingStartDate_end, outgoingId, prodOrQualId, status, managerCodeOrName,
+				outgoingStartDate_start, outgoingStartDate_end, outgoingId, prodOrSaleId, status, managerCodeOrName,
 				pageable);
 
+		
+		
 		// 프론트에서 테이블 데이터 조회시 outgoingDTOs.[etc...]로 찾아야함
 		model.addAttribute("outgoingDTOs", outgoingByPage);
 
@@ -351,10 +406,16 @@ public class InventoryController {
 		model.addAttribute("outgoingStartDate_start", outgoingStartDate_startStr);
 		model.addAttribute("outgoingStartDate_end", outgoingStartDate_endStr);
 		model.addAttribute("outgoingId", outgoingId);
-		model.addAttribute("prodOrQualId", prodOrQualId);
+		model.addAttribute("prodOrSaleId", prodOrSaleId);
 		model.addAttribute("status", status);
 		model.addAttribute("managerCodeOrName", managerCodeOrName);
 
+        // 현재 사용자의 권한 정보 추가
+        List<String> userRoles = SecurityUtil.getUserAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.toList());
+        model.addAttribute("userRoles", userRoles);
+		
 		// 페이징 처리하고 model에 저장
 		applyPagination(outgoingByPage, model);
 
