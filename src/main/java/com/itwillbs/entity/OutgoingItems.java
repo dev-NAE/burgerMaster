@@ -19,31 +19,26 @@ import lombok.ToString;
 @Table(name = "outgoing_items")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "outgoing") // 'outgoing' 필드를 toString에서 제외
 @NoArgsConstructor
 public class OutgoingItems {
 
 	
-	@Id
-	@Column(name = "outgoing_item_id", length = 20)
-	private String outgoingItemId;
-	
-	@Column(name = "outgoing_id", length = 20)
-	private String outgoingId;
-	
-	@Column(name = "item_code", length = 20)
-	private String itemCode;
-	
-	@Column(name = "quantity")
-	private int quantity;
-	
-    // Many-to-One 관계 설정
+    @Id
+    @Column(name = "outgoing_item_id", length = 20)
+    private String outgoingItemId;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+
+    // Many-to-One 관계 설정: OutgoingItems과 Outgoing
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "outgoing_id", insertable = false, updatable = false)
+    @JoinColumn(name = "outgoing_id")
     private Outgoing outgoing;
-    
-    // Many-to-One 관계 설정 (Item 엔티티와 연결)
+
+    // Many-to-One 관계 설정: OutgoingItems과 Item
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", insertable = false, updatable = false)
+    @JoinColumn(name = "item_code")
     private Item item;
 }

@@ -21,6 +21,7 @@ import com.itwillbs.domain.inventory.IncomingInsertDTO;
 import com.itwillbs.domain.inventory.IncomingItemsDTO;
 import com.itwillbs.entity.Incoming;
 import com.itwillbs.entity.IncomingItems;
+import com.itwillbs.entity.Outgoing;
 
 import jakarta.transaction.Transactional;
 
@@ -81,18 +82,6 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 			"WHERE mfo.orderState = '작업 완료' " +
 			"AND mfo.orderId NOT IN (SELECT inc.mfOrder.orderId FROM Incoming inc WHERE inc.mfOrder IS NOT NULL)")
 	List<IncomingInsertDTO> findAllEndOfProduction();
-	
-	
-//	/**
-//	 * 검품 완료되었지만 입고등록되지 않은 데이터 조회
-//	 */
-//	@Query("SELECT new com.itwillbs.domain.inventory.IncomingInsertDTO(qo.quality_order_id, qo.status, qo.order_date) " +
-//		       "FROM QualityOrder qo " +
-//		       "LEFT JOIN qo.quality_order_items qoi " +
-//		       "LEFT JOIN Incoming i ON qo.quality_order_id = i.qualityOrderId " +
-//		       "WHERE qo.status = '검품완료' AND qoi.status = '통과' AND i.qualityOrderId IS NULL"
-//		       )
-//	List<IncomingInsertDTO> findAllEndOfQaul();
 
 	
 
@@ -107,7 +96,8 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	
 
 	//입고등록번호 제일 높은 숫자 조회
-	Optional<Incoming> findTopByOrderByIncomingIdDesc();
+	@Query("SELECT ic FROM Incoming ic ORDER BY CAST(SUBSTRING(ic.incomingId, 4) AS int) DESC")
+	List<Incoming> findAllOrderByNumericIncomingIdDesc();
 
 
 	
