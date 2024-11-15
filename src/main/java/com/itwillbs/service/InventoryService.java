@@ -185,10 +185,13 @@ public class InventoryService {
 		}
 		
 		Optional<Incoming> incoming = incomingRepository.findById(incomingId);
+	    if (!incoming.isPresent()) {
+	        throw new EntityNotFoundException("해당 입고 ID가 존재하지 않습니다: " + incomingId);
+	    }
 		
-		//작업번호의 status를 작업완료 → 작업종료로 변경
-		mfRepository.completeOrder(incoming.get().getMfOrder().getOrderId()); 
-		
+		if(incoming.get().getMfOrder() != null){//작업번호의 status를 작업완료 → 작업종료로 변경
+			mfRepository.completeOrder(incoming.get().getMfOrder().getOrderId()); 
+		}
 	}
 
 	// 입고 등록 페이지에서 입고 대상 가져오기
