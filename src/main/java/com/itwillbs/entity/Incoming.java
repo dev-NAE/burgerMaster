@@ -47,13 +47,14 @@ public class Incoming {
     @Column(name = "status")
     private String status;
 
-    //생산번호 : 
-    @Column(name = "production_id")
-    private String productionId;
+    //생산번호 : manufacture_order테이블의 order_id
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "production_id")
+    private MFOrder mfOrder;
 
     //입고검품번호
-    @Column(name = "quality_order_id")
-    private String qualityOrderId;
+//    @Column(name = "quality_order_id")
+//    private String qualityOrderId;
 
     //발주번호 : orders테이블의 order_id
     @OneToOne(fetch = FetchType.LAZY, optional = true)
