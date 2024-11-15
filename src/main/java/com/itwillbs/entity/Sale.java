@@ -53,4 +53,11 @@ public class Sale {
     @OneToOne(mappedBy = "sale")
     private QualitySale qualitySale;
 
+    // 출하처리를 위한 OutGoing과의 관계 설정
+    @OneToOne(mappedBy = "sale")
+    private Outgoing outgoing;
+
+    @OneToOne(mappedBy = "sale")
+    private QualityShipment qualityShipment;
+
 }

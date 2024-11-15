@@ -1,8 +1,6 @@
 package com.itwillbs.entity;
 
-import java.sql.Timestamp;
 
-import org.springframework.data.jpa.repository.Query;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,30 +21,27 @@ import lombok.ToString;
 @Table(name = "incoming_items")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "incoming") // 'incoming' 필드를 toString에서 제외
 @NoArgsConstructor
 public class IncomingItems {
 
-	@Id
-	@Column(name = "incoming_item_id", length = 20)
-	private String incomingItemId;
-	
-	@Column(name = "incoming_id", length = 20)
-	private String incomingId;
-	
-	@Column(name = "item_code", length = 20)
-	private String itemCode;
-	
-	@Column(name = "quantity")
-	private int quantity;
-	
-    // Many-to-One 관계 설정
+    @Id
+    @Column(name = "incoming_item_id", length = 20)
+    private String incomingItemId;
+
+    @Column(name = "quantity")
+    private int quantity;
+
+//    @Column(name = "subtotal_price")
+//    private int subtotalPrice;
+
+    // Many-to-One 관계 설정: IncomingItems과 Incoming
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "incoming_id", insertable = false, updatable = false)
+    @JoinColumn(name = "incoming_id")
     private Incoming incoming;
-    
-    // Many-to-One 관계 설정 (Item 엔티티와 연결)
+
+    // Many-to-One 관계 설정: IncomingItems과 Item
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_code", insertable = false, updatable = false)
+    @JoinColumn(name = "item_code")
     private Item item;
 }

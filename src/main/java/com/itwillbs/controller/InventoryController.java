@@ -26,7 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.domain.inventory.IncomingDTO;
-
+import com.itwillbs.domain.inventory.IncomingItemsDTO;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.domain.inventory.OutgoingDTO;
 import com.itwillbs.service.InventoryService;
@@ -115,12 +115,20 @@ public class InventoryController {
 	// 입고 등록post
 	@PostMapping("/incomingInsert")
 	public String incomingInsertPost(@RequestParam(name = "incomingInsertCode") String incomingInsertCode,
-									@RequestParam(name = "managerId") String managerId) {
-		log.info("InventroyController incomingInsertget()");
+							            @RequestParam(name = "reasonOfIncoming") String reasonOfIncoming,
+							            @RequestParam(name = "managerId") String managerId) {
+		log.info("InventroyController incomingInsertPost()");
 		log.info("incomingInsertCode = " + incomingInsertCode);
+	    log.info("reasonOfIncoming = " + reasonOfIncoming);
 		log.info("managerId = " + managerId);
 		
 		//입고등록하기
+		
+		//11월 13일 변경!! 발주완료되었지만 입고 등록되지 않은 발주번호를 가져와서 입고 테이블에 등록함 + 입고 품목테이블에도 등록함
+		inventoryService.insertIncoming(incomingInsertCode, managerId);
+		
+		
+		
 		
 		
 		return "redirect:/inven/incomingInsert";
@@ -145,7 +153,7 @@ public class InventoryController {
 		model.addAttribute("incomingStartDate_start", null);
 		model.addAttribute("incomingStartDate_end", null);
 		model.addAttribute("incomingId", "");
-		model.addAttribute("prodOrQualId", "");
+		model.addAttribute("prodOrOrderId", "");
 		model.addAttribute("status", "");
 		model.addAttribute("managerCodeOrName", "");
 		
@@ -169,7 +177,7 @@ public class InventoryController {
 			@RequestParam(name = "incomingStartDate_start", defaultValue = "") String incomingStartDate_startStr,
 			@RequestParam(name = "incomingStartDate_end", defaultValue = "") String incomingStartDate_endStr,
 			@RequestParam(name = "incomingId", defaultValue = "") String incomingId,
-			@RequestParam(name = "prodOrQualId", defaultValue = "") String prodOrQualId,
+			@RequestParam(name = "prodOrOrderId", defaultValue = "") String prodOrOrderId,
 			@RequestParam(name = "status", defaultValue = "") String status,
 			@RequestParam(name = "managerCodeOrName", defaultValue = "") String managerCodeOrName) {
 
@@ -179,7 +187,7 @@ public class InventoryController {
 		log.info("reasonOfIncoming = " + reasonOfIncoming);
 
 		log.info("incomingId = " + incomingId);
-		log.info("prodOrQualId = " + prodOrQualId);
+		log.info("prodOrOrderId = " + prodOrOrderId);
 		log.info("status = " + status);
 		log.info("managerCodeOrName = " + managerCodeOrName);
 
@@ -216,9 +224,11 @@ public class InventoryController {
 
 		// 입고된 리스트 검색어 포함 조회
 		Page<IncomingDTO> incomingByPage = inventoryService.findIncomingBySearch(itemCodeOrName, reasonOfIncoming,
-				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrQualId, status, managerCodeOrName,
+				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrOrderId, status, managerCodeOrName,
 				pageable);
 
+		
+		
 		// 프론트에서 테이블 데이터 조회시 incomingDTOs.[etc...]로 찾아야함
 		model.addAttribute("incomingDTOs", incomingByPage);
 
@@ -228,7 +238,7 @@ public class InventoryController {
 		model.addAttribute("incomingStartDate_start", incomingStartDate_startStr);
 		model.addAttribute("incomingStartDate_end", incomingStartDate_endStr);
 		model.addAttribute("incomingId", incomingId);
-		model.addAttribute("prodOrQualId", prodOrQualId);
+		model.addAttribute("prodOrOrderId", prodOrOrderId);
 		model.addAttribute("status", status);
 		model.addAttribute("managerCodeOrName", managerCodeOrName);
 
@@ -327,7 +337,7 @@ public class InventoryController {
 			return VIEW_PATH + "outgoing_list";
 		}
 
-		// 입고된 리스트 검색어 포함 조회
+		// 출고된 리스트 검색어 포함 조회
 		Page<OutgoingDTO> outgoingByPage = inventoryService.findOutgoingBySearch(itemCodeOrName, reasonOfOutgoing,
 				outgoingStartDate_start, outgoingStartDate_end, outgoingId, prodOrQualId, status, managerCodeOrName,
 				pageable);

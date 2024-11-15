@@ -34,19 +34,21 @@ public class SaleDTO {
     // 출하처리를 위한 검품 및 출고정보
     private String qualityStatus;
     private String outGoingId;
+    private String outGoingStatus;
     private List<SaleItemsDTO> saleItems;
 
     public SaleDTO() {}
 
     public SaleDTO(String saleId, int totalPrice, Timestamp orderDate,
-                   Timestamp dueDate, Franchise franchise, String qualityStatus) {
+                   Timestamp dueDate, Franchise franchise, String outGoingId, String outGoingStatus) {
         this.saleId = saleId;
         this.totalPrice = totalPrice;
         this.orderDate = orderDate;
         this.dueDate = dueDate;
         this.franchiseCode = franchise.getFranchiseCode();
         this.franchiseName = franchise.getFranchiseName();
-        this.qualityStatus = qualityStatus;
+        this.outGoingId = outGoingId;
+        this.outGoingStatus = outGoingStatus;
     }
 
 

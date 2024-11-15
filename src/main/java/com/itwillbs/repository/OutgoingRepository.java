@@ -22,7 +22,7 @@ public interface OutgoingRepository extends JpaRepository<Outgoing, String> {
 	/**
 	 * 출고 페이지 진입할 때 출고테이블 조회(페이징 처리)
 	 */
-	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.OutgoingDTO(og.outgoingId, og.outgoingStartDate, og.outgoingEndDate, og.managerId, m.name, og.status, og.productionId, og.qualitySaleId) "
+	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.OutgoingDTO(og.outgoingId, og.outgoingStartDate, og.outgoingEndDate, og.managerId, m.name, og.status, og.productionId, og.sale.saleId) "
 			+ "FROM Outgoing og LEFT JOIN fetch Manager m ON og.managerId = m.managerId "
 			+ "ORDER BY og.outgoingId DESC")
 	Page<OutgoingDTO> getOutgoingLists(Pageable pageable);
@@ -30,15 +30,15 @@ public interface OutgoingRepository extends JpaRepository<Outgoing, String> {
 	/**
 	 * 출고 검색 조회
 	 */
-	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.OutgoingDTO(og.outgoingId, og.outgoingStartDate, og.outgoingEndDate, og.managerId, m.name, og.status, og.productionId, og.qualitySaleId) "
+	@Query("SELECT DISTINCT new com.itwillbs.domain.inventory.OutgoingDTO(og.outgoingId, og.outgoingStartDate, og.outgoingEndDate, og.managerId, m.name, og.status, og.productionId, og.sale.saleId) "
 			+ "FROM Outgoing og " + "LEFT JOIN og.manager m " + "LEFT JOIN og.outgoingItems oi "
 			+ "LEFT JOIN oi.item i " + "WHERE " + "(:reasonOfOutgoing = '' OR "
 			+ " (:reasonOfOutgoing = '생산 요청' AND og.productionId IS NOT NULL) OR "
-			+ " (:reasonOfOutgoing = '출고검품 완료' AND og.qualitySaleId IS NOT NULL)) "
+			+ " (:reasonOfOutgoing = '수주 완료' AND og.sale.saleId IS NOT NULL)) "
 			+ "AND (:outgoingStartDate_start IS NULL OR og.outgoingStartDate >= :outgoingStartDate_start) "
 			+ "AND (:outgoingStartDate_end IS NULL OR og.outgoingStartDate <= :outgoingStartDate_end) "
 			+ "AND (:outgoingId = '' OR og.outgoingId LIKE CONCAT('%', :outgoingId, '%')) "
-			+ "AND (:prodOrQualId = '' OR og.productionId LIKE CONCAT('%', :prodOrQualId, '%') OR og.qualitySaleId LIKE CONCAT('%', :prodOrQualId, '%')) "
+			+ "AND (:prodOrQualId = '' OR og.productionId LIKE CONCAT('%', :prodOrQualId, '%') OR og.sale.saleId LIKE CONCAT('%', :prodOrQualId, '%')) "
 			+ "AND (:status = '' OR og.status = :status) "
 			+ "AND (:managerCodeOrName = '' OR m.managerId LIKE CONCAT('%', :managerCodeOrName, '%') OR m.name LIKE CONCAT('%', :managerCodeOrName, '%')) "
 			+ "AND (:itemCodeOrName = '' OR i.itemCode LIKE CONCAT('%', :itemCodeOrName, '%') OR i.itemName LIKE CONCAT('%', :itemCodeOrName, '%')) "
@@ -73,9 +73,9 @@ public interface OutgoingRepository extends JpaRepository<Outgoing, String> {
 	 * 출고검품 완료되었지만 출고등록되지 않은 데이터 조회
 	 */
 	@Query("SELECT new com.itwillbs.domain.inventory.OutgoingInsertDTO(qs.quality_sale_id, qs.status, qs.order_date) " +
-			"FROM QualitySale qs LEFT JOIN Outgoing i ON qs.quality_sale_id = i.qualitySaleId " +
+			"FROM QualitySale qs LEFT JOIN Sale s ON qs.quality_sale_id = s.saleId " +
 			"WHERE qs.status = '출고검품 완료' " +
-			"AND i.qualitySaleId IS NULL")
+			"AND s.saleId IS NULL")
 	List<OutgoingInsertDTO> findAllEndOfQuality();
 	
 }
