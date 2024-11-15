@@ -3,7 +3,6 @@ package com.itwillbs.config.security.provider;
 import com.itwillbs.config.security.exception.LoginException;
 import com.itwillbs.config.security.exception.LoginExceptionResult;
 import com.itwillbs.entity.Manager;
-import com.itwillbs.service.ManagerService;
 import com.itwillbs.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +15,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,7 +52,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 managerInfo.getManagerId(),
                 managerInfo.getPass(),
                 grantedAuthorities
-//                Collections.singleton(new SimpleGrantedAuthority("TEST"))
         );
     }
 

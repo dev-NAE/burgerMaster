@@ -21,7 +21,7 @@ import lombok.ToString;
 @Table(name = "incoming_items")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "incoming") // 'incoming' 필드를 toString에서 제외
 @NoArgsConstructor
 public class IncomingItems {
 

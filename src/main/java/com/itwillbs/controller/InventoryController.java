@@ -125,7 +125,7 @@ public class InventoryController {
 		//입고등록하기
 		
 		//11월 13일 변경!! 발주완료되었지만 입고 등록되지 않은 발주번호를 가져와서 입고 테이블에 등록함 + 입고 품목테이블에도 등록함
-		inventoryService.insertIncoming(incomingInsertCode, managerId);
+		inventoryService.insertIncoming(incomingInsertCode, reasonOfIncoming, managerId);
 		
 		
 		
@@ -227,6 +227,8 @@ public class InventoryController {
 				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrOrderId, status, managerCodeOrName,
 				pageable);
 
+		
+		
 		// 프론트에서 테이블 데이터 조회시 incomingDTOs.[etc...]로 찾아야함
 		model.addAttribute("incomingDTOs", incomingByPage);
 

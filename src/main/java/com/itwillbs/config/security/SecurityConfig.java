@@ -3,7 +3,6 @@ package com.itwillbs.config.security;
 import com.itwillbs.config.security.handler.*;
 import com.itwillbs.config.security.provider.CustomAuthenticationProvider;
 import com.itwillbs.entity.Manager;
-import com.itwillbs.service.ManagerService;
 import com.itwillbs.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +22,6 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -43,6 +41,7 @@ public class SecurityConfig {
     // 특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        //region URL patterns List
         String[] urlsToBePermittedAll = {
                 "/",
                 "/login/**",
@@ -68,6 +67,7 @@ public class SecurityConfig {
                 "/quality/**",
                 "/defective/**"
         };
+        //endregion
 
         // url 접근 제한
         http.authorizeHttpRequests((authorize) -> authorize
@@ -106,6 +106,7 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID","remember-me")
                 .invalidateHttpSession(true)
                 .permitAll());
+        // 예외 처리 화면
         http.exceptionHandling(conf -> conf
                 .authenticationEntryPoint(customAuthenticationEntryPointHandler)
                 .accessDeniedHandler(customAccessDeniedHandler)
@@ -116,12 +117,12 @@ public class SecurityConfig {
     public CustomAuthenticationProvider customAuthenticationProvider() {
         return new CustomAuthenticationProvider(bCryptPasswordEncoder, securityService);
     }
-
     @Bean
     public AuthenticationManager authenticationManager() {
         CustomAuthenticationProvider authProvider = customAuthenticationProvider();
         return new ProviderManager(authProvider);
     }
+
     @Bean
     public UserDetailsService userDetailsService(SecurityService securityService){
         return username -> {
