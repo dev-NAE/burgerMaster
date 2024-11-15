@@ -20,7 +20,7 @@
 	<!-- iCheck -->
 	<link rel="stylesheet" href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 	<!-- JQVMap -->
-	<link rel="stylesheet" href="/plugins/jqvmap/jqvmap.min.css">
+	<link rel="stylesheet"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            href="/plugins/jqvmap/jqvmap.min.css">
 	<!-- Theme style -->
 	<link rel="stylesheet" href="/dist/css/adminlte.min.css">
 	<!-- overlayScrollbars -->
@@ -181,36 +181,37 @@
 
 					<!--					<div class="row">-->
 					<!-- 반품 품목 -->
-					<div class="col-md-4">
-						<div class="card card-danger" style="margin: 5px;">
-							<div class="card-header">
-								<h3 class="card-title">반품 품목</h3>
-								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-									<button class="btn btn-light" id="xls4">.xls로 저장</button>
-								</div>
-							</div>
-							<div class="card-body">
-								<canvas id="pieChart1" width="375" height="250"></canvas>
-							</div>
-						</div>
-					</div>
+<!--					<div class="col-md-4">-->
+<!--						<div class="card card-danger" style="margin: 5px;">-->
+<!--							<div class="card-header">-->
+<!--								<h3 class="card-title">불량 품목</h3>-->
+<!--								<div class="d-grid gap-2 d-md-flex justify-content-md-end">-->
+<!--									<button class="btn btn-light" id="xls4">.xls로 저장</button>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--							<div class="card-body">-->
+<!--								<canvas id="pieChart1" width="375" height="250"></canvas>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
 
 					<!-- 폐기 품목 -->
-					<div class="col-md-4">
-						<div class="card card-danger" style="margin: 5px;">
-							<div class="card-header">
-								<h3 class="card-title">폐기 품목</h3>
-								<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-									<button class="btn btn-light" id="xls5">.xls로 저장</button>
-								</div>
-							</div>
-							<div class="card-body">
-								<canvas id="pieChart2" width="375" height="250"></canvas>
-							</div>
-						</div>
-					</div>
+<!--					<div class="col-md-4">-->
+<!--						<div class="card card-danger" style="margin: 5px;">-->
+<!--							<div class="card-header">-->
+<!--								<h3 class="card-title">폐기 품목</h3>-->
+<!--								<div class="d-grid gap-2 d-md-flex justify-content-md-end">-->
+<!--									<button class="btn btn-light" id="xls5">.xls로 저장</button>-->
+<!--								</div>-->
+<!--							</div>-->
+<!--							<div class="card-body">-->
+<!--								<canvas id="pieChart2" width="375" height="250"></canvas>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+					
 					<!-- 월간 수주 현황 -->
-					<div class="col-md-4">
+					<div class="col-md-12">
 						<div class="card card-primary" style="margin: 5px;">
 							<div class="card-header">
 								<h3 class="card-title">월간 수주 현황</h3>
@@ -255,9 +256,9 @@
 	<div th:replace="fragments/footer :: footerFragment"></div>
 
 	<!-- jQuery -->
-	<script src="plugins/jquery/jquery.min.js"></script>
+	<script src="/plugins/jquery/jquery.min.js"></script>
 	<!-- jQuery UI 1.11.4 -->
-	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+	<script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
 	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 
 
@@ -265,31 +266,31 @@
 		$.widget.bridge('uibutton', $.ui.button)
 	</script>
 	<!-- Bootstrap 4 -->
-	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- ChartJS -->
-	<script src="plugins/chart.js/Chart.min.js"></script>
+	<script src="/plugins/chart.js/Chart.min.js"></script>
 	<!-- Sparkline -->
-	<script src="plugins/sparklines/sparkline.js"></script>
+	<script src="/plugins/sparklines/sparkline.js"></script>
 	<!-- JQVMap -->
-	<script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-	<script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+	<script src="/plugins/jqvmap/jquery.vmap.min.js"></script>
+	<script src="/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 	<!-- jQuery Knob Chart -->
-	<script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+	<script src="/plugins/jquery-knob/jquery.knob.min.js"></script>
 	<!-- daterangepicker -->
-	<script src="plugins/moment/moment.min.js"></script>
-	<script src="plugins/daterangepicker/daterangepicker.js"></script>
+	<script src="/plugins/moment/moment.min.js"></script>
+	<script src="/plugins/daterangepicker/daterangepicker.js"></script>
 	<!-- Tempusdominus Bootstrap 4 -->
-	<script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+	<script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
 	<!-- Summernote -->
-	<script src="plugins/summernote/summernote-bs4.min.js"></script>
+	<script src="/plugins/summernote/summernote-bs4.min.js"></script>
 	<!-- overlayScrollbars -->
-	<script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+	<script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
 	<!-- AdminLTE App -->
-	<script src="dist/js/adminlte.js"></script>
+	<script src="/dist/js/adminlte.js"></script>
 	<!-- AdminLTE for demo purposes -->
-	<script src="dist/js/demo.js"></script>
+	<script src="/dist/js/demo.js"></script>
 	<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-	<script src="dist/js/pages/dashboard.js"></script>
+	<script src="/dist/js/pages/dashboard.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
 	<script src="/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -703,86 +704,7 @@
 		});
 
 
-		// 반품 데이터
-		const dfItemList = /*[[${dfItemList}]]*/[];
-
-		// 데이터 확인을 위한 alert
-		//alert("dfItemList:" + JSON.stringify(dfItemList));
-
-		// 차트 컨텍스트 가져오기
-		var pieChartCanvas = $('#pieChart1').get(0).getContext('2d');
-
-		// 차트 옵션
-		var pieOptions = {
-			maintainAspectRatio: false,
-			responsive: true,
-		};
-
-		// 색상 자동 생성 함수
-		function generateRandomColors(count) {
-			const colors = [];
-			for (let i = 0; i < count; i++) {
-
-				// RGB 랜덤 색상 생성
-				const color = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(80 + Math.random() * 255)}, ${50 + Math.floor(Math.random() * 255)})`;
-				colors.push(color);
-			}
-			return colors;
-		}
-
-
-
-
-		// 라벨 및 데이터 설정
-		const labels4 = dfItemList.map(item => item.itemName);  // 항목 이름
-		const data4 = {
-			labels: labels4,
-			datasets: [
-				{
-					label: '총 재고',
-					data: dfItemList.map(item => item.quantity),  // 수량 필드 사용
-					backgroundColor: generateRandomColors(dfItemList.length),  // 각 항목의 색상 배열
-					//borderColor: generateRandomColors(dfItemList.length),
-					borderWidth: 0
-				}
-			]
-		};
-
-		// 차트 생성
-		new Chart(pieChartCanvas, {
-			type: 'pie',
-			data: data4,
-			options: pieOptions
-		});
-
-		// 엑셀 저장 함수
-		document.getElementById('xls4').addEventListener('click', () => {
-			// 차트 데이터 가져오기
-			const xlsdflabels = dfItemList.map(item => item.itemName);  // 항목 이름
-			const dfQuantities = dfItemList.map(item => item.quantity); // 원재료 입고량
-			const totaldfInventory = dfItemList.map(item => item.quantity); // 총 재고량
-			const dfCodeItem = dfItemList.map(item => item.defectiveId); // 총 재고량
-			const dfItemCode = dfItemList.map(item => item.itemCode); // 총 재고량
-
-			// 데이터를 JSON 형식으로 정리
-			const excelData4 = xlsdflabels.map((label, index) => ({
-				'#': dfItemCode[index],
-				'반품#': dfCodeItem[index],
-				'품목 이름': label,
-				'반품량': dfQuantities[index],
-				//'총 재고량': totaldfInventory[index]
-			}));
-
-			// JSON 데이터를 엑셀 시트로 변환
-			const worksheet4 = XLSX.utils.json_to_sheet(excelData4);
-			const workbook4 = XLSX.utils.book_new();
-			XLSX.utils.book_append_sheet(workbook4, worksheet4, '반품 데이터');
-
-			// 엑셀 파일로 다운로드
-			XLSX.writeFile(workbook4, '반품 품목명, 갯수.xlsx');
-		});
-
-		//수정필요 최종 반품데이터 갯수 모니터 코드 추가해얗ㅁ
+		
 
 
 
@@ -790,85 +712,7 @@
 
 
 
-
-		//
-		// 폐기 데이터
-		const discardItemList = /*[[${discardItemList}]]*/[];
-
-		// 데이터 확인을 위한 alert
-		//alert("dfItemList:" + JSON.stringify(dfItemList));
-
-		// 차트 컨텍스트 가져오기
-		var pieChartCanvas2 = $('#pieChart2').get(0).getContext('2d');
-
-		// 차트 옵션
-		var pieOptions2 = {
-			maintainAspectRatio: false,
-			responsive: true,
-		};
-
-		// 색상 자동 생성 함수
-		function generateRandomColors2(count) {
-			const colors = [];
-			for (let i = 0; i < count; i++) {
-
-				// RGB 랜덤 색상 생성
-				const color = `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(80 + Math.random() * 255)}, ${50 + Math.floor(Math.random() * 255)})`;
-				colors.push(color);
-			}
-			return colors;
-		}
-
-		// 라벨 및 데이터 설정
-		const labels5 = discardItemList.map(item => item.itemName);  // 항목 이름
-		const data5 = {
-			labels: labels5,
-			datasets: [
-				{
-					label: '총 재고',
-					data: discardItemList.map(item => item.quantity),  // 수량 필드 사용
-					backgroundColor: generateRandomColors2(discardItemList.length),  // 각 항목의 색상 배열
-					//borderColor: generateRandomColors(dfItemList.length),
-					borderWidth: 0
-				}
-			]
-		};
-
-		// 차트 생성
-		new Chart(pieChartCanvas2, {
-			type: 'pie',
-			data: data5,
-			options: pieOptions2
-		});
-
-		// 엑셀 저장 함수
-		document.getElementById('xls5').addEventListener('click', () => {
-			// 차트 데이터 가져오기
-			const xlsdslabels = discardItemList.map(item => item.itemName);  // 항목 이름
-			const dsQuantities = discardItemList.map(item => item.quantity); // 원재료 입고량
-			const totaldsInventory = discardItemList.map(item => item.quantity); // 총 재고량
-			const dsItemCode = discardItemList.map(item => item.defectiveId); // 총 재고량
-			const discardItemCode = discardItemList.map(item => item.itemCode); // 총 재고량
-
-			// 데이터를 JSON 형식으로 정리
-			const excelData5 = xlsdslabels.map((label, index) => ({
-				'#': discardItemCode[index],
-				'반품 #': dsItemCode[index],
-				'항목 이름': label,
-				'폐기량': dsQuantities[index],
-				//'총 재고량': totaldsInventory[index]
-			}));
-
-			// JSON 데이터를 엑셀 시트로 변환
-			const worksheet5 = XLSX.utils.json_to_sheet(excelData5);
-			const workbook5 = XLSX.utils.book_new();
-			XLSX.utils.book_append_sheet(workbook5, worksheet5, '폐기 데이터');
-
-			// 엑셀 파일로 다운로드
-			XLSX.writeFile(workbook5, '폐기 품목명, 갯수.xlsx');
-		});
-
-		//마찬가지 모니터하기, 코드 추가해얗ㅁ
+		
 
 
 
