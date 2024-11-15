@@ -48,7 +48,7 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	        "AND (:incomingStartDate_start IS NULL OR ic.incomingStartDate >= :incomingStartDate_start) " +
 	        "AND (:incomingStartDate_end IS NULL OR ic.incomingStartDate <= :incomingStartDate_end) " +
 	        "AND (:incomingId = '' OR ic.incomingId LIKE CONCAT('%', :incomingId, '%')) " +
-	        "AND (:prodOrQualId = '' OR mfo.orderId LIKE CONCAT('%', :prodOrQualId, '%') OR o.orderId LIKE CONCAT('%', :prodOrQualId, '%')) " +
+	        "AND (:prodOrOrderId = '' OR mfo.orderId LIKE CONCAT('%', :prodOrOrderId, '%') OR o.orderId LIKE CONCAT('%', :prodOrOrderId, '%')) " +
 	        "AND (:status = '' OR ic.status = :status) " +
 	        "AND (:managerCodeOrName = '' OR m.managerId LIKE CONCAT('%', :managerCodeOrName, '%') OR m.name LIKE CONCAT('%', :managerCodeOrName, '%')) " +
 	        "AND (:itemCodeOrName = '' OR i.itemCode LIKE CONCAT('%', :itemCodeOrName, '%') OR i.itemName LIKE CONCAT('%', :itemCodeOrName, '%')) " +
@@ -58,7 +58,7 @@ public interface IncomingRepository extends JpaRepository<Incoming, String> {
 	        @Param("incomingStartDate_start") Timestamp incomingStartDate_start,
 	        @Param("incomingStartDate_end") Timestamp incomingStartDate_end,
 	        @Param("incomingId") String incomingId,
-	        @Param("prodOrQualId") String prodOrQualId,
+	        @Param("prodOrOrderId") String prodOrOrderId,
 	        @Param("status") String status,
 	        @Param("managerCodeOrName") String managerCodeOrName,
 	        @Param("itemCodeOrName") String itemCodeOrName,

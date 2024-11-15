@@ -124,13 +124,13 @@ public class InventoryService {
 
 	// 입고 목록 검색 (검색 조건과 페이지네이션 포함)
 	public Page<IncomingDTO> findIncomingBySearch(String itemCodeOrName, String reasonOfIncoming,
-			Timestamp incomingStartDate_start, Timestamp incomingStartDate_end, String incomingId, String prodOrQualId,
+			Timestamp incomingStartDate_start, Timestamp incomingStartDate_end, String incomingId, String prodOrOrderId,
 			String status, String managerCodeOrName, Pageable pageable) {
 		log.info("findIncomingBySearch()");
 
 		// 한 번의 쿼리로 Incoming 엔티티와 연관된 데이터를 모두 조회
 		Page<Incoming> incomingEntitiesPage = incomingRepository.findIncomingEntities(reasonOfIncoming,
-				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrQualId, status, managerCodeOrName,
+				incomingStartDate_start, incomingStartDate_end, incomingId, prodOrOrderId, status, managerCodeOrName,
 				itemCodeOrName, pageable);
 
 		// Incoming 엔티티를 IncomingDTO로 매핑
@@ -290,14 +290,19 @@ public class InventoryService {
 	        MFOrder mfOrder = optionalMFOrder.get();
 	        log.info("생산 데이터 조회 완료 : " + mfOrder.toString());
 
+	        
 	        // 이제 mfOrder 데이터를 사용하여 incoming 및 incomingItems를 설정
-	        IncomingItems incomingItem = new IncomingItems();	        
+	        IncomingItems incomingItem = new IncomingItems();
+	        if (incomingItem.getItem() == null) {
+	            incomingItem.setItem(new Item());
+	        }
 	        incomingItem.setIncomingItemId(generateIncomingItemId());	        
-	        incomingItem.getItem().setItemCode(mfOrder.getItem().getItemCode());;	        
+	        incomingItem.getItem().setItemCode(mfOrder.getItem().getItemCode());        
 	        incomingItem.setQuantity(mfOrder.getOrderAmount());	        
 	        incomingItem.setIncoming(incoming);	        
 	        incoming.setMfOrder(mfOrder);
-
+	        incoming.getIncomingItems().add(incomingItem); 
+	        
 	    } else {
 	        // 발주 완료 로직
 	        Optional<Order> optionalOrder = orderRepository.findById(incomingInsertCode);
@@ -459,7 +464,7 @@ public class InventoryService {
 		Optional<Incoming> lastIncoming = incomingRepository.findTopByOrderByIncomingIdDesc();
 		if (lastIncoming.isPresent()) {
 			String lastId = lastIncoming.get().getIncomingId();
-			int numericPart = Integer.parseInt(lastId.substring(3)); // "INC" 이후 숫자 부분 추출
+			int numericPart = Integer.parseInt(lastId.substring(5)); // "INC" 이후 숫자 부분 추출
 			numericPart += 1;
 			return String.format("INC%05d", numericPart); // "INC" + 5자리 숫자
 		} else {
