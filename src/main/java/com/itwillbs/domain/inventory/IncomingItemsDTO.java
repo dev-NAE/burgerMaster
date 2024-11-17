@@ -2,6 +2,8 @@ package com.itwillbs.domain.inventory;
 
 import java.sql.Timestamp;
 
+import com.itwillbs.entity.Item;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +21,8 @@ public class IncomingItemsDTO {
 	private Integer otherCount; //품목 외 갯수 ex)패티 외 2건
 	
 	private String itemType; //품목 유형
+	
+	private Item item;
 	
 	// 입고 조회에서 품목이름과 갯수 확인할 떄 쓰는 생성자
 	public IncomingItemsDTO(String itemCode, String itemName) {
