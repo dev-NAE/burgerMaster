@@ -16,13 +16,11 @@ import lombok.Data;
 public class IncomingInsertDTO {
 	
     private String prodOrOrderId;
-    private String reasonOfIncoming; //생산 완료, 검품완료
+    private String reasonOfIncoming; //생산 완료, 발주 완료
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp prodOrOrderDate;
-    
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-//    private Date prodOrOrderDate1; 
+
     
     private String itemName;
     private Integer quantity;
@@ -55,12 +53,7 @@ public class IncomingInsertDTO {
 	}
     
     
-//	public IncomingInsertDTO(String prodOrOrderId, Date prodOrOrderDate1, String reasonOfIncoming ) {
-////		super();
-//		this.prodOrOrderId = prodOrOrderId;
-//		this.reasonOfIncoming = reasonOfIncoming;
-//		this.prodOrOrderDate1 = prodOrOrderDate1;
-//	}
+
     
     
 }
