@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.entity.InventoryItem;
 
-import java.util.List;
 
 /**
  *  전체 조회 쿼리명: get...() <br>

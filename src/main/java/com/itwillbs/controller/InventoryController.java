@@ -1,9 +1,6 @@
 package com.itwillbs.controller;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,7 +8,6 @@ import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,19 +18,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itwillbs.config.security.util.SecurityUtil;
 import com.itwillbs.domain.inventory.IncomingDTO;
-import com.itwillbs.domain.inventory.IncomingItemsDTO;
 import com.itwillbs.domain.inventory.InventoryItemDTO;
 import com.itwillbs.domain.inventory.OutgoingDTO;
 import com.itwillbs.service.InventoryService;
 
-import jakarta.persistence.EntityNotFoundException;
 
 /**
- * 출고, 출고, 재고 관리하는 컨트롤러
+ * 입고, 출고, 재고 관리하는 컨트롤러
  */
 @Controller
 @RequestMapping("/inven")
@@ -193,7 +186,6 @@ public class InventoryController {
 
 		Timestamp incomingStartDate_start = null;
 		Timestamp incomingStartDate_end = null;
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 		// 문자열로 가져온 등록일검색 날짜는 DB에서 조회할때 TimeStamp 타입으로 변환해야 한다
 		try {
@@ -310,7 +302,7 @@ public class InventoryController {
 
 		// 출고된 리스트 1페이지 조회
 		Page<OutgoingDTO> outgoingByPage = inventoryService.getOutgoingLists(pageable);
-//		log.info("Outgoing DTOs: {}", outgoingByPage.getContent());
+
 
 		// model에 출고테이블에 출력할 데이터 저장
 		model.addAttribute("outgoingDTOs", outgoingByPage);
@@ -361,7 +353,7 @@ public class InventoryController {
 
 		Timestamp outgoingStartDate_start = null;
 		Timestamp outgoingStartDate_end = null;
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 
 		// 문자열로 가져온 등록일검색 날짜는 DB에서 조회할때 TimeStamp 타입으로 변환해야 한다
 		try {

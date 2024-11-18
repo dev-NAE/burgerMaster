@@ -35,8 +35,6 @@ public class Outgoing {
 	@Column(name = "outgoing_end_date")
 	private Timestamp outgoingEndDate;
 	
-//	@Column(name = "manager_id")
-//	private String managerId;
 	
 	@Column(name = "status")
 	private String status;
