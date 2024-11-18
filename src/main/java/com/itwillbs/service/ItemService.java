@@ -76,10 +76,10 @@ public class ItemService {
 		}
 	}
 
-	@Transactional
-	public void deleteItem(String itemCode) {
-		itemRepository.deleteById(itemCode);
-	}
+//	@Transactional
+//	public void deleteItem(String itemCode) {
+//		itemRepository.deleteById(itemCode);
+//	}
 
 	public String generateNextCode(String itemType) {
 		String maxCode = itemRepository.findMaxItemCodeByItemType(itemType);
