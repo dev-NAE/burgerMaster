@@ -19,7 +19,7 @@ function setupEventHandlers() {
 
 	// 모달 버튼 이벤트
 	$('#editBtn').click(switchToEditMode);
-	$('#deleteBtn').click(deleteItem);
+//	$('#deleteBtn').click(deleteItem);
 
 	// 입력 필드: 실시간 검사 + 포커스 아웃
 	$('#itemForm input').on('input blur', function() {
@@ -173,7 +173,8 @@ function openModal(mode, itemCode = null) {
 
 	// 초기화
 	form[0].reset();
-	$('#saveBtn, #editBtn, #deleteBtn').hide();
+//	$('#saveBtn, #editBtn, #deleteBtn').hide();
+	$('#saveBtn, #editBtn').hide();
 	viewSection.hide();
 	form.hide();
 
@@ -201,7 +202,8 @@ function loadItemDetail(itemCode) {
 		.done(item => {
 			$('#viewSection').html(getItemDetailHtml(item)).show();
 			fillForm(item);
-			$('#editBtn, #deleteBtn').show();
+//			$('#editBtn, #deleteBtn').show();
+			$('#editBtn').show();
 		});
 }
 
@@ -308,44 +310,44 @@ function switchToEditMode() {
 }
 
 // 삭제
-function deleteItem() {
-	Swal.fire({
-		title: '삭제 확인',
-		text: '정말 삭제하시겠습니까?',
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#d33',
-		cancelButtonColor: '#3085d6',
-		confirmButtonText: '삭제',
-		cancelButtonText: '취소'
-	}).then((result) => {
-		if (result.isConfirmed) {
-			$.ajax({
-				url: '/masterdata/api/items/' + $('#itemCode').val(),
-				type: 'DELETE',
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success: () => {
-					$('#itemModal').modal('hide');
-					loadItems();
-					Swal.fire({
-						icon: 'success',
-						title: '삭제 완료',
-						text: '성공적으로 삭제되었습니다.'
-					});
-				},
-				error: (xhr) => {
-					Swal.fire({
-						icon: 'error',
-						title: `삭제 실패 (${xhr.status})`,
-						text: xhr.responseJSON?.message || '서버에서 오류가 발생했습니다.'
-					});
-				}
-			});
-		}
-	});
-}
+//function deleteItem() {
+//	Swal.fire({
+//		title: '삭제 확인',
+//		text: '정말 삭제하시겠습니까?',
+//		icon: 'warning',
+//		showCancelButton: true,
+//		confirmButtonColor: '#d33',
+//		cancelButtonColor: '#3085d6',
+//		confirmButtonText: '삭제',
+//		cancelButtonText: '취소'
+//	}).then((result) => {
+//		if (result.isConfirmed) {
+//			$.ajax({
+//				url: '/masterdata/api/items/' + $('#itemCode').val(),
+//				type: 'DELETE',
+//				beforeSend: function(xhr) {
+//					xhr.setRequestHeader(header, token);
+//				},
+//				success: () => {
+//					$('#itemModal').modal('hide');
+//					loadItems();
+//					Swal.fire({
+//						icon: 'success',
+//						title: '삭제 완료',
+//						text: '성공적으로 삭제되었습니다.'
+//					});
+//				},
+//				error: (xhr) => {
+//					Swal.fire({
+//						icon: 'error',
+//						title: `삭제 실패 (${xhr.status})`,
+//						text: xhr.responseJSON?.message || '서버에서 오류가 발생했습니다.'
+//					});
+//				}
+//			});
+//		}
+//	});
+//}
 
 
 // 품목코드 검색 버튼 시 자동입력
@@ -390,10 +392,6 @@ function validateField(field) {
 			}
 			if (value.length < 2 || value.length > 100) {
 				showError(field, '품목명은 2~100자 사이여야 합니다.');
-				return false;
-			}
-			if (!/^[가-힣A-Za-z0-9\s\-\_]+$/.test(value)) {
-				showError(field, '허용되지 않는 문자가 포함되어 있습니다.');
 				return false;
 			}
 			break;

@@ -15,7 +15,7 @@ function setupEventHandlers() {
 
 	$('#searchCodeBtn').on('click', updateSupplierCode);
 	$('#editBtn').click(switchToEditMode);
-	$('#deleteBtn').click(deleteSupplier);
+//	$('#deleteBtn').click(deleteSupplier);
 
 	$('#supplierForm input').on('input blur', function() {
 		validateField($(this));
@@ -152,7 +152,8 @@ function openModal(mode, supplierCode = null) {
 	const form = $('#supplierForm');
 
 	form[0].reset();
-	$('#saveBtn, #editBtn, #deleteBtn').hide();
+//	$('#saveBtn, #editBtn, #deleteBtn').hide();
+	$('#saveBtn, #editBtn').hide();
 	viewSection.hide();
 	form.hide();
 
@@ -177,7 +178,8 @@ function loadSupplierDetail(supplierCode) {
 		.done(supplier => {
 			$('#viewSection').html(getSupplierDetailHtml(supplier)).show();
 			fillForm(supplier);
-			$('#editBtn, #deleteBtn').show();
+//			$('#editBtn, #deleteBtn').show();
+			$('#editBtn').show();
 		});
 }
 
@@ -298,44 +300,44 @@ function switchToEditMode() {
 	$('#searchCodeBtnGroup').hide();
 }
 
-function deleteSupplier() {
-	Swal.fire({
-		title: '삭제 확인',
-		text: '정말 삭제하시겠습니까?',
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#d33',
-		cancelButtonColor: '#3085d6',
-		confirmButtonText: '삭제',
-		cancelButtonText: '취소'
-	}).then((result) => {
-		if (result.isConfirmed) {
-			$.ajax({
-				url: '/masterdata/api/suppliers/' + $('#supplierCode').val(),
-				type: 'DELETE',
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success: () => {
-					$('#supplierModal').modal('hide');
-					loadSuppliers();
-					Swal.fire({
-						icon: 'success',
-						title: '삭제 완료',
-						text: '성공적으로 삭제되었습니다.'
-					});
-				},
-				error: (xhr) => {
-					Swal.fire({
-						icon: 'error',
-						title: `삭제 실패 (${xhr.status})`,
-						text: xhr.responseJSON?.message || '서버에서 오류가 발생했습니다.'
-					});
-				}
-			});
-		}
-	});
-}
+//function deleteSupplier() {
+//	Swal.fire({
+//		title: '삭제 확인',
+//		text: '정말 삭제하시겠습니까?',
+//		icon: 'warning',
+//		showCancelButton: true,
+//		confirmButtonColor: '#d33',
+//		cancelButtonColor: '#3085d6',
+//		confirmButtonText: '삭제',
+//		cancelButtonText: '취소'
+//	}).then((result) => {
+//		if (result.isConfirmed) {
+//			$.ajax({
+//				url: '/masterdata/api/suppliers/' + $('#supplierCode').val(),
+//				type: 'DELETE',
+//				beforeSend: function(xhr) {
+//					xhr.setRequestHeader(header, token);
+//				},
+//				success: () => {
+//					$('#supplierModal').modal('hide');
+//					loadSuppliers();
+//					Swal.fire({
+//						icon: 'success',
+//						title: '삭제 완료',
+//						text: '성공적으로 삭제되었습니다.'
+//					});
+//				},
+//				error: (xhr) => {
+//					Swal.fire({
+//						icon: 'error',
+//						title: `삭제 실패 (${xhr.status})`,
+//						text: xhr.responseJSON?.message || '서버에서 오류가 발생했습니다.'
+//					});
+//				}
+//			});
+//		}
+//	});
+//}
 
 function updateSupplierCode() {
 	$.get('/masterdata/api/suppliers/nextCode')
