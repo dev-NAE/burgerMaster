@@ -32,7 +32,6 @@ public class Item {
 
 	@NotBlank(message = "품목명은 필수입니다")
 	@Length(min = 2, max = 100, message = "품목명은 2~100자 사이여야 합니다")
-    @Pattern(regexp = "^[가-힣A-Za-z0-9\\s\\-\\_]+$", message = "품목명에 허용되지 않는 문자가 포함되어 있습니다.")
 	@Column(name = "item_name", length = 100, nullable = false)
 	private String itemName;
 

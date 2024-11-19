@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,8 +36,6 @@ import com.itwillbs.service.ItemService;
 import com.itwillbs.service.SupplierService;
 
 import lombok.extern.java.Log;
-
-
 
 @Controller
 @RequestMapping("/masterdata")
@@ -108,6 +105,14 @@ public class MasterDataController {
 			@RequestParam(name = "size", defaultValue = "10") int size) {
 		return franchiseService.searchFranchises(searchDTO, PageRequest.of(page, size));
 	}
+	
+	@GetMapping("/api/boms")
+	@ResponseBody
+	public Page<BOMListDTO> getBOMs(BOMSearchDTO searchDTO,
+			@RequestParam(name = "page", defaultValue = "0") int page,
+			@RequestParam(name = "size", defaultValue = "10") int size) {
+		return bomService.getAllBOMs(searchDTO, PageRequest.of(page, size));
+	}
 
 	// 상세 조회 loadItemDetail(itemCode) 200 404
 	@GetMapping("/api/items/{itemCode}")
@@ -134,6 +139,14 @@ public class MasterDataController {
 						String.format("가맹점코드 %s를 찾을 수 없습니다.", franchiseCode)));
 	}
 	
+	@GetMapping("/api/boms/{bomId}")
+	@ResponseBody
+	public ResponseEntity<BOMDetailDTO> getBOM(@PathVariable(name = "bomId") Long bomId) {
+		log.info("bomdeatilCont");
+		return bomService.getBOMDetail(bomId).map(ResponseEntity::ok).orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("BOM ID %d를 찾을 수 없습니다.", bomId)));
+	}
+	
 	// 저장 saveItem() 201
 	@PostMapping("/api/items")
 	@ResponseBody
@@ -151,6 +164,14 @@ public class MasterDataController {
 	@ResponseBody
 	public ResponseEntity<Franchise> saveFranchise(@RequestBody @Validated Franchise franchise) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(franchiseService.saveFranchise(franchise));
+	}
+	
+	@PostMapping("/api/boms")
+	@ResponseBody
+	public ResponseEntity<BOMDetailDTO> saveBOM(@RequestBody @Validated BOMSaveDTO saveDTO) {
+		log.info("saveBOM");
+	    return ResponseEntity.status(HttpStatus.CREATED)
+	        .body(bomService.saveBOM(saveDTO));
 	}
 
 	// 수정 saveItem() 200
@@ -185,29 +206,44 @@ public class MasterDataController {
 		}
 		return ResponseEntity.ok(franchiseService.updateFranchise(franchise));
 	}
+	
+	@PutMapping("/api/boms/{bomId}")
+	@ResponseBody
+	public ResponseEntity<BOMDetailDTO> updateBOM(
+	        @PathVariable("bomId") Long bomId,
+	        @RequestBody @Validated BOMSaveDTO saveDTO) {
+	    return ResponseEntity.ok(bomService.updateBOM(bomId, saveDTO));
+	}
 
 	// 삭제 deleteItem() 204
-	@DeleteMapping("/api/items/{itemCode}")
-	@ResponseBody
-	public ResponseEntity<Void> deleteItem(@PathVariable(name = "itemCode") String itemCode) {
-		itemService.deleteItem(itemCode);
-		return ResponseEntity.noContent().build();
-	}
-
-	@DeleteMapping("/api/suppliers/{supplierCode}")
-	@ResponseBody
-	public ResponseEntity<Void> deleteSupplier(@PathVariable(name = "supplierCode") String supplierCode) {
-		supplierService.deleteSupplier(supplierCode);
-		return ResponseEntity.noContent().build();
-	}
-
-	@DeleteMapping("/api/franchises/{franchiseCode}")
-	@ResponseBody
-	public ResponseEntity<Void> deleteFranchise(@PathVariable(name = "franchiseCode") String franchiseCode) {
-		franchiseService.deleteFranchise(franchiseCode);
-		return ResponseEntity.noContent().build();
-	}
-
+//	@DeleteMapping("/api/items/{itemCode}")
+//	@ResponseBody
+//	public ResponseEntity<Void> deleteItem(@PathVariable(name = "itemCode") String itemCode) {
+//		itemService.deleteItem(itemCode);
+//		return ResponseEntity.noContent().build();
+//	}
+//
+//	@DeleteMapping("/api/suppliers/{supplierCode}")
+//	@ResponseBody
+//	public ResponseEntity<Void> deleteSupplier(@PathVariable(name = "supplierCode") String supplierCode) {
+//		supplierService.deleteSupplier(supplierCode);
+//		return ResponseEntity.noContent().build();
+//	}
+//
+//	@DeleteMapping("/api/franchises/{franchiseCode}")
+//	@ResponseBody
+//	public ResponseEntity<Void> deleteFranchise(@PathVariable(name = "franchiseCode") String franchiseCode) {
+//		franchiseService.deleteFranchise(franchiseCode);
+//		return ResponseEntity.noContent().build();
+//	}
+//
+//	@DeleteMapping("/api/boms/{bomId}")
+//	@ResponseBody
+//	public ResponseEntity<Void> deleteBOM(@PathVariable(name = "bomId") Long bomId) {
+//		bomService.deleteBOM(bomId);
+//		return ResponseEntity.noContent().build();
+//	}
+	
 	// 코드 최대값+1 조회 updateItemCode()
 	@GetMapping("/api/items/nextCode")
 	@ResponseBody
@@ -238,45 +274,4 @@ public class MasterDataController {
 		return ResponseEntity.ok(itemService.searchItemsForModal(itemType, itemName, useYN));
 	}
 	
-	
-	@GetMapping("/api/boms")
-	@ResponseBody
-	public Page<BOMListDTO> getBOMs(BOMSearchDTO searchDTO, @RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "10") int size) {
-		log.info("bomlistCont");
-		return bomService.getAllBOMs(searchDTO, PageRequest.of(page, size));
-	}
-	
-	@GetMapping("/api/boms/{bomId}")
-	@ResponseBody
-	public ResponseEntity<BOMDetailDTO> getBOM(@PathVariable(name = "bomId") Long bomId) {
-		log.info("bomdeatilCont");
-		return bomService.getBOMDetail(bomId).map(ResponseEntity::ok).orElseThrow(
-				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("BOM ID %d를 찾을 수 없습니다.", bomId)));
-	}
-	
-	@PostMapping("/api/boms")
-	@ResponseBody
-	public ResponseEntity<BOMDetailDTO> saveBOM(@RequestBody @Validated BOMSaveDTO saveDTO) {
-		log.info("saveBOM");
-	    return ResponseEntity.status(HttpStatus.CREATED)
-	        .body(bomService.saveBOM(saveDTO));
-	}
-
-	@PutMapping("/api/boms/{bomId}")
-	@ResponseBody
-	public ResponseEntity<BOMDetailDTO> updateBOM(
-	        @PathVariable("bomId") Long bomId,
-	        @RequestBody @Validated BOMSaveDTO saveDTO) {
-		log.info("updateBOM");
-	    return ResponseEntity.ok(bomService.updateBOM(bomId, saveDTO));
-	}
-	
-	@DeleteMapping("/api/boms/{bomId}")
-	@ResponseBody
-	public ResponseEntity<Void> deleteBOM(@PathVariable(name = "bomId") Long bomId) {
-		bomService.deleteBOM(bomId);
-		return ResponseEntity.noContent().build();
-	}
-
 }
