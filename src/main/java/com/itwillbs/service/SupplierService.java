@@ -54,10 +54,10 @@ public class SupplierService {
 		}
 	}
 
-	@Transactional
-	public void deleteSupplier(String supplierCode) {
-		supplierRepository.deleteById(supplierCode);
-	}
+//	@Transactional
+//	public void deleteSupplier(String supplierCode) {
+//		supplierRepository.deleteById(supplierCode);
+//	}
 
 	public String generateNextCode() {
 		String maxCode = supplierRepository.findMaxSupplierCode();

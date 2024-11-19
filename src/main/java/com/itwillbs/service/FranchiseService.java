@@ -62,10 +62,10 @@ public class FranchiseService {
 		}
 	}
 
-	@Transactional
-	public void deleteFranchise(String franchiseCode) {
-		franchiseRepository.deleteById(franchiseCode);
-	}
+//	@Transactional
+//	public void deleteFranchise(String franchiseCode) {
+//		franchiseRepository.deleteById(franchiseCode);
+//	}
 
 	public String generateNextCode() {
 		String maxCode = franchiseRepository.findMaxFranchiseCode();
