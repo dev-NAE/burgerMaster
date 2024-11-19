@@ -280,31 +280,50 @@ function saveFranchise() {
 					}
 					break;
 				case 400:
-					if (xhr.responseJSON?.errors) {
-						// 각 필드별 에러 메시지 표시
-						const errors = xhr.responseJSON.errors;
-						let errorMessages = [];
+					if (xhr.responseJSON) {
+						// 에러 응답 구조 확인을 위한 로깅
+						console.log('Error Response:', xhr.responseJSON);
 
-						errors.forEach(error => {
-							// 필드별 에러 표시
-							const fieldName = error.field;
-							const errorMessage = error.defaultMessage;
-							showError($(`#${fieldName}`), errorMessage);
-							errorMessages.push(errorMessage);
-						});
+						if (Array.isArray(xhr.responseJSON.errors)) {
+							// Spring Boot 기본 검증 에러 형식
+							const errors = xhr.responseJSON.errors;
+							let errorMessages = [];
 
-						// 전체 에러 메시지 표시
-						Swal.fire({
-							icon: 'error',
-							title: '입력값 오류',
-							html: errorMessages.join('<br>')
-						});
-					} else {
-						Swal.fire({
-							icon: 'error',
-							title: '비즈니스 규칙 위반 (400 Bad Request service)',
-							text: xhr.responseJSON.message
-						});
+							errors.forEach(error => {
+								const fieldName = error.field;
+								const errorMessage = error.defaultMessage;
+								showError($(`#${fieldName}`), errorMessage);
+								errorMessages.push(errorMessage);
+							});
+
+							Swal.fire({
+								icon: 'error',
+								title: '입력값 오류',
+								html: errorMessages.join('<br>')
+							});
+						} else if (typeof xhr.responseJSON.errors === 'object') {
+							// 다른 형식의 검증 에러
+							const errors = xhr.responseJSON.errors;
+							let errorMessages = [];
+
+							Object.entries(errors).forEach(([field, message]) => {
+								showError($(`#${field}`), message);
+								errorMessages.push(message);
+							});
+
+							Swal.fire({
+								icon: 'error',
+								title: '입력값 오류',
+								html: errorMessages.join('<br>')
+							});
+						} else {
+							// 비즈니스 규칙 위반
+							Swal.fire({
+								icon: 'error',
+								title: '비즈니스 규칙 위반',
+								text: xhr.responseJSON.message || '입력값이 올바르지 않습니다.'
+							});
+						}
 					}
 					break;
 				default:
