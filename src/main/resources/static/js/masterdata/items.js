@@ -19,7 +19,7 @@ function setupEventHandlers() {
 
 	// 모달 버튼 이벤트
 	$('#editBtn').click(switchToEditMode);
-//	$('#deleteBtn').click(deleteItem);
+	//	$('#deleteBtn').click(deleteItem);
 
 	// 입력 필드: 실시간 검사 + 포커스 아웃
 	$('#itemForm input').on('input blur', function() {
@@ -173,7 +173,7 @@ function openModal(mode, itemCode = null) {
 
 	// 초기화
 	form[0].reset();
-//	$('#saveBtn, #editBtn, #deleteBtn').hide();
+	//	$('#saveBtn, #editBtn, #deleteBtn').hide();
 	$('#saveBtn, #editBtn').hide();
 	viewSection.hide();
 	form.hide();
@@ -202,7 +202,7 @@ function loadItemDetail(itemCode) {
 		.done(item => {
 			$('#viewSection').html(getItemDetailHtml(item)).show();
 			fillForm(item);
-//			$('#editBtn, #deleteBtn').show();
+			//			$('#editBtn, #deleteBtn').show();
 			$('#editBtn').show();
 		});
 }
@@ -264,22 +264,50 @@ function saveItem() {
 					});
 					break;
 				case 400:
-					if (xhr.responseJSON.errors) {
-						const errors = xhr.responseJSON.errors;
-						Object.keys(errors).forEach(field => {
-							showError($(`#${field}`), errors[field]);
-						});
-						Swal.fire({
-							icon: 'error',
-							title: '입력값 오류 (400 Bad Request validated)',
-							text: `검증 오류: ${Object.values(errors).join(', ')}`
-						});
-					} else {
-						Swal.fire({
-							icon: 'error',
-							title: '비즈니스 규칙 위반 (400 Bad Request service)',
-							text: xhr.responseJSON.message
-						});
+					if (xhr.responseJSON) {
+						// 에러 응답 구조 확인을 위한 로깅
+						console.log('Error Response:', xhr.responseJSON);
+
+						if (Array.isArray(xhr.responseJSON.errors)) {
+							// Spring Boot 기본 검증 에러 형식
+							const errors = xhr.responseJSON.errors;
+							let errorMessages = [];
+
+							errors.forEach(error => {
+								const fieldName = error.field;
+								const errorMessage = error.defaultMessage;
+								showError($(`#${fieldName}`), errorMessage);
+								errorMessages.push(errorMessage);
+							});
+
+							Swal.fire({
+								icon: 'error',
+								title: '입력값 오류',
+								html: errorMessages.join('<br>')
+							});
+						} else if (typeof xhr.responseJSON.errors === 'object') {
+							// 다른 형식의 검증 에러
+							const errors = xhr.responseJSON.errors;
+							let errorMessages = [];
+
+							Object.entries(errors).forEach(([field, message]) => {
+								showError($(`#${field}`), message);
+								errorMessages.push(message);
+							});
+
+							Swal.fire({
+								icon: 'error',
+								title: '입력값 오류',
+								html: errorMessages.join('<br>')
+							});
+						} else {
+							// 비즈니스 규칙 위반
+							Swal.fire({
+								icon: 'error',
+								title: '비즈니스 규칙 위반',
+								text: xhr.responseJSON.message || '입력값이 올바르지 않습니다.'
+							});
+						}
 					}
 					break;
 				default:
