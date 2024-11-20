@@ -52,10 +52,6 @@ public class Incoming {
     @JoinColumn(name = "production_id")
     private MFOrder mfOrder;
 
-    //입고검품번호
-//    @Column(name = "quality_order_id")
-//    private String qualityOrderId;
-
     //발주번호 : orders테이블의 order_id
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "order_id")
