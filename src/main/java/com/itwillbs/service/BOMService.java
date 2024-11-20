@@ -71,10 +71,10 @@ public class BOMService {
         return new BOMDetailDTO(bomRepository.save(bom));
     }
 
-    @Transactional
-    public void deleteBOM(Long bomId) {
-        bomRepository.deleteById(bomId);
-    }
+//    @Transactional
+//    public void deleteBOM(Long bomId) {
+//        bomRepository.deleteById(bomId);
+//    }
 
     private Item findItemByCode(String itemCode, String expectedType) {
         Item item = itemRepository.findById(itemCode)

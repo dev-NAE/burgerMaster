@@ -1,5 +1,6 @@
 const token = $("meta[name='_csrf']").attr("content");
 const header = $("meta[name='_csrf_header']").attr("content");
+let clientValidationEnabled = true;
 
 $(document).ready(function() {
 	loadFranchises();
@@ -15,7 +16,7 @@ function setupEventHandlers() {
 
 	$('#searchCodeBtn').on('click', updateFranchiseCode);
 	$('#editBtn').click(switchToEditMode);
-	$('#deleteBtn').click(deleteFranchise);
+	//	$('#deleteBtn').click(deleteFranchise);
 
 	$('#franchiseForm input').on('input blur', function() {
 		validateField($(this));
@@ -43,6 +44,20 @@ function setupEventHandlers() {
 			return;
 		}
 		saveFranchise();
+	});
+
+	// 검증 스위치 이벤트 핸들러
+	$('#clientValidationSwitch').on('change', function() {
+		clientValidationEnabled = $(this).is(':checked');
+		Swal.fire({
+			icon: 'info',
+			title: '클라이언트 검증 상태',
+			text: `클라이언트 검증이 ${clientValidationEnabled ? '활성화' : '비활성화'} 되었습니다.`,
+			toast: true,
+			position: 'top-end',
+			showConfirmButton: false,
+			timer: 2000
+		});
 	});
 }
 
@@ -153,7 +168,8 @@ function openModal(mode, franchiseCode = null) {
 	const form = $('#franchiseForm');
 
 	form[0].reset();
-	$('#saveBtn, #editBtn, #deleteBtn').hide();
+	//	$('#saveBtn, #editBtn, #deleteBtn').hide();
+	$('#saveBtn, #editBtn').hide();
 	viewSection.hide();
 	form.hide();
 
@@ -178,7 +194,8 @@ function loadFranchiseDetail(franchiseCode) {
 		.done(franchise => {
 			$('#viewSection').html(getFranchiseDetailHtml(franchise)).show();
 			fillForm(franchise);
-			$('#editBtn, #deleteBtn').show();
+			//			$('#editBtn, #deleteBtn').show();
+			$('#editBtn').show();
 		});
 }
 
@@ -263,22 +280,50 @@ function saveFranchise() {
 					}
 					break;
 				case 400:
-					if (xhr.responseJSON.errors) {
-						const errors = xhr.responseJSON.errors;
-						Object.keys(errors).forEach(field => {
-							showError($(`#${field}`), errors[field]);
-						});
-						Swal.fire({
-							icon: 'error',
-							title: '입력값 오류 (400 Bad Request validated)',
-							text: `검증 오류: ${Object.values(errors).join(', ')}`
-						});
-					} else {
-						Swal.fire({
-							icon: 'error',
-							title: '비즈니스 규칙 위반 (400 Bad Request service)',
-							text: xhr.responseJSON.message
-						});
+					if (xhr.responseJSON) {
+						// 에러 응답 구조 확인을 위한 로깅
+						console.log('Error Response:', xhr.responseJSON);
+
+						if (Array.isArray(xhr.responseJSON.errors)) {
+							// Spring Boot 기본 검증 에러 형식
+							const errors = xhr.responseJSON.errors;
+							let errorMessages = [];
+
+							errors.forEach(error => {
+								const fieldName = error.field;
+								const errorMessage = error.defaultMessage;
+								showError($(`#${fieldName}`), errorMessage);
+								errorMessages.push(errorMessage);
+							});
+
+							Swal.fire({
+								icon: 'error',
+								title: '입력값 오류',
+								html: errorMessages.join('<br>')
+							});
+						} else if (typeof xhr.responseJSON.errors === 'object') {
+							// 다른 형식의 검증 에러
+							const errors = xhr.responseJSON.errors;
+							let errorMessages = [];
+
+							Object.entries(errors).forEach(([field, message]) => {
+								showError($(`#${field}`), message);
+								errorMessages.push(message);
+							});
+
+							Swal.fire({
+								icon: 'error',
+								title: '입력값 오류',
+								html: errorMessages.join('<br>')
+							});
+						} else {
+							// 비즈니스 규칙 위반
+							Swal.fire({
+								icon: 'error',
+								title: '비즈니스 규칙 위반',
+								text: xhr.responseJSON.message || '입력값이 올바르지 않습니다.'
+							});
+						}
 					}
 					break;
 				default:
@@ -303,44 +348,44 @@ function switchToEditMode() {
 	$('#searchCodeBtnGroup').hide();
 }
 
-function deleteFranchise() {
-	Swal.fire({
-		title: '삭제 확인',
-		text: '정말 삭제하시겠습니까?',
-		icon: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#d33',
-		cancelButtonColor: '#3085d6',
-		confirmButtonText: '삭제',
-		cancelButtonText: '취소'
-	}).then((result) => {
-		if (result.isConfirmed) {
-			$.ajax({
-				url: '/masterdata/api/franchises/' + $('#franchiseCode').val(),
-				type: 'DELETE',
-				beforeSend: function(xhr) {
-					xhr.setRequestHeader(header, token);
-				},
-				success: () => {
-					$('#franchiseModal').modal('hide');
-					loadFranchises();
-					Swal.fire({
-						icon: 'success',
-						title: '삭제 완료',
-						text: '성공적으로 삭제되었습니다.'
-					});
-				},
-				error: (xhr) => {
-					Swal.fire({
-						icon: 'error',
-						title: `삭제 실패 (${xhr.status})`,
-						text: xhr.responseJSON?.message || '서버에서 오류가 발생했습니다.'
-					});
-				}
-			});
-		}
-	});
-}
+//function deleteFranchise() {
+//	Swal.fire({
+//		title: '삭제 확인',
+//		text: '정말 삭제하시겠습니까?',
+//		icon: 'warning',
+//		showCancelButton: true,
+//		confirmButtonColor: '#d33',
+//		cancelButtonColor: '#3085d6',
+//		confirmButtonText: '삭제',
+//		cancelButtonText: '취소'
+//	}).then((result) => {
+//		if (result.isConfirmed) {
+//			$.ajax({
+//				url: '/masterdata/api/franchises/' + $('#franchiseCode').val(),
+//				type: 'DELETE',
+//				beforeSend: function(xhr) {
+//					xhr.setRequestHeader(header, token);
+//				},
+//				success: () => {
+//					$('#franchiseModal').modal('hide');
+//					loadFranchises();
+//					Swal.fire({
+//						icon: 'success',
+//						title: '삭제 완료',
+//						text: '성공적으로 삭제되었습니다.'
+//					});
+//				},
+//				error: (xhr) => {
+//					Swal.fire({
+//						icon: 'error',
+//						title: `삭제 실패 (${xhr.status})`,
+//						text: xhr.responseJSON?.message || '서버에서 오류가 발생했습니다.'
+//					});
+//				}
+//			});
+//		}
+//	});
+//}
 
 function updateFranchiseCode() {
 	$.get('/masterdata/api/franchises/nextCode')
@@ -351,6 +396,12 @@ function updateFranchiseCode() {
 }
 
 function validateField(field) {
+	//클라이언트 검증 제외 토글
+	if (!clientValidationEnabled) {
+		clearError(field);
+		return true;
+	}
+
 	const id = field.attr('id');
 	const value = field.val();
 
