@@ -68,10 +68,8 @@
                     <a class="btn-sm btn-primary" href="#" id="createManager">관리자 생성</a>
                   </div>
                   <div class="input-group input-group-sm" style="width: 250px;">
-                    <label>
                     <input type="text" id="search" name="search" class="form-control float-right" placeholder="Search"
                               th:value="${!search.isEmpty()} ? ${search} : ''">
-                    </label>
                     <div class="input-group-append">
                       <button type="submit" class="btn btn-default" id="btn_search">
                         <i class="fas fa-search"></i>
