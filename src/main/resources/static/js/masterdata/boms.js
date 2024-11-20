@@ -14,7 +14,7 @@ function setupEventHandlers() {
 	});
 
 	$('#editBtn').click(switchToEditMode);
-//	$('#deleteBtn').click(deleteBOM);
+	//	$('#deleteBtn').click(deleteBOM);
 
 	$('#bomForm input').on('input blur', function() {
 		validateField($(this));
@@ -149,11 +149,11 @@ function openModal(mode, bomId = null) {
 	const form = $('#bomForm');
 
 	form[0].reset();
-//	$('#saveBtn, #editBtn, #deleteBtn').hide();
+	//	$('#saveBtn, #editBtn, #deleteBtn').hide();
 	$('#saveBtn, #editBtn').hide();
 	viewSection.hide();
 	form.hide();
-	
+
 	$('#ppSearchBtn, #rmSearchBtn').show();
 
 	$('.is-invalid').removeClass('is-invalid');
@@ -172,23 +172,23 @@ function openModal(mode, bomId = null) {
 }
 
 function selectItem(type, itemCode, itemName) {
-    if (type === 'PP') {
-        $('#ppCode').val(itemCode);
-    } else {
-        $('#rmCode').val(itemCode);
-    }
-    $('#itemSearchModal').modal('hide');
+	if (type === 'PP') {
+		$('#ppCode').val(itemCode);
+	} else {
+		$('#rmCode').val(itemCode);
+	}
+	$('#itemSearchModal').modal('hide');
 }
 
 function selectItem(type, itemCode, itemName) {
-    if (type === 'PP') {
-        $('#ppCode').val(itemCode);
-        $('#processedProduct\\.itemCode').val(itemCode);
-    } else {
-        $('#rmCode').val(itemCode);
-        $('#rawMaterial\\.itemCode').val(itemCode);
-    }
-    $('#itemSearchModal').modal('hide');
+	if (type === 'PP') {
+		$('#ppCode').val(itemCode);
+		$('#processedProduct\\.itemCode').val(itemCode);
+	} else {
+		$('#rmCode').val(itemCode);
+		$('#rawMaterial\\.itemCode').val(itemCode);
+	}
+	$('#itemSearchModal').modal('hide');
 }
 
 function loadBOMDetail(bomId) {
@@ -197,20 +197,20 @@ function loadBOMDetail(bomId) {
 			$('#viewSection').html(getBOMDetailHtml(bom)).show();
 			fillForm(bom);
 			$('#editBtn').show();
-//			$('#editBtn, #deleteBtn').show();
+			//			$('#editBtn, #deleteBtn').show();
 		});
 }
 
 function fillForm(bom) {
-    $('#bomId').val(bom.bomId);
-    $('#ppCode').val(bom.processedProduct.itemCode);
-    $('#rmCode').val(bom.rawMaterial.itemCode);
-    $('#quantity').val(bom.quantity);
-    $('#useYN').val(bom.useYN);
+	$('#bomId').val(bom.bomId);
+	$('#ppCode').val(bom.processedProduct.itemCode);
+	$('#rmCode').val(bom.rawMaterial.itemCode);
+	$('#quantity').val(bom.quantity);
+	$('#useYN').val(bom.useYN);
 }
 
 function getBOMDetailHtml(bom) {
-    return ` 
+	return ` 
 	<table class="table"> 
 	    <tr><th>가공품코드</th><td>${bom.processedProduct.itemCode}</td></tr> 
 	    <tr><th>가공품명</th><td>${bom.processedProduct.itemName}</td></tr> 
@@ -223,36 +223,36 @@ function getBOMDetailHtml(bom) {
 }
 
 function saveBOM() {
-    const jsonData = {
-        ppCode: $('#ppCode').val(), 
-        rmCode: $('#rmCode').val(), 
-        quantity: $('#quantity').val(), 
-        useYN: $('#useYN').val() 
-    };
+	const jsonData = {
+		ppCode: $('#ppCode').val(),
+		rmCode: $('#rmCode').val(),
+		quantity: $('#quantity').val(),
+		useYN: $('#useYN').val()
+	};
 
-    const isEdit = $('#bomForm').data('mode') === 'edit';
-    const bomId = $('#bomId').val();
+	const isEdit = $('#bomForm').data('mode') === 'edit';
+	const bomId = $('#bomId').val();
 
-    $.ajax({
-        url: isEdit ? `/masterdata/api/boms/${bomId}` : '/masterdata/api/boms',
-        type: isEdit ? 'PUT' : 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(jsonData),
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader(header, token);
-        },
-        success: function() {
-            Swal.fire({
-                icon: 'success', 
-                title: isEdit ? '수정 완료' : '저장 완료', 
-                text: isEdit ? '성공적으로 수정되었습니다.' : '성공적으로 저장되었습니다.'
-            }).then(() => {
-                $('#bomModal').modal('hide');
-                loadBOMs();
-            });
-        },
-        error: handleError
-    });
+	$.ajax({
+		url: isEdit ? `/masterdata/api/boms/${bomId}` : '/masterdata/api/boms',
+		type: isEdit ? 'PUT' : 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(jsonData),
+		beforeSend: function(xhr) {
+			xhr.setRequestHeader(header, token);
+		},
+		success: function() {
+			Swal.fire({
+				icon: 'success',
+				title: isEdit ? '수정 완료' : '저장 완료',
+				text: isEdit ? '성공적으로 수정되었습니다.' : '성공적으로 저장되었습니다.'
+			}).then(() => {
+				$('#bomModal').modal('hide');
+				loadBOMs();
+			});
+		},
+		error: handleError
+	});
 }
 
 function selectItem(type, itemCode, itemName) {
@@ -284,22 +284,50 @@ function handleError(xhr) {
 			});
 			break;
 		case 400:
-			if (xhr.responseJSON.errors) {
-				const errors = xhr.responseJSON.errors;
-				Object.keys(errors).forEach(field => {
-					showError($(`#${field}`), errors[field]);
-				});
-				Swal.fire({
-					icon: 'error',
-					title: '입력값 오류',
-					text: `검증 오류: ${Object.values(errors).join(', ')}`
-				});
-			} else {
-				Swal.fire({
-					icon: 'error',
-					title: '비즈니스 규칙 위반',
-					text: xhr.responseJSON.message
-				});
+			if (xhr.responseJSON) {
+				// 에러 응답 구조 확인을 위한 로깅
+				console.log('Error Response:', xhr.responseJSON);
+
+				if (Array.isArray(xhr.responseJSON.errors)) {
+					// Spring Boot 기본 검증 에러 형식
+					const errors = xhr.responseJSON.errors;
+					let errorMessages = [];
+
+					errors.forEach(error => {
+						const fieldName = error.field;
+						const errorMessage = error.defaultMessage;
+						showError($(`#${fieldName}`), errorMessage);
+						errorMessages.push(errorMessage);
+					});
+
+					Swal.fire({
+						icon: 'error',
+						title: '입력값 오류',
+						html: errorMessages.join('<br>')
+					});
+				} else if (typeof xhr.responseJSON.errors === 'object') {
+					// 다른 형식의 검증 에러
+					const errors = xhr.responseJSON.errors;
+					let errorMessages = [];
+
+					Object.entries(errors).forEach(([field, message]) => {
+						showError($(`#${field}`), message);
+						errorMessages.push(message);
+					});
+
+					Swal.fire({
+						icon: 'error',
+						title: '입력값 오류',
+						html: errorMessages.join('<br>')
+					});
+				} else {
+					// 비즈니스 규칙 위반
+					Swal.fire({
+						icon: 'error',
+						title: '비즈니스 규칙 위반',
+						text: xhr.responseJSON.message || '입력값이 올바르지 않습니다.'
+					});
+				}
 			}
 			break;
 		default:
@@ -312,13 +340,13 @@ function handleError(xhr) {
 }
 
 function switchToEditMode() {
-    $('#viewSection').hide();
-    $('#bomForm').show();
-    $('#editBtn').hide();
-    $('#saveBtn').show();
-    $('#bomForm').data('mode', 'edit');
+	$('#viewSection').hide();
+	$('#bomForm').show();
+	$('#editBtn').hide();
+	$('#saveBtn').show();
+	$('#bomForm').data('mode', 'edit');
 
-    $('#ppSearchBtn, #rmSearchBtn').hide();
+	$('#ppSearchBtn, #rmSearchBtn').hide();
 }
 
 //function deleteBOM() {
