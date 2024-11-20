@@ -1,6 +1,5 @@
 package com.itwillbs.domain.inventory;
 
-import java.sql.Timestamp;
 
 import com.itwillbs.entity.Item;
 

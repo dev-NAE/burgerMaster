@@ -368,7 +368,7 @@ public class InventoryService {
 
 	}
 
-	
+	//입고번호의 autoincrement 구현, INCxxxxx 형식
 	private String generateIncomingId() {
 	    List<Incoming> incomings = incomingRepository.findAllOrderByNumericIncomingIdDesc();
 	    if (incomings.isEmpty()) {
@@ -387,7 +387,7 @@ public class InventoryService {
 
 
 
-
+	//입고물품번호의 무작위 id 생성
 	private void createIncomingFromOrder(Incoming incoming, Order order) {
 	    // OrderItems를 가져와서 IncomingItems를 생성 및 추가
 	    List<OrderItems> orderItemsList = order.getOrderItems();
@@ -694,7 +694,7 @@ public class InventoryService {
 
 	}
 
-	
+	//출고번호의 autoincrement 구현, OUTxxxxx 형식
 	private String generateOutgoingId() {
 	    List<Outgoing> outgoings = outgoingRepository.findAllOrderByNumericOutgoingIdDesc();
 	    if (outgoings.isEmpty()) {
@@ -713,7 +713,7 @@ public class InventoryService {
 
 
 
-
+	//출고물품번호의 무작위 id 생성
 	private void createOutgoingFromSale(Outgoing outgoing, Sale sale) {
 	    // SaleItems를 가져와서 OutgoingItems를 생성 및 추가
 	    List<SaleItems> saleItemsList = sale.getSaleItems();
