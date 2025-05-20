@@ -24,7 +24,7 @@
   </tr>
   <tr>
     <th>배포 주소</th>
-    <td><a href="http://http://c1d2405t22.itwillbs.com/login#">http://http://c1d2405t22.itwillbs.com/login#</a></td>
+    <td><a href="http://c1d2405t22.itwillbs.com/login#">http://c1d2405t22.itwillbs.com/login#</a></td>
   </tr>
 </table>
 <h4>관리자</h4>
