@@ -1,16 +1,10 @@
 # itwill project 2 bergerMaster
 
-- 언어 : Java, html, css, javascript
-- 프레임워크 : spring boot, Spring-Data-JPA
-- 라이브러리 : bootstrap, Mybatis
-- IDE : eclipse, intellij
-- 형상관리 : git, github
-
-- <h1>WishD | 웹서비스 - 프리랜서(개발자) 매칭 서비스</h1>
+- <h1>burgerMaster | 햄버거 프렌차이즈 MES 서비스</h1>
 <table>
   <tr>
     <th>개발기간</th>
-    <td>2024-08-09 ~ 2024-09-26</td>
+    <td>2024-10-08 ~ 2024-11-21</td>
   </tr>
   <tr>
     <th>개발인원</th>
@@ -18,15 +12,19 @@
   </tr>
   <tr>
     <th>사용기술</th>
-    <td>Spring Framework 5.0.7, MyBatis 3.5.6</td>
+    <td>언어 : Java, html, css, javascript <br>
+    프레임워크 : spring boot, Spring-Data-JPA<br>
+    라이브러리 : bootstrap, Mybatis<br>
+    IDE : eclipse, intellij<br>
+    형상관리 : git, github</td>
   </tr>
   <tr>
     <th>개발 목적</th>
-    <td>프리랜서와 클라이언트를 매칭 해주는 서비스</td>
+    <td>햄버거 프렌차이즈 MES 구현</td>
   </tr>
   <tr>
     <th>배포 주소</th>
-    <td><a href="http://c1d2405t3.itwillbs.com/WishD/">http://c1d2405t3.itwillbs.com/WishD/</a></td>
+    <td><a href="http://http://c1d2405t22.itwillbs.com/login#">http://http://c1d2405t22.itwillbs.com/login#</a></td>
   </tr>
 </table>
 <h4>관리자</h4>
